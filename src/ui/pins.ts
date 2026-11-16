@@ -44,6 +44,7 @@ export class Pins {
       root.dataset.id = h.id;
       root.style.setProperty('--cat', categoryColor[h.category]);
       root.style.setProperty('--delay', `${(h.order * 0.17) % 2.4}s`);
+      root.style.setProperty('--i', String(h.order));
       const generalised = h.location_precision === 'area' || h.location_precision === 'symbolic';
       let halo: HTMLDivElement | null = null;
       if (generalised) {

@@ -32,6 +32,10 @@ export class Progress {
 export function hideLoading() {
   const el = root();
   if (!el) return;
+  const pctEl = document.getElementById('loading-pct');
+  const bar = document.getElementById('loading-bar');
+  if (pctEl) pctEl.textContent = '100\u00a0%';
+  if (bar) bar.style.width = '100%';
   el.classList.add('done');
   setTimeout(() => el.remove(), 600);
 }

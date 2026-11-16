@@ -36,6 +36,13 @@ export function detectTier(override: string | null): TierSpec {
   return TIERS.high;
 }
 
-export function saveTier(t: Tier) {
-  try { localStorage.setItem(KEY, t); } catch { /* ignore */ }
+export function saveTier(t: Tier | null) {
+  try { if (t) localStorage.setItem(KEY, t); else localStorage.removeItem(KEY); } catch { /* ignore */ }
+}
+
+export function savedTier(): Tier | null {
+  try {
+    const v = localStorage.getItem(KEY);
+    return v === 'high' || v === 'mid' || v === 'low' ? v : null;
+  } catch { return null; }
 }

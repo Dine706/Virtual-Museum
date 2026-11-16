@@ -138,7 +138,7 @@ export class Overlays {
     if (ms <= 0) { this.opacity = { ...to }; this.apply(); return null; }
     const start = performance.now();
     return (_dt, now) => {
-      const t = Math.min(1, (now - start) / ms);
+      const t = Math.min(1, Math.max(0, (now - start) / ms));
       const k = t * t * (3 - 2 * t);
       for (const l of Object.keys(to) as Layer[]) this.opacity[l] = from[l] + (to[l] - from[l]) * k;
       this.apply();

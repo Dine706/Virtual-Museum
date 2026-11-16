@@ -114,3 +114,33 @@ Running log of decisions, measured budgets and issues (CLAUDE.md §15).
   * The legend text matches each mode; the Danger List chip opens the `danger-list` panel.
   * The M4 panel and M5 picking checks still pass.
 * JS bundle: 174 KB gz (adds `Line2`; budget 250 KB).
+
+## M7 – Flyover & polish
+* **Title card** over the live terrain, seen from the flyover's start point (NE, 6,000 m above the terrain), drifting slowly (`autoRotate` 0.15, none under reduced motion). Chrome, pins and overlay lines stay hidden (`body.flying`, set before the first frame) until the intro ends.
+* **Flyover** (`scene/flyover.ts`): centripetal Catmull-Rom splines through the CLAUDE.md §6.9 waypoints. Title view → low pass over Pierre Richaud / Grands Rochers (2,200 m above) → Richard-Molard (1,800 m above) → the default orbit (az 215°, el 38°, 14 km).
+  * The look-at spline runs ridge → summit → on down the ridge towards the tripoint → home target.
+  * Arc-length parametrised (even speed), cubic ease-in-out, 12 s.
+  * Every frame the camera is clamped to ≥ 150 m (true) above the DEM.
+  * Subtitles (DESIGN.md §5): "Trois pays, une montagne" → "1 752 m au-dessus des nuages" → "Un château d'eau pour la région", in FR/EN, Fraunces, fading in and out.
+* **Skip:** "Passer l'introduction" button, any tap/click, or Esc; each glides to the default orbit in 0.9 s. "Passer" on the title card glides straight there (1.2 s). Under `prefers-reduced-motion`, "Explorer" cuts straight to the orbit. **A `#/h/<id>` deep link skips the title card and flyover** and opens the hotspot, which is what a link shared on WhatsApp should do.
+* After the intro the pins arrive in a 40 ms stagger, then the one-time "Touchez un repère" hint shows.
+* **Bug fixed** (found by the new check): animators compare the rAF timestamp with a `performance.now()` start, and the first rAF time can be a few ms *earlier*. A slightly negative progress made `CatmullRomCurve3.getPointAt` index −1 and throw. Progress is now clamped to [0, 1] in the flyover, overlay fades, atmosphere cross-fade and mode looks.
+* **About / Credits** (`ui/about.ts`, native `<dialog>`; info button in the desktop rail / phone top bar, plus "Photos : voir Crédits" on the credit line and the title card):
+  * Project note (unofficial prototype, no UNESCO/CSIG/OIPR logos), how-to, and "no accounts, no cookies, no analytics" (true: the app has none).
+  * Settings: **graphics quality Auto / High / Medium / Low** (saved, applies on next load; shows the current level) and atmosphere.
+  * Every entry of `docs/DATA_LICENCES.md` with its attribution text verbatim: Copernicus DEM, ESA WorldCover, WDPA (non-commercial), geoBoundaries (per-country licences), OSM (ODbL), Wikidata (CC0).
+  * All **32 photo credits** from `credits.json` (thumbnail, alt text, attribution linking to Commons, "resized and recompressed for the web").
+  * Texts note, software licences (three.js MIT, Vite MIT, fonts SIL OFL 1.1), and "how to correct us".
+  * The "correct us" text says a contact will be published with the pilot. **Dean: add the real contact (email or form) when you have one.** I did not invent one, and I removed a draft line claiming the code is public on GitHub, because I don't know the repo's visibility.
+  * The only surface that follows `prefers-color-scheme`: light theme `#F4F1E8` / `#1B2314` / `#C9C0AA` (DESIGN.md §1).
+* The credit line is split into the fixed credit text plus a "Photos : voir Crédits" button. On phones the full credit line is inside the About sheet (DESIGN.md §12).
+* The "Switch to English?" suggestion disappears as soon as any language is chosen. The loading bar reads 100 % as it fades.
+* Haptics: `navigator.vibrate(8)` on pin tap on touch devices (since M3). FPS meter and `uncertain` badges under `?debug=1` (since M1/M3).
+* **Not done here:** the loading screen's "text-only list" button after 6 s needs the list view (M9).
+* **`scripts/check-flyover.mjs`** (M7 acceptance), all pass:
+  * Planned path minimum clearance **922 m**; rendered frames minimum **972–991 m** (≥ 150).
+  * Ends exactly on the default orbit target with chrome back and subtitles gone.
+  * Esc, tap and "Passer" all land on the default orbit.
+  * Reduced motion: no flyover. A deep link opens without the title card.
+  * The M4/M5/M6 checks still pass.
+* JS bundle: 180.6 KB gz (budget 250 KB). Code-splitting the About sheet and panel is M8.

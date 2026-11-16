@@ -156,7 +156,7 @@ export class Atmosphere {
     if (dAz > 180) dAz -= 360;
     if (dAz < -180) dAz += 360;
     return (_dt, now) => {
-      const t = Math.min(1, (now - start) / durationMs);
+      const t = Math.min(1, Math.max(0, (now - start) / durationMs));
       const k = t * t * (3 - 2 * t);
       const s = this.state;
       const L = (x: number, y: number) => x + (y - x) * k;

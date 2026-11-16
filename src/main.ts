@@ -14,6 +14,10 @@ import { Readout } from './ui/readout';
 import { Overlays } from './scene/overlays';
 import { TerrainLabels } from './ui/labels';
 import { Legend } from './ui/legend';
+import { FLY_START, groundPoint, minClearance, planFlyover, runFlyover } from './scene/flyover';
+import { Subtitles } from './ui/subtitles';
+import { AboutSheet } from './ui/about';
+import { saveTier, savedTier } from './scene/tier';
 import { loadContent, loadCredits, loc, type Hotspot, type Mode } from './data/content';
 import { decodePixels, fetchBlob } from './data/loader';
 import { Heightfield } from './scene/heightfield';
@@ -43,6 +47,9 @@ function webglAvailable(): boolean {
 
 async function boot() {
   if (!webglAvailable()) { showFatal(t('loading.error')); return; }
+  // Intro pending (no ?skipintro, no #/h/ deep link): keep chrome and pins hidden from the first frame.
+  const introPending = !flags.skipIntro && !/^#\/h\//.test(location.hash);
+  if (introPending) document.body.classList.add('flying');
   const tier = detectTier(flags.tier);
   const exag = DEFAULT_EXAG;
   const progress = new Progress();
@@ -173,6 +180,8 @@ async function boot() {
     scene.add(overlays.group);
     sizeOverlays();
     overlays.precompile(stage.renderer, scene, camera);
+    // Cinematic intro: no overlay lines over the title card and flyover.
+    if (document.body.classList.contains('flying')) overlays.group.visible = false;
     overlays.setMode(mode, 0);
     stage.invalidate();
   }).catch(() => { /* overlays are optional: the scene works without them */ });
@@ -195,7 +204,7 @@ async function boot() {
     };
     if (ms <= 0) { set(1); stage.invalidate(); return; }
     const start = performance.now();
-    stage.addAnimator((_dt, now) => { const t = Math.min(1, (now - start) / ms); set(t * t * (3 - 2 * t)); return t < 1; });
+    stage.addAnimator((_dt, now) => { const t = Math.min(1, Math.max(0, (now - start) / ms)); set(t * t * (3 - 2 * t)); return t < 1; });
   };
 
   // ---- Pins, modes, selection, deep links ----
@@ -217,6 +226,7 @@ async function boot() {
   onLang(() => {
     pins.relabel();
     panel.relabel();
+    about.relabel();
     readout.relabel();
     labels.relabel();
     legend.relabel();
@@ -272,14 +282,22 @@ async function boot() {
     stage.invalidate();
   }
 
+  const setAtmo = (next: AtmoName) => {
+    const anim = atmo.transition(next, reducedMotion ? 0 : 1200);
+    if (anim) stage.addAnimator(anim); else stage.invalidate();
+    chrome.setAtmo(next);
+    announce(t('status.atmo', { atmo: t(`atmo.${next}`) }));
+  };
+  const about = new AboutSheet(credits, {
+    tier: tier.tier,
+    savedTier,
+    setTier: (x) => saveTier(x),
+    atmo: () => atmo.name,
+    setAtmo,
+  });
   const chrome = new Chrome({
-    onAtmo: () => {
-      const next = nextAtmo(atmo.name);
-      const anim = atmo.transition(next, reducedMotion ? 0 : 1200);
-      if (anim) stage.addAnimator(anim); else stage.invalidate();
-      chrome.setAtmo(next);
-      announce(t('status.atmo', { atmo: t(`atmo.${next}`) }));
-    },
+    onAtmo: () => setAtmo(nextAtmo(atmo.name)),
+    onAbout: () => about.open(),
     onReset: () => { selectHotspot(null, true); flyTo(homePose()); },
     onMode: (m) => setMode(m),
   });
@@ -365,12 +383,78 @@ async function boot() {
   hideLoading();
   document.body.dataset.ready = '1';
 
+  // ---- Intro: title card → flyover → free orbit (M7) ----
+  const pinsArrive = () => {
+    const c = document.getElementById('pins')!;
+    c.classList.add('arrive');
+    setTimeout(() => c.classList.remove('arrive'), 2000);
+  };
+  const flyLog: number[] = [];
+  let introPlanMin = NaN;
+  const endIntro = () => {
+    document.body.classList.remove('flying');
+    if (overlays) overlays.group.visible = true;
+    stage.invalidate();
+    controls.autoRotate = false;
+    pinsArrive();
+    showHint();
+  };
+  const startFlyover = () => {
+    controls.autoRotate = false;
+    if (reducedMotion) { applyPose(homePose()); controls.update(); stage.invalidate(); endIntro(); return; }
+    const home = homePose();
+    const plan = planFlyover(hf, exag, { pos: camera.position.clone(), target: controls.target.clone() }, { pos: poseToPosition(home), target: home.target });
+    introPlanMin = minClearance(plan, hf, exag);
+    controls.enabled = false;
+    let finished = false;
+    const finish = () => {
+      if (finished) return;
+      finished = true;
+      subs.close();
+      window.removeEventListener('pointerdown', skip, true);
+      window.removeEventListener('keydown', onKey, true);
+      endIntro();
+    };
+    const fly = runFlyover(plan, camera, controls.target, hf, exag, {
+      onFrame: (tt, clearance) => { subs.update(tt); if (flags.debug) flyLog.push(clearance); },
+      onDone: () => { controls.enabled = true; controls.update(); finish(); },
+    });
+    function skip() {
+      if (finished) return;
+      fly.stop();
+      flyTo(homePose(), 900);
+      finish();
+    }
+    function onKey(e: KeyboardEvent) { if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); skip(); } }
+    const subs = new Subtitles(skip);
+    // Any tap / click / Esc skips (CLAUDE.md §6.9). Registered after this click has finished bubbling.
+    setTimeout(() => {
+      window.addEventListener('pointerdown', skip, true);
+      window.addEventListener('keydown', onKey, true);
+    }, 0);
+    stage.addAnimator(fly.animator);
+  };
+
+  // A shared hotspot link opens straight on that hotspot: no title card, no flyover.
   if (location.hash) routeFromHash();
-  if (!flags.skipIntro) {
-    controls.autoRotate = true;
-    controls.autoRotateSpeed = 0.35;
-    const done = () => { controls.autoRotate = false; showHint(); };
-    showTitleCard({ onExplore: done, onSkip: done });
+  if (introPending) {
+    // Title card over the live terrain, seen from the flyover's start (NE, high), drifting slowly.
+    const startPos = groundPoint(hf, exag, FLY_START.lon, FLY_START.lat, FLY_START.above);
+    controls.target.copy(groundPoint(hf, exag, -8.40, 7.64));
+    camera.position.copy(startPos);
+    camera.lookAt(controls.target);
+    controls.update();
+    controls.autoRotate = !reducedMotion;
+    controls.autoRotateSpeed = 0.15;
+    showTitleCard({
+      onExplore: startFlyover,
+      onSkip: () => { flyTo(homePose(), reducedMotion ? 0 : 1200); endIntro(); },
+      onCredits: () => about.open(),
+    });
+  }
+
+  if (flags.debug) {
+    (window as unknown as { __nimbaFly: unknown }).__nimbaFly = () => ({ planMin: introPlanMin, frames: flyLog.length, frameMin: flyLog.length ? Math.min(...flyLog) : NaN });
   }
 }
 

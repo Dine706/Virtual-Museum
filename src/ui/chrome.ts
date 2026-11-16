@@ -10,6 +10,7 @@ export interface ChromeHandlers {
   onAtmo: () => void;
   onReset: () => void;
   onMode: (m: Mode) => void;
+  onAbout: () => void;
 }
 
 const atmoIcon: Record<AtmoName, string> = { clear: icons.sun, golden: icons.sunset, mist: icons.mist };
@@ -26,7 +27,10 @@ export class Chrome {
     const langHome = document.createElement('div');
     langHome.className = 'lang-home';
     langHome.append(langToggle());
-    top.append(langHome);
+    const aboutTop = this.iconButton(icons.info, () => h.onAbout());
+    aboutTop.classList.add('about-btn');
+    aboutTop.dataset.i18nAttr = 'aria-label:about.open';
+    top.append(langHome, aboutTop);
 
     const modes = document.createElement('div');
     modes.className = 'modes';
@@ -63,11 +67,21 @@ export class Chrome {
     const langSlot = document.createElement('div');
     langSlot.className = 'lang-slot';
     langSlot.append(langToggle());
-    tools.append(this.atmoBtn, reset, langSlot);
+    const aboutRail = this.iconButton(icons.info, () => h.onAbout());
+    aboutRail.classList.add('about-rail');
+    aboutRail.dataset.i18nAttr = 'aria-label:about.open;data-tip:about.open';
+    tools.append(this.atmoBtn, reset, langSlot, aboutRail);
 
     const credit = document.createElement('p');
     credit.className = 'credit';
-    credit.dataset.i18n = 'footer.credit';
+    const creditText = document.createElement('span');
+    creditText.dataset.i18n = 'footer.credit';
+    const creditsLink = document.createElement('button');
+    creditsLink.type = 'button';
+    creditsLink.className = 'credits-link';
+    creditsLink.dataset.i18n = 'footer.creditsLink';
+    creditsLink.addEventListener('click', () => h.onAbout());
+    credit.append(creditText, ' · ', creditsLink);
 
     document.getElementById('app')!.append(top, modes, tools, credit);
     applyStatic();
