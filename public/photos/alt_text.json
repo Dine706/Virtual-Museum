@@ -1,0 +1,130 @@
+{
+ "hero-massif": {
+  "alt_en": "Green massif rising above grassland and savanna under a hazy sky",
+  "alt_fr": "Massif vert s'élevant au-dessus de la prairie et de la savane sous un ciel voilé"
+ },
+ "grassland-valley": {
+  "alt_en": "Grass-covered slopes of the massif under low cloud",
+  "alt_fr": "Pentes herbeuses du massif sous des nuages bas"
+ },
+ "peak-green": {
+  "alt_en": "Green peak above montane grassland and drifting cloud",
+  "alt_fr": "Sommet vert au-dessus de la prairie d'altitude et de nuages"
+ },
+ "forest-canopy": {
+  "alt_en": "Forest canopy seen from below",
+  "alt_fr": "Canopée de la forêt vue d'en dessous"
+ },
+ "forest-stream": {
+  "alt_en": "Forest stream flowing beneath a rock overhang",
+  "alt_fr": "Ruisseau forestier sous un surplomb rocheux"
+ },
+ "biosphere-sign": {
+  "alt_en": "Green sign: Biosphere Reserve of the Nimba Mountains, central area, World Heritage site, entry forbidden",
+  "alt_fr": "Panneau vert : Réserve de la biosphère des Monts Nimba, aire centrale, site du patrimoine mondial, défense d'entrer"
+ },
+ "montane-grassland": {
+  "alt_en": "Montane grassland on the Nimba ridge",
+  "alt_fr": "Prairie d'altitude sur la crête du Nimba"
+ },
+ "protea-bushland": {
+  "alt_en": "Protea bushland on a misty Nimba slope",
+  "alt_fr": "Fourré à Protea sur une pente brumeuse du Nimba"
+ },
+ "cloud-forest": {
+  "alt_en": "Cloud-covered ridge with montane forest",
+  "alt_fr": "Crête couverte de nuages avec forêt montagnarde"
+ },
+ "rainforest-stream": {
+  "alt_en": "Narrow stream through dense rainforest with a fallen log",
+  "alt_fr": "Ruisseau étroit dans la forêt dense avec un tronc tombé"
+ },
+ "savanna": {
+  "alt_en": "Dry golden savanna with scattered trees around the massif",
+  "alt_fr": "Savane dorée avec arbres épars autour du massif"
+ },
+ "reserve-edge-ridge": {
+  "alt_en": "Grass ridge at the edge of the reserve near Gbakoré",
+  "alt_fr": "Crête herbeuse en limite de réserve près de Gbakoré"
+ },
+ "grassland-above-forest": {
+  "alt_en": "Walkers resting in high grassland above the forest zone",
+  "alt_fr": "Randonneurs au repos dans la prairie d'altitude au-dessus de la forêt"
+ },
+ "peak-strata": {
+  "alt_en": "Rocky peak with terraced slopes under cloud",
+  "alt_fr": "Sommet rocheux aux pentes en terrasses sous les nuages"
+ },
+ "peak-cloudcap": {
+  "alt_en": "Cloud-capped peak seen from the foothills",
+  "alt_fr": "Sommet coiffé de nuages vu depuis le piémont"
+ },
+ "valley-view": {
+  "alt_en": "View across a green valley towards the Nimba mountains",
+  "alt_fr": "Vue sur une vallée verte vers les monts Nimba"
+ },
+ "liberia-side-summit": {
+  "alt_en": "Walkers on the Liberian side of Mount Nimba",
+  "alt_fr": "Marcheurs sur le versant libérien du Mont Nimba"
+ },
+ "liberia-pit-road": {
+  "alt_en": "Dirt road into a terraced pit landscape with a pond (Liberian side, caption ambiguous)",
+  "alt_fr": "Piste de terre vers un paysage de fosse en gradins avec un étang (côté libérien, légende ambiguë)"
+ },
+ "toad-gestating-female": {
+  "alt_en": "Large gestating female Nimba viviparous toad",
+  "alt_fr": "Grande femelle gestante du crapaud vivipare du Nimba"
+ },
+ "toad-amplexus": {
+  "alt_en": "Male and female Nimba viviparous toads in amplexus",
+  "alt_fr": "Mâle et femelle du crapaud vivipare du Nimba en amplexus"
+ },
+ "toad-young-female": {
+  "alt_en": "Young female Nimba viviparous toad",
+  "alt_fr": "Jeune femelle du crapaud vivipare du Nimba"
+ },
+ "chimp-bossou-1": {
+  "alt_en": "Chimpanzee among ferns, holding fruit",
+  "alt_fr": "Chimpanzé parmi les fougères, tenant un fruit"
+ },
+ "chimp-bossou-2": {
+  "alt_en": "Chimpanzee seated on a mossy branch",
+  "alt_fr": "Chimpanzé assis sur une branche moussue"
+ },
+ "chimp-nimba-lowland": {
+  "alt_en": "Western chimpanzee partly hidden in lowland rainforest",
+  "alt_fr": "Chimpanzé d'Afrique de l'Ouest à demi caché dans la forêt de basse altitude"
+ },
+ "oil-palm-fruit": {
+  "alt_en": "Bunch of red oil-palm fruits",
+  "alt_fr": "Régime de fruits rouges du palmier à huile"
+ },
+ "bossou-village": {
+  "alt_en": "Rooftops of Bossou village among trees",
+  "alt_fr": "Toits du village de Bossou parmi les arbres"
+ },
+ "ireb-building": {
+  "alt_en": "IREB research building at Bossou with lawn and path",
+  "alt_fr": "Bâtiment de recherche de l'IREB à Bossou avec pelouse et allée"
+ },
+ "ireb-sign": {
+  "alt_en": "Sign: Institut de Recherche Environnementale de Bossou (IREB)",
+  "alt_fr": "Panneau : Institut de Recherche Environnementale de Bossou (IREB)"
+ },
+ "bossou-market": {
+  "alt_en": "Empty market stalls at Bossou on red earth",
+  "alt_fr": "Étals vides du marché de Bossou sur terre rouge"
+ },
+ "corridor-planting": {
+  "alt_en": "Two people planting trees in the Green Corridor",
+  "alt_fr": "Deux personnes plantant des arbres dans le Corridor vert"
+ },
+ "corridor-seedlings": {
+  "alt_en": "Tree seedlings in a nursery for corridor restoration",
+  "alt_fr": "Plantules en pépinière pour la restauration du corridor"
+ },
+ "lamco-mine-1976": {
+  "alt_en": "Open-pit iron-ore mine at Yekepa, Liberia, in 1976",
+  "alt_fr": "Mine de fer à ciel ouvert à Yekepa, Liberia, en 1976"
+ }
+}

@@ -1,0 +1,25 @@
+{
+  "name": "nimba-3d",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Monts Nimba interactive 3D demo – unofficial Phase 0 prototype (Tech Guinée for CSIG, fiche P19)",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "screens": "node scripts/screens.mjs"
+  },
+  "dependencies": {
+    "@fontsource-variable/fraunces": "^5.3.0",
+    "@fontsource-variable/inter": "^5.3.0",
+    "three": "^0.187.0"
+  },
+  "devDependencies": {
+    "@types/three": "^0.187.0",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.8",
+    "vite-plugin-pwa": "^2.0.0"
+  }
+}
