@@ -315,3 +315,17 @@ button { font: inherit; color: inherit; }
 .viewer-count { font: 500 .875rem/1 var(--font-ui); font-variant-numeric: tabular-nums; color: var(--mist-300); }
 .viewer-caption { margin: 0; padding: 4px 20px calc(16px + var(--sab)); text-align: center; font: 400 .875rem/1.45 var(--font-ui); color: var(--straw-300); }
 .viewer .v-close { position: absolute; top: calc(12px + var(--sat)); right: calc(12px + var(--sar)); }
+
+/* ---------- Free-click readout (DESIGN.md §9) ---------- */
+.readout { position: fixed; z-index: 13; left: 0; top: 0; max-width: min(340px, calc(100vw - 24px)); padding: 10px 12px; border-radius: 12px;
+  background: var(--glass); border: 1px solid var(--hairline); box-shadow: var(--shadow); color: var(--cloud-50);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); animation: readout-in .12s var(--ease); }
+@keyframes readout-in { from { opacity: 0; translate: 0 4px; } to { opacity: 1; translate: 0 0; } }
+.readout-line { margin: 0; font: 400 .875rem/1.45 var(--font-ui); font-variant-numeric: tabular-nums; }
+.readout-elev { display: inline-flex; align-items: center; gap: 4px; font-weight: 700; }
+.readout-elev svg { width: 15px; height: 15px; }
+.readout-nearest { display: block; width: 100%; margin-top: 8px; min-height: 40px; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--hairline);
+  background: rgba(239, 244, 242, .07); color: var(--straw-300); text-align: left; cursor: pointer; font: 500 .8125rem/1.35 var(--font-ui); }
+.readout-nearest:hover { background: rgba(239, 244, 242, .13); color: var(--cloud-50); }
+.readout-dot { position: fixed; z-index: 12; left: -6px; top: -6px; width: 12px; height: 12px; border-radius: 50%; background: var(--savanna-500);
+  box-shadow: 0 0 0 2px var(--cloud-50), 0 2px 8px rgba(0, 0, 0, .5); pointer-events: none; }

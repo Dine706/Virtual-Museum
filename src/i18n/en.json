@@ -53,5 +53,18 @@
   "viewer.close": "Close the viewer",
   "viewer.prev": "Previous photo",
   "viewer.next": "Next photo",
-  "viewer.zoomHint": "Pinch or double-click to zoom"
+  "viewer.zoomHint": "Pinch or double-click to zoom",
+  "readout.label": "Tapped point",
+  "readout.inReserve": "Inside the reserve ({country})",
+  "readout.outReserve": "Outside the strict reserve",
+  "readout.enclave": "Mining enclave (approx., OSM)",
+  "readout.nearBorder": "near a border",
+  "readout.nearTri": "near the tri-border point",
+  "readout.nearest": "Nearest: {title} ({dist})",
+  "readout.openNearest": "Open the nearest site: {title}, {dist} away",
+  "readout.close": "Close",
+  "readout.montaneGrass": "Montane grassland",
+  "country.GIN": "Guinea",
+  "country.CIV": "Côte d'Ivoire",
+  "country.LBR": "Liberia"
 }

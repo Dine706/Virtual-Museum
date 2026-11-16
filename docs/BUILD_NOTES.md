@@ -61,3 +61,25 @@ Running log of decisions, measured budgets and issues (CLAUDE.md §15).
 * `?debug=1` adds a dashed "To verify" box listing the hotspot's `uncertain` notes (English, for the team).
 * **`scripts/check-panel.mjs`** (M4 acceptance): opens all 23 hotspots in FR and EN at 320 px and 1440 px and checks title/short/long text, the photo count (or placeholder), "©" attribution on every caption, facts and sources counts, link attributes, no horizontal overflow, prev/next wrap, language switch keeping the panel open, keyboard Enter on a pin, and Esc + focus return. **All pass.**
 * JS bundle: 160 KB gz (budget 250 KB). Code-splitting the panel is planned for M8.
+
+## M5 – Camera & picking
+* **Fly-to on open** uses each hotspot's `camera` hint (since M3). **Picking** (`scene/picking.ts`) turns the click into a camera ray (it honours the panel's view offset) and ray-marches the CPU heightfield: 25 m steps growing with distance, then 12 bisection steps. The 250k-triangle mesh is never raycast.
+* **Tap / double-tap** on the canvas (8 px / 450 ms tap threshold, so orbit drags never trigger it). One tap shows the readout. A second tap within 330 ms and 30 px flies there: target = the ground point, current azimuth, elevation ≥ 30°, distance 45 % of the current one (1.5–8 km). Mouse double-click does the same.
+* **Readout** (`ui/readout.ts`, DESIGN.md §9): `▲ 1 747 m · Prairie d'altitude · Dans la réserve (Guinée)` plus a "Nearest: … (50 m)" button that opens that hotspot.
+  * Placed *below* the tapped point, because pins rise above their ground point and the card would otherwise hide the pin you just tapped next to.
+  * Dismissed by the next tap, any drag/pinch/wheel (`controls` `start`), a fly-to, opening a hotspot, or Esc.
+  * Announced via `aria-live`. The card has no keyboard path of its own; the same information lives in the panels and the M9 list view.
+  * Elevation is the DEM at the hit point (DSM: canopy included).
+  * Land cover comes from WorldCover. Grass/shrub above **1,200 m** is labelled "Prairie d'altitude / Montane grassland", following the `montane-grassland` hotspot text ("between about 1,200 and 1,400 m and up to the highest crests").
+* **Where is it?** (`data/regions.ts`):
+  * Reserve = point-in-polygon on the two WDPA parts. Their `iso3` gives the country inside the reserve.
+  * Outside, "strict reserve" is worded carefully ("Hors réserve intégrale / Outside the strict reserve"), because the Liberian East Nimba Nature Reserve exists but is not in our data.
+  * Countries: `borders_clipped.geojson` holds *lines*, so each country polygon is its line closed along the window edge on that country's side (Guinea N, Liberia W/SW, Côte d'Ivoire SE). Inside 0 or 2 polygons, or within 400 m of any outline, reads "near a border". Within 2.5 km of the Wikidata tripoint reads "near the tri-border point".
+  * Inside the OSM polygon the readout adds "Mining enclave (approx., OSM)".
+* **Flag for the content team:** the `mining-enclave` hotspot sits on the *area centroid* of the OSM polygon, which lies **outside** the polygon (it's concave; the nearest inside point is ≈ 165 m away). Harmless for a marker labelled "approximate", but the readout at the pin itself says "not in the enclave". Left unchanged (CLAUDE.md §15: flag, don't silently correct).
+* **`scripts/check-picking.mjs`** (M5 acceptance), all pass on desktop and phone (touch):
+  * 11 classification checks: summit in the Guinea part; Bossou, N'Zo and Gbakoré in Guinea; Yekepa and the Liberian lowland in Liberia; Yéalé and the Ivorian lowland in Côte d'Ivoire; the Côte d'Ivoire reserve part; tripoint; inside the enclave.
+  * **A real click on the summit reads 1,740 m (mid tier, 504² DEM) / 1,747 m (high tier, 1008² DEM).** The target is ≈ 1,750 ± 25 m ✓.
+  * A click in the Liberian lowland (503 m) reads "Hors réserve intégrale · Liberia" ✓.
+  * The "nearest" button opens Yekepa. A double click / double tap moves the orbit target to within 60–120 m of the point.
+* `?debug=1` exposes `window.__nimba` (`project`, `view`, `target`, `describe`) for these scripts only.

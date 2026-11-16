@@ -7,7 +7,10 @@ import { hideLoading, Progress, setLoadingText, showFatal } from './ui/loading';
 import { showTitleCard } from './ui/titlecard';
 import { BASE, flags, reducedMotion } from './flags';
 import { t } from './i18n';
-import { checkMeta, lonLatToXZ, type TerrainMeta } from './data/geo';
+import { checkMeta, lonLatToXZ, xzToLonLat, WORLD, WORLD_W, WORLD_D, type TerrainMeta } from './data/geo';
+import { Regions } from './data/regions';
+import { pickGround } from './scene/picking';
+import { Readout } from './ui/readout';
 import { loadContent, loadCredits, loc, type Hotspot, type Mode } from './data/content';
 import { decodePixels, fetchBlob } from './data/loader';
 import { Heightfield } from './scene/heightfield';
@@ -100,10 +103,61 @@ async function boot() {
   stage.onBeforeRender(() => clampCamera(camera, controls.target, hf, exag));
 
   const flyTo = (to: OrbitPose, ms = 1200) => {
+    readout?.hide();
     if (reducedMotion) { applyPose(to); stage.invalidate(); return; }
     controls.enabled = false;
     stage.addAnimator(tweenPose(currentPose(camera, controls.target), to, ms, applyPose, () => { controls.enabled = true; }));
   };
+
+  // ---- Free-click readout + double-tap fly (M5) ----
+  // Boundaries are small; fetch them right away but never block the first frame on them.
+  const regionsP = Regions.load(BASE);
+  regionsP.catch((e) => console.error(e));
+  // eslint-disable-next-line prefer-const
+  let readout: Readout;
+
+  const describe = async (p: THREE.Vector3) => {
+    const regions = await regionsP;
+    const [lon, lat] = xzToLonLat(p.x, p.z);
+    let nearest: { hotspot: Hotspot; distance: number } | null = null;
+    for (const h of content.hotspots) {
+      const [x, z] = lonLatToXZ(h.lon, h.lat);
+      const d = Math.hypot(x - p.x, z - p.z);
+      if (!nearest || d < nearest.distance) nearest = { hotspot: h, distance: d };
+    }
+    return {
+      elevation: hf.heightAt(p.x, p.z),
+      landcover: lc.classAtUV((p.x - WORLD.minX) / WORLD_W, (p.z - WORLD.minZ) / WORLD_D),
+      place: regions.classify(lon, lat),
+      nearest,
+      lon, lat,
+    };
+  };
+
+  let down: { x: number; y: number; t: number; id: number } | null = null;
+  let lastTap: { x: number; y: number; t: number } | null = null;
+  canvas.addEventListener('pointerdown', (e) => {
+    if (!e.isPrimary) { down = null; return; }
+    down = { x: e.clientX, y: e.clientY, t: performance.now(), id: e.pointerId };
+  });
+  canvas.addEventListener('pointerup', async (e) => {
+    const d = down;
+    down = null;
+    if (!d || d.id !== e.pointerId || Math.hypot(e.clientX - d.x, e.clientY - d.y) > 8 || performance.now() - d.t > 450) return;
+    const now = performance.now();
+    const isDouble = !!lastTap && now - lastTap.t < 330 && Math.hypot(e.clientX - lastTap.x, e.clientY - lastTap.y) < 30;
+    lastTap = isDouble ? null : { x: e.clientX, y: e.clientY, t: now };
+    const p = pickGround(e.clientX, e.clientY, canvas, camera, hf, exag);
+    if (!p) { readout.hide(); return; }
+    if (isDouble) {
+      const cur = currentPose(camera, controls.target);
+      flyTo({ target: p, azimuthDeg: cur.azimuthDeg, elevationDeg: Math.max(cur.elevationDeg, 30), distance: THREE.MathUtils.clamp(cur.distance * 0.45, 1500, 8000) }, 1000);
+      return;
+    }
+    const info = await describe(p);
+    readout.show(e.clientX, e.clientY, info);
+    announce(document.querySelector('.readout')?.textContent ?? '');
+  });
 
   // ---- Pins, modes, selection, deep links ----
   const modes: Mode[] = ['nature', 'culture', 'conservation'];
@@ -111,6 +165,8 @@ async function boot() {
   let selected: string | null = null;
   const pins = new Pins(content, hf, exag, (id) => selectHotspot(id, true), { debug: flags.debug, pulse: !reducedMotion && tier.tier !== 'low' });
   stage.onAfterRender(() => pins.update(camera, canvas.clientWidth, canvas.clientHeight, camera.position.distanceTo(controls.target)));
+  readout = new Readout((id) => selectHotspot(id, true));
+  controls.addEventListener('start', () => readout.hide()); // any drag / pinch / wheel dismisses it
   const viewer = new PhotoViewer();
   const panel = new Panel(content, credits, viewer, {
     onClose: () => selectHotspot(null, true),
@@ -121,6 +177,7 @@ async function boot() {
   onLang(() => {
     pins.relabel();
     panel.relabel();
+    readout.relabel();
     viewer.relabel();
     const h = content.hotspots.find((x) => x.id === selected);
     if (h) announce(t('status.opened', { title: loc(h, 'title', getLang()) }));
@@ -140,6 +197,7 @@ async function boot() {
     pins.select(selected);
     const hash = selected ? `#/h/${selected}` : '';
     if (location.hash !== hash) history.replaceState(null, '', `${location.pathname}${location.search}${hash}`);
+    readout.hide();
     if (h) {
       // The selected pin stays visible even outside the current mode (prev/next walk all 23 in order).
       panel.open(h, focus);
@@ -188,7 +246,9 @@ async function boot() {
   let focusOnRoute = false; // a deep link on page load must not grab focus
   window.addEventListener('hashchange', routeFromHash);
   window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && selected && !document.querySelector('.title-card, dialog[open]')) selectHotspot(null, true);
+    if (e.key !== 'Escape' || document.querySelector('.title-card, dialog[open]')) return;
+    if (readout.visible) { readout.hide(); return; }
+    if (selected) selectHotspot(null, true);
   });
 
   // One-time "Tap a pin" hint (DESIGN.md §5).
@@ -215,6 +275,27 @@ async function boot() {
     const rm = content.hotspots.find((h) => h.id === 'richard-molard');
     const maxRow = Math.floor(hf.maxIndex / hf.size), maxCol = hf.maxIndex % hf.size;
     const [mx, mz] = hf.samplePos(maxCol, maxRow);
+    // Test hook for scripts/check-*.mjs (debug builds only).
+    (window as unknown as { __nimba: unknown }).__nimba = {
+      project(lon: number, lat: number) {
+        const [x, z] = lonLatToXZ(lon, lat);
+        const v = new THREE.Vector3(x, hf.heightAt(x, z) * exag, z).project(camera);
+        const r = canvas.getBoundingClientRect();
+        return { x: r.left + (v.x * 0.5 + 0.5) * r.width, y: r.top + (-v.y * 0.5 + 0.5) * r.height, visible: Math.abs(v.z) <= 1 };
+      },
+      view(lon: number, lat: number, distance = 6000, azimuthDeg = 200, elevationDeg = 55) {
+        const [x, z] = lonLatToXZ(lon, lat);
+        readout.hide(); // like any camera move
+        applyPose({ target: new THREE.Vector3(x, hf.heightAt(x, z) * exag, z), azimuthDeg, elevationDeg, distance });
+        controls.update();
+        stage.invalidate();
+      },
+      target() { const [lon, lat] = xzToLonLat(controls.target.x, controls.target.z); return { lon, lat }; },
+      async describe(lon: number, lat: number) {
+        const [x, z] = lonLatToXZ(lon, lat);
+        return describe(new THREE.Vector3(x, 0, z));
+      },
+    };
     const fpsEl = document.createElement('div');
     fpsEl.className = 'fps';
     document.body.append(fpsEl);

@@ -53,5 +53,18 @@
   "viewer.close": "Fermer la visionneuse",
   "viewer.prev": "Photo précédente",
   "viewer.next": "Photo suivante",
-  "viewer.zoomHint": "Pincez ou double-cliquez pour zoomer"
+  "viewer.zoomHint": "Pincez ou double-cliquez pour zoomer",
+  "readout.label": "Point touché",
+  "readout.inReserve": "Dans la réserve ({country})",
+  "readout.outReserve": "Hors réserve intégrale",
+  "readout.enclave": "Enclave minière (approx., OSM)",
+  "readout.nearBorder": "près d'une frontière",
+  "readout.nearTri": "près du tripoint des trois pays",
+  "readout.nearest": "Plus proche : {title} ({dist})",
+  "readout.openNearest": "Ouvrir le site le plus proche : {title}, à {dist}",
+  "readout.close": "Fermer",
+  "readout.montaneGrass": "Prairie d'altitude",
+  "country.GIN": "Guinée",
+  "country.CIV": "Côte d'Ivoire",
+  "country.LBR": "Liberia"
 }
