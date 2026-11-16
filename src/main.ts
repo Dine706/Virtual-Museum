@@ -11,6 +11,9 @@ import { checkMeta, lonLatToXZ, xzToLonLat, WORLD, WORLD_W, WORLD_D, type Terrai
 import { Regions } from './data/regions';
 import { pickGround } from './scene/picking';
 import { Readout } from './ui/readout';
+import { Overlays } from './scene/overlays';
+import { TerrainLabels } from './ui/labels';
+import { Legend } from './ui/legend';
 import { loadContent, loadCredits, loc, type Hotspot, type Mode } from './data/content';
 import { decodePixels, fetchBlob } from './data/loader';
 import { Heightfield } from './scene/heightfield';
@@ -159,6 +162,42 @@ async function boot() {
     announce(document.querySelector('.readout')?.textContent ?? '');
   });
 
+  // ---- Overlays, terrain labels, legend (M6) ----
+  let overlays: Overlays | null = null;
+  const labels = new TerrainLabels(hf, exag);
+  stage.onAfterRender(() => labels.update(camera, canvas.clientWidth, canvas.clientHeight));
+  const sizeOverlays = () => overlays?.setResolution(canvas.clientWidth, canvas.clientHeight);
+  window.addEventListener('resize', sizeOverlays);
+  regionsP.then((r) => {
+    overlays = new Overlays(r, hf, exag);
+    scene.add(overlays.group);
+    sizeOverlays();
+    overlays.precompile(stage.renderer, scene, camera);
+    overlays.setMode(mode, 0);
+    stage.invalidate();
+  }).catch(() => { /* overlays are optional: the scene works without them */ });
+
+  // Terrain grading per mode (DESIGN.md §7), cross-faded with the overlays.
+  const MODE_LOOK: Record<Mode, { habitat: number; tint: THREE.Color; tintAmount: number; sat: number }> = {
+    nature: { habitat: 0.75, tint: new THREE.Color(1, 1, 1), tintAmount: 0, sat: 1 },
+    culture: { habitat: 0, tint: new THREE.Color(1.3, 1.0, 0.68), tintAmount: 0.8, sat: 1.06 },
+    conservation: { habitat: 0, tint: new THREE.Color(1, 1, 1), tintAmount: 0, sat: 0.7 },
+  };
+  const tu = terrainMat.uniforms;
+  const applyLook = (m: Mode, ms: number) => {
+    const to = MODE_LOOK[m];
+    const from = { habitat: tu.uHabitat.value as number, tint: (tu.uTint.value as THREE.Color).clone(), tintAmount: tu.uTintAmount.value as number, sat: tu.uModeSat.value as number };
+    const set = (k: number) => {
+      tu.uHabitat.value = from.habitat + (to.habitat - from.habitat) * k;
+      (tu.uTint.value as THREE.Color).lerpColors(from.tint, to.tint, k);
+      tu.uTintAmount.value = from.tintAmount + (to.tintAmount - from.tintAmount) * k;
+      tu.uModeSat.value = from.sat + (to.sat - from.sat) * k;
+    };
+    if (ms <= 0) { set(1); stage.invalidate(); return; }
+    const start = performance.now();
+    stage.addAnimator((_dt, now) => { const t = Math.min(1, (now - start) / ms); set(t * t * (3 - 2 * t)); return t < 1; });
+  };
+
   // ---- Pins, modes, selection, deep links ----
   const modes: Mode[] = ['nature', 'culture', 'conservation'];
   let mode: Mode = modes.includes(flags.mode as Mode) ? (flags.mode as Mode) : 'nature';
@@ -166,6 +205,7 @@ async function boot() {
   const pins = new Pins(content, hf, exag, (id) => selectHotspot(id, true), { debug: flags.debug, pulse: !reducedMotion && tier.tier !== 'low' });
   stage.onAfterRender(() => pins.update(camera, canvas.clientWidth, canvas.clientHeight, camera.position.distanceTo(controls.target)));
   readout = new Readout((id) => selectHotspot(id, true));
+  const legend = new Legend(() => selectHotspot('danger-list', true));
   controls.addEventListener('start', () => readout.hide()); // any drag / pinch / wheel dismisses it
   const viewer = new PhotoViewer();
   const panel = new Panel(content, credits, viewer, {
@@ -178,6 +218,8 @@ async function boot() {
     pins.relabel();
     panel.relabel();
     readout.relabel();
+    labels.relabel();
+    legend.relabel();
     viewer.relabel();
     const h = content.hotspots.find((x) => x.id === selected);
     if (h) announce(t('status.opened', { title: loc(h, 'title', getLang()) }));
@@ -214,6 +256,12 @@ async function boot() {
     mode = m;
     chrome.setMode(m);
     pins.setMode(m);
+    labels.setMode(m);
+    legend.setMode(m);
+    const ms = fromUser && !reducedMotion ? 250 : 0;
+    applyLook(m, ms);
+    const fade = overlays?.setMode(m, ms);
+    if (fade) stage.addAnimator(fade);
     const q = new URLSearchParams(location.search);
     if (m === 'nature') q.delete('mode'); else q.set('mode', m);
     const qs = q.toString();
@@ -289,6 +337,10 @@ async function boot() {
         applyPose({ target: new THREE.Vector3(x, hf.heightAt(x, z) * exag, z), azimuthDeg, elevationDeg, distance });
         controls.update();
         stage.invalidate();
+      },
+      modeState() {
+        return { mode, habitat: tu.uHabitat.value, tintAmount: tu.uTintAmount.value, sat: tu.uModeSat.value, overlays: overlays?.state ?? null,
+          labels: [...document.querySelectorAll('.tlabel.on')].map((e) => e.textContent), legend: document.querySelector('.legend-body')?.textContent ?? '' };
       },
       target() { const [lon, lat] = xzToLonLat(controls.target.x, controls.target.z); return { lon, lat }; },
       async describe(lon: number, lat: number) {

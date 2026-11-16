@@ -66,5 +66,17 @@
   "readout.montaneGrass": "Montane grassland",
   "country.GIN": "Guinea",
   "country.CIV": "Côte d'Ivoire",
-  "country.LBR": "Liberia"
+  "country.LBR": "Liberia",
+  "legend.title": "Legend",
+  "legend.bandsNote": "Indicative elevation bands (Copernicus DEM)",
+  "legend.bandLow": "Lowland forest (≲ 1,000 m)",
+  "legend.bandMontane": "Montane forest (≈ 1,000–1,400 m)",
+  "legend.bandGrass": "Montane grassland (≳ 1,400 m)",
+  "legend.reserve": "Reserve – UNESCO property (WDPA, simplified)",
+  "legend.enclave": "Mining enclave (OSM, approximate)",
+  "legend.borders": "Borders (geoBoundaries, approximate)",
+  "legend.village": "Village (OSM / Wikidata)",
+  "legend.danger": "On the List of World Heritage in Danger since 1992",
+  "legend.dangerOpen": "Open: On the Danger List",
+  "label.enclave": "Mining enclave (approx.)"
 }

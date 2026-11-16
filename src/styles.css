@@ -329,3 +329,43 @@ button { font: inherit; color: inherit; }
 .readout-nearest:hover { background: rgba(239, 244, 242, .13); color: var(--cloud-50); }
 .readout-dot { position: fixed; z-index: 12; left: -6px; top: -6px; width: 12px; height: 12px; border-radius: 50%; background: var(--savanna-500);
   box-shadow: 0 0 0 2px var(--cloud-50), 0 2px 8px rgba(0, 0, 0, .5); pointer-events: none; }
+
+/* ---------- Terrain labels (M6) ---------- */
+.terrain-labels { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.tlabel { position: absolute; left: 0; top: 0; opacity: 0; transition: opacity .2s; will-change: transform; white-space: nowrap; }
+.tlabel.on { opacity: 1; }
+.tlabel.hidden { opacity: 0 !important; }
+.tlabel span { position: absolute; left: 0; top: 0; text-shadow: 0 1px 3px rgba(0, 0, 0, .85), 0 0 8px rgba(0, 0, 0, .5); color: var(--cloud-50); }
+.tlabel-village::before { content: ''; position: absolute; left: -4px; top: -4px; width: 8px; height: 8px; border-radius: 50%; background: var(--laterite-500);
+  box-shadow: 0 0 0 1.5px var(--cloud-50); }
+.tlabel-village span { transform: translate(-50%, 8px); font: 600 .8125rem/1 var(--font-ui); }
+.tlabel-country span { transform: translate(-50%, -50%); font: 600 .8125rem/1 var(--font-ui); letter-spacing: .28em; text-transform: uppercase; opacity: .9; }
+.tlabel-enclave span { transform: translate(-50%, calc(-100% - 8px)); padding: 4px 9px; border-radius: 6px; font: 600 .75rem/1.2 var(--font-ui); color: #fff;
+  background: repeating-linear-gradient(135deg, rgba(200, 85, 61, .92) 0 6px, rgba(150, 58, 40, .92) 6px 12px); border: 1px solid rgba(255, 255, 255, .5); text-shadow: none; }
+
+/* ---------- Legend (M6) ---------- */
+.legend { position: fixed; z-index: 9; right: calc(16px + var(--sar)); bottom: calc(16px + var(--sab)); max-width: min(300px, calc(100vw - 150px));
+  border-radius: 14px; background: var(--glass); border: 1px solid var(--hairline); box-shadow: var(--shadow); color: var(--cloud-50);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); font: 400 .8125rem/1.35 var(--font-ui); }
+.legend summary { min-height: 44px; padding: 0 16px; display: flex; align-items: center; cursor: pointer; list-style: none; font: 600 .75rem/1 var(--font-ui);
+  letter-spacing: .08em; text-transform: uppercase; color: var(--mist-300); }
+.legend summary::-webkit-details-marker { display: none; }
+.legend summary::after { content: ''; margin-left: 10px; width: 7px; height: 7px; border-right: 1.75px solid currentColor; border-bottom: 1.75px solid currentColor;
+  transform: rotate(-135deg) translate(-2px, -2px); }
+.legend[open] summary::after { transform: rotate(45deg); }
+.legend-body { padding: 0 14px 12px; }
+.legend ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; }
+.legend li { display: flex; align-items: center; gap: 10px; }
+.legend li.note { color: var(--sage-400); font-size: .75rem; padding-left: 32px; margin-top: -3px; }
+.sw { flex: none; width: 22px; height: 12px; border-radius: 3px; }
+.sw-band-low { background: #4F7A3A; } .sw-band-montane { background: #3E6E66; } .sw-band-grass { background: #B5A35A; }
+.sw-reserve { height: 3px; border-radius: 2px; background: #E3B04B; }
+.sw-glow { box-shadow: 0 0 6px 2px rgba(227, 176, 75, .6); }
+.sw-enclave { height: 3px; background: repeating-linear-gradient(90deg, #C8553D 0 6px, transparent 6px 10px); }
+.sw-borders { height: 2px; background: repeating-linear-gradient(90deg, rgba(255, 255, 255, .7) 0 5px, transparent 5px 9px); }
+.sw-village { width: 10px; height: 10px; margin: 0 6px; border-radius: 50%; background: var(--laterite-500); box-shadow: 0 0 0 1.5px var(--cloud-50); }
+.danger-chip { margin-top: 10px; width: 100%; min-height: 40px; padding: 8px 12px; border-radius: 999px; border: 1px solid rgba(224, 100, 63, .6); cursor: pointer;
+  background: rgba(224, 100, 63, .16); color: #FFD3C4; font: 600 .8125rem/1.25 var(--font-ui); text-align: center; }
+.danger-chip:hover { background: rgba(224, 100, 63, .28); }
+@media (min-width: 600px) and (max-width: 1023px) { .legend { bottom: calc(72px + var(--sab)); } }
+@media (min-width: 1024px) { .legend { right: auto; left: calc(16px + var(--sal)); bottom: calc(60px + var(--sab)); } }

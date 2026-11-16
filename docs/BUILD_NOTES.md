@@ -92,3 +92,25 @@ Running log of decisions, measured budgets and issues (CLAUDE.md §15).
 * `engines.node` pinned to `22.x`. With `>=20`, Vercel picked Node 26 and warned it would auto-upgrade on every new major.
 * The Vercel connector in Claude sessions can read this team (deployments, logs) but is **not allowed to create projects or deployments** (403). Deployments therefore come from Git pushes, not from the connector.
 * The cloud container's network policy blocks `*.vercel.app`, so live checks from here go through an external fetch or the Vercel API. `scripts/check-*.mjs` accept `BASE_URL=…` to run against any reachable host.
+
+## M6 – Overlays & modes
+* **Draped lines** (`scene/overlays.ts`, three's `Line2`/`LineMaterial`, constant CSS-pixel width, dashes in metres): each ring is densified to a vertex every 40 m and lifted 25 m (true) above the DEM, so it follows the relief and never sinks into the mesh; depth-tested, so ridges hide lines behind them.
+  * Reserve: amber `#E3B04B`, 2.6 px, plus a 7 px glow line in Conservation.
+  * Enclave: terracotta `#C8553D`, dashed 200/90 m. Shorter dashes broke the many-vertex OSM polygon into scattered dots.
+  * Borders: white 40 %, dashed 260/170 m, clipped 2.6 km inside the tile so they stop before the hazy edge.
+  * Widths ×0.65 on screens narrower than 600 px.
+* **Modes** (DESIGN.md §7), all cross-faded in 250 ms (instant with reduced motion):
+  * **Nature:** terrain tinted by indicative elevation bands (≲ 1,000 m greener, ≈ 1,000–1,400 m cooler, ≳ 1,400 m golden), from the content's own figures (UNESCO lowland forest "up to 1,000 m"; grassland from "≈ 1,200–1,400 m"). The legend calls them *indicative elevation bands (Copernicus DEM)*, not mapped habitats. Reserve boundary at 55 %. "Water glints": no river data exists in the kit (GEO_DATA §4), so none are drawn.
+  * **Culture:** warm grade on the terrain (×(1.3, 1.0, 0.68) at 80 %). Six village labels with laterite dots: Bossou, Séringbara, Gbakoré, N'Zo, Yéalé, Yekepa, at the GEO_DATA §4 positions; Lola is outside the window. Reserve 35 %, borders 30 %.
+  * **Conservation:** terrain desaturated to 70 % so the overlays read, the reserve glows, the enclave is dashed with a hatched "Mining enclave (approx.)" label, borders at 40 %, country labels (GUINÉE / LIBERIA / CÔTE D'IVOIRE). The legend chip "On the List of World Heritage in Danger since 1992" comes from the `danger-list` hotspot's fact and opens that hotspot.
+* The **enclave label** is anchored inside the polygon's northern end and drawn above its point. The polygon's centroid lies outside it (M5 note), and the enclave / bat / peak pins cluster to the south.
+* **Legend** (`ui/legend.ts`): a `<details>` whose content follows the mode. Open on desktop (bottom-left above the credit line); a "Legend" pill bottom-right on phones and tablets.
+* Terrain labels are `aria-hidden` DOM elements (same projection + occlusion test as the pins). The information they carry is in the hotspot panels and the legend.
+* **Shader stall fixed:** the dashed `LineMaterial` programs only compiled the first time those lines became visible, so the first switch to Conservation could stall (2.2 s once under software GL). `Overlays.precompile()` compiles all line materials as soon as the overlays are added.
+* **`scripts/check-overlays.mjs`** (M6 acceptance), all pass:
+  * The 3 country label anchors classify inside their country; the enclave label anchor is inside the polygon.
+  * **Each mode reaches its target look in 239–260 ms** after the click (≤ 300 ms).
+  * Mean pixel difference between modes: 8.7 (Nature/Culture), 12.4 (Culture/Conservation), 11.7 (Nature/Conservation) / 255.
+  * The legend text matches each mode; the Danger List chip opens the `danger-list` panel.
+  * The M4 panel and M5 picking checks still pass.
+* JS bundle: 168 KB gz (adds `Line2`).

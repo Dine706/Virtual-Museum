@@ -66,5 +66,17 @@
   "readout.montaneGrass": "Prairie d'altitude",
   "country.GIN": "Guinée",
   "country.CIV": "Côte d'Ivoire",
-  "country.LBR": "Liberia"
+  "country.LBR": "Liberia",
+  "legend.title": "Légende",
+  "legend.bandsNote": "Bandes d'altitude indicatives (MNS Copernicus)",
+  "legend.bandLow": "Forêt de basse altitude (≲ 1 000 m)",
+  "legend.bandMontane": "Forêt montagnarde (≈ 1 000–1 400 m)",
+  "legend.bandGrass": "Prairie d'altitude (≳ 1 400 m)",
+  "legend.reserve": "Réserve – bien UNESCO (WDPA, simplifié)",
+  "legend.enclave": "Enclave minière (OSM, approximatif)",
+  "legend.borders": "Frontières (geoBoundaries, approximatif)",
+  "legend.village": "Village (OSM / Wikidata)",
+  "legend.danger": "Sur la liste du patrimoine en péril depuis 1992",
+  "legend.dangerOpen": "Ouvrir : Sur la liste du patrimoine en péril",
+  "label.enclave": "Enclave minière (approx.)"
 }

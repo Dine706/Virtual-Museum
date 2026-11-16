@@ -38,6 +38,8 @@ uniform vec3 uRock;
 uniform vec3 uTint;        // mode tint (M6)
 uniform float uTintAmount;
 uniform float uDetail;
+uniform float uHabitat;     // Nature mode: indicative elevation bands (DESIGN.md §7)
+uniform float uModeSat;     // Conservation mode: slightly muted terrain so overlays read
 varying vec3 vWorld;
 ${NOISE}
 ${SKY_FN}
@@ -113,6 +115,12 @@ void main() {
 
   // Mode tint (habitat bands / warm culture grade).
   base = mix(base, base * uTint, uTintAmount);
+  // Nature: lowland (≲ 1,000 m) greener, montane (≈ 1,000–1,400 m) cooler teal, ridge (≳ 1,400 m) golden.
+  if (uHabitat > 0.001) {
+    float m1 = smoothstep(950.0, 1050.0, elev), m2 = smoothstep(1350.0, 1450.0, elev);
+    vec3 band = mix(mix(vec3(0.88, 1.12, 0.82), vec3(0.80, 1.0, 1.10), m1), vec3(1.22, 1.08, 0.70), m2);
+    base = mix(base, base * band, uHabitat);
+  }
 
   // Lighting.
   float ndl = max(dot(n, uSunDir), 0.0);
@@ -134,6 +142,7 @@ void main() {
   col = mix(col, mistLit, mist);
 
   col = grade(col);
+  col = mix(vec3(dot(col, vec3(0.2126, 0.7152, 0.0722))), col, uModeSat);
   col = aerial(col, cameraPosition, vWorld);
 
   // Fade the 31 km square into the horizon haze.
@@ -157,6 +166,8 @@ export function createTerrainMaterial(atmo: Atmosphere, hf: Heightfield, landTex
       uRock: { value: new THREE.Color('#6E6252') },
       uTint: { value: new THREE.Color(1, 1, 1) },
       uTintAmount: { value: 0 },
+      uHabitat: { value: 0 },
+      uModeSat: { value: 1 },
       uDetail: { value: 1 },
     },
     defines: { SHADOW_STEPS: shadowSteps },
