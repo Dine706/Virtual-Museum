@@ -39,9 +39,14 @@ v16 = np.clip((dem - ZMIN) / (ZMAX - ZMIN), 0, 1) * 65535
 Image.fromarray(v16.round().astype("uint16")).save(os.path.join(PUB, "heightmap_16bit.png"), optimize=True)
 half = Image.fromarray(v16.round().astype("uint16")).resize((Wd // 2, H // 2), Image.BILINEAR)
 half.save(os.path.join(PUB, "heightmap_512_16bit.png"), optimize=True)
-t = dem + 32768.0; R = np.floor(t / 256); G = np.floor(t - R * 256); B = np.floor((t - np.floor(t)) * 256)
-Image.fromarray(np.dstack([R, G, B]).astype("uint8")).save(os.path.join(PUB, "terrarium.png"), optimize=True)
-Image.fromarray(np.dstack([R, G, B]).astype("uint8")).resize((Wd // 2, H // 2), Image.BILINEAR).save(os.path.join(PUB, "terrarium_504.png"), optimize=True)  # mobile
+def terrarium(z):
+    t = z + 32768.0; R = np.floor(t / 256); G = np.floor(t - R * 256); B = np.floor((t - np.floor(t)) * 256)
+    return Image.fromarray(np.dstack([R, G, B]).astype("uint8"))
+terrarium(dem).save(os.path.join(PUB, "terrarium.png"), optimize=True)
+# Downsample the HEIGHTS, then encode. Resizing the encoded RGB image interpolates R and G independently and
+# creates spikes of up to ~250 m wherever R rolls over (every 256 m) – the bug in the first kit release.
+dem_half = dem[: H // 2 * 2, : Wd // 2 * 2].reshape(H // 2, 2, Wd // 2, 2).mean(axis=(1, 3))
+terrarium(dem_half).save(os.path.join(PUB, "terrarium_504.png"), optimize=True)  # mobile
 # --- hillshade
 def hillshade(z, az=315, alt=40, exag=1.5):
     gy, gx = np.gradient(z * exag, py_m, px_m)
