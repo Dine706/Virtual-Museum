@@ -7,7 +7,7 @@ export interface PlaceLabel {
   id: string;
   lon: number;
   lat: number;
-  kind: 'village' | 'country' | 'enclave';
+  kind: 'village' | 'country';
   /** Fixed name, or an i18n key when `i18n` is true. */
   text: string;
   i18n?: boolean;
@@ -24,7 +24,4 @@ export const PLACE_LABELS: PlaceLabel[] = [
   { id: 'gin', lon: -8.47, lat: 7.705, kind: 'country', text: 'country.GIN', i18n: true, modes: ['conservation'] },
   { id: 'lbr', lon: -8.535, lat: 7.555, kind: 'country', text: 'country.LBR', i18n: true, modes: ['conservation'] },
   { id: 'civ', lon: -8.34, lat: 7.53, kind: 'country', text: 'country.CIV', i18n: true, modes: ['conservation'] },
-  // Inside the northern end of the (concave) OSM polygon: its area centroid falls outside (BUILD_NOTES M5),
-  // and the pins of the enclave/bat/peaks cluster lie south of here, so the label (drawn above) stays clear.
-  { id: 'enclave', lon: -8.383, lat: 7.6807, kind: 'enclave', text: 'label.enclave', i18n: true, modes: ['conservation'] },
 ];

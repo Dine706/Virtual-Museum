@@ -144,3 +144,11 @@ Running log of decisions, measured budgets and issues (CLAUDE.md §15).
   * Reduced motion: no flyover. A deep link opens without the title card.
   * The M4/M5/M6 checks still pass.
 * JS bundle: 180.6 KB gz (budget 250 KB). Code-splitting the About sheet and panel is M8.
+
+## Simplification for the prototype (Dean's request, after M7)
+* **Removed:** the legend (with its Danger List chip), the amber reserve-boundary lines and glow, the terracotta mining-enclave outline and its label, both on-screen credit lines ("Prototype non officiel – Phase 0 · …" on the map and the title card, with the "Photos : voir Crédits" link), and the ⓘ About / Credits sheet with its settings (quality tier, atmosphere). `ui/legend.ts`, `ui/about.ts`, their CSS and strings were deleted; git history keeps them (`f515a4a`).
+* **Kept:** the white dashed national borders and the GUINÉE / LIBERIA / CÔTE D'IVOIRE labels (Conservation), the village labels (Culture), the mode looks, and **the "© author · licence" caption under every photo** in the panels and the viewer (required by the photos' CC BY / BY-SA licences). The readout still *says* "in the reserve" and "mining enclave (approx., OSM)"; only the drawn lines are gone.
+* **Added:** a ✕ close button on the free-click readout card (44 px target, `aria-label` "Fermer / Close"), like the panel's.
+* **Before any public or official launch, restore the data attributions somewhere visible.** Copernicus DEM, ESA WorldCover (CC BY 4.0), WDPA (non-commercial terms), geoBoundaries (CC BY-SA for Guinea) and OSM (ODbL) all require them (`docs/DATA_LICENCES.md`). The removed About sheet held them verbatim and can be brought back from git. This conflicts with CLAUDE.md §12 / the final checklist ("Footer credits + About lists every licence"), and was done knowingly for the prototype.
+* Quality tier: with the About setting gone, the tier is auto-detected (and `?tier=high|mid|low` still overrides it). The M8 FPS watchdog will handle step-downs.
+* Checks updated: `check-overlays.mjs` now expects border-only overlays, 3 Conservation labels, no legend and no credit line. `check-picking.mjs` tests the ✕. All four checks pass. One overlay run timed a first switch at 1.7 s; two reruns gave 207–247 ms, a one-off CPU-renderer stall rather than a regression.

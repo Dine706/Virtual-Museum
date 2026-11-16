@@ -1,5 +1,6 @@
-// Draped GeoJSON overlays (CLAUDE.md §6.5): reserve boundary (amber #E3B04B, + glow in Conservation),
-// approximate mining enclave (dashed terracotta #C8553D), national borders (thin white 40 % dashed).
+// Draped GeoJSON overlays (CLAUDE.md §6.5). Currently only the national borders (thin white 40 % dashed):
+// the reserve boundary (amber) and mining enclave (terracotta) lines were removed at Dean's request for the
+// prototype (see BUILD_NOTES, "Simplification"). Restore them by re-adding their layers below.
 // Fat lines (Line2) keep a constant pixel width; dashes are in world metres. Each ring is densified so it
 // follows the relief between vertices and lifted a little above the DEM so it never sinks into the mesh.
 import * as THREE from 'three';
@@ -11,13 +12,13 @@ import type { Regions } from '../data/regions';
 import type { Mode } from '../data/content';
 import type { Heightfield } from './heightfield';
 
-type Layer = 'reserve' | 'reserveGlow' | 'enclave' | 'borders';
+type Layer = 'borders';
 
 /** Target opacity of each layer per mode (DESIGN.md §7). */
 const MODE_OPACITY: Record<Mode, Record<Layer, number>> = {
-  nature: { reserve: 0.55, reserveGlow: 0, enclave: 0, borders: 0 },
-  culture: { reserve: 0.35, reserveGlow: 0, enclave: 0, borders: 0.3 },
-  conservation: { reserve: 1, reserveGlow: 0.26, enclave: 1, borders: 0.4 },
+  nature: { borders: 0 },
+  culture: { borders: 0.3 },
+  conservation: { borders: 0.4 },
 };
 
 const STEP_M = 40; // densify: one vertex every 40 m
@@ -28,17 +29,9 @@ export class Overlays {
   readonly group = new THREE.Group();
   private materials = new Map<Layer, LineMaterial[]>();
   private baseWidth = new Map<LineMaterial, number>();
-  private opacity: Record<Layer, number> = { reserve: 0, reserveGlow: 0, enclave: 0, borders: 0 };
+  private opacity: Record<Layer, number> = { borders: 0 };
 
   constructor(regions: Regions, private hf: Heightfield, private exag: number) {
-    const reserveRings = regions.reserveParts.flatMap((r) => r.polys.map((p) => p[0]));
-    for (const ring of reserveRings) {
-      this.add('reserveGlow', ring, { color: '#E3B04B', width: 7, closed: true });
-      this.add('reserve', ring, { color: '#E3B04B', width: 2.6, closed: true });
-    }
-    for (const poly of regions.enclavePolygons) {
-      this.add('enclave', poly[0], { color: '#C8553D', width: 3, closed: true, dash: [200, 90] });
-    }
     for (const line of regions.borders) {
       for (const part of this.clipToInner(line)) {
         this.add('borders', part, { color: '#FFFFFF', width: 1.6, closed: false, dash: [260, 170] });
@@ -96,7 +89,7 @@ export class Overlays {
     const line = new Line2(geo, mat);
     if (o.dash) line.computeLineDistances();
     line.visible = false;
-    line.renderOrder = layer === 'reserveGlow' ? 2 : 3;
+    line.renderOrder = 3;
     this.group.add(line);
     if (!this.materials.has(layer)) this.materials.set(layer, []);
     this.materials.get(layer)!.push(mat);

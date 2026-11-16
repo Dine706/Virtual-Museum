@@ -13,11 +13,8 @@ import { pickGround } from './scene/picking';
 import { Readout } from './ui/readout';
 import { Overlays } from './scene/overlays';
 import { TerrainLabels } from './ui/labels';
-import { Legend } from './ui/legend';
 import { FLY_START, groundPoint, minClearance, planFlyover, runFlyover } from './scene/flyover';
 import { Subtitles } from './ui/subtitles';
-import { AboutSheet } from './ui/about';
-import { saveTier, savedTier } from './scene/tier';
 import { loadContent, loadCredits, loc, type Hotspot, type Mode } from './data/content';
 import { decodePixels, fetchBlob } from './data/loader';
 import { Heightfield } from './scene/heightfield';
@@ -169,7 +166,7 @@ async function boot() {
     announce(document.querySelector('.readout')?.textContent ?? '');
   });
 
-  // ---- Overlays, terrain labels, legend (M6) ----
+  // ---- Overlays (white borders) and terrain labels (M6) ----
   let overlays: Overlays | null = null;
   const labels = new TerrainLabels(hf, exag);
   stage.onAfterRender(() => labels.update(camera, canvas.clientWidth, canvas.clientHeight));
@@ -214,7 +211,6 @@ async function boot() {
   const pins = new Pins(content, hf, exag, (id) => selectHotspot(id, true), { debug: flags.debug, pulse: !reducedMotion && tier.tier !== 'low' });
   stage.onAfterRender(() => pins.update(camera, canvas.clientWidth, canvas.clientHeight, camera.position.distanceTo(controls.target)));
   readout = new Readout((id) => selectHotspot(id, true));
-  const legend = new Legend(() => selectHotspot('danger-list', true));
   controls.addEventListener('start', () => readout.hide()); // any drag / pinch / wheel dismisses it
   const viewer = new PhotoViewer();
   const panel = new Panel(content, credits, viewer, {
@@ -226,10 +222,8 @@ async function boot() {
   onLang(() => {
     pins.relabel();
     panel.relabel();
-    about.relabel();
     readout.relabel();
     labels.relabel();
-    legend.relabel();
     viewer.relabel();
     const h = content.hotspots.find((x) => x.id === selected);
     if (h) announce(t('status.opened', { title: loc(h, 'title', getLang()) }));
@@ -267,7 +261,6 @@ async function boot() {
     chrome.setMode(m);
     pins.setMode(m);
     labels.setMode(m);
-    legend.setMode(m);
     const ms = fromUser && !reducedMotion ? 250 : 0;
     applyLook(m, ms);
     const fade = overlays?.setMode(m, ms);
@@ -288,16 +281,8 @@ async function boot() {
     chrome.setAtmo(next);
     announce(t('status.atmo', { atmo: t(`atmo.${next}`) }));
   };
-  const about = new AboutSheet(credits, {
-    tier: tier.tier,
-    savedTier,
-    setTier: (x) => saveTier(x),
-    atmo: () => atmo.name,
-    setAtmo,
-  });
   const chrome = new Chrome({
     onAtmo: () => setAtmo(nextAtmo(atmo.name)),
-    onAbout: () => about.open(),
     onReset: () => { selectHotspot(null, true); flyTo(homePose()); },
     onMode: (m) => setMode(m),
   });
@@ -358,7 +343,7 @@ async function boot() {
       },
       modeState() {
         return { mode, habitat: tu.uHabitat.value, tintAmount: tu.uTintAmount.value, sat: tu.uModeSat.value, overlays: overlays?.state ?? null,
-          labels: [...document.querySelectorAll('.tlabel.on')].map((e) => e.textContent), legend: document.querySelector('.legend-body')?.textContent ?? '' };
+          labels: [...document.querySelectorAll('.tlabel.on')].map((e) => e.textContent) };
       },
       target() { const [lon, lat] = xzToLonLat(controls.target.x, controls.target.z); return { lon, lat }; },
       async describe(lon: number, lat: number) {
@@ -449,7 +434,6 @@ async function boot() {
     showTitleCard({
       onExplore: startFlyover,
       onSkip: () => { flyTo(homePose(), reducedMotion ? 0 : 1200); endIntro(); },
-      onCredits: () => about.open(),
     });
   }
 

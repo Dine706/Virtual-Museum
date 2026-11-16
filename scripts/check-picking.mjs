@@ -63,6 +63,10 @@ for (const [name, opts] of [
   check(Math.abs(elev - 1750) <= 25, `[${name}] summit readout ${elev} m ("${summit.slice(0, 80)}")`);
   check(/réserve \(/.test(summit), `[${name}] summit is inside the reserve`);
 
+  // The card's ✕ closes it.
+  await page.click('.readout-close');
+  check(await page.evaluate(() => !document.querySelector('.readout:not([hidden])')), `[${name}] ✕ closes the readout`);
+
   await clickAt(-8.55, 7.55);
   const lbr = await page.evaluate(() => document.querySelector('.readout:not([hidden])')?.textContent ?? '');
   check(/Hors réserve/.test(lbr) && /Liberia/.test(lbr), `[${name}] Liberian lowland: "${lbr.slice(0, 90)}"`);

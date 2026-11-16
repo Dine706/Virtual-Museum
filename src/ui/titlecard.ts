@@ -2,7 +2,7 @@
 import { applyStatic, onLang, setLang, suggestEnglish, t } from '../i18n';
 import { langToggle } from './lang';
 
-export function showTitleCard(opts: { onExplore: () => void; onSkip: () => void; onCredits?: () => void }): { close: () => void } {
+export function showTitleCard(opts: { onExplore: () => void; onSkip: () => void }): { close: () => void } {
   const el = document.createElement('section');
   el.className = 'title-card';
   el.setAttribute('aria-labelledby', 'title-h1');
@@ -14,8 +14,7 @@ export function showTitleCard(opts: { onExplore: () => void; onSkip: () => void;
         <button type="button" class="btn-primary" data-i18n="title.explore"></button>
         <button type="button" class="btn-ghost" data-i18n="title.skip"></button>
       </div>
-    </div>
-    <p class="credit-line"><span data-i18n="footer.credit"></span> · <button type="button" class="credits-link" data-i18n="footer.creditsLink"></button></p>`;
+    </div>`;
   el.append(langToggle());
   if (suggestEnglish) {
     const hint = document.createElement('button');
@@ -30,7 +29,6 @@ export function showTitleCard(opts: { onExplore: () => void; onSkip: () => void;
   document.body.append(el);
   applyStatic(el);
   const [explore, skip] = el.querySelectorAll<HTMLButtonElement>('.actions button');
-  el.querySelector('.credits-link')!.addEventListener('click', () => opts.onCredits?.());
   explore.focus({ preventScroll: true });
 
   let closed = false;

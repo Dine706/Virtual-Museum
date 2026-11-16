@@ -85,7 +85,13 @@ export class Readout {
     elev.append(fmtMeters(Math.round(d.elevation)));
     line.append(elev, ` · ${landcoverLabel(d.landcover, d.elevation)} · ${placeLabel(d.place)}`);
     this.el.setAttribute('aria-label', t('readout.label'));
-    this.el.append(line);
+    const close = document.createElement('button');
+    close.type = 'button';
+    close.className = 'readout-close';
+    close.innerHTML = icons.close;
+    close.setAttribute('aria-label', t('readout.close'));
+    close.addEventListener('click', (e) => { e.stopPropagation(); this.hide(); });
+    this.el.append(close, line);
     if (d.nearest) {
       const title = loc(d.nearest.hotspot, 'title', getLang());
       const dist = fmtDistance(d.nearest.distance);
