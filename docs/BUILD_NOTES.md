@@ -83,3 +83,12 @@ Running log of decisions, measured budgets and issues (CLAUDE.md §15).
   * A click in the Liberian lowland (503 m) reads "Hors réserve intégrale · Liberia" ✓.
   * The "nearest" button opens Yekepa. A double click / double tap moves the orbit target to within 60–120 m of the point.
 * `?debug=1` exposes `window.__nimba` (`project`, `view`, `target`, `describe`) for these scripts only.
+
+## Hosting – Vercel
+* Project **`nimba-3d`** in the "dine706's projects" team, imported from `Dine706/Virtual-Museum`. The production branch is `claude/new-session-96lrge` (the repo's only and default branch), so **every push redeploys production**.
+* Live at **https://nimba-3d.vercel.app** (public; checked from outside: HTTP 200, no login wall). Vercel "Standard Protection" stays on: per-deployment and branch URLs (`nimba-3d-<hash>-dine706s-projects.vercel.app`) ask for a Vercel login, while the production domain is public.
+* `vercel.json`: Vite preset, `npm ci`, `npm run build` → `dist`. Hashed `/assets/*` are cached for a year (immutable); `/data/*` and `/photos/*` for 7 days with stale-while-revalidate (these names aren't hashed, so a data fix reaches visitors within a week, or immediately after a hard reload). Adds `nosniff` and `Referrer-Policy`.
+* The build prunes files the app never loads (`preview.png`, 16-bit heightmaps, hillshade, albedo, GLBs, `hotspots.geojson`), so `dist` is ≈ 16 MB, mostly the photos. CLAUDE.md M10 asks for this; it's done early because hosting started early.
+* `engines.node` pinned to `22.x`. With `>=20`, Vercel picked Node 26 and warned it would auto-upgrade on every new major.
+* The Vercel connector in Claude sessions can read this team (deployments, logs) but is **not allowed to create projects or deployments** (403). Deployments therefore come from Git pushes, not from the connector.
+* The cloud container's network policy blocks `*.vercel.app`, so live checks from here go through an external fetch or the Vercel API. `scripts/check-*.mjs` accept `BASE_URL=…` to run against any reachable host.
