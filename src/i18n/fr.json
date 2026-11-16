@@ -28,5 +28,6 @@
   "precision.approximate": "Position approximative",
   "precision.symbolic": "Repère symbolique",
   "footer.credit": "Prototype non officiel – Phase 0 · Un projet Tech Guinée pour le CSIG (fiche P19) · Données : Copernicus DEM, ESA WorldCover, WDPA, OpenStreetMap · Photos : voir Crédits",
-  "debug.verify": "À vérifier"
+  "debug.verify": "À vérifier",
+  "tools.label": "Outils"
 }

@@ -28,24 +28,27 @@ const sizes = [
 const browser = await chromium.launch({ args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
 let problems = 0;
 
-async function shoot(page, url, file, name) {
-  await page.goto(url, { waitUntil: 'load' });
-  // The app sets <body data-ready="1"> once the terrain has rendered (software GL is slow).
-  await page.waitForSelector('body[data-ready="1"]', { timeout: 60000 }).catch(() => console.log(`[${name}] timed out waiting for ready`));
-  await page.waitForTimeout(1800); // let tweens / fades settle
-  await page.screenshot({ path: `docs/screens/${prefix}${file}` });
-}
-
-for (const [name, opts] of sizes) {
-  const ctx = await browser.newContext(opts);
+async function shoot(ctx, url, file, name) {
+  // Fresh page per shot: a page that is still rendering (software GL) can block the next navigation.
   const page = await ctx.newPage();
+  page.setDefaultTimeout(180000);
   page.on('console', (m) => {
     if (['error', 'warning'].includes(m.type()) && !/GPU stall|swiftshader|WebGL/i.test(m.text())) { problems++; console.log(`[${name}] ${m.type()}: ${m.text()}`); }
   });
   page.on('pageerror', (e) => { problems++; console.log(`[${name}] pageerror: ${e.message}`); });
-  await shoot(page, `${BASE}?debug=1${extra}`, `${name}-title.png`, name);
-  await shoot(page, `${BASE}?debug=1&skipintro=1${extra}`, `${name}-home.png`, name);
-  await shoot(page, `${BASE}?debug=1&skipintro=1${extra}#/h/${hotspot}`, `${name}-${hotspot}.png`, name);
+  await page.goto(url, { waitUntil: 'load' });
+  // The app sets <body data-ready="1"> once the terrain has rendered (software GL is slow).
+  await page.waitForSelector('body[data-ready="1"]', { timeout: 90000 }).catch(() => console.log(`[${name}] timed out waiting for ready`));
+  await page.waitForTimeout(1800); // let tweens / fades settle
+  await page.screenshot({ path: `docs/screens/${prefix}${file}` });
+  await page.close();
+}
+
+for (const [name, opts] of sizes) {
+  const ctx = await browser.newContext(opts);
+  await shoot(ctx, `${BASE}?debug=1${extra}`, `${name}-title.png`, name);
+  await shoot(ctx, `${BASE}?debug=1&skipintro=1${extra}`, `${name}-home.png`, name);
+  await shoot(ctx, `${BASE}?debug=1&skipintro=1${extra}#/h/${hotspot}`, `${name}-${hotspot}.png`, name);
   await ctx.close();
 }
 await browser.close();

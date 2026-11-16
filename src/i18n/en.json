@@ -28,5 +28,6 @@
   "precision.approximate": "Approximate position",
   "precision.symbolic": "Symbolic marker",
   "footer.credit": "Unofficial prototype – Phase 0 · A Tech Guinée project for CSIG (fiche P19) · Data: Copernicus DEM, ESA WorldCover, WDPA, OpenStreetMap · Photos: see Credits",
-  "debug.verify": "To verify"
+  "debug.verify": "To verify",
+  "tools.label": "Tools"
 }

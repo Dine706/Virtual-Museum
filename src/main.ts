@@ -5,7 +5,7 @@ import * as THREE from 'three';
 import { applyStatic } from './i18n';
 import { hideLoading, Progress, setLoadingText, showFatal } from './ui/loading';
 import { showTitleCard } from './ui/titlecard';
-import { BASE, flags } from './flags';
+import { BASE, flags, reducedMotion } from './flags';
 import { t } from './i18n';
 import { checkMeta, lonLatToXZ, type TerrainMeta } from './data/geo';
 import { loadContent } from './data/content';
@@ -16,7 +16,11 @@ import { buildTerrainGeometry } from './scene/terrain';
 import { Stage } from './scene/stage';
 import { detectTier } from './scene/tier';
 import { DEFAULT_EXAG, HOME_VIEW } from './scene/config';
-import { clampCamera, poseToPosition, type OrbitPose } from './scene/camera';
+import { clampCamera, currentPose, poseToPosition, tweenPose, type OrbitPose } from './scene/camera';
+import { ATMO_ORDER, Atmosphere, nextAtmo, type AtmoName } from './scene/atmosphere';
+import { createTerrainMaterial } from './scene/terrainMaterial';
+import { Clouds, createSky } from './scene/sky';
+import { announce, Chrome } from './ui/chrome';
 
 setLoadingText();
 applyStatic();
@@ -51,25 +55,65 @@ async function boot() {
   const stage = new Stage(canvas, tier);
   const { scene, camera, controls } = stage;
 
-  // M1: plain lit terrain. (M2 replaces the material with the atmosphere shader.)
-  scene.background = new THREE.Color('#BFD3E0');
-  scene.fog = new THREE.Fog('#BFD3E0', 20000, 60000);
-  const sun = new THREE.DirectionalLight('#fff4e0', 2.2);
-  sun.position.set(-0.55, 0.62, 0.55).multiplyScalar(10000);
-  scene.add(sun, new THREE.HemisphereLight('#cfe0ee', '#3a4a2a', 1.1));
+  // Atmosphere (shared uniforms) → terrain shader, sky dome, clouds.
+  const initialAtmo: AtmoName = (ATMO_ORDER as string[]).includes(flags.atmo ?? '') ? (flags.atmo as AtmoName) : 'clear';
+  const atmo = new Atmosphere(initialAtmo, exag);
+  const syncExposure = () => { stage.renderer.toneMappingExposure = atmo.exposure; };
+  atmo.subscribe(syncExposure);
+  syncExposure();
   const geom = buildTerrainGeometry(hf, tier.segments, exag);
-  const mat = new THREE.MeshStandardMaterial({ map: lc.toTexture(), roughness: 0.95, metalness: 0 });
-  const terrain = new THREE.Mesh(geom, mat);
-  scene.add(terrain);
+  const terrainMat = createTerrainMaterial(atmo, hf, lc.toTexture(), tier.shadowSteps);
+  const terrain = new THREE.Mesh(geom, terrainMat);
+  terrain.frustumCulled = false;
+  scene.add(createSky(atmo), terrain);
+  if (tier.clouds > 0) scene.add(new Clouds(atmo, terrainMat.uniforms.uHeight.value, tier.clouds).group);
 
-  // Home orbit.
+  // Cloud/mist drift. High tier animates continuously; elsewhere time only advances while rendering
+  // (render-on-demand). No drift at all under prefers-reduced-motion.
+  if (!reducedMotion) {
+    if (tier.tier === 'high') stage.addAnimator((dt) => { atmo.uniforms.uTime.value += dt; return true; });
+    else stage.onBeforeRender(() => { atmo.uniforms.uTime.value += 1 / 30; });
+  }
+
+  // Home orbit (portrait screens look down a little more so the ridge fills the frame).
   const [tx, tz] = lonLatToXZ(HOME_VIEW.target.lon, HOME_VIEW.target.lat);
-  const home: OrbitPose = { target: new THREE.Vector3(tx, HOME_VIEW.target.h * exag, tz), azimuthDeg: HOME_VIEW.azimuthDeg, elevationDeg: HOME_VIEW.elevationDeg, distance: HOME_VIEW.distance };
-  controls.target.copy(home.target);
-  poseToPosition(home, camera.position);
-  camera.lookAt(home.target);
+  const homePose = (): OrbitPose => {
+    const portrait = camera.aspect < 0.8;
+    return {
+      target: new THREE.Vector3(tx, HOME_VIEW.target.h * exag, tz),
+      azimuthDeg: HOME_VIEW.azimuthDeg,
+      elevationDeg: portrait ? HOME_VIEW.elevationDeg + 8 : HOME_VIEW.elevationDeg,
+      distance: portrait ? HOME_VIEW.distance * 1.25 : HOME_VIEW.distance,
+    };
+  };
+  const applyPose = (p: OrbitPose) => {
+    controls.target.copy(p.target);
+    poseToPosition(p, camera.position);
+    camera.lookAt(p.target);
+  };
+  applyPose(homePose());
   controls.update();
   stage.onBeforeRender(() => clampCamera(camera, controls.target, hf, exag));
+
+  const flyTo = (to: OrbitPose, ms = 1200) => {
+    if (reducedMotion) { applyPose(to); stage.invalidate(); return; }
+    controls.enabled = false;
+    stage.addAnimator(tweenPose(currentPose(camera, controls.target), to, ms, applyPose, () => { controls.enabled = true; }));
+  };
+
+  const chrome = new Chrome({
+    onAtmo: () => {
+      const next = nextAtmo(atmo.name);
+      const anim = atmo.transition(next, reducedMotion ? 0 : 1200);
+      if (anim) stage.addAnimator(anim); else stage.invalidate();
+      chrome.setAtmo(next);
+      announce(t('status.atmo', { atmo: t(`atmo.${next}`) }));
+    },
+    onReset: () => flyTo(homePose()),
+    onMode: (m) => chrome.setMode(m),
+  });
+  chrome.setAtmo(initialAtmo);
+  chrome.setMode('nature');
 
   if (flags.debug) {
     // M1 acceptance: a marker at richard-molard must sit on the highest DEM sample of the tile.
@@ -89,7 +133,7 @@ async function boot() {
     document.body.append(fpsEl);
     const rmXZ = rm ? lonLatToXZ(rm.lon, rm.lat) : [0, 0];
     stage.onAfterRender(() => {
-      fpsEl.textContent = `${stage.fps.toFixed(0)} fps · tier ${tier.tier} · ${tier.segments}²\n` +
+      fpsEl.textContent = `${stage.fps ? stage.fps.toFixed(0) + ' fps' : 'idle'} · tier ${tier.tier} · ${tier.segments}²\n` +
         `DEM max ${hf.max.toFixed(1)} m @ x ${mx.toFixed(0)} z ${mz.toFixed(0)}\n` +
         `richard-molard x ${rmXZ[0].toFixed(0)} z ${rmXZ[1].toFixed(0)} DEM ${rm ? hf.heightAt(rmXZ[0], rmXZ[1]).toFixed(1) : '-'} m`;
     });

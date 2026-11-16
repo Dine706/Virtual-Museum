@@ -83,7 +83,8 @@ button { font: inherit; color: inherit; }
 .tools .lang-slot { display: none; }
 
 .credit { position: fixed; z-index: 5; left: 50%; transform: translateX(-50%); bottom: calc(8px + var(--sab)); width: max-content; max-width: calc(100vw - 32px);
-  font: 400 12px/1.4 var(--font-ui); color: var(--cloud-50); opacity: .6; text-align: center; text-shadow: 0 1px 6px rgba(0, 0, 0, .7); pointer-events: none; }
+  margin: 0; padding: 4px 10px; border-radius: 8px; background: rgba(15, 26, 11, .55); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  font: 400 12px/1.4 var(--font-ui); color: rgba(239, 244, 242, .82); text-align: center; pointer-events: none; }
 @media (max-width: 599px) { .credit { display: none; } } /* phones: credit line lives in the About sheet */
 
 @media (min-width: 600px) {

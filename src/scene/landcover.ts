@@ -20,10 +20,10 @@ export const LANDCOVER_LABELS: Record<number, { fr: string; en: string }> = {
 // not the saturated WorldCover legend. Alpha carries a "roughness/canopy" hint for the shader:
 // 255 = closed canopy (gets clumpy detail), lower = open ground.
 const PALETTE: Record<number, [number, number, number, number]> = {
-  10: [44, 66, 36, 255],
-  20: [88, 100, 56, 150],
-  30: [146, 138, 86, 60],
-  40: [150, 134, 88, 90],
+  10: [38, 60, 31, 255],
+  20: [82, 96, 50, 150],
+  30: [104, 110, 56, 60],
+  40: [122, 116, 70, 90],
   50: [150, 108, 84, 20],
   60: [156, 116, 82, 10],
   80: [46, 74, 82, 0],

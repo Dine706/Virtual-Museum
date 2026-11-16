@@ -66,7 +66,10 @@ export class Stage {
       for (const a of this.animators) {
         if (a(dt, now)) this.dirty = true; else this.animators.delete(a), (this.dirty = true);
       }
-      if (!this.dirty) return;
+      if (!this.dirty) {
+        if (now - this.fpsStart > 1500) { this.fps = 0; this.fpsCount = 0; this.fpsStart = now; }
+        return;
+      }
       this.dirty = false;
       this.beforeRender.forEach((f) => f());
       this.renderer.render(this.scene, this.camera);
