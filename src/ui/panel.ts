@@ -2,7 +2,7 @@
 // Phones / portrait tablets: bottom sheet with snap points 18 / 55 / 92 vh (drag or tap the handle),
 // modal with a focus trap. Landscape tablets / desktop: non-modal glass side panel (380 / 440 px).
 import { getLang, fmtMeters, t } from '../i18n';
-import { loc, thumbUrl, type Content, type Hotspot, type Lang, type PhotoCredit } from '../data/content';
+import { loc, pictureFor, type Content, type Hotspot, type Lang, type PhotoCredit } from '../data/content';
 import { BASE } from '../flags';
 import { categoryColor, glyphs, icons } from './icons';
 import { illustration } from './illustrations';
@@ -335,14 +335,13 @@ export class Panel {
       btn.type = 'button';
       btn.className = 'photo-btn';
       btn.setAttribute('aria-label', t('panel.openPhoto', { alt }));
-      const img = document.createElement('img');
-      img.src = thumbUrl(BASE, p.id);
+      const { picture, img } = pictureFor(BASE, p.id, true);
       img.alt = alt;
       img.width = 480;
       img.height = Math.round((480 * p.height) / p.width);
       img.decoding = 'async';
       img.loading = i === 0 ? 'eager' : 'lazy';
-      btn.append(img);
+      btn.append(picture);
       btn.insertAdjacentHTML('beforeend', `<span class="photo-expand" aria-hidden="true">${icons.expand}</span>`);
       btn.addEventListener('click', () => this.viewer.open(photos, i));
       const cap = document.createElement('figcaption');

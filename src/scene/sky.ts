@@ -93,8 +93,10 @@ void main() {
 export class Clouds {
   readonly group = new THREE.Group();
   private layers: THREE.Mesh<THREE.PlaneGeometry, THREE.ShaderMaterial>[] = [];
+  private count: number;
 
   constructor(private atmo: Atmosphere, heightTex: THREE.Texture, count: number) {
+    this.count = count;
     const geo = new THREE.PlaneGeometry(64000, 64000, 1, 1).rotateX(-Math.PI / 2);
     for (let i = 0; i < count; i++) {
       const mat = new THREE.ShaderMaterial({
@@ -119,6 +121,12 @@ export class Clouds {
     this.sync();
   }
 
+  /** Runtime quality step-down: keep only the first `n` layers (0 = none). */
+  setCount(n: number) {
+    this.count = n;
+    this.sync();
+  }
+
   sync() {
     const e = this.atmo.uniforms.uExag.value;
     this.layers.forEach((m, i) => {
@@ -129,7 +137,7 @@ export class Clouds {
       u.uOpacity.value = p.opacity;
       u.uScale.value = p.scale;
       m.position.y = p.level * e;
-      m.visible = p.coverage > 0.01 && p.opacity > 0.01;
+      m.visible = i < this.count && p.coverage > 0.01 && p.opacity > 0.01;
     });
   }
 }

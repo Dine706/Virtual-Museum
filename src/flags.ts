@@ -7,6 +7,11 @@ export const flags = {
   tier: q.get('tier'),
   mode: q.get('mode'),
   atmo: q.get('atmo'),
+  /** On-screen FPS + tier meter only (for testing on real phones): ?fps=1 */
+  fps: q.get('fps') === '1',
+  /** FPS watchdog: on by default for real visitors, off under automation (software GL is always "slow")
+   *  unless ?watchdog=1; ?watchdog=0 turns it off. */
+  watchdog: q.get('watchdog') === '1' ? true : q.get('watchdog') === '0' ? false : !navigator.webdriver,
 };
 export const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 /** Base URL of the deployed app (Vite `base: './'`), used for every data fetch. */

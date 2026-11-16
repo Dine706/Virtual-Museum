@@ -84,8 +84,10 @@ for (const how of ['Escape', 'tap']) {
 // 5. Deep link: no title card, hotspot open.
 {
   const { ctx, page } = await open({}, `${BASE}?debug=1&tier=low#/h/cavally`);
+  // The panel is code-split: wait for its chunk (and the card's 0.7 s fade).
+  await page.waitForSelector('#panel.open', { timeout: 15000 }).catch(() => {});
   await page.waitForTimeout(800);
-  check(!(await page.isVisible('.title-card')) && !!(await page.$('#panel.open')), 'deep link #/h/cavally: no title card, panel open');
+  check(!(await page.$('.title-card:not(.hidden)')) && !!(await page.$('#panel.open')), 'deep link #/h/cavally: title card gone (fading), panel open');
   await ctx.close();
 }
 

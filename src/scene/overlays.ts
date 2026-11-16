@@ -99,9 +99,13 @@ export class Overlays {
   get state() { return { ...this.opacity }; }
 
   /** Compile every line shader up front so the first switch to Conservation does not stall on it. */
-  precompile(renderer: THREE.WebGLRenderer, scene: THREE.Scene, camera: THREE.Camera) {
+  async precompile(renderer: THREE.WebGLRenderer, scene: THREE.Scene, camera: THREE.Camera) {
     for (const c of this.group.children) c.visible = true;
-    renderer.compile(scene, camera);
+    if (renderer.extensions.has('KHR_parallel_shader_compile')) {
+      try { await renderer.compileAsync(this.group, camera, scene); } catch { renderer.compile(scene, camera); }
+    } else {
+      renderer.compile(scene, camera); // synchronous, but now rather than as a stall on the first mode switch
+    }
     this.apply();
   }
 

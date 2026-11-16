@@ -152,3 +152,33 @@ Running log of decisions, measured budgets and issues (CLAUDE.md §15).
 * **Before any public or official launch, restore the data attributions somewhere visible.** Copernicus DEM, ESA WorldCover (CC BY 4.0), WDPA (non-commercial terms), geoBoundaries (CC BY-SA for Guinea) and OSM (ODbL) all require them (`docs/DATA_LICENCES.md`). The removed About sheet held them verbatim and can be brought back from git. This conflicts with CLAUDE.md §12 / the final checklist ("Footer credits + About lists every licence"), and was done knowingly for the prototype.
 * Quality tier: with the About setting gone, the tier is auto-detected (and `?tier=high|mid|low` still overrides it). The M8 FPS watchdog will handle step-downs.
 * Checks updated: `check-overlays.mjs` now expects border-only overlays, 3 Conservation labels, no legend and no credit line. `check-picking.mjs` tests the ✕. All four checks pass. One overlay run timed a first switch at 1.7 s; two reruns gave 207–247 ms, a one-off CPU-renderer stall rather than a regression.
+
+## M8 – Performance
+**Measured** (`scripts/check-perf.mjs`, production build served with gzip; Vercel's brotli is slightly smaller):
+
+| | Mobile (mid tier) | Desktop (high tier) | Budget (CLAUDE.md §8) |
+|---|---|---|---|
+| Bytes to the title card | **880 KB** | **2.34 MB** | ≤ 3 MB / ≤ 5 MB |
+| JS (gzip, first load) | 168 KB | 168 KB | ≤ 250 KB |
+| Fonts | 2 files, 83 KB (Inter + Fraunces, Latin) | same | 2 files ≈ 80 KB |
+| Title card on 400 kbps "3G" | 20 s | – | ≤ 60 s |
+| Title card on Slow 4G (1.6 Mbps) | 5.8 s | – | – |
+| Lighthouse (mobile / desktop) | Perf **70–72** · A11y 100 · BP 100 · SEO 100 | Perf **81** · 100 · 100 · 100 | ≥ 80 / 95 / 95 / 90 |
+| LCP | 0.8 s | 0.2 s | ≤ 4 s |
+| CLS | 0.016 | 0.005 | – |
+
+* **Caveat on the mobile Lighthouse score:** this container renders WebGL on the CPU (SwiftShader). Lighthouse's 4× CPU slowdown then turns every rendered frame of the drifting title card into a long main-thread task. Total Blocking Time varies between 2.1 and 5.8 s from run to run, and it alone holds the score below 80. Boot itself, unthrottled, is 0.5–0.6 s to the first frame (marks below) with no task over 240 ms. **Run Lighthouse in Chrome on a real laptop/phone against https://nimba-3d.vercel.app for the real figure.**
+* Boot timeline (`performance.mark('nimba:*')`, phone, unthrottled, SwiftShader): webgl-probe 144 ms → data fetched 182 → decoded 227 → GL context 273 → terrain built 400 → shaders compiled 440 → first frame 609 ms.
+
+**Changes**
+* **The title card is the loading screen**, static HTML in `index.html` with its own critical CSS. "Monts Nimba", the subtitle (in the saved language, via a tiny inline script), the real DEM ridge line and the byte progress are painted from the first byte. The terrain fades in behind the card's gradient when ready, and Explorer/Passer appear *above* the fading progress block. The content is anchored from the top, so nothing already on screen moves. This took mobile LCP from 6.2 s to 0.8 s, because the title was previously created by JS only after the terrain loaded. On 3G, people read the title for those 20 s instead of a contour line. With `?skipintro` or a deep link, the card simply fades away when ready.
+* **Code splitting:** the panel (4.8 KB gz), photo viewer (1.7 KB gz) and `credits.json` load on the first hotspot opening, or are prefetched during idle time 4 s after the first frame. The overlays (`Line2`, 6.6 KB gz) load right after the first frame. Main chunk 176 → 167 KB gz (mostly three.js).
+* **Photos: AVIF + WebP + JPEG fallback** via `<picture>` (`scripts/make_photo_formats.mjs`, sharp; outputs committed so the Vercel build does not run encoders). Thumbs: JPEG 1.2 MB → AVIF 0.72 MB (−40 %). Full size (viewer only): 11 MB → 5.9 MB (−46 %). Opening a panel is now ≈ 20–30 KB per thumbnail. The repo grows by ≈ 14 MB of encoded copies.
+* **FPS watchdog** (`scene/watchdog.ts`, CLAUDE.md §7): measures 2 s of *continuous* rendering (the stage reports whether each frame followed another rendered frame, so idle gaps never count). If it is under 28 fps it steps down one tier *at runtime*: high → mid → low, meaning fewer mesh segments (504² → 256² → 160²), a lower DPR cap (2 → 1.5 → 1), fewer cloud layers (3 → 2 → 0), fewer shadow steps (24 → 12 → 0) and no pin pulse on low. It re-measures after 600 ms of settling and saves the result for the next visit. `?tier=` forces a tier and disables it. It is off under automation (`navigator.webdriver`: software GL is always "slow") unless `?watchdog=1`.
+  * The first version ignored frames more than 250 ms apart as "idle" and never fired on a GPU slow enough to need it. The new check caught this.
+* **`?fps=1`**: an on-screen meter (fps · tier · mesh · DPR · watchdog history) for testing on real phones, without the debug badges.
+* **Battery / render-on-demand:** the high-tier cloud drift and the title-card drift stop 20 s and 30 s after the last input, and restart on any input. The check confirms 0 frames in 3 s when idle.
+* **Shaders:** compiled with `renderer.compileAsync` before the first frame when `KHR_parallel_shader_compile` exists (off the main thread). Otherwise, as before, on the first render. The overlay line shaders are precompiled the same way (async, or synchronously at load rather than as a stall on the first Conservation switch).
+* **Favicon:** an inline SVG mountain glyph (no logo). This removes the `/favicon.ico` 404, the only console error Lighthouse found.
+* Dev tooling: `scripts/serve-dist.mjs` (gzip static server for `dist/`, used for Lighthouse); `sharp` dev dependency.
+* All checks pass: perf, flyover, panel, picking, overlays. The flyover check now waits for the lazily loaded panel on deep links.

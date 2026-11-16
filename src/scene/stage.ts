@@ -19,6 +19,12 @@ export class Stage {
   private beforeRender = new Set<() => void>();
   private last = performance.now();
   frames = 0;
+  /** Time since the previous rendered frame, and whether that frame was rendered on the previous rAF
+   *  tick too (a continuous run, e.g. animation or drag) – the FPS watchdog only measures those. */
+  frameDt = 0;
+  continuous = false;
+  private lastRender = 0;
+  private renderedLastTick = false;
   /** Number of frames actually rendered in the last second (debug meter). */
   fps = 0;
   private fpsCount = 0;
@@ -98,10 +104,15 @@ export class Stage {
         if (a(dt, now)) this.dirty = true; else this.animators.delete(a), (this.dirty = true);
       }
       if (!this.dirty) {
+        this.renderedLastTick = false;
         if (now - this.fpsStart > 1500) { this.fps = 0; this.fpsCount = 0; this.fpsStart = now; }
         return;
       }
       this.dirty = false;
+      this.frameDt = now - this.lastRender;
+      this.continuous = this.renderedLastTick;
+      this.lastRender = now;
+      this.renderedLastTick = true;
       this.beforeRender.forEach((f) => f());
       this.renderer.render(this.scene, this.camera);
       this.frames++;

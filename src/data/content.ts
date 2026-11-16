@@ -85,3 +85,24 @@ export async function loadCredits(base: string): Promise<Map<string, PhotoCredit
 
 export const photoUrl = (base: string, id: string) => `${base}photos/${id}.jpg`;
 export const thumbUrl = (base: string, id: string) => `${base}photos/thumb/${id}.jpg`;
+
+/** <picture> sources: AVIF, then WebP, JPEG fallback (scripts/make_photo_formats.mjs). */
+export function fillPicture(picture: HTMLPictureElement, img: HTMLImageElement, base: string, id: string, thumb: boolean) {
+  const stem = `${base}photos/${thumb ? 'thumb/' : ''}${id}`;
+  picture.querySelectorAll('source').forEach((s) => s.remove());
+  for (const [type, ext] of [['image/avif', 'avif'], ['image/webp', 'webp']] as const) {
+    const s = document.createElement('source');
+    s.type = type;
+    s.srcset = `${stem}.${ext}`;
+    picture.insertBefore(s, img);
+  }
+  img.src = `${stem}.jpg`;
+}
+
+export function pictureFor(base: string, id: string, thumb: boolean): { picture: HTMLPictureElement; img: HTMLImageElement } {
+  const picture = document.createElement('picture');
+  const img = document.createElement('img');
+  picture.append(img);
+  fillPicture(picture, img, base, id, thumb);
+  return { picture, img };
+}

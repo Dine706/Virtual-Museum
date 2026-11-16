@@ -1,7 +1,7 @@
 // Full-screen photo viewer (DESIGN.md §8.4): native <dialog> (top layer, Esc, focus containment),
 // loads the 1600 px original only here; pinch / wheel / double-tap zoom, drag to pan, arrows to switch.
 import { getLang, t } from '../i18n';
-import { photoUrl, type PhotoCredit } from '../data/content';
+import { fillPicture, type PhotoCredit } from '../data/content';
 import { BASE } from '../flags';
 import { icons } from './icons';
 
@@ -25,7 +25,7 @@ export class PhotoViewer {
     this.dlg = document.createElement('dialog');
     this.dlg.className = 'viewer';
     this.dlg.innerHTML = `
-      <div class="viewer-stage"><img alt="" decoding="async" draggable="false" /></div>
+      <div class="viewer-stage"><picture><img alt="" decoding="async" draggable="false" /></picture></div>
       <div class="viewer-bar">
         <button type="button" class="btn-icon v-prev">${icons.chevronLeft}</button>
         <span class="viewer-count"></span>
@@ -75,7 +75,7 @@ export class PhotoViewer {
     this.index = (i + n) % n;
     const p = this.photos[this.index];
     const alt = getLang() === 'en' ? p.alt_en : p.alt_fr;
-    this.img.src = photoUrl(BASE, p.id);
+    fillPicture(this.img.parentElement as HTMLPictureElement, this.img, BASE, p.id, false);
     this.img.width = p.width;
     this.img.height = p.height;
     this.img.alt = alt;

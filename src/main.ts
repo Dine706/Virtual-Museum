@@ -11,7 +11,7 @@ import { checkMeta, lonLatToXZ, xzToLonLat, WORLD, WORLD_W, WORLD_D, type Terrai
 import { Regions } from './data/regions';
 import { pickGround } from './scene/picking';
 import { Readout } from './ui/readout';
-import { Overlays } from './scene/overlays';
+import type { Overlays } from './scene/overlays';
 import { TerrainLabels } from './ui/labels';
 import { FLY_START, groundPoint, minClearance, planFlyover, runFlyover } from './scene/flyover';
 import { Subtitles } from './ui/subtitles';
@@ -21,7 +21,8 @@ import { Heightfield } from './scene/heightfield';
 import { Landcover } from './scene/landcover';
 import { buildTerrainGeometry } from './scene/terrain';
 import { Stage } from './scene/stage';
-import { detectTier } from './scene/tier';
+import { detectTier, saveTier, TIERS, type Tier, type TierSpec } from './scene/tier';
+import { FpsWatchdog } from './scene/watchdog';
 import { DEFAULT_EXAG, HOME_VIEW, ORBIT } from './scene/config';
 import { clampCamera, currentPose, poseToPosition, tweenPose, type OrbitPose } from './scene/camera';
 import { ATMO_ORDER, Atmosphere, nextAtmo, type AtmoName } from './scene/atmosphere';
@@ -29,8 +30,8 @@ import { createTerrainMaterial } from './scene/terrainMaterial';
 import { Clouds, createSky } from './scene/sky';
 import { announce, Chrome } from './ui/chrome';
 import { Pins } from './ui/pins';
-import { Panel } from './ui/panel';
-import { PhotoViewer } from './ui/viewer';
+import type { Panel } from './ui/panel';
+import type { PhotoViewer } from './ui/viewer';
 
 setLoadingText();
 applyStatic();
@@ -43,7 +44,10 @@ function webglAvailable(): boolean {
 }
 
 async function boot() {
+  const mark = (n: string) => performance.mark(`nimba:${n}`);
+  mark('boot');
   if (!webglAvailable()) { showFatal(t('loading.error')); return; }
+  mark('webgl-probe');
   // Intro pending (no ?skipintro, no #/h/ deep link): keep chrome and pins hidden from the first frame.
   const introPending = !flags.skipIntro && !/^#\/h\//.test(location.hash);
   if (introPending) document.body.classList.add('flying');
@@ -51,22 +55,24 @@ async function boot() {
   const exag = DEFAULT_EXAG;
   const progress = new Progress();
 
-  const [meta, content, credits, terrBlob, lcBlob] = await Promise.all([
+  const [meta, content, terrBlob, lcBlob] = await Promise.all([
     fetch(`${BASE}data/terrain_meta.json`).then((r) => r.json() as Promise<TerrainMeta>),
     loadContent(BASE),
-    loadCredits(BASE),
     fetchBlob(`${BASE}data/${tier.terrarium}`, progress.track('terrain', tier.terrariumBytes), tier.terrariumBytes),
     fetchBlob(`${BASE}data/landcover_classes.png`, progress.track('landcover', 76479), 76479),
   ]);
+  mark('fetched');
   const issues = checkMeta(meta);
   if (issues.length) console.warn('terrain_meta.json:', issues.join('; '));
 
   const [terrPx, lcPx] = await Promise.all([decodePixels(terrBlob), decodePixels(lcBlob)]);
   const hf = Heightfield.fromTerrarium(terrPx.data, terrPx.width);
   const lc = Landcover.fromPixels(lcPx.data, lcPx.width);
+  mark('decoded');
 
   const canvas = document.getElementById('scene') as HTMLCanvasElement;
   const stage = new Stage(canvas, tier);
+  mark('context');
   const { scene, camera, controls } = stage;
 
   // Atmosphere (shared uniforms) → terrain shader, sky dome, clouds.
@@ -79,15 +85,29 @@ async function boot() {
   const terrainMat = createTerrainMaterial(atmo, hf, lc.toTexture(), tier.shadowSteps);
   const terrain = new THREE.Mesh(geom, terrainMat);
   terrain.frustumCulled = false;
+  mark('terrain-built');
   scene.add(createSky(atmo), terrain);
-  if (tier.clouds > 0) scene.add(new Clouds(atmo, terrainMat.uniforms.uHeight.value, tier.clouds).group);
+  const clouds = tier.clouds > 0 ? new Clouds(atmo, terrainMat.uniforms.uHeight.value, tier.clouds) : null;
+  if (clouds) scene.add(clouds.group);
 
-  // Cloud/mist drift. High tier animates continuously; elsewhere time only advances while rendering
-  // (render-on-demand). No drift at all under prefers-reduced-motion.
-  if (!reducedMotion) {
-    if (tier.tier === 'high') stage.addAnimator((dt) => { atmo.uniforms.uTime.value += dt; return true; });
-    else stage.onBeforeRender(() => { atmo.uniforms.uTime.value += 1 / 30; });
-  }
+  // Cloud/mist drift. On the high tier the clouds drift continuously, but only for 20 s after the last
+  // interaction: an untouched page stops rendering (battery, CLAUDE.md §6.10). Mid/low tiers advance time
+  // only while frames are rendered anyway. No drift under prefers-reduced-motion.
+  let lastInput = performance.now();
+  let drifting = false;
+  const startDrift = () => {
+    if (drifting || reducedMotion || stage.tier.tier !== 'high') return;
+    drifting = true;
+    stage.addAnimator((dt, now) => {
+      atmo.uniforms.uTime.value += dt;
+      drifting = stage.tier.tier === 'high' && !document.hidden && now - lastInput < 20000;
+      return drifting;
+    });
+  };
+  const onInput = () => { lastInput = performance.now(); startDrift(); };
+  for (const ev of ['pointerdown', 'wheel', 'keydown']) window.addEventListener(ev, onInput, { passive: true });
+  startDrift();
+  if (!reducedMotion) stage.onBeforeRender(() => { if (!drifting) atmo.uniforms.uTime.value += 1 / 30; });
 
   // Home orbit (portrait screens look down a little more so the ridge fills the frame).
   const [tx, tz] = lonLatToXZ(HOME_VIEW.target.lon, HOME_VIEW.target.lat);
@@ -172,11 +192,12 @@ async function boot() {
   stage.onAfterRender(() => labels.update(camera, canvas.clientWidth, canvas.clientHeight));
   const sizeOverlays = () => overlays?.setResolution(canvas.clientWidth, canvas.clientHeight);
   window.addEventListener('resize', sizeOverlays);
-  regionsP.then((r) => {
-    overlays = new Overlays(r, hf, exag);
+  // Overlays (three's Line2) are code-split: not needed for the first frame.
+  Promise.all([regionsP, import('./scene/overlays')]).then(([r, { Overlays: OverlaysCls }]) => {
+    overlays = new OverlaysCls(r, hf, exag);
     scene.add(overlays.group);
     sizeOverlays();
-    overlays.precompile(stage.renderer, scene, camera);
+    void overlays.precompile(stage.renderer, scene, camera);
     // Cinematic intro: no overlay lines over the title card and flyover.
     if (document.body.classList.contains('flying')) overlays.group.visible = false;
     overlays.setMode(mode, 0);
@@ -212,19 +233,28 @@ async function boot() {
   stage.onAfterRender(() => pins.update(camera, canvas.clientWidth, canvas.clientHeight, camera.position.distanceTo(controls.target)));
   readout = new Readout((id) => selectHotspot(id, true));
   controls.addEventListener('start', () => readout.hide()); // any drag / pinch / wheel dismisses it
-  const viewer = new PhotoViewer();
-  const panel = new Panel(content, credits, viewer, {
-    onClose: () => selectHotspot(null, true),
-    onNavigate: (id) => selectHotspot(id, true),
-    onShowOnMap: (id) => { const h = content.hotspots.find((x) => x.id === id); if (h) flyTo(hotspotPose(h)); },
-    onObscure: (right, bottom) => stage.setViewInset(right, bottom, reducedMotion),
-  }, flags.debug);
+  // Panel + photo viewer + credits.json are code-split (CLAUDE.md M8): loaded on the first hotspot opening,
+  // or prefetched once the scene has been idle for a moment.
+  let panel: Panel | null = null;
+  let viewer: PhotoViewer | null = null;
+  let panelP: Promise<Panel> | null = null;
+  const ensurePanel = () => (panelP ??= (async () => {
+    const [{ Panel: PanelCls }, { PhotoViewer: ViewerCls }, credits] = await Promise.all([import('./ui/panel'), import('./ui/viewer'), loadCredits(BASE)]);
+    viewer = new ViewerCls();
+    panel = new PanelCls(content, credits, viewer, {
+      onClose: () => selectHotspot(null, true),
+      onNavigate: (id) => selectHotspot(id, true),
+      onShowOnMap: (id) => { const h = content.hotspots.find((x) => x.id === id); if (h) flyTo(hotspotPose(h)); },
+      onObscure: (right, bottom) => stage.setViewInset(right, bottom, reducedMotion),
+    }, flags.debug);
+    return panel;
+  })());
   onLang(() => {
     pins.relabel();
-    panel.relabel();
+    panel?.relabel();
     readout.relabel();
     labels.relabel();
-    viewer.relabel();
+    viewer?.relabel();
     const h = content.hotspots.find((x) => x.id === selected);
     if (h) announce(t('status.opened', { title: loc(h, 'title', getLang()) }));
     stage.invalidate();
@@ -246,12 +276,13 @@ async function boot() {
     readout.hide();
     if (h) {
       // The selected pin stays visible even outside the current mode (prev/next walk all 23 in order).
-      panel.open(h, focus);
+      const id = h.id;
+      ensurePanel().then((p) => { if (selected === id) p.open(h, focus); }).catch((e) => console.error(e));
       flyTo(hotspotPose(h), fromUser ? 1200 : 0);
       announce(t('status.opened', { title: loc(h, 'title', getLang()) }));
       dismissHint();
     } else {
-      panel.close();
+      panel?.close();
     }
     stage.invalidate();
   }
@@ -321,6 +352,7 @@ async function boot() {
     setTimeout(dismissHint, 6000);
   }
 
+  let debugLines = () => '';
   if (flags.debug) {
     // M1 acceptance readout: richard-molard must sit on the highest DEM sample of the tile.
     const rm = content.hotspots.find((h) => h.id === 'richard-molard');
@@ -345,28 +377,82 @@ async function boot() {
         return { mode, habitat: tu.uHabitat.value, tintAmount: tu.uTintAmount.value, sat: tu.uModeSat.value, overlays: overlays?.state ?? null,
           labels: [...document.querySelectorAll('.tlabel.on')].map((e) => e.textContent) };
       },
+      frames() { return stage.frames; },
+      quality() {
+        return { tier: stage.tier.tier, segments: builtSegments, dpr: stage.renderer.getPixelRatio(), watchdog: watchdog?.history ?? null, panelLoaded: !!panel };
+      },
       target() { const [lon, lat] = xzToLonLat(controls.target.x, controls.target.z); return { lon, lat }; },
       async describe(lon: number, lat: number) {
         const [x, z] = lonLatToXZ(lon, lat);
         return describe(new THREE.Vector3(x, 0, z));
       },
     };
+    const rmXZ = rm ? lonLatToXZ(rm.lon, rm.lat) : [0, 0];
+    debugLines = () => `\nDEM max ${hf.max.toFixed(1)} m @ x ${mx.toFixed(0)} z ${mz.toFixed(0)}\n` +
+      `richard-molard x ${rmXZ[0].toFixed(0)} z ${rmXZ[1].toFixed(0)} DEM ${rm ? hf.heightAt(rmXZ[0], rmXZ[1]).toFixed(1) : '-'} m`;
+  }
+
+  // ---- Quality tiers at runtime + FPS watchdog (M8, CLAUDE.md §7) ----
+  // Step order high → mid → low: fewer terrain segments, lower DPR cap, fewer cloud layers, fewer/no shadow steps.
+  const ORDER: Tier[] = ['high', 'mid', 'low'];
+  let builtSegments = tier.segments;
+  const setTier = (next: TierSpec) => {
+    stage.tier = next;
+    stage.resize(); // applies the new DPR cap
+    if (next.segments !== builtSegments) {
+      const old = terrain.geometry;
+      terrain.geometry = buildTerrainGeometry(hf, next.segments, exag);
+      old.dispose();
+      builtSegments = next.segments;
+    }
+    if (terrainMat.defines.SHADOW_STEPS !== next.shadowSteps) {
+      terrainMat.defines.SHADOW_STEPS = next.shadowSteps;
+      terrainMat.needsUpdate = true;
+    }
+    clouds?.setCount(next.clouds);
+    document.getElementById('pins')!.classList.toggle('no-pulse', reducedMotion || next.tier === 'low');
+    stage.invalidate();
+  };
+  // Forced tiers (?tier=) are never overridden. The watchdog's result is saved for the next visit.
+  const watchdog = flags.watchdog && !flags.tier ? new FpsWatchdog(() => {
+    const i = ORDER.indexOf(stage.tier.tier);
+    if (i < 0 || i >= ORDER.length - 1) return false;
+    const next = TIERS[ORDER[i + 1]];
+    setTier(next);
+    saveTier(next.tier);
+    return true;
+  }) : null;
+  if (watchdog) stage.onAfterRender(() => watchdog.frame(performance.now(), stage.frameDt, stage.continuous));
+
+  // On-screen meter: ?fps=1 (for testing on real phones) or ?debug=1 (plus the M1 summit readout).
+  if (flags.fps || flags.debug) {
     const fpsEl = document.createElement('div');
     fpsEl.className = 'fps';
     document.body.append(fpsEl);
-    const rmXZ = rm ? lonLatToXZ(rm.lon, rm.lat) : [0, 0];
     stage.onAfterRender(() => {
-      fpsEl.textContent = `${stage.fps ? stage.fps.toFixed(0) + ' fps' : 'idle'} · tier ${tier.tier} · ${tier.segments}²\n` +
-        `DEM max ${hf.max.toFixed(1)} m @ x ${mx.toFixed(0)} z ${mz.toFixed(0)}\n` +
-        `richard-molard x ${rmXZ[0].toFixed(0)} z ${rmXZ[1].toFixed(0)} DEM ${rm ? hf.heightAt(rmXZ[0], rmXZ[1]).toFixed(1) : '-'} m`;
+      const w = watchdog?.history.map((h) => `${h.fps.toFixed(0)}${h.stepped ? '↓' : '✓'}`).join(' ') ?? 'off';
+      fpsEl.textContent = `${stage.fps ? stage.fps.toFixed(0) + ' fps' : 'idle'} · ${stage.tier.tier} · ${builtSegments}² · DPR ${stage.renderer.getPixelRatio().toFixed(2)}\n` +
+        `watchdog ${w}${debugLines()}`;
     });
   }
 
+  // Compile every shader before the first frame. With KHR_parallel_shader_compile (most browsers) this
+  // happens off the main thread, so the page stays responsive while the GPU builds the programs. Without it
+  // (some GPUs, SwiftShader) the first render compiles them, as before.
+  mark('scene-ready');
+  if (stage.renderer.extensions.has('KHR_parallel_shader_compile')) {
+    try { await stage.renderer.compileAsync(scene, camera); } catch { /* compiled on first render instead */ }
+  }
+  mark('compiled');
   stage.start();
   // Ready once the first frame is on screen.
   await new Promise<void>((r) => requestAnimationFrame(() => requestAnimationFrame(() => r())));
-  hideLoading();
+  mark('first-frame');
+  hideLoading(introPending);
   document.body.dataset.ready = '1';
+  // Prefetch the panel chunk + credits once the scene is up and the network is quiet.
+  const idle = (fn: () => void) => ('requestIdleCallback' in window ? window.requestIdleCallback(fn, { timeout: 8000 }) : setTimeout(fn, 1));
+  setTimeout(() => idle(() => { ensurePanel().catch(() => { /* retried on first open */ panelP = null; }); }), 4000);
 
   // ---- Intro: title card → flyover → free orbit (M7) ----
   const pinsArrive = () => {
@@ -431,6 +517,17 @@ async function boot() {
     controls.update();
     controls.autoRotate = !reducedMotion;
     controls.autoRotateSpeed = 0.15;
+    // The drift is the only thing rendering behind the title card: pause it after 30 s without input
+    // (battery), resume on any input while the card is still up.
+    const pauseDrift = () => { if (Date.now() - lastTitleInput >= 30000 && document.body.classList.contains('flying')) controls.autoRotate = false; };
+    let lastTitleInput = Date.now();
+    const titleInput = () => {
+      lastTitleInput = Date.now();
+      if (document.querySelector('.title-card:not(.hidden)') && !reducedMotion) { controls.autoRotate = true; stage.invalidate(); setTimeout(pauseDrift, 30000); }
+    };
+    window.addEventListener('pointermove', titleInput, { passive: true });
+    window.addEventListener('keydown', titleInput);
+    setTimeout(pauseDrift, 30000);
     showTitleCard({
       onExplore: startFlyover,
       onSkip: () => { flyTo(homePose(), reducedMotion ? 0 : 1200); endIntro(); },
