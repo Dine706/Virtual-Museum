@@ -1,0 +1,37 @@
+{
+ "source": "Copernicus GLO-30 DSM (ESA, 2019 release), tile N07 W009, AWS open data",
+ "bbox_wgs84": {
+  "west": -8.56,
+  "south": 7.48,
+  "east": -8.28,
+  "north": 7.76
+ },
+ "size_px": [
+  1008,
+  1008
+ ],
+ "pixel_size_deg": [
+  0.0002777777777777778,
+  0.0002777777777777778
+ ],
+ "pixel_size_m": [
+  30.65,
+  30.71
+ ],
+ "extent_m": [
+  30894,
+  30961
+ ],
+ "elevation_min_m": 352.9656677246094,
+ "elevation_max_m": 1755.340576171875,
+ "heightmap_16bit_decode": "h_m = 300.0 + value/65535*1500.0",
+ "terrarium_decode": "h_m = R*256 + G + B/256 - 32768",
+ "local_projection": {
+  "lon0": -8.42,
+  "lat0": 7.62,
+  "x_m_per_deg_lon": 110336.9679982832,
+  "z_m_per_deg_lat": 110574.0,
+  "formula": "x=(lon-lon0)*x_m_per_deg_lon; z=-(lat-lat0)*z_m_per_deg_lat; y=elevation"
+ },
+ "caveat": "DSM: includes canopy, so forest tops read 10-30 m higher than the ground; summit value differs from the surveyed 1,752 m."
+}

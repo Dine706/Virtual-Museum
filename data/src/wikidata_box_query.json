@@ -1,0 +1,4328 @@
+{
+  "head" : {
+    "vars" : [ "i", "l", "c", "e", "t" ]
+  },
+  "results" : {
+    "bindings" : [ {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q25343516"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "river"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.75 7.466666666)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Deney"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "403"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q32114116"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "river"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.714444444 7.552777777)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Ba River"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "405"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q32117088"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "river"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.65 7.5)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Geti Creek"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "430"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q32118010"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "river"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.608055555 7.521388888)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Kahnla River"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "452"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q32124162"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "river"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.4175 7.471388888)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Yaniga Creek"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "371"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24853958"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.518611111 7.607222222)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Ban"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "560"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24853959"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.483333333 7.7)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Ban"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "523"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24853985"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.483333333 7.666666666)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Bangué"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "530"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24854039"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.616666666 7.933333333)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Ba Ya"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "549"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24854046"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.3 7.833333333)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Be"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "465"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24854060"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.55 7.899166666)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Belepola"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "516"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24854061"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.333333333 7.6)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Béléya"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "524"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24854103"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.246388888 7.8175)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Bili"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "464"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24854136"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.283333333 7.75)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Blan"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "447"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24854141"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.15 7.833333333)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Blondio"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "482"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24854164"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.716666666 7.883333333)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Bogo Ya"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "472"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q627944"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "river"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.5007 7.5881)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Cavalla River"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q627944"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "river"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.5007 7.5881)"
+      },
+      "l" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "Cavally"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1161786"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "river"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.558 7.628)"
+      },
+      "l" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "Saint John River"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1161786"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "river"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.558 7.628)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Saint John River"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q140946504"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "university"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.526353947 7.579576223)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "African Bible College University"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q140946520"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "university"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.716444 7.352031)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Nimba University"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q6951300"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "town"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.314166666 7.679444444)"
+      },
+      "l" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "N'Zo"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q6951300"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "town"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.314166666 7.679444444)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "N'Zoo"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q27459251"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "mountain"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.6 7.666666666)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Mount Maatohn"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q27459283"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "mountain"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.6 7.633333333)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Mount Nino"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q27459344"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "mountain"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.4617 7.4283)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Mount Shra"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q27459390"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "mountain"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.671388888 7.450277777)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Mountain Tokade"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q27459397"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "mountain"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.683333333 7.6)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Mount Tombu"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q27459442"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "mountain"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.7342 7.42)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Mount Yidoinye"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q27459444"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "mountain"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.634166666 7.564444444)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Mountain Yueliton"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q27466514"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "mountain"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.6058 7.4)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Mountain Bele"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q27466527"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "mountain"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.6619 7.5214)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Mountain Gleton"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q27466555"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "mountain"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.5808 7.6475)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Mount Buletohn"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q27466558"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "mountain"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.583333333 7.683333333)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Mount Bume"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q27466587"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "mountain"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.643333333 7.406666666)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Mountain Detton"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q27466627"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "mountain"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.6361 7.5453)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Mountain Gangla"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q27466634"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "mountain"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.52 7.563333333)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Gbahm Mountain"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q27466639"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "mountain"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.65 7.65)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Mount Gbei"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q27467195"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "mountain"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.665 7.6842)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Mount Guego"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q27467196"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "mountain"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.5486 7.5261)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Guesthouse Hill"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q27467236"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "mountain"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.7033 7.5425)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Mount Kahn"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q27467251"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "mountain"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.616666666 7.683333333)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Mount Kietohn"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q107384163"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "forest"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.505369444 7.648746111)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Bossou Hills"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q107384163"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "forest"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.505369444 7.648746111)"
+      },
+      "l" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "Chimpanzé de Bossou"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q7037582"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "forest"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.5 7.5)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Nimba National Forest"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q849129"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "mountain"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.408058694 7.622588194)"
+      },
+      "l" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "mont Nimba"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "1752"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q849129"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "mountain"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.408058694 7.622588194)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Mount Richard-Molard"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "1752"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q23092400"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "mountain"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.1992 7.5467)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Tonki"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q23106384"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "mountain"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.1642 7.5042)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Sra"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24850539"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "mountain"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.55 7.61667)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Mount Gletohn"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24850609"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "mountain"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.4 7.683333333)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Gouton"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24850704"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "mountain"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.384444444 7.68)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Mont Jean Charles Leclerc"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24851379"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "mountain"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.3642 7.6742)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Mont Pierre Richaud"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q23211653"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "park"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.391 7.603)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Mt. Nimba Strict Nature Reserve"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "788"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q2122617"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "theatre building"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.71388912 7.36111116)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Queen's Theatre"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q22080914"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "mountain range"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.46666667 7.56666667)"
+      },
+      "l" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "Chaîne du Nimba"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "1752"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q22080914"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "mountain range"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.46666667 7.56666667)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Nimba Range"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "1752"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24850615"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "mountain range"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.383333333 7.65)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Grands Rochers"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24843959"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "hill"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.45 7.616666666)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Colline de Tuo"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24848634"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "hill"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.4958 7.8)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Ouroulo Ye"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24849027"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "hill"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.4317 7.7817)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Souho"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24851006"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "hill"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.6 7.7)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Kinon"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3088890"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "border"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.472222222 7.555555555)"
+      },
+      "l" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "frontière entre la Côte d'Ivoire et le Liberia"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3088890"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "border"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.472222222 7.555555555)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Côte d'Ivoire–Liberia border"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3088888"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "border"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.472222222 7.555555555)"
+      },
+      "l" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "frontière entre la Côte d'Ivoire et la Guinée"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3088888"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "border"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.472222222 7.555555555)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Côte d'Ivoire–Guinea border"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3088929"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "border"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.472222222 7.555555555)"
+      },
+      "l" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "frontière entre la Guinée et le Liberia"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3088929"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "border"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.472222222 7.555555555)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Guinea–Liberia border"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q22806713"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "biosphere reserve"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.408058333 7.622588888)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Mont Nimba"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q5046580"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "secondary school"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.55137 7.57557)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Carroll High School"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q924276"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "nature reserve"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.391 7.603)"
+      },
+      "l" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "réserve naturelle intégrale du Mont Nimba"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q924276"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "nature reserve"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.391 7.603)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Mount Nimba Strict Nature Reserve"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24854206"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.516666666 7.8)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Booya"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "476"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24854245"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.1925 7.744722222)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Bougou"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "430"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24854282"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.733333333 7.6)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Bounou"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "423"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24854394"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.25 7.6)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Déré"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "417"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24854462"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.7 7.65)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Diokon"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "427"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24854478"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.441944444 7.715277777)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Diougou"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "524"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24854487"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.247777777 7.626666666)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Diré"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "365"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24854556"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.483333333 7.583333333)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Gonay"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24854569"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.75 7.716666666)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Ioii"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24855071"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.65 7.766666666)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Dié"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "433"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q4947626"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "administrative territorial entity"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.505369444 7.648746111)"
+      },
+      "l" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "Bossou"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q4947626"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "administrative territorial entity"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.505369444 7.648746111)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Bossou"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q23139497"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "summit"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.4712 7.5581)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Mount Nuon-Fa"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "1285"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q27459343"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "valley"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.51667 7.55)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Seka Valley"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q27401761"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "international tripoint"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.47222 7.55556)"
+      },
+      "l" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "tripoint Côte d'Ivoire-Guinée-Liberia"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q27401761"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "international tripoint"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.47222 7.55556)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Côte d'Ivoire–Guinea–Liberia tripoint"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q27466007"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "third-level administrative division"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.597777777 7.487222222)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Gbar"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q27466008"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "third-level administrative division"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.589722222 7.5925)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Gbeleyee"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1099959"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "human settlement"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.533333333 7.8)"
+      },
+      "l" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "Lola"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1099959"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "human settlement"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.533333333 7.8)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Lola"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1968465"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "human settlement"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.706111111 7.362222222)"
+      },
+      "l" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "Sanniquellie"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "769"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q1968465"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "human settlement"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.706111111 7.362222222)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Sanniquellie"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "769"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3179587"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "human settlement"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.533333333 7.583333333)"
+      },
+      "l" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "Yekepa"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3179587"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "human settlement"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.533333333 7.583333333)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Yekepa"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q4855592"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "human settlement"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.564166666 7.763888888)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Bangoueta"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q4869442"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "human settlement"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.660277777 7.874722222)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Batoata"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q4947626"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "human settlement"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.505369444 7.648746111)"
+      },
+      "l" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "Bossou"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q4947626"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "human settlement"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.505369444 7.648746111)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Bossou"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q5519535"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "human settlement"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.23333333 7.9)"
+      },
+      "l" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "Gama Berema"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q5519535"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "human settlement"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.23333333 7.9)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Gama"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q6426838"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "human settlement"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.5 7.91666667)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Kokota"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q6426838"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "human settlement"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.5 7.91666667)"
+      },
+      "l" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "Kokota"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q7071350"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "human settlement"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.314166666 7.679444444)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Nzo"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q8047452"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "human settlement"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.68333 7.71667)"
+      },
+      "l" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "Yalenzou"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q8047452"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "human settlement"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.68333 7.71667)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Yalenzou"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q10860238"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "human settlement"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.564166666 7.763888888)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Balimou"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24854335"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "spur"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.35 7.683333333)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Cousiama"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q99020235"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "community college"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.716958 7.352361)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Nimba County Community College"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q27459282"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "mountain range"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.465 7.56306)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Monts Nimba"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24844002"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.260277777 7.641388888)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Wolanda"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24844008"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.733333333 7.5)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Yaa River"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24844015"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.483333333 7.666666666)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Yakpolia"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24844101"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.16986 7.84629)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Bigué"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "462"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24847913"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.583333333 7.8)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Kouali"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24848300"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.272777777 7.657222222)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Lola"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24848323"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.2 7.616666666)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Mlai"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24848420"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.666666666 7.733333333)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Nianda"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24848541"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.73333 7.88333)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Oua Ya"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24848551"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.25 7.583333333)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Ouengouroumaga"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24848574"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.693055555 7.905277777)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Oulougna"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24848594"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.726666666 7.890833333)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Ouono"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24848735"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.616666666 7.783333333)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Poumou Va"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24848732"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.71667 7.85)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Potikoko Ya"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24848818"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.25583 7.62389)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Sanganian"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24849177"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.516666666 7.8)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Tooba Ya"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24850298"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.498055555 7.916666666)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Dourou"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "499"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24850300"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.350833333 7.840277777)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Dourou Ya"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "474"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24850301"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.466666666 7.95)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Dourou Ya"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "490"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24850443"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.233333333 7.816666666)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Fla Ya"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "452"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24850486"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.45 7.716666666)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Ga"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "515"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24850495"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.65 7.75)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Galipo"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "457"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24850505"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.374444444 7.931944444)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Gay"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "546"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24850508"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.409444444 7.723333333)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Gba"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "485"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24850528"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.683333333 7.7)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Gblay"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "445"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24850529"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.4625 7.711388888)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Gbléyi"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "515"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24850658"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.7 7.866666666)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Hamou Ya"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24850692"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.683333333 7.7)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Iiti"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24850958"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.633333333 7.783333333)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Keredo"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q24853809"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.294722222 7.74)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Bian"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "463"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q924276"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "strict nature reserve"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.391 7.603)"
+      },
+      "l" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "réserve naturelle intégrale du Mont Nimba"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q924276"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "strict nature reserve"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.391 7.603)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Mount Nimba Strict Nature Reserve"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q623145"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "prefecture of Guinea"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.53333 7.8)"
+      },
+      "l" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "préfecture de Lola"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q623145"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "prefecture of Guinea"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.536 7.801)"
+      },
+      "l" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "préfecture de Lola"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q623145"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "prefecture of Guinea"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.53333 7.8)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Lola Prefecture"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q623145"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "prefecture of Guinea"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.536 7.801)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Lola Prefecture"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q6426838"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "subprefecture"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.5 7.91666667)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Kokota"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q6426838"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "subprefecture"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.5 7.91666667)"
+      },
+      "l" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "Kokota"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q6432554"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "subprefecture of Guinea"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.7 7.95)"
+      },
+      "l" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "Koropara"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q6432554"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "subprefecture of Guinea"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.7 7.95)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Koropara"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q6951300"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "subprefecture of Guinea"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.314166666 7.679444444)"
+      },
+      "l" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "N'Zo"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q6951300"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "subprefecture of Guinea"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.314166666 7.679444444)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "N'Zoo"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q7828920"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "subprefecture of Guinea"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.35 7.61667)"
+      },
+      "l" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "Tounkarata"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q7828920"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "subprefecture of Guinea"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.35 7.61667)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Tounkarata"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q427336"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "district of Liberia"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.615 7.569)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Yarmein District"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q979874"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "district of Liberia"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.71792 7.38725)"
+      },
+      "l" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "district de Sanniquelleh-Mahn"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q979874"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "district of Liberia"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.70611111 7.36222222)"
+      },
+      "l" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "district de Sanniquelleh-Mahn"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q979874"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "district of Liberia"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.71792 7.38725)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Sanniqquellie-Mahn District"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q979874"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "district of Liberia"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.70611111 7.36222222)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Sanniqquellie-Mahn District"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3031256"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "district of Liberia"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.484166666 7.365833333)"
+      },
+      "l" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "district de Gbehlageh"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3031256"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "district of Liberia"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.484166666 7.365833333)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Gbehlageh District"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3099997"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "commune of Ivory Coast"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.36666667 7.43333333)"
+      },
+      "l" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "Gbon-Houyé"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3099997"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "commune of Ivory Coast"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.36666667 7.43333333)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Gbon-Houyé"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3110791"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "commune of Ivory Coast"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.283333333 7.433333333)"
+      },
+      "l" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "Gopoupleu"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3110791"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "commune of Ivory Coast"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.283333333 7.433333333)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Gopoupleu"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3199224"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "commune of Ivory Coast"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.266666666 7.383333333)"
+      },
+      "l" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "Kouan-Houle"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3199224"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "commune of Ivory Coast"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.266666666 7.383333333)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Kouan-Houlé"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q924276"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "transboundary protected area"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.391 7.603)"
+      },
+      "l" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "réserve naturelle intégrale du Mont Nimba"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q924276"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "transboundary protected area"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.391 7.603)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Mount Nimba Strict Nature Reserve"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q2903067"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "airport"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.7026 7.8132)"
+      },
+      "l" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "aérodrome de N'zérékoré"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "1657"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q2903067"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "airport"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.7026 7.8132)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Nzérékoré Airport"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "1657"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3521971"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "airport"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.60013 7.501017)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Nimba Airport"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "1632"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3521971"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "airport"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.6 7.5)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Nimba Airport"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "1632"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q2007382"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "memorial"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.71194444 7.36194444)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "OAU Memorial Place"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3088890"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "maritime boundary"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.472222222 7.555555555)"
+      },
+      "l" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "frontière entre la Côte d'Ivoire et le Liberia"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3088890"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "maritime boundary"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.472222222 7.555555555)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Côte d'Ivoire–Liberia border"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3088890"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "land boundary"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.472222222 7.555555555)"
+      },
+      "l" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "frontière entre la Côte d'Ivoire et le Liberia"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3088890"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "land boundary"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.472222222 7.555555555)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Côte d'Ivoire–Liberia border"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3088888"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "land boundary"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.472222222 7.555555555)"
+      },
+      "l" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "frontière entre la Côte d'Ivoire et la Guinée"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3088888"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "land boundary"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.472222222 7.555555555)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Côte d'Ivoire–Guinea border"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3088929"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "land boundary"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.472222222 7.555555555)"
+      },
+      "l" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "frontière entre la Guinée et le Liberia"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3088929"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "land boundary"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.472222222 7.555555555)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Guinea–Liberia border"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q23091071"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse in Ivory Coast"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.425833333 7.530555555)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Yan"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q23091101"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse in Ivory Coast"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.41667 7.55)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Yenfi"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "413"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q23091104"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse in Ivory Coast"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.42587 7.54557)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Yenpou"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "377"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q23091114"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse in Ivory Coast"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.43975 7.53719)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Yibon"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "391"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q23151219"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse in Ivory Coast"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.23563 7.54446)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Nienyi"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "377"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q23196644"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse in Ivory Coast"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.17731 7.43441)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Goueti"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "339"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q23197805"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse in Ivory Coast"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.221666666 7.513611111)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "De"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "362"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q23198119"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse in Ivory Coast"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.4 7.35)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Can"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "335"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q23198300"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "watercourse in Ivory Coast"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.218611111 7.505555555)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Boni"
+      },
+      "e" : {
+        "datatype" : "http://www.w3.org/2001/XMLSchema#decimal",
+        "type" : "literal",
+        "value" : "353"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3088890"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "international border"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.472222222 7.555555555)"
+      },
+      "l" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "frontière entre la Côte d'Ivoire et le Liberia"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3088890"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "international border"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.472222222 7.555555555)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Côte d'Ivoire–Liberia border"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3088888"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "international border"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.472222222 7.555555555)"
+      },
+      "l" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "frontière entre la Côte d'Ivoire et la Guinée"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3088888"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "international border"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.472222222 7.555555555)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Côte d'Ivoire–Guinea border"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3088929"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "international border"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.472222222 7.555555555)"
+      },
+      "l" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "frontière entre la Guinée et le Liberia"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3088929"
+      },
+      "t" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "international border"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.472222222 7.555555555)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Guinea–Liberia border"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3037119"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.30027778 7.65583333)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Doromou"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q3037119"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.30027778 7.65583333)"
+      },
+      "l" : {
+        "xml:lang" : "fr",
+        "type" : "literal",
+        "value" : "Doromou"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q27466004"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.68209 7.40098)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Sehyi"
+      }
+    }, {
+      "i" : {
+        "type" : "uri",
+        "value" : "http://www.wikidata.org/entity/Q27466010"
+      },
+      "c" : {
+        "datatype" : "http://www.opengis.net/ont/geosparql#wktLiteral",
+        "type" : "literal",
+        "value" : "Point(-8.61733 7.68552)"
+      },
+      "l" : {
+        "xml:lang" : "en",
+        "type" : "literal",
+        "value" : "Vayee"
+      }
+    } ]
+  }
+}
