@@ -33,3 +33,14 @@ Running log of decisions, measured budgets and issues (CLAUDE.md §15).
 * Cloud drift is 6 m/s rather than the 0.6 m/s in DESIGN.md §10; at 0.6 m/s the motion is invisible from 10+ km away. It animates continuously only on the high tier. On mid/low, time advances only while frames are being rendered (render-on-demand), and nothing drifts under `prefers-reduced-motion`.
 * The low tier has no cloud planes, but the Mist preset still shows the sea of clouds through the terrain shader.
 * **Screenshots in this container use SwiftShader (CPU)**, so a 1230×1770 frame with the full shader takes seconds. `screens.mjs` now opens a fresh page per shot. Performance has to be judged on real devices (M8).
+
+## M3 – Content & pins
+* 23 pins are real `<button>`s in a `#pins` layer, in `order` (Tab order = hotspot order), moved with `translate3d` after every rendered frame. Pins anchor on the **DEM surface** at the hotspot's lon/lat, not at `elevation_m`. Otherwise Pierre Richaud (1,670 m published, 1,609 m DEM) would float 110 m (×1.8) above the ground.
+* **Occlusion:** a 64-step segment march from the camera to the pin through the CPU heightfield (no depth read-back). Occluded pins fade to 25 % and ignore clicks.
+* **Declutter:** greedy by priority (selected, then `order`). A pin whose head lands within 34 px (phone) / 40 px (desktop) of an already-placed one collapses to a small dot. Collapsed pins stay keyboard-focusable and re-expand on focus.
+* **Phones (< 600 px):** pins show their `order` number instead of the glyph while the camera is more than 9 km from its target (DESIGN.md §6 badge variant).
+* `area` / `symbolic` hotspots draw a dashed ellipse of ≈ 600 m projected radius instead of a ground dot. The species pins are therefore visibly "zones", never points.
+* **Modes:** pins filter by `modes[]` (Nature 13, Culture 6, Conservation 14 pins). The state is in `?mode=` and the default (Nature) is omitted from the URL. A selected pin stays visible across modes; switching to a mode it isn't in clears the selection.
+* **Deep links:** `#/h/<id>` selects the hotspot and glides the camera (1.2 s cubic) to its `camera` hint (distance, azimuth, elevation clamped 15–80°). The panel arrives in M4. The hash is kept in sync with `replaceState`.
+* `?debug=1`: an orange "!" dot on hotspots with `uncertain` notes; the notes show as the button's tooltip. Never shown without the flag.
+* Portrait screens use a steeper, slightly farther home view (+14°, ×1.25), so the ridge fills the frame instead of the sky.

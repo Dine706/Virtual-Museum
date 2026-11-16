@@ -2,25 +2,26 @@ import '@fontsource-variable/fraunces';
 import '@fontsource-variable/inter';
 import './styles.css';
 import * as THREE from 'three';
-import { applyStatic } from './i18n';
+import { applyStatic, getLang, onLang } from './i18n';
 import { hideLoading, Progress, setLoadingText, showFatal } from './ui/loading';
 import { showTitleCard } from './ui/titlecard';
 import { BASE, flags, reducedMotion } from './flags';
 import { t } from './i18n';
 import { checkMeta, lonLatToXZ, type TerrainMeta } from './data/geo';
-import { loadContent } from './data/content';
+import { loadContent, loc, type Hotspot, type Mode } from './data/content';
 import { decodePixels, fetchBlob } from './data/loader';
 import { Heightfield } from './scene/heightfield';
 import { Landcover } from './scene/landcover';
 import { buildTerrainGeometry } from './scene/terrain';
 import { Stage } from './scene/stage';
 import { detectTier } from './scene/tier';
-import { DEFAULT_EXAG, HOME_VIEW } from './scene/config';
+import { DEFAULT_EXAG, HOME_VIEW, ORBIT } from './scene/config';
 import { clampCamera, currentPose, poseToPosition, tweenPose, type OrbitPose } from './scene/camera';
 import { ATMO_ORDER, Atmosphere, nextAtmo, type AtmoName } from './scene/atmosphere';
 import { createTerrainMaterial } from './scene/terrainMaterial';
 import { Clouds, createSky } from './scene/sky';
 import { announce, Chrome } from './ui/chrome';
+import { Pins } from './ui/pins';
 
 setLoadingText();
 applyStatic();
@@ -82,7 +83,7 @@ async function boot() {
     return {
       target: new THREE.Vector3(tx, HOME_VIEW.target.h * exag, tz),
       azimuthDeg: HOME_VIEW.azimuthDeg,
-      elevationDeg: portrait ? HOME_VIEW.elevationDeg + 8 : HOME_VIEW.elevationDeg,
+      elevationDeg: portrait ? HOME_VIEW.elevationDeg + 14 : HOME_VIEW.elevationDeg,
       distance: portrait ? HOME_VIEW.distance * 1.25 : HOME_VIEW.distance,
     };
   };
@@ -101,6 +102,50 @@ async function boot() {
     stage.addAnimator(tweenPose(currentPose(camera, controls.target), to, ms, applyPose, () => { controls.enabled = true; }));
   };
 
+  // ---- Pins, modes, selection, deep links ----
+  const modes: Mode[] = ['nature', 'culture', 'conservation'];
+  let mode: Mode = modes.includes(flags.mode as Mode) ? (flags.mode as Mode) : 'nature';
+  let selected: string | null = null;
+  const pins = new Pins(content, hf, exag, (id) => selectHotspot(id, true), { debug: flags.debug, pulse: !reducedMotion && tier.tier !== 'low' });
+  stage.onAfterRender(() => pins.update(camera, canvas.clientWidth, canvas.clientHeight, camera.position.distanceTo(controls.target)));
+  onLang(() => { pins.relabel(); stage.invalidate(); });
+
+  const hotspotPose = (h: Hotspot): OrbitPose => ({
+    target: pins.worldOf(h.id)!,
+    azimuthDeg: h.camera.azimuth_deg,
+    elevationDeg: THREE.MathUtils.clamp(h.camera.elevation_deg, 15, 80),
+    distance: Math.max(h.camera.distance_m, ORBIT.minDistance),
+  });
+
+  function selectHotspot(id: string | null, fromUser: boolean) {
+    const h = id ? content.hotspots.find((x) => x.id === id) : undefined;
+    selected = h ? h.id : null;
+    pins.select(selected);
+    const hash = selected ? `#/h/${selected}` : '';
+    if (location.hash !== hash) history.replaceState(null, '', `${location.pathname}${location.search}${hash}`);
+    if (h) {
+      if (!h.modes.includes(mode)) setMode(h.modes[0], false);
+      flyTo(hotspotPose(h), fromUser ? 1200 : 0);
+      announce(t('status.opened', { title: loc(h, 'title', getLang()) }));
+      dismissHint();
+    }
+    stage.invalidate();
+  }
+
+  function setMode(m: Mode, fromUser = true) {
+    mode = m;
+    chrome.setMode(m);
+    pins.setMode(m);
+    const q = new URLSearchParams(location.search);
+    if (m === 'nature') q.delete('mode'); else q.set('mode', m);
+    const qs = q.toString();
+    history.replaceState(null, '', `${location.pathname}${qs ? `?${qs}` : ''}${location.hash}`);
+    // Keep the selection only if its hotspot belongs to the new mode.
+    if (fromUser && selected && !pins.isInMode(selected)) selectHotspot(null, true);
+    if (fromUser) announce(t('status.mode', { mode: t(`mode.${m}`) }));
+    stage.invalidate();
+  }
+
   const chrome = new Chrome({
     onAtmo: () => {
       const next = nextAtmo(atmo.name);
@@ -109,25 +154,45 @@ async function boot() {
       chrome.setAtmo(next);
       announce(t('status.atmo', { atmo: t(`atmo.${next}`) }));
     },
-    onReset: () => flyTo(homePose()),
-    onMode: (m) => chrome.setMode(m),
+    onReset: () => { selectHotspot(null, true); flyTo(homePose()); },
+    onMode: (m) => setMode(m),
   });
   chrome.setAtmo(initialAtmo);
-  chrome.setMode('nature');
+  setMode(mode, false);
+
+  const routeFromHash = () => {
+    const m = /^#\/h\/([a-z0-9-]+)$/.exec(location.hash);
+    if (m) selectHotspot(m[1], true);
+  };
+  window.addEventListener('hashchange', routeFromHash);
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && selected && !document.querySelector('.title-card')) selectHotspot(null, true);
+  });
+
+  // One-time "Tap a pin" hint (DESIGN.md §5).
+  let hintEl: HTMLDivElement | null = null;
+  function dismissHint() {
+    if (!hintEl) return;
+    const el = hintEl;
+    hintEl = null;
+    el.classList.add('gone');
+    setTimeout(() => el.remove(), 500);
+    try { localStorage.setItem('nimba.hint', '1'); } catch { /* ignore */ }
+  }
+  function showHint() {
+    try { if (localStorage.getItem('nimba.hint')) return; } catch { /* ignore */ }
+    hintEl = document.createElement('div');
+    hintEl.className = 'hint';
+    hintEl.textContent = t('pins.hint');
+    document.body.append(hintEl);
+    setTimeout(dismissHint, 6000);
+  }
 
   if (flags.debug) {
-    // M1 acceptance: a marker at richard-molard must sit on the highest DEM sample of the tile.
+    // M1 acceptance readout: richard-molard must sit on the highest DEM sample of the tile.
     const rm = content.hotspots.find((h) => h.id === 'richard-molard');
     const maxRow = Math.floor(hf.maxIndex / hf.size), maxCol = hf.maxIndex % hf.size;
     const [mx, mz] = hf.samplePos(maxCol, maxRow);
-    const mark = (x: number, z: number, color: string) => {
-      const m = new THREE.Mesh(new THREE.ConeGeometry(70, 500, 12), new THREE.MeshBasicMaterial({ color, fog: false }));
-      m.rotation.x = Math.PI;
-      m.position.set(x, hf.heightAt(x, z) * exag + 250, z);
-      scene.add(m);
-    };
-    mark(mx, mz, '#ff2a2a');
-    if (rm) { const [x, z] = lonLatToXZ(rm.lon, rm.lat); mark(x, z, '#2aa8ff'); }
     const fpsEl = document.createElement('div');
     fpsEl.className = 'fps';
     document.body.append(fpsEl);
@@ -145,11 +210,12 @@ async function boot() {
   hideLoading();
   document.body.dataset.ready = '1';
 
+  if (location.hash) routeFromHash();
   if (!flags.skipIntro) {
     controls.autoRotate = true;
     controls.autoRotateSpeed = 0.35;
-    const stopSpin = () => { controls.autoRotate = false; };
-    showTitleCard({ onExplore: stopSpin, onSkip: stopSpin });
+    const done = () => { controls.autoRotate = false; showHint(); };
+    showTitleCard({ onExplore: done, onSkip: done });
   }
 }
 
