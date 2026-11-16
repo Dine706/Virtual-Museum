@@ -8,7 +8,7 @@ import { showTitleCard } from './ui/titlecard';
 import { BASE, flags, reducedMotion } from './flags';
 import { t } from './i18n';
 import { checkMeta, lonLatToXZ, type TerrainMeta } from './data/geo';
-import { loadContent, loc, type Hotspot, type Mode } from './data/content';
+import { loadContent, loadCredits, loc, type Hotspot, type Mode } from './data/content';
 import { decodePixels, fetchBlob } from './data/loader';
 import { Heightfield } from './scene/heightfield';
 import { Landcover } from './scene/landcover';
@@ -22,6 +22,8 @@ import { createTerrainMaterial } from './scene/terrainMaterial';
 import { Clouds, createSky } from './scene/sky';
 import { announce, Chrome } from './ui/chrome';
 import { Pins } from './ui/pins';
+import { Panel } from './ui/panel';
+import { PhotoViewer } from './ui/viewer';
 
 setLoadingText();
 applyStatic();
@@ -39,9 +41,10 @@ async function boot() {
   const exag = DEFAULT_EXAG;
   const progress = new Progress();
 
-  const [meta, content, terrBlob, lcBlob] = await Promise.all([
+  const [meta, content, credits, terrBlob, lcBlob] = await Promise.all([
     fetch(`${BASE}data/terrain_meta.json`).then((r) => r.json() as Promise<TerrainMeta>),
     loadContent(BASE),
+    loadCredits(BASE),
     fetchBlob(`${BASE}data/${tier.terrarium}`, progress.track('terrain', tier.terrariumBytes), tier.terrariumBytes),
     fetchBlob(`${BASE}data/landcover_classes.png`, progress.track('landcover', 76479), 76479),
   ]);
@@ -108,7 +111,21 @@ async function boot() {
   let selected: string | null = null;
   const pins = new Pins(content, hf, exag, (id) => selectHotspot(id, true), { debug: flags.debug, pulse: !reducedMotion && tier.tier !== 'low' });
   stage.onAfterRender(() => pins.update(camera, canvas.clientWidth, canvas.clientHeight, camera.position.distanceTo(controls.target)));
-  onLang(() => { pins.relabel(); stage.invalidate(); });
+  const viewer = new PhotoViewer();
+  const panel = new Panel(content, credits, viewer, {
+    onClose: () => selectHotspot(null, true),
+    onNavigate: (id) => selectHotspot(id, true),
+    onShowOnMap: (id) => { const h = content.hotspots.find((x) => x.id === id); if (h) flyTo(hotspotPose(h)); },
+    onObscure: (right, bottom) => stage.setViewInset(right, bottom, reducedMotion),
+  }, flags.debug);
+  onLang(() => {
+    pins.relabel();
+    panel.relabel();
+    viewer.relabel();
+    const h = content.hotspots.find((x) => x.id === selected);
+    if (h) announce(t('status.opened', { title: loc(h, 'title', getLang()) }));
+    stage.invalidate();
+  });
 
   const hotspotPose = (h: Hotspot): OrbitPose => ({
     target: pins.worldOf(h.id)!,
@@ -117,17 +134,20 @@ async function boot() {
     distance: Math.max(h.camera.distance_m, ORBIT.minDistance),
   });
 
-  function selectHotspot(id: string | null, fromUser: boolean) {
+  function selectHotspot(id: string | null, fromUser: boolean, focus = fromUser) {
     const h = id ? content.hotspots.find((x) => x.id === id) : undefined;
     selected = h ? h.id : null;
     pins.select(selected);
     const hash = selected ? `#/h/${selected}` : '';
     if (location.hash !== hash) history.replaceState(null, '', `${location.pathname}${location.search}${hash}`);
     if (h) {
-      if (!h.modes.includes(mode)) setMode(h.modes[0], false);
+      // The selected pin stays visible even outside the current mode (prev/next walk all 23 in order).
+      panel.open(h, focus);
       flyTo(hotspotPose(h), fromUser ? 1200 : 0);
       announce(t('status.opened', { title: loc(h, 'title', getLang()) }));
       dismissHint();
+    } else {
+      panel.close();
     }
     stage.invalidate();
   }
@@ -162,11 +182,13 @@ async function boot() {
 
   const routeFromHash = () => {
     const m = /^#\/h\/([a-z0-9-]+)$/.exec(location.hash);
-    if (m) selectHotspot(m[1], true);
+    if (m) selectHotspot(m[1], true, focusOnRoute);
+    focusOnRoute = true;
   };
+  let focusOnRoute = false; // a deep link on page load must not grab focus
   window.addEventListener('hashchange', routeFromHash);
   window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && selected && !document.querySelector('.title-card')) selectHotspot(null, true);
+    if (e.key === 'Escape' && selected && !document.querySelector('.title-card, dialog[open]')) selectHotspot(null, true);
   });
 
   // One-time "Tap a pin" hint (DESIGN.md §5).

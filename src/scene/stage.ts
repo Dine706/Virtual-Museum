@@ -49,7 +49,38 @@ export class Stage {
     const vFov = 2 * Math.atan(Math.tan(hHalf) / aspect) * 180 / Math.PI;
     this.camera.fov = THREE.MathUtils.clamp(vFov, 40, 68);
     this.camera.updateProjectionMatrix();
+    if (this.shift) this.applyShift();
     this.invalidate();
+  }
+
+  // Projection-centre shift (px) so the target sits in the part of the canvas not covered by the panel.
+  private shift = { x: 0, y: 0 };
+  private shiftTarget = { x: 0, y: 0 };
+  private shiftAnimating = false;
+
+  /** Panel covers `right` px on the right / `bottom` px at the bottom: centre the view in what is left. */
+  setViewInset(right: number, bottom: number, instant = false) {
+    this.shiftTarget = { x: right / 2, y: bottom / 2 };
+    if (instant) { this.shift = { ...this.shiftTarget }; this.applyShift(); this.invalidate(); return; }
+    if (this.shiftAnimating) return;
+    this.shiftAnimating = true;
+    this.addAnimator((dt) => {
+      const k = 1 - Math.exp(-dt * 9);
+      this.shift.x += (this.shiftTarget.x - this.shift.x) * k;
+      this.shift.y += (this.shiftTarget.y - this.shift.y) * k;
+      const done = Math.abs(this.shiftTarget.x - this.shift.x) < 0.5 && Math.abs(this.shiftTarget.y - this.shift.y) < 0.5;
+      if (done) this.shift = { ...this.shiftTarget };
+      this.applyShift();
+      this.shiftAnimating = !done;
+      return !done;
+    });
+  }
+
+  private applyShift() {
+    const w = this.canvas.clientWidth || window.innerWidth;
+    const h = this.canvas.clientHeight || window.innerHeight;
+    if (Math.abs(this.shift.x) < 0.5 && Math.abs(this.shift.y) < 0.5) this.camera.clearViewOffset();
+    else this.camera.setViewOffset(w, h, this.shift.x, this.shift.y, w, h);
   }
 
   invalidate() { this.dirty = true; }
