@@ -113,4 +113,4 @@ Running log of decisions, measured budgets and issues (CLAUDE.md §15).
   * Mean pixel difference between modes: 8.7 (Nature/Culture), 12.4 (Culture/Conservation), 11.7 (Nature/Conservation) / 255.
   * The legend text matches each mode; the Danger List chip opens the `danger-list` panel.
   * The M4 panel and M5 picking checks still pass.
-* JS bundle: 168 KB gz (adds `Line2`).
+* JS bundle: 174 KB gz (adds `Line2`; budget 250 KB).
