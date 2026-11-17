@@ -11,6 +11,8 @@ export interface ReadoutData {
   landcover: number; // WorldCover class
   place: Place;
   nearest: { hotspot: Hotspot; distance: number } | null;
+  /** World point (for "Walk here"). */
+  x?: number; z?: number;
 }
 
 const nfKm = { fr: new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 1, minimumFractionDigits: 1 }), en: new Intl.NumberFormat('en-GB', { maximumFractionDigits: 1, minimumFractionDigits: 1 }) };
@@ -46,7 +48,7 @@ export class Readout {
   private data: ReadoutData | null = null;
   private at = { x: 0, y: 0 };
 
-  constructor(private onOpen: (id: string) => void) {
+  constructor(private onOpen: (id: string) => void, private onWalk?: (x: number, z: number) => void) {
     this.dot = document.createElement('div');
     this.dot.className = 'readout-dot';
     this.el = document.createElement('div');
@@ -92,6 +94,16 @@ export class Readout {
     close.setAttribute('aria-label', t('readout.close'));
     close.addEventListener('click', (e) => { e.stopPropagation(); this.hide(); });
     this.el.append(close, line);
+    if (this.onWalk && d.x !== undefined && d.z !== undefined) {
+      const w = document.createElement('button');
+      w.type = 'button';
+      w.className = 'readout-walk';
+      w.innerHTML = `${icons.walk}<span>${t('walk.enter')}</span>`;
+      w.setAttribute('aria-label', t('walk.enterLabel'));
+      const { x, z } = d;
+      w.addEventListener('click', (e) => { e.stopPropagation(); this.hide(); this.onWalk!(x, z); });
+      this.el.append(w);
+    }
     if (d.nearest) {
       const title = loc(d.nearest.hotspot, 'title', getLang());
       const dist = fmtDistance(d.nearest.distance);

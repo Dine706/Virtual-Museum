@@ -89,6 +89,14 @@ export class Stage {
     else this.camera.setViewOffset(w, h, this.shift.x, this.shift.y, w, h);
   }
 
+  /** While another view (walk mode) owns the renderer, the orbit view renders nothing. */
+  suspended = false;
+  suspend(on: boolean) {
+    this.suspended = on;
+    this.controls.enabled = !on;
+    if (!on) { this.resize(); this.invalidate(); }
+  }
+
   invalidate() { this.dirty = true; }
   addAnimator(a: Animator) { this.animators.add(a); this.invalidate(); return () => this.animators.delete(a); }
   onBeforeRender(fn: () => void) { this.beforeRender.add(fn); }
@@ -97,6 +105,7 @@ export class Stage {
   start() {
     const loop = (now: number) => {
       requestAnimationFrame(loop);
+      if (this.suspended) { this.last = now; return; }
       const dt = Math.min(0.1, (now - this.last) / 1000);
       this.last = now;
       if (this.controls.enabled && this.controls.update(dt)) this.dirty = true;

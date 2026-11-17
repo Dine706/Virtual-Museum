@@ -1,99 +1,100 @@
 {
-  "id": "z3-bossou",
-  "name_fr": "Collines de Bossou",
-  "name_en": "Bossou hills",
-  "why": "Forested hills of Bossou (chimpanzee forest, publicly known site) and the village edge (≈ 535–700 m).",
-  "center_lonlat": [
-    -8.5054,
-    7.6487
+ "id": "z3-bossou",
+ "name_fr": "Collines de Bossou",
+ "name_en": "Bossou hills",
+ "why": "Forested hills of Bossou (chimpanzee forest, publicly known site) and the village edge (\u2248 535\u2013700 m).",
+ "center_lonlat": [
+  -8.5054,
+  7.6487
+ ],
+ "crs": "EPSG:32629",
+ "center_utm_m": [
+  554550.82,
+  845492.76
+ ],
+ "spacing_m": 1.0,
+ "size_px": 2017,
+ "extent_m": 2016.0,
+ "corners_lonlat": {
+  "nw": [
+   -8.514529,
+   7.657828
   ],
-  "crs": "EPSG:32629",
-  "center_utm_m": [
-    554550.82,
-    845492.76
+  "ne": [
+   -8.49625,
+   7.657807
   ],
-  "spacing_m": 1.0,
-  "size_px": 2017,
-  "extent_m": 2016.0,
-  "corners_lonlat": {
-    "nw": [
-      -8.514529,
-      7.657828
-    ],
-    "ne": [
-      -8.49625,
-      7.657807
-    ],
-    "sw": [
-      -8.514549,
-      7.639593
-    ],
-    "se": [
-      -8.496272,
-      7.639572
-    ]
-  },
-  "affine_utm_pixel_is_area": [
-    1.0,
-    0.0,
-    553542.3159429495,
-    0.0,
-    -1.0,
-    846501.256499974
+  "sw": [
+   -8.514549,
+   7.639593
   ],
-  "unreal_import": {
-    "heightmap_resolution": "2017 x 2017",
-    "scale_cm": {
-      "x": 100.0,
-      "y": 100.0,
-      "z": 33.658564
-    },
-    "location_cm": {
-      "x": 0,
-      "y": 0,
-      "z": 61810.43
-    },
-    "note": "Import as a new Landscape (File → Import from file), set these scale values, then set the Landscape actor location Z: elevations then match real metres above sea level (1 Unreal unit = 1 cm).",
-    "height_range_m": [
-      531.94,
-      704.27
-    ],
-    "vertical_precision_cm": 0.263
-  },
-  "stats": {
-    "dsm_m": [
-      535.1,
-      703.3
-    ],
-    "ground_m": [
-      532.9,
-      683.3
-    ],
-    "canopy_height_m": {
-      "mean": 6.7,
-      "p95": 22.3,
-      "max": 46.0
-    },
-    "cover_pct": {
-      "10": 80.8,
-      "20": 0.1,
-      "30": 11.6,
-      "50": 7.5
-    },
-    "forest_weight_mean": 0.361,
-    "steep_gt38deg_pct": 0.27
-  },
-  "files": [
-    "canopy_height_m.png",
-    "heightmap_dsm.png",
-    "heightmap_ground.png",
-    "landcover_worldcover.png",
-    "mask_band_lowland_lt1000m.png",
-    "mask_band_montane_1000-1400m.png",
-    "mask_band_summit_gt1400m.png",
-    "mask_forest.png",
-    "mask_grass.png",
-    "mask_rock.png",
-    "mask_stream.png"
+  "se": [
+   -8.496272,
+   7.639572
   ]
+ },
+ "affine_utm_pixel_is_area": [
+  1.0,
+  0.0,
+  553542.3159429495,
+  0.0,
+  -1.0,
+  846501.256499974
+ ],
+ "unreal_import": {
+  "heightmap_resolution": "2017 x 2017",
+  "scale_cm": {
+   "x": 100.0,
+   "y": 100.0,
+   "z": 33.658564
+  },
+  "location_cm": {
+   "x": 0,
+   "y": 0,
+   "z": 61810.43
+  },
+  "note": "Import as a new Landscape (File \u2192 Import from file), set these scale values, then set the Landscape actor location Z: elevations then match real metres above sea level (1 Unreal unit = 1 cm).",
+  "height_range_m": [
+   531.94,
+   704.27
+  ],
+  "vertical_precision_cm": 0.263
+ },
+ "stats": {
+  "dsm_m": [
+   535.1,
+   703.3
+  ],
+  "ground_m": [
+   532.9,
+   683.3
+  ],
+  "canopy_height_m": {
+   "mean": 6.7,
+   "p95": 22.3,
+   "max": 46.0
+  },
+  "cover_pct": {
+   "10": 80.8,
+   "20": 0.1,
+   "30": 11.6,
+   "50": 7.5
+  },
+  "forest_weight_mean": 0.361,
+  "steep_gt38deg_pct": 0.27
+ },
+ "files": [
+  "canopy_height_m.png",
+  "heightmap_dsm.png",
+  "heightmap_ground.png",
+  "landcover_worldcover.png",
+  "mask_band_lowland_lt1000m.png",
+  "mask_band_montane_1000-1400m.png",
+  "mask_band_summit_gt1400m.png",
+  "mask_forest.png",
+  "mask_grass.png",
+  "mask_regrowth.png",
+  "mask_rock.png",
+  "mask_stream.png"
+ ]
 }

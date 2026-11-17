@@ -290,9 +290,11 @@ button { font: inherit; color: inherit; }
 .verify ul { margin: 6px 0 0; padding-left: 18px; }
 
 /* Footer actions */
-.panel-foot { flex: none; display: grid; grid-template-columns: 1fr auto auto 1fr; gap: 8px; padding: 10px 12px; border-top: 1px solid var(--divider); }
-.foot-share, .foot-map { width: 44px; padding: 0; }
-.foot-share .foot-text, .foot-map .foot-text { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.panel-foot { flex: none; display: grid; grid-template-columns: 1fr auto auto auto 1fr; gap: 8px; padding: 10px 12px; border-top: 1px solid var(--divider); }
+.foot-share, .foot-map, .foot-walk { width: 44px; padding: 0; }
+.foot-walk { background: var(--savanna-500); color: var(--forest-950); }
+.foot-walk:hover { background: var(--straw-300) !important; }
+.foot-share .foot-text, .foot-map .foot-text, .foot-walk .foot-text { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .foot-prev { justify-self: start; } .foot-next { justify-self: end; }
 .foot-btn { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 0 12px; border-radius: 999px; cursor: pointer;
   border: 1px solid var(--hairline); background: rgba(239, 244, 242, .05); color: var(--cloud-50); font: 500 .875rem/1 var(--font-ui); white-space: nowrap; }
@@ -360,3 +362,73 @@ body.flying #pins, body.flying .terrain-labels { opacity: 0; }
 #pins.arrive .pin { animation: pin-in .5s var(--ease) both; animation-delay: calc(var(--i, 0) * 40ms); }
 @keyframes pin-in { from { opacity: 0; translate: 0 -10px; } to { opacity: 1; translate: 0 0; } }
 
+
+/* ---------- Walk mode (first-person) ---------- */
+.readout-walk { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; margin-top: 8px; min-height: 44px; padding: 8px 12px;
+  border-radius: 8px; border: 0; background: var(--savanna-500); color: var(--forest-950); cursor: pointer; font: 600 .9375rem/1.2 var(--font-ui); }
+.readout-walk:hover { background: var(--straw-300); }
+.readout-walk svg { width: 20px; height: 20px; }
+body.walking .topbar, body.walking .modes, body.walking .tools, body.walking #pins, body.walking .terrain-labels,
+body.walking .readout, body.walking .readout-dot, body.walking .hint, body.walking .panel, body.walking .sheet, body.walking .fps { visibility: hidden; pointer-events: none; }
+.walk-ui { position: fixed; inset: 0; z-index: 30; touch-action: none; user-select: none; -webkit-user-select: none; cursor: grab; }
+.walk-ui:active { cursor: grabbing; }
+.walk-ui.locked { cursor: none; }
+.walk-top { position: absolute; top: calc(10px + var(--sat)); left: calc(12px + var(--sal)); right: calc(12px + var(--sar)); display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; pointer-events: none; }
+.walk-top > * { pointer-events: auto; }
+.walk-place { display: grid; gap: 1px; padding: 8px 12px; border-radius: 12px; background: var(--glass-soft); border: 1px solid var(--hairline);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); max-width: min(330px, 58vw); }
+.walk-place strong { font: 600 1.0625rem/1.25 var(--font-display); }
+.walk-place span { display: inline-flex; align-items: center; gap: 4px; font: 500 .8125rem/1.3 var(--font-ui); color: var(--straw-300); font-variant-numeric: tabular-nums; }
+.walk-place span svg { width: 14px; height: 14px; }
+.walk-place em { font: 400 .75rem/1.3 var(--font-ui); color: var(--mist-300); font-style: normal; }
+.walk-actions { display: flex; gap: 8px; }
+.walk-btn { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; min-width: 44px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--hairline);
+  background: var(--glass-soft); color: var(--cloud-50); cursor: pointer; font: 600 .875rem/1 var(--font-ui); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+.walk-btn:hover { background: var(--glass); }
+.walk-btn svg { width: 18px; height: 18px; }
+.walk-btn:focus-visible, .walk-card button:focus-visible, .walk-card a:focus-visible { outline: 2px solid var(--savanna-500); outline-offset: 2px; }
+.walk-sun { width: 12px; height: 12px; border-radius: 50%; background: radial-gradient(circle, #FFE3AE 40%, #E9A75A 100%); box-shadow: 0 0 8px #F5C67A; }
+.walk-cross { position: absolute; left: 50%; top: 50%; width: 6px; height: 6px; margin: -3px 0 0 -3px; border-radius: 50%; background: rgba(239, 244, 242, .85);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, .35); display: none; pointer-events: none; }
+.walk-ui.locked .walk-cross { display: block; }
+.walk-marker { position: absolute; left: -14px; top: -14px; width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--cloud-50); pointer-events: none; }
+.walk-marker.pulse { animation: walk-pulse 1.1s var(--ease) forwards; }
+@keyframes walk-pulse { from { transform-origin: center; scale: .4; opacity: 1; } to { scale: 1.6; opacity: 0; } }
+.walk-hint { position: absolute; left: 50%; bottom: calc(18px + var(--sab)); transform: translateX(-50%); width: max-content; max-width: calc(100vw - 32px);
+  padding: 9px 16px; border-radius: 999px; background: var(--glass-soft); font: 500 .8125rem/1.4 var(--font-ui); text-align: center; pointer-events: none;
+  transition: opacity 1.2s ease; }
+.walk-hint.fade { opacity: 0; }
+.walk-card { position: absolute; left: calc(12px + var(--sal)); bottom: calc(12px + var(--sab)); width: min(390px, calc(100vw - 24px)); max-height: min(70vh, 560px);
+  overflow: auto; padding: 16px 18px 14px; border-radius: 16px; background: var(--glass); border: 1px solid var(--hairline); box-shadow: var(--shadow);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); cursor: auto; user-select: text; -webkit-user-select: text; animation: readout-in .16s var(--ease);
+  overscroll-behavior: contain; touch-action: pan-y; }
+.walk-card h2 { margin: 2px 40px 4px 0; font: 600 1.3rem/1.2 var(--font-display); }
+.walk-card p { margin: 0 0 8px; font: 400 .9rem/1.5 var(--font-ui); }
+.walk-kicker { color: var(--straw-300); font: 600 .75rem/1.3 var(--font-ui) !important; text-transform: uppercase; letter-spacing: .06em; }
+.walk-sci { font-style: italic; color: var(--mist-300); }
+.walk-note { color: var(--mist-300); font-size: .8125rem !important; border-left: 2px solid var(--savanna-500); padding-left: 8px; }
+.walk-items-title { font-weight: 600 !important; margin-top: 4px !important; }
+.walk-items { list-style: none; margin: 0 0 10px; padding: 0; display: grid; gap: 6px; }
+.walk-items li { display: grid; font: 400 .875rem/1.35 var(--font-ui); }
+.walk-items a { color: var(--cloud-50); }
+.walk-items span { color: var(--mist-300); font-size: .75rem; }
+.walk-card-close { position: absolute; top: 6px; right: 6px; width: 44px; height: 44px; border: 0; border-radius: 12px; background: none; color: var(--mist-300); display: grid; place-items: center; cursor: pointer; }
+.walk-card-close:hover { color: var(--cloud-50); }
+.walk-sources summary { cursor: pointer; font: 600 .8125rem/2 var(--font-ui); color: var(--straw-300); min-height: 32px; }
+.walk-sources ul { margin: 4px 0 0; padding-left: 18px; font-size: .8125rem; }
+.walk-sources a { color: var(--mist-300); }
+.walk-veil { position: absolute; inset: 0; display: grid; place-items: center; background: radial-gradient(ellipse at center, #3A4A30 0%, #16210F 75%);
+  transition: opacity .9s ease; pointer-events: auto; }
+.walk-veil p { font: 500 1rem/1.4 var(--font-ui); color: var(--straw-300); letter-spacing: .02em; }
+.walk-veil.off { opacity: 0; pointer-events: none; }
+.walk-stick { position: absolute; left: calc(28px + var(--sal)); bottom: calc(64px + var(--sab)); width: 120px; height: 120px; border-radius: 50%;
+  background: rgba(22, 33, 15, .35); border: 1.5px solid rgba(239, 244, 242, .35); display: grid; place-items: center; touch-action: none; }
+.walk-stick[hidden] { display: none; }
+.walk-knob { width: 52px; height: 52px; border-radius: 50%; background: rgba(239, 244, 242, .55); box-shadow: 0 2px 10px rgba(0, 0, 0, .35); pointer-events: none; }
+@media (max-width: 600px) {
+  .walk-card { left: 0; right: 0; bottom: 0; width: 100%; border-radius: 16px 16px 0 0; max-height: 55vh; padding-bottom: calc(14px + var(--sab)); }
+  .walk-btn span:not(.walk-sun) { display: none; }
+  .walk-btn { padding: 0 12px; }
+  .walk-hint { bottom: calc(196px + var(--sab)); }
+}
+@media (prefers-reduced-motion: reduce) { .walk-marker.pulse { animation: none; } .walk-veil { transition: none; } }

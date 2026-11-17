@@ -201,3 +201,85 @@ Everything is in `worldpack/`; read `worldpack/REPORT.md` first. The scripts are
   * Requests have a hard 90 s streamed deadline and a 0.5 s pause between calls.
   * Not in GBIF within the window: the otter shrew, *Blaeria nimbana*, *Osbeckia porteresii*.
   * 1,112 of 1,117 iNaturalist photo candidates are CC BY-NC.
+
+## Walk mode – first-person exploration (17 Nov 2026)
+
+Dean asked for detail when zooming in: walk among the trees and plants, see animals, click on anything, each area unique. This is built into the web app as a lazy-loaded **walk mode** (`src/walk/`, 35 KB gz chunk, loaded only on entry). Nothing is deployed: Vercel stays paused.
+
+**Ways in:**
+* "Marcher ici / Walk here" in the free-click readout.
+* The new walk button in a hotspot panel's footer.
+* Zooming in past the closest orbit distance (mouse wheel).
+* A deep link `#/walk/<lon>,<lat>` (kept up to date while walking, cleared on exit).
+
+**Controls:**
+* Drag to look; ZQSD/WASD (by key position) or the arrows; Shift to run.
+* Double-click for mouse-look; Esc closes the card, then exits.
+* Joystick on touch screens.
+* A tap or click identifies the tree, plant, animal or ground under it.
+
+**Data** (`scripts/worldpack/build_walk_data.py` → `public/walk/`, 8.8 MB, loaded tile by tile, ≈ 0.3–0.4 MB for one place):
+* 15 m tiles in the app frame with ground height (DSM − canopy), canopy height, land cover, rock and stream masks.
+* Smoothed DEM stream lines.
+* `species.json`: the species that walk mode names, plus the most-recorded species per altitude band.
+* **Dominant tree crowns detected in the 1 m canopy model** for the four hero zones: 3,505 / 4,912 / 6,253 / 8,712 crowns. The model is smooth, so these are the dominant crowns (≈ 20–40 per hectare), not every tree.
+* The same script writes `mask_regrowth.png` into the world pack. This is the grey "neither forest nor grass" class seen in the previews: tree/shrub land cover with a canopy under ~6 m (39 % of the massif, 43 % of the Bossou zone).
+
+**Rendering:**
+* Two passes: far (sky, whole massif DSM at true scale, sea of clouds) and near (0.1–2,700 m).
+* Ground patch: a GPU-displaced grid, ≈ 0.5 m at the centre to 25 m at the rim. It uses the same height function in GLSL and JS (shared integer hash), so feet, trees and the mesh agree.
+* Beyond the tree range, the patch rises to the measured canopy height (a "canopy shell").
+* Ground materials: leaf litter, laterite, turf, rock and moss, blended from the measured land cover, canopy, slope, altitude and stream distance. The textures are all drawn in code.
+
+**Plants:**
+* Ten procedural plant types following content.json's sourced habitat descriptions: emergent with buttresses and lianas, canopy, understorey, mossy Parinari-type montane tree with epiphytes, *Alsophila* tree fern, oil palm, raphia palm, *Protea* shrub, savanna tree, regrowth.
+* In hero zones, measured crowns are placed at their real positions and heights. Elsewhere, canopy, understorey, shrubs, palms and ferns are placed deterministically from canopy height, land cover, altitude belt and stream proximity.
+* Distant trees are impostors rendered from the same models.
+* Ground cover: summit tussock grass, savanna grass, turf, ferns, broad-leaved herbs, branches, stones and boulders. Grass thins out to twice the cover radius.
+* Streams are animated ribbons in carved beds.
+
+**Animals** (simple procedural models, never photos or scans; all recorded by GBIF in the window):
+* African pied hornbills and Guinea turacos (red flight feathers), sunbirds.
+* *Acraea*, swallowtail and *Graphium* butterflies.
+* An *illustrative* nut-cracking site at Bossou (anvil, hammer stone, palm nuts). Its card says the location is not real.
+* No chimpanzee models (CLAUDE.md §10.4: wild, respectful), and no threatened species at specific places.
+
+**Cards:**
+* Trees: the measured height (Meta/WRI) when the crown is measured, otherwise ≈ the canopy height here. Sourced habitat text from content.json, recorded species of that plant group with GBIF links, and "the species of this exact tree is not mapped".
+* Animals: the recorded species in GBIF, plus "simplified model at an illustrative spot".
+* Ground: the habitat text and sources, the altitude band, the species counts for that band, and the most-recorded plants.
+
+**Lighting and realism details:**
+* Three light presets (Matin / Midi / Brume).
+* Fog per habitat (dense in the cloud forest, light in the grassland), plus a fill light under closed canopy.
+* Wind in leaves, fronds and grass; foliage normals not flipped; alpha-tested leaf shadows; alpha-to-coverage.
+* Leaf textures bleed colour under transparent pixels, so mipmaps do not turn edges black.
+* Foliage within ~1.5 m of the eye dissolves (dithered).
+* The walker starts at the most open spot within 14 m.
+
+**Tiers** (`TIER_OPTS` in `src/walk/index.ts`):
+* High: 320² ground grid, 420 m tree range, 55 m full-detail trees, 2,048 shadows.
+* Mid: 224², 260 m, 32 m, 1,024 shadows.
+* Low: 160², 170 m, 20 m, no shadows.
+* On every tier, the resolution steps down if the first seconds run under 24 fps.
+* **Not yet measured on a real phone or GPU.** SwiftShader in the container renders 1–3 s per frame, so the numbers here are only correctness checks.
+
+**Checks:**
+* `scripts/check-walk.mjs [tier] [place]`: five places, screenshots in `docs/screens/walk-*.png`, console clean.
+* `scripts/check-walk-flow.mjs`: phone flow, readout → walk → card → back, with the deep link and no overflow.
+* `walk-lab.html` (dev only, not built): every plant and cover type in a row.
+
+**Bugs found and fixed during the build:**
+* Fog started at full density.
+* Canvas leaves had black mip edges.
+* Fronds were invisible while casting solid shadows.
+* Palm bark looked like faces.
+* Herbs were lit from below.
+* Teleporting kept stale heights.
+* Butterflies never found a "suitable" spot.
+
+**Honest limits:**
+* Plant shapes and species per tree are reconstructions.
+* The ground under 30 m is generated.
+* Animals are simple models, often hard to spot behind leaves, as in a real forest.
+* This is a browser, so it will not reach Unreal-level photorealism. The same data feeds the Unreal world pack.

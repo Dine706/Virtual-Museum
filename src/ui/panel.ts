@@ -12,6 +12,8 @@ export interface PanelHandlers {
   onClose: () => void;
   onNavigate: (id: string) => void;
   onShowOnMap: (id: string) => void;
+  /** Walk at this hotspot in first-person view (habitats, peaks and places on the ground). */
+  onWalk?: (id: string) => void;
   /** Pixels of the canvas covered by the panel (right edge on desktop, bottom edge for the sheet). */
   onObscure: (right: number, bottom: number) => void;
 }
@@ -433,6 +435,7 @@ export class Panel {
         if (this.sheet) this.setSnap(0);
         this.h.onShowOnMap(h.id);
       }),
+      ...(this.h.onWalk ? [mk('foot-walk', icons.walk, t('walk.enter'), t('walk.enterLabel'), () => this.h.onWalk!(h.id))] : []),
       mk('foot-next', icons.chevronRight, t('panel.next'), t('panel.nextLabel', { title: loc(next, 'title', lang) }), () => this.h.onNavigate(next.id), true),
     );
   }

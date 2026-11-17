@@ -1,103 +1,104 @@
 {
-  "id": "massif",
-  "name_fr": null,
-  "name_en": null,
-  "why": null,
-  "center_lonlat": [
-    -8.42,
-    7.62
+ "id": "massif",
+ "name_fr": null,
+ "name_en": null,
+ "why": null,
+ "center_lonlat": [
+  -8.42,
+  7.62
+ ],
+ "crs": "EPSG:32629",
+ "center_utm_m": [
+  563974.38,
+  842331.58
+ ],
+ "spacing_m": 15.0,
+ "size_px": 2017,
+ "extent_m": 30240.0,
+ "corners_lonlat": {
+  "nw": [
+   -8.556935,
+   7.756929
   ],
-  "crs": "EPSG:32629",
-  "center_utm_m": [
-    563974.38,
-    842331.58
+  "ne": [
+   -8.282697,
+   7.756555
   ],
-  "spacing_m": 15.0,
-  "size_px": 2017,
-  "extent_m": 30240.0,
-  "corners_lonlat": {
-    "nw": [
-      -8.556935,
-      7.756929
-    ],
-    "ne": [
-      -8.282697,
-      7.756555
-    ],
-    "sw": [
-      -8.557216,
-      7.483394
-    ],
-    "se": [
-      -8.283152,
-      7.483034
-    ]
-  },
-  "affine_utm_pixel_is_area": [
-    15.0,
-    0.0,
-    548846.8772073694,
-    0.0,
-    -15.0,
-    857459.0810994133
+  "sw": [
+   -8.557216,
+   7.483394
   ],
-  "unreal_import": {
-    "heightmap_resolution": "2017 x 2017",
-    "scale_cm": {
-      "x": 1500.0,
-      "y": 1500.0,
-      "z": 275.496972
-    },
-    "location_cm": {
-      "x": 0,
-      "y": 0,
-      "z": 105061.33
-    },
-    "note": "Import as a new Landscape (File → Import from file), set these scale values, then set the Landscape actor location Z: elevations then match real metres above sea level (1 Unreal unit = 1 cm).",
-    "height_range_m": [
-      345.34,
-      1755.89
-    ],
-    "vertical_precision_cm": 2.152
-  },
-  "stats": {
-    "dsm_m": [
-      353.7,
-      1754.9
-    ],
-    "ground_m": [
-      346.3,
-      1750.8
-    ],
-    "canopy_height_m": {
-      "mean": 7.5,
-      "p95": 23.5,
-      "max": 36.2
-    },
-    "cover_pct": {
-      "10": 78.8,
-      "20": 0.4,
-      "30": 20.1,
-      "40": 0.0,
-      "50": 0.7,
-      "60": 0.0,
-      "80": 0.0,
-      "90": 0.0
-    },
-    "forest_weight_mean": 0.39,
-    "steep_gt38deg_pct": 2.57
-  },
-  "files": [
-    "canopy_height_m.png",
-    "heightmap_dsm.png",
-    "heightmap_ground.png",
-    "landcover_worldcover.png",
-    "mask_band_lowland_lt1000m.png",
-    "mask_band_montane_1000-1400m.png",
-    "mask_band_summit_gt1400m.png",
-    "mask_forest.png",
-    "mask_grass.png",
-    "mask_rock.png",
-    "mask_stream.png"
+  "se": [
+   -8.283152,
+   7.483034
   ]
+ },
+ "affine_utm_pixel_is_area": [
+  15.0,
+  0.0,
+  548846.8772073694,
+  0.0,
+  -15.0,
+  857459.0810994133
+ ],
+ "unreal_import": {
+  "heightmap_resolution": "2017 x 2017",
+  "scale_cm": {
+   "x": 1500.0,
+   "y": 1500.0,
+   "z": 275.496972
+  },
+  "location_cm": {
+   "x": 0,
+   "y": 0,
+   "z": 105061.33
+  },
+  "note": "Import as a new Landscape (File \u2192 Import from file), set these scale values, then set the Landscape actor location Z: elevations then match real metres above sea level (1 Unreal unit = 1 cm).",
+  "height_range_m": [
+   345.34,
+   1755.89
+  ],
+  "vertical_precision_cm": 2.152
+ },
+ "stats": {
+  "dsm_m": [
+   353.7,
+   1754.9
+  ],
+  "ground_m": [
+   346.3,
+   1750.8
+  ],
+  "canopy_height_m": {
+   "mean": 7.5,
+   "p95": 23.5,
+   "max": 36.2
+  },
+  "cover_pct": {
+   "10": 78.8,
+   "20": 0.4,
+   "30": 20.1,
+   "40": 0.0,
+   "50": 0.7,
+   "60": 0.0,
+   "80": 0.0,
+   "90": 0.0
+  },
+  "forest_weight_mean": 0.39,
+  "steep_gt38deg_pct": 2.57
+ },
+ "files": [
+  "canopy_height_m.png",
+  "heightmap_dsm.png",
+  "heightmap_ground.png",
+  "landcover_worldcover.png",
+  "mask_band_lowland_lt1000m.png",
+  "mask_band_montane_1000-1400m.png",
+  "mask_band_summit_gt1400m.png",
+  "mask_forest.png",
+  "mask_grass.png",
+  "mask_regrowth.png",
+  "mask_rock.png",
+  "mask_stream.png"
+ ]
 }

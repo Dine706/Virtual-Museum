@@ -1,0 +1,368 @@
+// Walk-mode data (public/walk/, built by scripts/worldpack/build_walk_data.py):
+// 15 m tiles of ground height + canopy/land cover in the app frame, measured tree crowns in the hero zones,
+// DEM-derived streams and the species walk mode names. A 512 × 512 window around the walker is kept both
+// as JS arrays (player height, placement) and as GPU textures (ground mesh, shading) – the same numbers.
+import * as THREE from 'three';
+import { groundDetail } from './noise';
+
+export interface WalkIndex {
+  frame: { lon0: number; lat0: number; kx: number; kz: number };
+  step: number; tile: number; tiles: number; origin: number;
+  height: { h0: number; scale: number };
+  zones: ZoneInfo[];
+}
+export interface ZoneInfo { id: string; cx: number; cz: number; half: number; count: number; file: string; name_fr: string; name_en: string }
+export interface Crown { x: number; z: number; h: number; r: number }
+export interface SpeciesRef {
+  sci: string; fr: string | null; en: string | null; family: string | null; class: string | null; iucn: string;
+  records: number; bands: Record<string, number>; sensitive: boolean; gbif: string; wp_fr: string | null; wp_en: string | null;
+}
+export interface SpeciesData {
+  taxa: Record<string, SpeciesRef[]>;
+  bands: Record<string, { plants: SpeciesRef[]; birds: SpeciesRef[]; butterflies: SpeciesRef[]; counts: { species: number; plants: number; birds: number } }>;
+}
+export interface Attr { canopy: number; cls: number; rock: number; streamMask: number }
+
+const WIN = 512;            // window size in samples (15 m → 7.68 km)
+const SWIN = 512;           // stream field size in samples (2 m → 1.02 km)
+const SSTEP = 2;
+const SMAX = 25.5;          // metres: stream distance saturates here
+
+interface Tile { h: Float32Array; a: Uint8Array; s: Uint8Array }
+
+async function decode(url: string): Promise<ImageData> {
+  const blob = await (await fetch(url)).blob();
+  const bmp = await createImageBitmap(blob, { colorSpaceConversion: 'none', premultiplyAlpha: 'none' });
+  const c = new OffscreenCanvas(bmp.width, bmp.height);
+  const g = c.getContext('2d', { willReadFrequently: true })!;
+  g.drawImage(bmp, 0, 0);
+  bmp.close();
+  return g.getImageData(0, 0, c.width, c.height);
+}
+
+export class WalkData {
+  index!: WalkIndex;
+  species!: SpeciesData;
+  private tiles = new Map<string, Promise<Tile>>();
+  private streams: { a: number; p: Float32Array; minX: number; maxX: number; minZ: number; maxZ: number }[] = [];
+  private crowns = new Map<string, Crown[]>();
+
+  // Window (JS copy + textures).
+  winX0 = 0; winZ0 = 0;                       // world position of sample (0, 0)
+  readonly height = new Float32Array(WIN * WIN);
+  readonly attr = new Uint8Array(WIN * WIN * 4); // canopy m, class, rock, stream mask
+  readonly heightTex: THREE.DataTexture;
+  readonly attrTex: THREE.DataTexture;
+  // Stream distance field (m, saturating at SMAX) + width, 2 m grid around the walker.
+  sX0 = 0; sZ0 = 0;
+  readonly stream = new Uint8Array(SWIN * SWIN * 2);
+  readonly streamTex: THREE.DataTexture;
+
+  constructor(readonly base: string) {
+    this.heightTex = new THREE.DataTexture(this.height, WIN, WIN, THREE.RedFormat, THREE.FloatType);
+    this.heightTex.minFilter = this.heightTex.magFilter = THREE.NearestFilter;
+    this.attrTex = new THREE.DataTexture(this.attr, WIN, WIN, THREE.RGBAFormat, THREE.UnsignedByteType);
+    this.attrTex.minFilter = this.attrTex.magFilter = THREE.LinearFilter;
+    this.streamTex = new THREE.DataTexture(this.stream, SWIN, SWIN, THREE.RGFormat, THREE.UnsignedByteType);
+    this.streamTex.minFilter = this.streamTex.magFilter = THREE.LinearFilter;
+    this.uniforms.uHeightTex.value = this.heightTex;
+    this.uniforms.uAttrTex.value = this.attrTex;
+    this.uniforms.uStreamTex.value = this.streamTex;
+  }
+
+  async init() {
+    const [index, species, streams] = await Promise.all([
+      fetch(`${this.base}walk/index.json`).then((r) => r.json() as Promise<WalkIndex>),
+      fetch(`${this.base}walk/species.json`).then((r) => r.json() as Promise<SpeciesData>),
+      fetch(`${this.base}walk/streams.json`).then((r) => r.json() as Promise<{ a: number; p: number[] }[]>),
+    ]);
+    this.index = index;
+    this.species = species;
+    this.streams = streams.map((s) => {
+      const p = chaikin(chaikin(s.p));
+      let minX = Infinity, maxX = -Infinity, minZ = Infinity, maxZ = -Infinity;
+      for (let i = 0; i < p.length; i += 2) {
+        minX = Math.min(minX, p[i]); maxX = Math.max(maxX, p[i]);
+        minZ = Math.min(minZ, p[i + 1]); maxZ = Math.max(maxZ, p[i + 1]);
+      }
+      return { a: s.a, p, minX, maxX, minZ, maxZ };
+    });
+  }
+
+  get extent() { const i = this.index; return { min: i.origin, max: i.origin + i.tiles * i.tile * i.step }; }
+
+  private tile(i: number, j: number): Promise<Tile> {
+    const key = `${i}_${j}`;
+    let t = this.tiles.get(key);
+    if (!t) {
+      t = Promise.all([decode(`${this.base}walk/tiles/${key}_h.png`), decode(`${this.base}walk/tiles/${key}_a.png`)]).then(([h, a]) => {
+        const n = h.width * h.height;
+        const hh = new Float32Array(n), aa = new Uint8Array(n * 3), ss = new Uint8Array(n);
+        const { h0, scale } = this.index.height;
+        for (let k = 0; k < n; k++) {
+          hh[k] = (h.data[k * 4] * 256 + h.data[k * 4 + 1]) / scale + h0;
+          ss[k] = h.data[k * 4 + 2];
+          aa[k * 3] = a.data[k * 4]; aa[k * 3 + 1] = a.data[k * 4 + 1]; aa[k * 3 + 2] = a.data[k * 4 + 2];
+        }
+        return { h: hh, a: aa, s: ss };
+      });
+      this.tiles.set(key, t);
+    }
+    return t;
+  }
+
+  /** Fill the window centred near (x, z) (snapped to the 15 m grid). */
+  async loadWindow(x: number, z: number) {
+    const { step, tile, tiles, origin } = this.index;
+    const half = (WIN / 2) * step;
+    const x0 = origin + Math.round((x - half - origin) / step) * step;
+    const z0 = origin + Math.round((z - half - origin) / step) * step;
+    const i0 = Math.floor((x0 - origin) / (tile * step)), i1 = Math.floor((x0 + (WIN - 1) * step - origin) / (tile * step));
+    const j0 = Math.floor((z0 - origin) / (tile * step)), j1 = Math.floor((z0 + (WIN - 1) * step - origin) / (tile * step));
+    const loads: Promise<[number, number, Tile]>[] = [];
+    for (let j = Math.max(0, j0); j <= Math.min(tiles - 1, j1); j++) {
+      for (let i = Math.max(0, i0); i <= Math.min(tiles - 1, i1); i++) {
+        loads.push(this.tile(i, j).then((t) => [i, j, t]));
+      }
+    }
+    const got = await Promise.all(loads);
+    const byKey = new Map(got.map(([i, j, t]) => [`${i}_${j}`, t]));
+    const tw = tile + 1;
+    for (let r = 0; r < WIN; r++) {
+      const zz = z0 + r * step;
+      let gj = Math.round((zz - origin) / step);
+      gj = Math.min(Math.max(gj, 0), tiles * tile);
+      const j = Math.min(tiles - 1, Math.floor(gj / tile)), lj = gj - j * tile;
+      for (let c = 0; c < WIN; c++) {
+        const xx = x0 + c * step;
+        let gi = Math.round((xx - origin) / step);
+        gi = Math.min(Math.max(gi, 0), tiles * tile);
+        const i = Math.min(tiles - 1, Math.floor(gi / tile)), li = gi - i * tile;
+        const t = byKey.get(`${i}_${j}`);
+        const k = r * WIN + c;
+        if (!t) { this.height[k] = 400; this.attr.fill(0, k * 4, k * 4 + 4); continue; }
+        const s = lj * tw + li;
+        this.height[k] = t.h[s];
+        this.attr[k * 4] = t.a[s * 3];
+        this.attr[k * 4 + 1] = t.a[s * 3 + 1];
+        this.attr[k * 4 + 2] = t.a[s * 3 + 2];
+        this.attr[k * 4 + 3] = t.s[s];
+      }
+    }
+    this.winX0 = x0; this.winZ0 = z0;
+    this.uniforms.uWin.value.set(x0, z0, step, WIN);
+    this.heightTex.needsUpdate = true;
+    this.attrTex.needsUpdate = true;
+  }
+
+  /** True when (x, z) is far enough from the window centre that it should be reloaded. */
+  windowStale(x: number, z: number) {
+    const c = this.winX0 + (WIN / 2) * this.index.step, d = this.winZ0 + (WIN / 2) * this.index.step;
+    return Math.max(Math.abs(x - c), Math.abs(z - d)) > 1400;
+  }
+
+  // ---------------------------------------------------------------- sampling (mirrors the GLSL in ground.ts)
+
+  /** DEM ground (bicubic Catmull-Rom on the 15 m window). */
+  baseHeight(x: number, z: number): number {
+    const step = this.index.step;
+    const fx = (x - this.winX0) / step, fz = (z - this.winZ0) / step;
+    const ix = Math.floor(fx), iz = Math.floor(fz);
+    const tx = fx - ix, tz = fz - iz;
+    const row = (r: number) => {
+      const rr = Math.min(WIN - 1, Math.max(0, r)) * WIN;
+      const s = (c: number) => this.height[rr + Math.min(WIN - 1, Math.max(0, c))];
+      return cr(s(ix - 1), s(ix), s(ix + 1), s(ix + 2), tx);
+    };
+    return cr(row(iz - 1), row(iz), row(iz + 1), row(iz + 2), tz);
+  }
+
+  attrAt(x: number, z: number): Attr {
+    const step = this.index.step;
+    const fx = (x - this.winX0) / step - 0.0, fz = (z - this.winZ0) / step;
+    const ix = Math.min(WIN - 2, Math.max(0, Math.floor(fx))), iz = Math.min(WIN - 2, Math.max(0, Math.floor(fz)));
+    const tx = Math.min(1, Math.max(0, fx - ix)), tz = Math.min(1, Math.max(0, fz - iz));
+    const g = (c: number, r: number, ch: number) => this.attr[(r * WIN + c) * 4 + ch];
+    const bl = (ch: number) => {
+      const a = g(ix, iz, ch) + (g(ix + 1, iz, ch) - g(ix, iz, ch)) * tx;
+      const b = g(ix, iz + 1, ch) + (g(ix + 1, iz + 1, ch) - g(ix, iz + 1, ch)) * tx;
+      return a + (b - a) * tz;
+    };
+    const cls = g(Math.round(fx), Math.round(fz), 1) || g(ix, iz, 1);
+    return { canopy: bl(0), cls, rock: bl(2) / 255, streamMask: bl(3) / 255 };
+  }
+
+  /** Distance to the nearest stream line (m, ≤ SMAX) and its bed half-width (m). */
+  streamAt(x: number, z: number): { dist: number; width: number } {
+    const fx = (x - this.sX0) / SSTEP, fz = (z - this.sZ0) / SSTEP;
+    if (fx < 0 || fz < 0 || fx >= SWIN - 1 || fz >= SWIN - 1) return { dist: SMAX, width: 1 };
+    const ix = Math.floor(fx), iz = Math.floor(fz), tx = fx - ix, tz = fz - iz;
+    const g = (c: number, r: number, ch: number) => this.stream[(r * SWIN + c) * 2 + ch];
+    const bl = (ch: number) => {
+      const a = g(ix, iz, ch) + (g(ix + 1, iz, ch) - g(ix, iz, ch)) * tx;
+      const b = g(ix, iz + 1, ch) + (g(ix + 1, iz + 1, ch) - g(ix, iz + 1, ch)) * tx;
+      return a + (b - a) * tz;
+    };
+    return { dist: (bl(0) / 255) * SMAX, width: 0.6 + (bl(1) / 255) * 3.4 };
+  }
+
+  /** Ground surface the walker stands on: DEM + micro-relief − stream bed. Mirrors groundHeight() in GLSL. */
+  heightAt(x: number, z: number): number {
+    const a = this.attrAt(x, z);
+    const s = this.streamAt(x, z);
+    const k = bedK(s.dist, s.width);
+    return this.baseHeight(x, z) + groundDetail(x, z, roughness(a.rock)) * (1 - 0.85 * k) - bedDepth(s.width) * k;
+  }
+
+  // ---------------------------------------------------------------- streams
+
+  /** Rasterise stream distances into the 2 m field around (x, z). */
+  updateStreams(x: number, z: number) {
+    const x0 = Math.round((x - (SWIN / 2) * SSTEP) / SSTEP) * SSTEP;
+    const z0 = Math.round((z - (SWIN / 2) * SSTEP) / SSTEP) * SSTEP;
+    const ext = SWIN * SSTEP;
+    const dist = new Float32Array(SWIN * SWIN).fill(SMAX);
+    const width = new Float32Array(SWIN * SWIN);
+    for (const s of this.streams) {
+      if (s.maxX < x0 - SMAX || s.minX > x0 + ext + SMAX || s.maxZ < z0 - SMAX || s.minZ > z0 + ext + SMAX) continue;
+      const w = Math.min(1, Math.sqrt(s.a) / 4);
+      for (let k = 0; k + 3 < s.p.length; k += 2) {
+        const ax = s.p[k], az = s.p[k + 1], bx = s.p[k + 2], bz = s.p[k + 3];
+        const c0 = Math.max(0, Math.floor((Math.min(ax, bx) - SMAX - x0) / SSTEP)), c1 = Math.min(SWIN - 1, Math.ceil((Math.max(ax, bx) + SMAX - x0) / SSTEP));
+        const r0 = Math.max(0, Math.floor((Math.min(az, bz) - SMAX - z0) / SSTEP)), r1 = Math.min(SWIN - 1, Math.ceil((Math.max(az, bz) + SMAX - z0) / SSTEP));
+        if (c0 > c1 || r0 > r1) continue;
+        const dx = bx - ax, dz = bz - az, len2 = dx * dx + dz * dz || 1;
+        for (let r = r0; r <= r1; r++) {
+          const pz = z0 + r * SSTEP;
+          for (let c = c0; c <= c1; c++) {
+            const px = x0 + c * SSTEP;
+            const t = Math.min(1, Math.max(0, ((px - ax) * dx + (pz - az) * dz) / len2));
+            const ex = ax + dx * t - px, ez = az + dz * t - pz;
+            const d = Math.sqrt(ex * ex + ez * ez);
+            const k2 = r * SWIN + c;
+            if (d < dist[k2]) { dist[k2] = d; width[k2] = w; }
+          }
+        }
+      }
+    }
+    for (let k = 0; k < dist.length; k++) {
+      this.stream[k * 2] = Math.round((dist[k] / SMAX) * 255);
+      this.stream[k * 2 + 1] = Math.round(width[k] * 255);
+    }
+    this.sX0 = x0; this.sZ0 = z0;
+    this.uniforms.uSWin.value.set(x0, z0, SSTEP, SWIN);
+    this.streamTex.needsUpdate = true;
+  }
+
+  streamStale(x: number, z: number) {
+    const c = this.sX0 + (SWIN / 2) * SSTEP, d = this.sZ0 + (SWIN / 2) * SSTEP;
+    return Math.max(Math.abs(x - c), Math.abs(z - d)) > 200;
+  }
+
+  /** Stream polylines near (x, z) (for water ribbons). */
+  streamsNear(x: number, z: number, r: number) {
+    return this.streams.filter((s) => s.maxX > x - r && s.minX < x + r && s.maxZ > z - r && s.minZ < z + r);
+  }
+
+  // ---------------------------------------------------------------- hero-zone crowns
+
+  zoneAt(x: number, z: number, margin = 0): ZoneInfo | null {
+    return this.index.zones.find((zn) => Math.abs(x - zn.cx) < zn.half + margin && Math.abs(z - zn.cz) < zn.half + margin) ?? null;
+  }
+
+  async loadCrowns(zone: ZoneInfo): Promise<Crown[]> {
+    const have = this.crowns.get(zone.id);
+    if (have) return have;
+    const buf = await (await fetch(`${this.base}walk/${zone.file}`)).arrayBuffer();
+    const v = new DataView(buf);
+    const out: Crown[] = [];
+    for (let o = 0; o + 6 <= buf.byteLength; o += 6) {
+      out.push({ x: zone.cx + v.getInt16(o, true) / 10, z: zone.cz + v.getInt16(o + 2, true) / 10, h: v.getUint8(o + 4) / 4, r: v.getUint8(o + 5) / 10 });
+    }
+    this.crowns.set(zone.id, out);
+    return out;
+  }
+
+  /** Uniforms for the GLSL mirror (shared objects; values follow the window). */
+  readonly uniforms = {
+    uHeightTex: { value: null as unknown as THREE.DataTexture },
+    uAttrTex: { value: null as unknown as THREE.DataTexture },
+    uStreamTex: { value: null as unknown as THREE.DataTexture },
+    uWin: { value: new THREE.Vector4(0, 0, 15, WIN) },
+    uSWin: { value: new THREE.Vector4(0, 0, SSTEP, SWIN) },
+  };
+}
+
+function cr(p0: number, p1: number, p2: number, p3: number, t: number) {
+  return p1 + 0.5 * t * (p2 - p0 + t * (2 * p0 - 5 * p1 + 4 * p2 - p3 + t * (3 * (p1 - p2) + p3 - p0)));
+}
+
+export const roughness = (rock: number) => 0.55 + rock * 1.4;
+
+/** Stream bed: a channel ~0.5–1.4 m deep whose banks fade out over ~4× the bed half-width. */
+export const bedDepth = (width: number) => 0.35 + width * 0.32;
+export function bedK(dist: number, width: number): number {
+  const t = Math.min(1, Math.max(0, dist / (width * 4)));
+  const s = 1 - t * t * (3 - 2 * t);
+  return s * s;
+}
+
+/** Chaikin corner cutting: the D8 flow lines zig-zag along the 15 m DEM grid. */
+function chaikin(p: ArrayLike<number>): Float32Array {
+  const n = p.length / 2;
+  if (n < 3) return Float32Array.from(p);
+  const out: number[] = [p[0], p[1]];
+  for (let i = 0; i < n - 1; i++) {
+    const ax = p[i * 2], az = p[i * 2 + 1], bx = p[i * 2 + 2], bz = p[i * 2 + 3];
+    out.push(ax * 0.75 + bx * 0.25, az * 0.75 + bz * 0.25, ax * 0.25 + bx * 0.75, az * 0.25 + bz * 0.75);
+  }
+  out.push(p[(n - 1) * 2], p[(n - 1) * 2 + 1]);
+  return Float32Array.from(out);
+}
+
+export const DATA_GLSL = /* glsl */ `
+uniform sampler2D uHeightTex;
+uniform sampler2D uAttrTex;
+uniform sampler2D uStreamTex;
+uniform vec4 uWin;   // x0, z0, step, size
+uniform vec4 uSWin;  // x0, z0, step, size
+float hTexel(int c, int r) {
+  int n = int(uWin.w) - 1;
+  return texelFetch(uHeightTex, ivec2(clamp(c, 0, n), clamp(r, 0, n)), 0).r;
+}
+float crw(float p0, float p1, float p2, float p3, float t) {
+  return p1 + 0.5 * t * (p2 - p0 + t * (2.0 * p0 - 5.0 * p1 + 4.0 * p2 - p3 + t * (3.0 * (p1 - p2) + p3 - p0)));
+}
+float baseHeight(vec2 p) {
+  vec2 f = (p - uWin.xy) / uWin.z;
+  vec2 i = floor(f); vec2 t = f - i;
+  int ix = int(i.x), iz = int(i.y);
+  float r[4];
+  for (int k = 0; k < 4; k++) {
+    int rr = iz - 1 + k;
+    r[k] = crw(hTexel(ix - 1, rr), hTexel(ix, rr), hTexel(ix + 1, rr), hTexel(ix + 2, rr), t.x);
+  }
+  return crw(r[0], r[1], r[2], r[3], t.y);
+}
+vec4 attrAt(vec2 p) {
+  vec2 uv = ((p - uWin.xy) / uWin.z + 0.5) / uWin.w;
+  return texture(uAttrTex, uv); // canopy/255 m, class/255, rock, stream mask
+}
+vec2 streamAt(vec2 p) {
+  vec2 f = (p - uSWin.xy) / uSWin.z;
+  if (f.x < 0.0 || f.y < 0.0 || f.x >= uSWin.w - 1.0 || f.y >= uSWin.w - 1.0) return vec2(25.5, 1.0);
+  vec2 v = texture(uStreamTex, (f + 0.5) / uSWin.w).rg;
+  return vec2(v.r * 25.5, 0.6 + v.g * 3.4);
+}
+float bedK(float dist, float width) {
+  float t = clamp(dist / (width * 4.0), 0.0, 1.0);
+  float s = 1.0 - t * t * (3.0 - 2.0 * t);
+  return s * s;
+}
+float groundHeight(vec2 p) {
+  vec4 a = attrAt(p);
+  vec2 s = streamAt(p);
+  float k = bedK(s.x, s.y);
+  return baseHeight(p) + groundDetail(p, 0.55 + a.b * 1.4) * (1.0 - 0.85 * k) - (0.35 + s.y * 0.32) * k;
+}
+`;

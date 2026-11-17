@@ -1,0 +1,63 @@
+{
+ "frame": {
+  "lon0": -8.42,
+  "lat0": 7.62,
+  "kx": 110336.9679982832,
+  "kz": 110574.0
+ },
+ "step": 15.0,
+ "tile": 200,
+ "tiles": 10,
+ "origin": -15000.0,
+ "height": {
+  "h0": 300.0,
+  "scale": 40.0
+ },
+ "zones": [
+  {
+   "id": "z1-summit",
+   "name": "summit",
+   "cx": 1103.0,
+   "cz": -372.0,
+   "half": 1008,
+   "count": 3505,
+   "file": "crowns_z1-summit.bin",
+   "name_fr": "Sommet – Mont Richard-Molard",
+   "name_en": "Summit – Mount Richard-Molard"
+  },
+  {
+   "id": "z2-cloud-forest",
+   "name": "cloud-forest",
+   "cx": 2305.0,
+   "cz": -5775.0,
+   "half": 1008,
+   "count": 4912,
+   "file": "crowns_z2-cloud-forest.bin",
+   "name_fr": "Forêt de nuage",
+   "name_en": "Cloud forest"
+  },
+  {
+   "id": "z3-bossou",
+   "name": "bossou",
+   "cx": -9394.0,
+   "cz": -3094.0,
+   "half": 1008,
+   "count": 6253,
+   "file": "crowns_z3-bossou.bin",
+   "name_fr": "Collines de Bossou",
+   "name_en": "Bossou hills"
+  },
+  {
+   "id": "z4-lowland-forest",
+   "name": "lowland-forest",
+   "cx": -2118.0,
+   "cz": -6121.0,
+   "half": 1008,
+   "count": 8712,
+   "file": "crowns_z4-lowland-forest.bin",
+   "name_fr": "Forêt de piémont",
+   "name_en": "Foothill forest"
+  }
+ ],
+ "crown_encoding": "int16 x, int16 z (dm from zone centre), uint8 height (0.25 m), uint8 radius (0.1 m)"
+}

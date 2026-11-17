@@ -21,6 +21,7 @@ export const icons = {
   expand: stroke('<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>'),
   mountain: stroke('<path d="M2.5 19.5 9 8.5l4 6.5 2.5-4 6 8.5z"/>'),
   info: stroke('<circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.6v.1"/>'),
+  walk: stroke('<circle cx="13" cy="4.2" r="1.8"/><path d="M9.5 21l2.2-6.2 2.8 2.7V21M8 11.5l2.5-3.5 3 .5 2 3.5 2.5 1M11.7 14.8 10.5 8"/>'),
 };
 
 const fill = (body: string) =>

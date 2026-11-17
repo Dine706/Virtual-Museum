@@ -24,6 +24,7 @@ All rasters are on the **UTM zone 29N** grid (EPSG:32629, metres, north up). Eac
 | `mask_forest.png` | 8-bit weight | 0–255 forest weight (smooth step from 3 m to 12 m canopy). |
 | `mask_grass.png` | 8-bit weight | Grassland / shrub / cropland where the canopy is low. |
 | `mask_rock.png` | 8-bit weight | Steep ground (≈ 32–42° and over), less where forest covers it: exposed rock and scree. |
+| `mask_regrowth.png` | 8-bit weight | Land the 10 m map calls tree/shrub but the 1 m canopy model puts under ~6 m: young regrowth, fallow, farm bush. Use shrubs, young trees and tall grass here. |
 | `mask_band_*.png` | 8-bit weight | Indicative altitude bands: lowland < 1,000 m, montane 1,000–1,400 m, summit > 1,400 m (soft 100 m transitions). |
 | `mask_stream.png` | 8-bit weight | Streams derived from the ground model (**approximate**, not surveyed). |
 | `preview.jpg` | JPEG | Hillshade with forest, grass and streams, for a quick look. |
@@ -61,6 +62,12 @@ python3 -m venv .venv && .venv/bin/pip install rasterio numpy pillow scipy shape
 ```bash
 .venv/bin/python scripts/worldpack/build_species.py
 ```
+
+```bash
+.venv/bin/python scripts/worldpack/build_walk_data.py
+```
+
+The last one adds `mask_regrowth.png` to every folder and writes the web app's walk-mode data (`public/walk/`).
 
 Raw downloads are cached in `.worldpack-cache/` (git-ignored). The terrain script reads straight from the AWS open-data buckets; the species script needs access to `api.gbif.org`, `query.wikidata.org` and `api.inaturalist.org`.
 

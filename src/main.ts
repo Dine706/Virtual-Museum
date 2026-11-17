@@ -32,6 +32,7 @@ import { announce, Chrome } from './ui/chrome';
 import { Pins } from './ui/pins';
 import type { Panel } from './ui/panel';
 import type { PhotoViewer } from './ui/viewer';
+import type { WalkHandle } from './walk';
 
 setLoadingText();
 applyStatic();
@@ -49,7 +50,7 @@ async function boot() {
   if (!webglAvailable()) { showFatal(t('loading.error')); return; }
   mark('webgl-probe');
   // Intro pending (no ?skipintro, no #/h/ deep link): keep chrome and pins hidden from the first frame.
-  const introPending = !flags.skipIntro && !/^#\/h\//.test(location.hash);
+  const introPending = !flags.skipIntro && !/^#\/(h|walk)\//.test(location.hash);
   if (introPending) document.body.classList.add('flying');
   const tier = detectTier(flags.tier);
   const exag = DEFAULT_EXAG;
@@ -158,6 +159,7 @@ async function boot() {
       place: regions.classify(lon, lat),
       nearest,
       lon, lat,
+      x: p.x, z: p.z,
     };
   };
 
@@ -231,7 +233,7 @@ async function boot() {
   let selected: string | null = null;
   const pins = new Pins(content, hf, exag, (id) => selectHotspot(id, true), { debug: flags.debug, pulse: !reducedMotion && tier.tier !== 'low' });
   stage.onAfterRender(() => pins.update(camera, canvas.clientWidth, canvas.clientHeight, camera.position.distanceTo(controls.target)));
-  readout = new Readout((id) => selectHotspot(id, true));
+  readout = new Readout((id) => selectHotspot(id, true), (x, z) => void startWalk(x, z));
   controls.addEventListener('start', () => readout.hide()); // any drag / pinch / wheel dismisses it
   // Panel + photo viewer + credits.json are code-split (CLAUDE.md M8): loaded on the first hotspot opening,
   // or prefetched once the scene has been idle for a moment.
@@ -245,6 +247,13 @@ async function boot() {
       onClose: () => selectHotspot(null, true),
       onNavigate: (id) => selectHotspot(id, true),
       onShowOnMap: (id) => { const h = content.hotspots.find((x) => x.id === id); if (h) flyTo(hotspotPose(h)); },
+      onWalk: (id) => {
+        const h = content.hotspots.find((x) => x.id === id);
+        if (!h) return;
+        // Markers of threatened species are already generalised in content.json (CLAUDE.md §10.2).
+        const [x, z] = lonLatToXZ(h.lon, h.lat);
+        void startWalk(x, z);
+      },
       onObscure: (right, bottom) => stage.setViewInset(right, bottom, reducedMotion),
     }, flags.debug);
     return panel;
@@ -320,7 +329,66 @@ async function boot() {
   chrome.setAtmo(initialAtmo);
   setMode(mode, false);
 
+  // ---- Walk mode (first-person, lazy-loaded) ----
+  let walking: WalkHandle | null = null;
+  let walkStarting = false;
+  async function startWalk(x: number, z: number) {
+    if (walking || walkStarting) return;
+    walkStarting = true;
+    readout.hide();
+    if (selected) selectHotspot(null, true);
+    const fwd = new THREE.Vector3().subVectors(controls.target, camera.position);
+    const yaw = Math.atan2(-fwd.x, -fwd.z);
+    stage.suspend(true);
+    document.body.classList.add('walking');
+    try {
+      const { enterWalk } = await import('./walk');
+      let lastHash = 0;
+      walking = await enterWalk({
+        renderer: stage.renderer, hf, lcTex: terrainMat.uniforms.uLand.value as THREE.Texture, content, base: BASE,
+        tier: stage.tier.tier, start: { x, z, yaw }, reducedMotion,
+        onExit: () => {
+          walking = null;
+          document.body.classList.remove('walking');
+          stage.suspend(false);
+          history.replaceState(null, '', `${location.pathname}${location.search}`);
+          canvas.focus({ preventScroll: true });
+        },
+        onPosition: (px, pz) => {
+          const now = performance.now();
+          if (now - lastHash < 1500) return;
+          lastHash = now;
+          const [lon, lat] = xzToLonLat(px, pz);
+          history.replaceState(null, '', `${location.pathname}${location.search}#/walk/${lon.toFixed(5)},${lat.toFixed(5)}`);
+        },
+      });
+    } catch (e) {
+      console.error(e);
+      document.body.classList.remove('walking');
+      stage.suspend(false);
+    } finally {
+      walkStarting = false;
+    }
+  }
+
+  // Zooming in past the closest orbit distance walks into the forest at the view centre.
+  let zoomPush = 0;
+  canvas.addEventListener('wheel', (e) => {
+    if (walking || e.deltaY >= 0) { zoomPush = 0; return; }
+    const d = camera.position.distanceTo(controls.target);
+    if (d > ORBIT.minDistance * 1.08) { zoomPush = 0; return; }
+    zoomPush += Math.min(200, -e.deltaY);
+    if (zoomPush > 900) { zoomPush = 0; void startWalk(controls.target.x, controls.target.z); }
+  }, { passive: true });
+
   const routeFromHash = () => {
+    const w = /^#\/walk\/(-?[\d.]+),(-?[\d.]+)$/.exec(location.hash);
+    if (w) {
+      const [x, z] = lonLatToXZ(Number(w[1]), Number(w[2]));
+      if (!walking) void startWalk(x, z);
+      focusOnRoute = true;
+      return;
+    }
     const m = /^#\/h\/([a-z0-9-]+)$/.exec(location.hash);
     if (m) selectHotspot(m[1], true, focusOnRoute);
     focusOnRoute = true;
@@ -328,7 +396,7 @@ async function boot() {
   let focusOnRoute = false; // a deep link on page load must not grab focus
   window.addEventListener('hashchange', routeFromHash);
   window.addEventListener('keydown', (e) => {
-    if (e.key !== 'Escape' || document.querySelector('.title-card, dialog[open]')) return;
+    if (e.key !== 'Escape' || walking || document.querySelector('.title-card, dialog[open]')) return;
     if (readout.visible) { readout.hide(); return; }
     if (selected) selectHotspot(null, true);
   });
@@ -386,6 +454,12 @@ async function boot() {
         const [x, z] = lonLatToXZ(lon, lat);
         return describe(new THREE.Vector3(x, 0, z));
       },
+      async walk(lon: number, lat: number) {
+        const [x, z] = lonLatToXZ(lon, lat);
+        await startWalk(x, z);
+        return !!walking;
+      },
+      walkDebug() { return walking?.debug ?? null; },
     };
     const rmXZ = rm ? lonLatToXZ(rm.lon, rm.lat) : [0, 0];
     debugLines = () => `\nDEM max ${hf.max.toFixed(1)} m @ x ${mx.toFixed(0)} z ${mz.toFixed(0)}\n` +
