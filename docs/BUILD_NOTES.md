@@ -187,3 +187,17 @@ Running log of decisions, measured budgets and issues (CLAUDE.md §15).
 * Dean asked that nothing change on Vercel until he approves the results. `vercel.json` now has `"ignoreCommand": "… exit 0"`. Vercel's *Ignored Build Step* exits 0, so **every push is skipped**: it shows as *Canceled* in the Vercel dashboard and the live site stays exactly as it is.
 * The live site is the M8 app (commit `b3937b3`). The three pushes after it (setup guide, stage-1 massif and zones) only added docs and data, and no web-build file has changed since.
 * **To deploy again after approval:** remove the `ignoreCommand` line and push. That commit builds normally, because Vercel reads `vercel.json` from the commit being deployed.
+
+## Stage 1 – world pack for the Unreal world (17 Nov 2026)
+
+Everything is in `worldpack/`; read `worldpack/REPORT.md` first. The scripts are in `scripts/worldpack/`.
+
+* **Terrain and forest:** massif at 15 m, plus four hero zones at 1 m (summit, cloud forest, Bossou hills, foothill forest).
+  * Ground = Copernicus DSM − Meta/WRI canopy height.
+  * PCG masks and DEM-derived streams.
+  * The 1-px CHM tile seam at lon −8.4375 is filled with nearest valid values.
+* **Species:** 3,914 species from 79,736 GBIF records, with Wikidata names and iNaturalist photo candidates. No coordinates are stored.
+  * **GBIF deep paging:** search pages past offset ≈ 10,000 take 90 s or more, or stall, through the proxy. The script now splits the window into parts of fewer than 9,900 records each (quadrants, then taxon facets where one collection of 13,682 specimens shares a single point).
+  * Requests have a hard 90 s streamed deadline and a 0.5 s pause between calls.
+  * Not in GBIF within the window: the otter shrew, *Blaeria nimbana*, *Osbeckia porteresii*.
+  * 1,112 of 1,117 iNaturalist photo candidates are CC BY-NC.

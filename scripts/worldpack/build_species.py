@@ -45,7 +45,7 @@ def log(*a):
     print(time.strftime('%H:%M:%S'), *a, flush=True)
 
 
-def get_json(url, params=None, cache_name=None, tries=6, method='GET', data=None):
+def get_json(url, params=None, cache_name=None, tries=6, method='GET', data=None, deadline=90, pace=0.5):
     if cache_name:
         p = CACHE / f'{cache_name}.json'
         if p.exists():
@@ -53,11 +53,20 @@ def get_json(url, params=None, cache_name=None, tries=6, method='GET', data=None
     delay = 2
     for i in range(tries):
         try:
-            r = S.request(method, url, params=params, data=data, timeout=60)
-            if r.status_code == 429 or r.status_code >= 500:
-                raise RuntimeError(f'HTTP {r.status_code}')
-            r.raise_for_status()
-            j = r.json()
+            # Stream with an overall deadline: a plain `timeout` only bounds the gap
+            # between bytes, so a server trickling data could stall us forever.
+            t0 = time.monotonic()
+            with S.request(method, url, params=params, data=data, timeout=(15, 30), stream=True) as r:
+                if r.status_code == 429 or r.status_code >= 500:
+                    raise RuntimeError(f'HTTP {r.status_code}')
+                r.raise_for_status()
+                buf = bytearray()
+                for chunk in r.iter_content(64 * 1024):
+                    buf += chunk
+                    if time.monotonic() - t0 > deadline:
+                        raise TimeoutError(f'no full response within {deadline} s')
+            j = json.loads(buf)
+            time.sleep(pace)  # be polite to public APIs
             if cache_name:
                 p.parent.mkdir(parents=True, exist_ok=True)
                 p.write_text(json.dumps(j))
@@ -98,23 +107,93 @@ def band(elev):
 
 # ---------------------------------------------------------------- GBIF
 
+def licence_name(url):
+    """'http://creativecommons.org/licenses/by-nc/4.0/legalcode' → 'CC BY-NC 4.0'; CC0 URLs → 'CC0 1.0'."""
+    u = url.lower()
+    if 'publicdomain/zero' in u or u.startswith('cc0'):
+        return 'CC0 1.0'
+    if '/licenses/' in u:
+        parts = u.split('/licenses/')[1].split('/')
+        return f"CC {parts[0].upper()} {parts[1] if len(parts) > 1 else ''}".strip()
+    return url
+
+GBIF_SEARCH = 'https://api.gbif.org/v1/occurrence/search'
+GBIF_WINDOW = 9900  # GBIF search pages beyond offset ~10,000 become extremely slow
+
+
+def gbif_query(box):
+    w, s, e, n = box
+    return {'decimalLatitude': f'{s:.5f},{n:.5f}', 'decimalLongitude': f'{w:.5f},{e:.5f}',
+            'hasCoordinate': 'true', 'hasGeospatialIssue': 'false'}
+
+
+TAXON_SPLIT = ['classKey', 'orderKey', 'familyKey', 'genusKey', 'speciesKey']
+
+
+def _tag(q):
+    keep = {k: v for k, v in q.items() if k not in ('hasCoordinate', 'hasGeospatialIssue', 'limit', 'offset')}
+    return '_'.join(f'{k}-{v}' for k, v in sorted(keep.items())).replace(',', '~')
+
+
+def gbif_parts(q, depth=0, level=0):
+    """Split a query into parts that each hold < GBIF_WINDOW records, so paging stays shallow.
+
+    Space is split into quadrants first. Where many records share one coordinate (a museum
+    collection catalogued at one point), the part is split by taxon instead; records without
+    that rank have no species key and are not used anyway.
+    """
+    count = get_json(GBIF_SEARCH, {**q, 'limit': 0}, cache_name='gbifc_' + _tag(q))['count']
+    if count == 0:
+        return []
+    if count <= GBIF_WINDOW:
+        return [(q, count)]
+    s, n = map(float, q['decimalLatitude'].split(','))
+    w, e = map(float, q['decimalLongitude'].split(','))
+    if e - w > 0.002 and level == 0:
+        mx, my = (w + e) / 2, (s + n) / 2
+        out = []
+        for b in ((w, s, mx, my), (mx, s, e, my), (w, my, mx, n), (mx, my, e, n)):
+            out += gbif_parts({**q, **gbif_query(b)}, depth + 1)
+        return out
+    if level >= len(TAXON_SPLIT):
+        log(f'  warning: {count} records at one point and one species; keeping the first {GBIF_WINDOW}')
+        return [(q, GBIF_WINDOW)]
+    field = TAXON_SPLIT[level]
+    j = get_json(GBIF_SEARCH, {**q, 'limit': 0, 'facet': field, 'facetLimit': 2000, 'facetMincount': 1},
+                 cache_name='gbiff_' + _tag(q) + '_' + field)
+    facets = j['facets'][0]['counts'] if j.get('facets') else []
+    out = []
+    for c in facets:
+        out += gbif_parts({**q, field: c['name']}, depth, level + 1)
+    missing = count - sum(c['count'] for c in facets)
+    if missing:
+        log(f'  {missing} records without {field} at {q["decimalLongitude"]} / {q["decimalLatitude"]} skipped')
+    return out
+
+
 def gbif_records():
-    base = 'https://api.gbif.org/v1/occurrence/search'
-    q = {'decimalLatitude': f"{BBOX['south']},{BBOX['north']}", 'decimalLongitude': f"{BBOX['west']},{BBOX['east']}",
-         'hasCoordinate': 'true', 'hasGeospatialIssue': 'false', 'limit': 300}
-    first = get_json(base, {**q, 'limit': 0}, cache_name='gbif_count')
-    total = first['count']
+    whole = gbif_query((BBOX['west'], BBOX['south'], BBOX['east'], BBOX['north']))
+    total = get_json(GBIF_SEARCH, {**whole, 'limit': 0}, cache_name='gbif_count')['count']
     log(f'GBIF: {total} records in the window')
-    off = 0
-    while off < min(total, 100000):
-        page = get_json(base, {**q, 'offset': off}, cache_name=f'gbif_{off:06d}')
-        for r in page['results']:
-            yield r
-        off += 300
-        if page.get('endOfRecords'):
-            break
-        if off % 6000 == 0:
-            log(f'  GBIF {off}/{total}')
+    parts = gbif_parts(whole)
+    log(f'  split into {len(parts)} parts (largest {max(c for _, c in parts)} records)')
+    seen = set()  # range filters are inclusive, so a point on a shared edge can appear twice
+    done = 0
+    for pi, (q, count) in enumerate(parts):
+        off = 0
+        while off < count:
+            page = get_json(GBIF_SEARCH, {**q, 'limit': 300, 'offset': off}, cache_name=f'gbifp_{_tag(q)}_{off:05d}')
+            for r in page['results']:
+                if r['key'] not in seen:
+                    seen.add(r['key'])
+                    yield r
+            off += 300
+            if page.get('endOfRecords'):
+                break
+        done += count
+        if (pi + 1) % 5 == 0 or pi + 1 == len(parts):
+            log(f'  GBIF part {pi + 1}/{len(parts)} · {done}/{total}')
+    log(f'  GBIF unique records: {len(seen)}')
 
 
 # ---------------------------------------------------------------- Wikidata
@@ -229,7 +308,7 @@ def main():
             datasets[dk] += 1
             dataset_names.setdefault(dk, r.get('datasetName'))
         if r.get('license'):
-            s['licenses'][r['license'].rsplit('/', 2)[-2] if '/' in r['license'] else r['license']] += 1
+            s['licenses'][licence_name(r['license'])] += 1
     log(f'{n_records} records → {len(species)} species')
 
     wd = wikidata_by_gbif(list(species))
