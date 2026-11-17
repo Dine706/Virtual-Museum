@@ -1,0 +1,52 @@
+{
+  "zones": [
+    {
+      "id": "z1-summit",
+      "name_fr": "Sommet – Mont Richard-Molard",
+      "name_en": "Summit – Mount Richard-Molard",
+      "lon": -8.4083,
+      "lat": 7.6219,
+      "why": "Montane grassland meeting the cloud-forest edge around the highest point (994–1,755 m).",
+      "size_px": 2017,
+      "spacing_m": 1.0
+    },
+    {
+      "id": "z2-cloud-forest",
+      "name_fr": "Forêt de nuage",
+      "name_en": "Cloud forest",
+      "lon": -8.4,
+      "lat": 7.67,
+      "why": "The montane / cloud-forest belt on the north-western slope (≈ 775–1,570 m).",
+      "size_px": 2017,
+      "spacing_m": 1.0
+    },
+    {
+      "id": "z3-bossou",
+      "name_fr": "Collines de Bossou",
+      "name_en": "Bossou hills",
+      "lon": -8.5054,
+      "lat": 7.6487,
+      "why": "Forested hills of Bossou (chimpanzee forest, publicly known site) and the village edge (≈ 535–700 m).",
+      "size_px": 2017,
+      "spacing_m": 1.0
+    },
+    {
+      "id": "z4-lowland-forest",
+      "name_fr": "Forêt de piémont",
+      "name_en": "Foothill forest",
+      "lon": -8.44,
+      "lat": 7.675,
+      "why": "Tall lowland forest of the foothills with DEM-derived streams (≈ 545–660 m).",
+      "size_px": 2017,
+      "spacing_m": 1.0
+    }
+  ],
+  "massif": {
+    "id": "massif",
+    "lon": -8.42,
+    "lat": 7.62,
+    "size_px": 2017,
+    "spacing_m": 15.0
+  },
+  "crs": "EPSG:32629"
+}

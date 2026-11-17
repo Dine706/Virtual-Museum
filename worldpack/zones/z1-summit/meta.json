@@ -1,0 +1,98 @@
+{
+  "id": "z1-summit",
+  "name_fr": "Sommet – Mont Richard-Molard",
+  "name_en": "Summit – Mount Richard-Molard",
+  "why": "Montane grassland meeting the cloud-forest edge around the highest point (994–1,755 m).",
+  "center_lonlat": [
+    -8.4083,
+    7.6219
+  ],
+  "crs": "EPSG:32629",
+  "center_utm_m": [
+    565264.65,
+    842543.39
+  ],
+  "spacing_m": 1.0,
+  "size_px": 2017,
+  "extent_m": 2016.0,
+  "corners_lonlat": {
+    "nw": [
+      -8.417426,
+      7.63103
+    ],
+    "ne": [
+      -8.399149,
+      7.631005
+    ],
+    "sw": [
+      -8.417451,
+      7.612795
+    ],
+    "se": [
+      -8.399174,
+      7.61277
+    ]
+  },
+  "affine_utm_pixel_is_area": [
+    1.0,
+    0.0,
+    564256.151244618,
+    0.0,
+    -1.0,
+    843551.886045746
+  ],
+  "unreal_import": {
+    "heightmap_resolution": "2017 x 2017",
+    "scale_cm": {
+      "x": 100.0,
+      "y": 100.0,
+      "z": 154.618967
+    },
+    "location_cm": {
+      "x": 0,
+      "y": 0,
+      "z": 136051.24
+    },
+    "note": "Import as a new Landscape (File → Import from file), set these scale values, then set the Landscape actor location Z: elevations then match real metres above sea level (1 Unreal unit = 1 cm).",
+    "height_range_m": [
+      964.69,
+      1756.34
+    ],
+    "vertical_precision_cm": 1.208
+  },
+  "stats": {
+    "dsm_m": [
+      979.5,
+      1755.3
+    ],
+    "ground_m": [
+      965.7,
+      1751.1
+    ],
+    "canopy_height_m": {
+      "mean": 4.8,
+      "p95": 23.0,
+      "max": 44.0
+    },
+    "cover_pct": {
+      "10": 43.0,
+      "20": 0.0,
+      "30": 56.9
+    },
+    "forest_weight_mean": 0.258,
+    "steep_gt38deg_pct": 34.68
+  },
+  "files": [
+    "canopy_height_m.png",
+    "heightmap_dsm.png",
+    "heightmap_ground.png",
+    "landcover_worldcover.png",
+    "mask_band_lowland_lt1000m.png",
+    "mask_band_montane_1000-1400m.png",
+    "mask_band_summit_gt1400m.png",
+    "mask_forest.png",
+    "mask_grass.png",
+    "mask_rock.png",
+    "mask_stream.png"
+  ]
+}

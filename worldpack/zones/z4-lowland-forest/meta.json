@@ -1,0 +1,99 @@
+{
+  "id": "z4-lowland-forest",
+  "name_fr": "Forêt de piémont",
+  "name_en": "Foothill forest",
+  "why": "Tall lowland forest of the foothills with DEM-derived streams (≈ 545–660 m).",
+  "center_lonlat": [
+    -8.44,
+    7.675
+  ],
+  "crs": "EPSG:32629",
+  "center_utm_m": [
+    561760.39,
+    848409.19
+  ],
+  "spacing_m": 1.0,
+  "size_px": 2017,
+  "extent_m": 2016.0,
+  "corners_lonlat": {
+    "nw": [
+      -8.449128,
+      7.684129
+    ],
+    "ne": [
+      -8.430848,
+      7.684106
+    ],
+    "sw": [
+      -8.449151,
+      7.665894
+    ],
+    "se": [
+      -8.430873,
+      7.66587
+    ]
+  },
+  "affine_utm_pixel_is_area": [
+    1.0,
+    0.0,
+    560751.8856585596,
+    0.0,
+    -1.0,
+    849417.6865948867
+  ],
+  "unreal_import": {
+    "heightmap_resolution": "2017 x 2017",
+    "scale_cm": {
+      "x": 100.0,
+      "y": 100.0,
+      "z": 28.444862
+    },
+    "location_cm": {
+      "x": 0,
+      "y": 0,
+      "z": 60816.1
+    },
+    "note": "Import as a new Landscape (File → Import from file), set these scale values, then set the Landscape actor location Z: elevations then match real metres above sea level (1 Unreal unit = 1 cm).",
+    "height_range_m": [
+      535.34,
+      680.98
+    ],
+    "vertical_precision_cm": 0.222
+  },
+  "stats": {
+    "dsm_m": [
+      544.0,
+      680.0
+    ],
+    "ground_m": [
+      536.3,
+      661.2
+    ],
+    "canopy_height_m": {
+      "mean": 14.8,
+      "p95": 26.0,
+      "max": 39.0
+    },
+    "cover_pct": {
+      "10": 82.9,
+      "20": 0.0,
+      "30": 17.1,
+      "50": 0.0
+    },
+    "forest_weight_mean": 0.771,
+    "steep_gt38deg_pct": 0.0
+  },
+  "files": [
+    "canopy_height_m.png",
+    "heightmap_dsm.png",
+    "heightmap_ground.png",
+    "landcover_worldcover.png",
+    "mask_band_lowland_lt1000m.png",
+    "mask_band_montane_1000-1400m.png",
+    "mask_band_summit_gt1400m.png",
+    "mask_forest.png",
+    "mask_grass.png",
+    "mask_rock.png",
+    "mask_stream.png"
+  ]
+}

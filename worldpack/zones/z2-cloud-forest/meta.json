@@ -1,0 +1,97 @@
+{
+  "id": "z2-cloud-forest",
+  "name_fr": "Forêt de nuage",
+  "name_en": "Cloud forest",
+  "why": "The montane / cloud-forest belt on the north-western slope (≈ 775–1,570 m).",
+  "center_lonlat": [
+    -8.4,
+    7.67
+  ],
+  "crs": "EPSG:32629",
+  "center_utm_m": [
+    566172.77,
+    847862.37
+  ],
+  "spacing_m": 1.0,
+  "size_px": 2017,
+  "extent_m": 2016.0,
+  "corners_lonlat": {
+    "nw": [
+      -8.409127,
+      7.67913
+    ],
+    "ne": [
+      -8.390848,
+      7.679105
+    ],
+    "sw": [
+      -8.409152,
+      7.660895
+    ],
+    "se": [
+      -8.390874,
+      7.66087
+    ]
+  },
+  "affine_utm_pixel_is_area": [
+    1.0,
+    0.0,
+    565164.2659952649,
+    0.0,
+    -1.0,
+    848870.8724973626
+  ],
+  "unreal_import": {
+    "heightmap_resolution": "2017 x 2017",
+    "scale_cm": {
+      "x": 100.0,
+      "y": 100.0,
+      "z": 158.473945
+    },
+    "location_cm": {
+      "x": 0,
+      "y": 0,
+      "z": 116647.98
+    },
+    "note": "Import as a new Landscape (File → Import from file), set these scale values, then set the Landscape actor location Z: elevations then match real metres above sea level (1 Unreal unit = 1 cm).",
+    "height_range_m": [
+      760.79,
+      1572.17
+    ],
+    "vertical_precision_cm": 1.238
+  },
+  "stats": {
+    "dsm_m": [
+      775.3,
+      1571.2
+    ],
+    "ground_m": [
+      761.8,
+      1567.4
+    ],
+    "canopy_height_m": {
+      "mean": 10.0,
+      "p95": 26.5,
+      "max": 46.0
+    },
+    "cover_pct": {
+      "10": 61.5,
+      "30": 38.5
+    },
+    "forest_weight_mean": 0.524,
+    "steep_gt38deg_pct": 21.07
+  },
+  "files": [
+    "canopy_height_m.png",
+    "heightmap_dsm.png",
+    "heightmap_ground.png",
+    "landcover_worldcover.png",
+    "mask_band_lowland_lt1000m.png",
+    "mask_band_montane_1000-1400m.png",
+    "mask_band_summit_gt1400m.png",
+    "mask_forest.png",
+    "mask_grass.png",
+    "mask_rock.png",
+    "mask_stream.png"
+  ]
+}
