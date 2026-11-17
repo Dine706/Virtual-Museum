@@ -39,8 +39,7 @@ export class Hud {
       <div class="walk-marker" aria-hidden="true" hidden></div>
       <div class="walk-hint"></div>
       <section class="walk-card" role="dialog" aria-modal="false" hidden></section>
-      <div class="walk-veil"><p></p></div>
-      <p class="walk-osm">© OpenStreetMap</p>`;
+      <div class="walk-veil"><p></p></div>`;
     document.body.append(this.root);
     this.place = this.root.querySelector('.walk-place')!;
     this.card = this.root.querySelector('.walk-card')!;
