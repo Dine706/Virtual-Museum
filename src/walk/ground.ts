@@ -95,7 +95,7 @@ export class Ground {
             return mix(texture(t, p / s).rgb, texture(t, q / (s * 2.7)).rgb, k * 0.55);
           }
           vec3 nrm(sampler2D t, vec2 p, float s) { return texture(t, p / s).xyz * 2.0 - 1.0; }
-          float gW[5]; float gWet; float gRough;`)
+          float gW[5]; float gWet; float gRough; float gBare;`)
         .replace('#include <map_fragment>', /* glsl */ `
           vec2 P = vWP.xz;
           vec4 at = attrAt(P);
@@ -121,18 +121,27 @@ export class Ground {
           // Summit grassland reads golden-green, lowland turf greener.
           cGr = mix(cGr, vec3(dot(cGr, vec3(0.33))), 0.35) * mix(vec3(0.85, 1.0, 0.7), vec3(1.3, 1.12, 0.7), smoothstep(1150.0, 1450.0, vWP.y));
           vec3 g = cLit * gW[0] + cSoil * gW[1] + cGr * gW[2] + cRock * gW[3] + cMoss * gW[4];
+          // Roads and footpaths (OpenStreetMap) and animal/research trails under forest: beaten earth.
+          vec2 pa = pathAt(P);
+          float onPath = 1.0 - smoothstep(0.0, 0.7, pa.x);
+          float tr = trailK(P, forest);
+          gBare = max(onPath, tr * 0.85);
+          vec3 earth = cSoil * mix(vec3(0.72, 0.62, 0.55), vec3(1.05, 0.95, 0.9), smoothstep(1.2, 3.0, pa.y));
+          earth *= 0.82 + 0.3 * vnoise(P / 1.3, 95) + 0.12 * vnoise(P / 0.35, 96);
+          earth = mix(earth, cLit * 0.8, tr * (1.0 - onPath) * 0.35); // a few leaves on trails
+          g = mix(g, earth, gBare);
           g = mix(g, g * vec3(0.55, 0.52, 0.5), gWet * 0.8);
           // Distant canopy shell: dark crowns with lit tops.
           float lump = 0.5 + 0.5 * vnoise(P / 5.0, 91);
           vec3 crownCol = mix(vec3(0.045, 0.085, 0.03), vec3(0.16, 0.24, 0.07), lump * lump) * mix(vec3(1.0), vec3(0.9, 1.0, 1.08), cloudBelt);
           g = mix(g, crownCol, vShell);
           diffuseColor.rgb *= g;
-          gRough = mix(0.95, 0.55, gWet) - gW[3] * 0.1;`)
+          gRough = mix(0.95, 0.55, gWet) - gW[3] * 0.1 + gBare * 0.02;`)
         .replace('#include <roughnessmap_fragment>', 'float roughnessFactor = gRough;')
         .replace('#include <normal_fragment_maps>', /* glsl */ `
           {
             vec3 t = nrm(uN0, P, 2.6) * gW[0] + nrm(uN1, P, 3.2) * gW[1] + nrm(uN3, P, 4.5) * gW[3] + vec3(0.0, 0.0, 1.0) * (gW[2] + gW[4]);
-            t.xy *= (1.0 - vShell) * 1.2;
+            t.xy *= (1.0 - vShell) * 1.2 * (1.0 - gBare * 0.5);
             vec3 N = normalize(vNW);
             vec3 T = normalize(vec3(1.0, 0.0, 0.0) - N * N.x);
             vec3 B = cross(N, T);

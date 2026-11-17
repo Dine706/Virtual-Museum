@@ -39,7 +39,8 @@ export class Hud {
       <div class="walk-marker" aria-hidden="true" hidden></div>
       <div class="walk-hint"></div>
       <section class="walk-card" role="dialog" aria-modal="false" hidden></section>
-      <div class="walk-veil"><p></p></div>`;
+      <div class="walk-veil"><p></p></div>
+      <p class="walk-osm">© OpenStreetMap</p>`;
     document.body.append(this.root);
     this.place = this.root.querySelector('.walk-place')!;
     this.card = this.root.querySelector('.walk-card')!;
@@ -62,8 +63,8 @@ export class Hud {
     this.timeBtn.setAttribute('aria-label', `${t('walk.time')} : ${label}`);
   }
 
-  setPlace(habitat: string, elev: string, zone: boolean) {
-    this.place.innerHTML = `<strong>${esc(habitat)}</strong><span>${icons.mountain}${esc(elev)}</span>${zone ? `<em>${esc(t('walk.zone'))}</em>` : ''}`;
+  setPlace(habitat: string, elev: string, zone: boolean, near?: string) {
+    this.place.innerHTML = `<strong>${esc(habitat)}</strong><span>${icons.mountain}${esc(elev)}${near ? ` · ${esc(near)}` : ''}</span>${zone ? `<em>${esc(t('walk.zone'))}</em>` : ''}`;
   }
 
   veilOn(text = t('walk.loading')) { this.veilText.textContent = text; this.veil.classList.remove('off'); }

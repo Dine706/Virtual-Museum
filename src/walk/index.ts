@@ -22,6 +22,8 @@ import { walkMaterial } from './env';
 import { groundTextures } from './textures';
 import { PostFX } from './post';
 import { loadPhotos } from './photo';
+import { loadModels } from './models';
+import { Village, type Person } from './village';
 
 export interface WalkContext {
   renderer: THREE.WebGLRenderer;
@@ -35,6 +37,9 @@ export interface WalkContext {
   onExit: () => void;
   onPosition?: (x: number, z: number) => void;
 }
+
+type Hit = { kind: 'tree'; tree: TreeInst } | { kind: 'animal'; agent: Agent } | { kind: 'site' } | { kind: 'ground'; p: THREE.Vector3 }
+  | { kind: 'person'; person: Person } | { kind: 'house'; round: boolean };
 
 export interface WalkHandle { exit(): void; debug: Record<string, unknown> }
 
@@ -74,8 +79,10 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
 
   const data = new WalkData(ctx.base);
   await data.init();
-  await data.loadWindow(ctx.start.x, ctx.start.z);
+  await Promise.all([data.loadWindow(ctx.start.x, ctx.start.z), data.loadPlaces()]);
+  await data.loadOsm(ctx.start.x, ctx.start.z);
   data.updateStreams(ctx.start.x, ctx.start.z);
+  data.updatePaths(ctx.start.x, ctx.start.z);
   await nextFrame();
 
   // ---- scene ----
@@ -95,11 +102,12 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
   const cover = new GroundCover(data, { radius: O.cover, spacing: O.spacing, shadows: O.shadows > 0, rockRadius: O.rock, texSize: O.tex, msaa: !!renderer.getContext().getContextAttributes()?.antialias });
   const water = new Water(data, env.hemi.color);
   const fauna = new Fauna(data, { birds: O.birds, butterflies: O.flies });
+  const village = new Village(data, ctx.tier === 'high' ? 26 : ctx.tier === 'mid' ? 16 : 8);
 
   const far = new THREE.Scene();
   far.add(env.sky, ground.far);
   const near = new THREE.Scene();
-  near.add(ground.mesh, forest.group, cover.group, water.mesh, fauna.group, ground.cloudNear, env.hemi, env.sun, env.sun.target);
+  near.add(ground.mesh, forest.group, cover.group, water.mesh, fauna.group, village.group, ground.cloudNear, env.hemi, env.sun, env.sun.target);
   const farCam = new THREE.PerspectiveCamera(62, 1, 30, 60000);
   const cam = new THREE.PerspectiveCamera(62, 1, 0.1, Math.max(2600, O.R * 1.8));
 
@@ -113,6 +121,10 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
       if (exited) return;
       ground.usePhotos(p); forest.usePhotos(p); cover.usePhotos(p);
     }).catch((e) => console.warn('walk: scanned textures unavailable', e));
+    loadModels(ctx.base, aniso, { single_root: 'root' }).then((m) => {
+      if (exited) return;
+      cover.useModels(m); forest.useModels(m);
+    }).catch((e) => console.warn('walk: scanned models unavailable', e));
   }
   renderer.shadowMap.enabled = O.shadows > 0 || fx;
   renderer.shadowMap.type = THREE.PCFShadowMap;
@@ -156,10 +168,11 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
   {
     let bestScore = Infinity, bx = pos.x, bz = pos.z;
     for (let k = 0; k < 48; k++) {
-      const a = k * 2.39996, d = Math.sqrt(k / 48) * 14;
+      const a = k * 2.39996, d = Math.sqrt(k / 48) * 22;
       const cx = ctx.start.x + Math.cos(a) * d, cz = ctx.start.z + Math.sin(a) * d;
       const st = data.streamAt(cx, cz);
       let score = st.dist < st.width * 1.5 ? 50 : 0;
+      if (data.buildingAt(cx, cz, 1.5)) score += 100;
       for (const tr of forest.nearTrees) {
         const dd = Math.hypot(tr.x - cx, tr.z - cz);
         const reach = Math.max(1.2, tr.h * tr.crown * (tr.h < 6 ? 0.45 : 0.06));
@@ -219,7 +232,8 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
     const b = biomeAt(data, pos.x, pos.z);
     habitat = habitatOf(b);
     const zone = data.zoneAt(pos.x, pos.z);
-    hud.setPlace(t(`walk.habitat.${habitat}`), fmtMeters(Math.round(pos.y)), !!zone);
+    const np = data.nearestPlace(pos.x, pos.z);
+    hud.setPlace(t(`walk.habitat.${habitat}`), fmtMeters(Math.round(pos.y)), !!zone, np && np.d < 1500 ? np.place.name : undefined);
     ctx.onPosition?.(pos.x, pos.z);
   }
   updatePlace();
@@ -249,6 +263,7 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
       pos.x = THREE.MathUtils.clamp(nx, ex.min + 1600, ex.max - 1600);
       pos.z = THREE.MathUtils.clamp(nz, ex.min + 1600, ex.max - 1600);
       forest.collide(pos, 0.35);
+      village.collide(pos, 0.35);
     }
     pos.y = data.heightAt(pos.x, pos.z);
     // Wade, don't sink: the eye follows the ground smoothly.
@@ -273,6 +288,10 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
       void data.loadWindow(pos.x, pos.z).then(() => { windowLoading = false; });
     }
     if (data.streamStale(pos.x, pos.z)) { data.updateStreams(pos.x, pos.z); water.update(eye); }
+    if (data.pathStale(pos.x, pos.z)) {
+      data.updatePaths(pos.x, pos.z);
+      void data.loadOsm(pos.x, pos.z).then(() => { data.updatePaths(pos.x, pos.z); village.reset(); });
+    }
     forest.update(eye);
     cover.update(eye);
     water.update(eye);
@@ -280,6 +299,7 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
     fauna.viewYaw = controls.yaw;
     if (eye.distanceTo(lastFauna) > 200) { fauna.populate(eye); lastFauna.copy(eye); }
     fauna.update(dt, eye, shared.uTime.value);
+    village.update(eye, dt, shared.uTime.value);
     placeT += dt;
     if (placeT > 0.5) { placeT = 0; updatePlace(); }
     const fog = fogFor(habitat, pos.y, fogTint);
@@ -287,8 +307,8 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
     // Under a closed canopy the sun barely reaches the floor: lift the sky fill a little (eyes adapt).
     const closed = habitat === 'lowlandForest' || habitat === 'cloudForest' || habitat === 'gallery' ? 1 : 0;
     canopyFill += (closed - canopyFill) * (1 - Math.exp(-dt * 0.7));
-    env.hemi.intensity = env.preset.hemi * (1 + canopyFill * 0.45) * (fx ? 0.8 : 1);
-    renderer.toneMappingExposure = env.exposure * (1 + canopyFill * 0.18);
+    env.hemi.intensity = env.preset.hemi * (1 + canopyFill * 0.7) * (fx ? 0.85 : 1);
+    renderer.toneMappingExposure = env.exposure * (1 + canopyFill * 0.38);
 
     const drawScene = () => { renderer.clear(); renderer.render(far, farCam); renderer.clearDepth(); renderer.render(near, cam); };
     if (post) {
@@ -315,9 +335,12 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
     hud.veilOn();
     relocating = true;
     await data.loadWindow(x, z);
+    await data.loadOsm(x, z);
     data.updateStreams(x, z);
+    data.updatePaths(x, z);
     forest.reset();
     cover.reset();
+    village.reset();
     pos.set(x, data.heightAt(x, z), z);
     eyeY = pos.y + EYE;
     eye.set(pos.x, eyeY, pos.z);
@@ -339,7 +362,7 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
     ray.setFromCamera(ndc, cam);
     const o = ray.ray.origin, d = ray.ray.direction;
     let best = Infinity;
-    let hit: { kind: 'tree'; tree: TreeInst } | { kind: 'animal'; agent: Agent } | { kind: 'site' } | { kind: 'ground'; p: THREE.Vector3 } | null = null;
+    let hit: Hit | null = null;
     const sphere = (c: THREE.Vector3, r: number) => {
       const oc = new THREE.Vector3().subVectors(o, c);
       const b = oc.dot(d), cc = oc.lengthSq() - r * r;
@@ -354,6 +377,8 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
       const tt = sphere(a.pos, Math.max(a.size * 2.2, dist * 0.025));
       if (tt < best) { best = tt; hit = { kind: 'animal', agent: a }; }
     }
+    const vp = village.pick(ray.ray);
+    if (vp && vp.t < best) { best = vp.t; hit = vp.kind === 'person' ? { kind: 'person', person: vp.p } : { kind: 'house', round: vp.h.round }; }
     if (fauna.sitePos) {
       const tt = sphere(fauna.sitePos.clone().add(new THREE.Vector3(0, 0.2, 0)), 1.1);
       if (tt < best) { best = tt; hit = { kind: 'site' }; }
@@ -403,7 +428,36 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
   const nf = new Intl.NumberFormat(lang === 'fr' ? 'fr-FR' : 'en-GB');
   const bandOf = (elev: number) => elev < 1000 ? 'lowland_lt1000m' : elev < 1400 ? 'montane_1000-1400m' : 'summit_gt1400m';
 
-  function cardFromHit(hit: { kind: 'tree'; tree: TreeInst } | { kind: 'animal'; agent: Agent } | { kind: 'site' } | { kind: 'ground'; p: THREE.Vector3 }): Card {
+  function cardFromHit(hit: Hit): Card {
+    if (hit.kind === 'person') {
+      const p: Person = hit.person;
+      const SRC = {
+        guinea: { label: 'Countries and Their Cultures – Guinea', url: 'https://www.everyculture.com/Ge-It/Guinea.html' },
+        gret: { label: 'Gret – Guide pratique de l\'huile de palme (Guinée forestière)', url: 'https://gret.org/wp-content/uploads/2021/12/Guide-Pratique-Huile-de-Palme.pdf' },
+        bossou: { label: 'Yamakoshi & Leblan 2013, Revue de primatologie 5', url: 'https://journals.openedition.org/primatologie/1762' },
+        green: { label: 'Green Corridor Project – People of Bossou', url: 'https://www.greencorridor.info/en/people/' },
+        kpelle: { label: 'Encyclopedia of World Cultures – Kpelle economy', url: 'https://www.everyculture.com/Africa-Middle-East/Kpelle-Economy.html' },
+        osm: { label: '© OpenStreetMap contributors (ODbL)', url: 'https://www.openstreetmap.org/copyright' },
+      };
+      const src = p.activity === 'pound' ? [SRC.gret] : p.activity === 'hoe' ? [SRC.bossou, SRC.kpelle] : p.activity === 'walk' ? [SRC.osm] : p.activity === 'play' || p.activity === 'sit' ? [] : [SRC.guinea];
+      const lines = [t(`walk.act.${p.activity}`)];
+      if (p.village === 'Bossou') { lines.push(t('walk.village.bossou')); src.push(SRC.bossou, SRC.green); }
+      else if (p.village) lines.push(t('walk.village.generic', { name: p.village }));
+      return { kicker: p.village ?? t(`walk.habitat.${habitat}`), title: t('walk.person.title'), lines, note: t('walk.person.note'), sources: src };
+    }
+    if (hit.kind === 'house') {
+      return {
+        kicker: data.nearestPlace(pos.x, pos.z)?.place.name ?? '',
+        title: t(hit.round ? 'walk.house.round' : 'walk.house.rect'),
+        lines: [t(hit.round ? 'walk.house.roundText' : 'walk.house.rectText')],
+        note: t('walk.house.note'),
+        sources: [
+          { label: 'Encyclopedia of World Cultures – Kpelle settlements', url: 'https://www.everyculture.com/Africa-Middle-East/Kpelle-Settlements.html' },
+          { label: 'Countries and Their Cultures – Liberia', url: 'https://www.everyculture.com/Ja-Ma/Liberia.html' },
+          { label: '© OpenStreetMap contributors (ODbL)', url: 'https://www.openstreetmap.org/copyright' },
+        ],
+      };
+    }
     if (hit.kind === 'tree') {
       const tr = hit.tree;
       const hs = hotspot(PLANT_HOTSPOT[tr.type]);
@@ -528,6 +582,9 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
         return { kind: best.kind, d: bd };
       },
       animals() { return fauna.agents.map((a) => ({ kind: a.kind, visible: a.obj.visible, d: Math.round(a.pos.distanceTo(eye)) })); },
+      village() { return { houses: village.houses.length, people: village.people.map((p) => ({ a: p.activity, d: Math.round(p.pos.distanceTo(eye)) })) }; },
+      lookAt(x: number, y: number, z: number) { const v = new THREE.Vector3(x - eye.x, y - eye.y, z - eye.z); controls.yaw = Math.atan2(-v.x, -v.z); controls.pitch = Math.atan2(v.y, Math.hypot(v.x, v.z)); },
+      people() { return village.people.map((p) => ({ a: p.activity, x: p.pos.x, y: p.pos.y, z: p.pos.z })); },
       inspect,
     },
   };

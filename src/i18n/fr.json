@@ -135,5 +135,22 @@
   "walk.water": "Ruisseau",
   "walk.waterNote": "Tracé déduit du relief (approximatif).",
   "walk.rock": "Rocher",
-  "walk.iucn": "UICN : {c}"
+  "walk.iucn": "UICN : {c}",
+  "walk.person.title": "Villageois – personnage fictif",
+  "walk.person.note": "Personnage générique et fictif : aucune personne réelle n'est représentée. L'activité suit les sources ci-dessous ; l'endroit est illustratif.",
+  "walk.act.pound": "Piler au mortier. En Guinée forestière, les fruits de palme bouillis sont pilés au mortier puis malaxés pour en extraire l'huile.",
+  "walk.act.carry": "Transporter de l'eau ou une charge. En Guinée, les enfants vont chercher l'eau et le bois et aident à préparer les repas.",
+  "walk.act.firewood": "Rapporter du bois de chauffe. En Guinée, les enfants vont chercher l'eau et le bois et aident à préparer les repas.",
+  "walk.act.baby": "Les mères portent leur bébé sur le dos, noué dans un pagne.",
+  "walk.act.hoe": "Travailler au champ. À Bossou, riz pluvial et manioc sont les cultures de base ; chez les Kpelle, les hommes défrichent et les femmes plantent.",
+  "walk.act.sit": "Une conversation à l'ombre devant la maison (scène de vie quotidienne, sans source particulière).",
+  "walk.act.walk": "En chemin sur un sentier réel (OpenStreetMap) qui relie maisons, champs et villages.",
+  "walk.act.play": "Des enfants qui jouent (scène de vie quotidienne, sans source particulière).",
+  "walk.village.bossou": "Bossou : environ 2 000 habitants (village), Manon. Riz pluvial, manioc, palmier à huile ; marché le mercredi. Les chimpanzés y sont protégés par un interdit.",
+  "walk.village.generic": "Village de {name}.",
+  "walk.house.round": "Case ronde",
+  "walk.house.rect": "Maison au toit de tôle",
+  "walk.house.roundText": "La maison traditionnelle de la région est ronde, en torchis, sous un toit conique de chaume ; elle ne domine plus que dans les villages éloignés.",
+  "walk.house.rectText": "Les maisons récentes sont surtout rectangulaires, en torchis ou en parpaings, couvertes de tôle ondulée, souvent avec une véranda.",
+  "walk.house.note": "Emplacement et dimensions : bâtiment cartographié dans OpenStreetMap. Forme et matériaux : typiques de la région, pas relevés maison par maison."
 }

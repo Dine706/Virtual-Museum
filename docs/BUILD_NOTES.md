@@ -306,3 +306,62 @@ Dean asked how to sharpen the graphics and the realism. This is an example of th
 * **Comparisons:** `docs/screens/fx-*-before.png` and `fx-*-after.png`, at the mid tier with fx off and on.
 * **Not measured yet:** the GPU cost on real hardware. It is expected to suit desktops and recent laptops and iPads only, and phones stay on the light look.
 * The network allowlist gained `api.polyhaven.com` and `dl.polyhaven.org` for the fetch script.
+
+## Realism pass + real villages (night of 17–18 Nov 2026, Dean asleep, "push it live")
+
+Dean sent a reference video (a chimpanzee on a forest trail) and asked for more realism, villages with people based on the real places, and that the result go live.
+
+**What the reference shows that we lacked:**
+* many thin, straight pole trunks with pale lichen-mottled bark;
+* saplings with broad, glossy leaves;
+* light-brown dry leaf litter;
+* an open understorey with bright dappled light;
+* a beaten-earth trail.
+
+**Forest changes:**
+* New `pole` plant (5–15 cm stems with lichen bark), up to about 300 per hectare under closed forest.
+* `sapling` ground cover built from individual drawn leaves with drip tips.
+* Herbs, ferns, shrubs and fallen branches thinned out.
+* Brighter leaves and litter, and more fill light and exposure under closed canopy.
+* Forest trails: a noise-based network, identical on CPU and GPU, kept clear of plants.
+* High-quality mode adds six CC0 scanned models from Poly Haven (`scripts/fetch_models.mjs` → `public/walk/models/`, 1.7 MB, meshopt + WebP):
+  * the fern and the broad-leaved herb replace the drawn ones;
+  * scanned surface roots sit at the feet of the big trees;
+  * the scanned rock replaces the boulders.
+
+**Real places:** OpenStreetMap (ODbL), fetched by `scripts/worldpack/fetch_osm.py` through the OSM API. Overpass dropped the connection through the proxy. The extract is split into 3 km tiles in `public/walk/osm/`, 2.25 MB in total:
+* 9,824 buildings;
+* 2,578 roads and paths;
+* 642 land-use areas;
+* 42 named places.
+
+Its uses:
+* **Roads and paths** go into a 2 m distance field around the walker. They are drawn as beaten earth, and no plants grow on them.
+* **The place chip** names the nearest village (Bossou, Séringbara, Gbakoré, N'Zoo, Yéalé, Yekepa…).
+* **Houses** stand on the real footprints. Their shape and materials follow `docs/VILLAGE_SOURCES.md`:
+  * round wattle-and-daub huts with thatch for small square footprints;
+  * otherwise rectangular earth-plastered houses with corrugated metal roofs, some rusty, some with porches.
+* **Villagers** are fictional, generic figures doing sourced everyday activities:
+  * pounding in a mortar (palm fruit, per the Gret guide);
+  * carrying water or a load, and a child with firewood (Guinea);
+  * a mother with a baby on her back (Guinea);
+  * hoeing in fields (rice and cassava at Bossou);
+  * talking in the shade and children playing (generic, flagged);
+  * walking the real OSM paths.
+
+  Cards say "fictional figure" and cite the sources. Bossou cards add sourced village facts: about 2,000 people, Manon, rice, cassava and oil palm, the Wednesday market, and the chimpanzee taboo.
+* **Never shown:** Mt Gban, the sacred forest; Poro/Sande societies; rites; masks; and chimpanzees near people. All of these are listed in `docs/VILLAGE_SOURCES.md`.
+* The walk HUD shows "© OpenStreetMap", and the cards link the copyright page.
+
+**Research:** done by a subagent, with sources and evidence levels, in `docs/VILLAGE_SOURCES.md`. It found dead links: the papfor.org PDFs for the `yeale` and `yekepa-lamco` hotspots now resolve to a parked domain. They are flagged and not yet changed.
+
+**Network:** `overpass-api.de`, `api.openstreetmap.org` and `upload.wikimedia.org` were added to the environment allowlist. The fetch scripts need `NODE_USE_ENV_PROXY=1` behind the proxy.
+
+**Sizes:** the walk chunk is 79 KB gz (GLTFLoader, meshopt and post-processing included), and the main bundle 184 KB gz. Village and OSM data load tile by tile.
+
+**Not done / limits:**
+* No chimpanzee model. A credible animated chimp needs a proper rigged model, and the rules ask for them wild and away from people.
+* Faces are plain; villagers are simple rigged figures, not scans.
+* No market scene; the Wednesday market is only mentioned in the cards.
+* Fields are not yet drawn as rice or cassava rows.
+* Real-GPU performance is still unmeasured.

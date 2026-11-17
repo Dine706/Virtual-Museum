@@ -131,6 +131,40 @@ export function leafCluster(style: LeafStyle, seed: number, size = 512): THREE.T
   return alphaTex(c);
 }
 
+/** A single tropical leaf filling the card (base at v = 0): broad, glossy, with a drip tip, for saplings. */
+export function singleLeaf(seed: number): THREE.Texture {
+  const W = 128, H = 256;
+  const c = canvas(W, H);
+  const g = ctx2d(c);
+  const r = rng(seed);
+  const hue = 92 + r() * 14;
+  g.translate(W / 2, H);
+  const L = H * 0.96, Wd = W * 0.42;
+  const grad = g.createLinearGradient(-Wd, 0, Wd, 0);
+  grad.addColorStop(0, hsl(hue, 48, 24)); grad.addColorStop(0.5, hsl(hue - 4, 52, 36)); grad.addColorStop(1, hsl(hue + 4, 46, 26));
+  g.fillStyle = grad;
+  g.beginPath(); g.moveTo(0, -L * 0.06);
+  g.bezierCurveTo(-Wd * 1.15, -L * 0.25, -Wd * 0.95, -L * 0.72, -Wd * 0.12, -L * 0.88);
+  g.quadraticCurveTo(-Wd * 0.04, -L * 0.94, 0, -L);       // drip tip
+  g.quadraticCurveTo(Wd * 0.04, -L * 0.94, Wd * 0.12, -L * 0.88);
+  g.bezierCurveTo(Wd * 0.95, -L * 0.72, Wd * 1.15, -L * 0.25, 0, -L * 0.06);
+  g.fill();
+  // glossy sheen band
+  const sh = g.createLinearGradient(-Wd, -L * 0.3, Wd * 0.4, -L * 0.6);
+  sh.addColorStop(0, hsl(hue, 30, 60, 0)); sh.addColorStop(0.5, hsl(hue - 10, 30, 62, 0.18)); sh.addColorStop(1, hsl(hue, 30, 60, 0));
+  g.fillStyle = sh; g.fill();
+  g.strokeStyle = hsl(hue - 20, 30, 52, 0.85); g.lineWidth = 2.2;
+  g.beginPath(); g.moveTo(0, 0); g.lineTo(0, -L * 0.97); g.stroke();
+  g.strokeStyle = hsl(hue - 10, 35, 46, 0.4); g.lineWidth = 1;
+  for (let q = 1; q < 9; q++) {
+    const y = -L * (0.1 + q * 0.085);
+    for (const sd of [-1, 1]) { g.beginPath(); g.moveTo(0, y); g.quadraticCurveTo(sd * Wd * 0.45, y - L * 0.04, sd * Wd * 0.82, y - L * 0.11); g.stroke(); }
+  }
+  // petiole
+  g.strokeStyle = hsl(60, 30, 30); g.lineWidth = 4; g.beginPath(); g.moveTo(0, 0); g.lineTo(0, -L * 0.07); g.stroke();
+  return alphaTex(c);
+}
+
 /** One broad leaf filling the card (forest-floor herbs): oblong, glossy, with parallel veins. */
 export function bigLeaf(seed: number): THREE.Texture {
   const S = 256;
@@ -162,9 +196,9 @@ export function bigLeaf(seed: number): THREE.Texture {
 }
 
 export const LEAVES = {
-  lowland: { hue: 105, sat: 42, light: 26, len: 70, width: 20, count: 150, spread: 1.0, shape: 'ellipse' } as LeafStyle,
-  bigleaf: { hue: 100, sat: 45, light: 27, len: 150, width: 52, count: 40, spread: 1.4, shape: 'ellipse' } as LeafStyle,
-  montane: { hue: 95, sat: 32, light: 24, len: 46, width: 15, count: 260, spread: 0.8, shape: 'leathery' } as LeafStyle,
+  lowland: { hue: 100, sat: 46, light: 31, len: 70, width: 20, count: 150, spread: 1.0, shape: 'ellipse' } as LeafStyle,
+  bigleaf: { hue: 96, sat: 50, light: 33, len: 150, width: 52, count: 40, spread: 1.4, shape: 'ellipse' } as LeafStyle,
+  montane: { hue: 95, sat: 34, light: 28, len: 46, width: 15, count: 260, spread: 0.8, shape: 'leathery' } as LeafStyle,
   protea: { hue: 85, sat: 18, light: 40, len: 72, width: 16, count: 110, spread: 0.7, shape: 'lance' } as LeafStyle,
   regrowth: { hue: 88, sat: 48, light: 36, len: 80, width: 28, count: 90, spread: 1.2, shape: 'round' } as LeafStyle,
   savanna: { hue: 78, sat: 30, light: 32, len: 34, width: 12, count: 220, spread: 0.9, shape: 'ellipse' } as LeafStyle,
@@ -277,12 +311,12 @@ export function mossStrands(seed: number): THREE.Texture {
 
 // ---------------------------------------------------------------- bark
 
-export function bark(kind: 'brown' | 'grey' | 'mossy' | 'palm' | 'fern', seed: number): { map: THREE.Texture; normal: THREE.Texture } {
+export function bark(kind: 'brown' | 'grey' | 'mossy' | 'palm' | 'fern' | 'lichen', seed: number): { map: THREE.Texture; normal: THREE.Texture } {
   const W = 256, H = 512;
   const c = canvas(W, H);
   const g = ctx2d(c);
   const r = rng(seed);
-  const base = kind === 'grey' ? [35, 8, 46] : kind === 'mossy' ? [70, 20, 30] : kind === 'palm' ? [32, 22, 30] : kind === 'fern' ? [25, 30, 18] : [28, 22, 32];
+  const base = kind === 'lichen' ? [70, 7, 48] : kind === 'grey' ? [35, 8, 46] : kind === 'mossy' ? [70, 20, 30] : kind === 'palm' ? [34, 18, 40] : kind === 'fern' ? [25, 30, 18] : [28, 22, 32];
   g.fillStyle = hsl(base[0], base[1], base[2]);
   g.fillRect(0, 0, W, H);
   const hgt = new Float32Array(W * H);
@@ -305,6 +339,22 @@ export function bark(kind: 'brown' | 'grey' | 'mossy' | 'palm' | 'fern', seed: n
         g.fill();
         g.strokeStyle = hsl(base[0], base[1], l - 16, 0.6); g.lineWidth = 1.5; g.stroke();
       }
+    }
+  } else if (kind === 'lichen') {
+    // smooth young bark, mottled with pale crustose lichen and dark patches (like the poles in forest footage)
+    for (let k = 0; k < 22; k++) {
+      g.strokeStyle = hsl(60, 6, 40 + r() * 10, 0.35); g.lineWidth = 1 + r() * 2;
+      const x = r() * W; g.beginPath(); g.moveTo(x, 0); g.lineTo(x + (r() - 0.5) * 10, H); g.stroke();
+    }
+    for (let k = 0; k < 320; k++) {
+      const pale = r() < 0.65;
+      g.fillStyle = pale ? hsl(70 + r() * 30, 8 + r() * 12, 70 + r() * 14, 0.55 + r() * 0.3) : hsl(40, 10, 24 + r() * 10, 0.35);
+      g.beginPath();
+      const x = r() * W, y = r() * H, rx = 3 + r() * (pale ? 22 : 10), ry = rx * (0.5 + r() * 0.8);
+      g.ellipse(x, y, rx, ry, r() * 3, 0, Math.PI * 2); g.fill();
+    }
+    for (let k = 0; k < 60; k++) { // lenticels
+      g.fillStyle = hsl(40, 15, 30, 0.6); g.fillRect(r() * W, r() * H, 6 + r() * 8, 1.5);
     }
   } else {
     // vertical ridges and cracks
@@ -392,11 +442,11 @@ function drawGround(size: number): GroundSet {
   };
   // 0 leaf litter: brown soil under hundreds of fallen leaves, some still green, twigs.
   make((g, r, hgt) => {
-    noiseFill(g, 26, 22, 14, 7, 4, 11, hgt);
+    noiseFill(g, 28, 24, 20, 7, 4, 11, hgt);
     for (let k = 0; k < 900; k++) {
       const x = r() * S, y = r() * S, len = 10 + r() * 26, w = 4 + r() * 9;
       const fresh = r() < 0.12;
-      const col: [number, number, number] = fresh ? [75 + r() * 25, 28, 22 + r() * 10] : [22 + r() * 18, 18 + r() * 22, 14 + r() * 18];
+      const col: [number, number, number] = fresh ? [75 + r() * 25, 28, 26 + r() * 10] : [24 + r() * 16, 22 + r() * 22, 22 + r() * 22];
       for (const ox of [0, S, -S]) for (const oy of [0, S, -S]) {
         if (x + ox < -40 || x + ox > S + 40 || y + oy < -40 || y + oy > S + 40) continue;
         leaf(g, x + ox, y + oy, r() * Math.PI * 2, len, w, col, r() < 0.5 ? 'ellipse' : 'round');
@@ -408,10 +458,14 @@ function drawGround(size: number): GroundSet {
   // 1 laterite: red-brown iron-rich soil with pebbles.
   make((g, r, hgt) => {
     noiseFill(g, 16, 38, 30, 9, 3, 21, hgt);
-    for (let k = 0; k < 500; k++) {
-      g.fillStyle = hsl(14 + r() * 14, 35 + r() * 20, 22 + r() * 28, 0.9);
-      const x = r() * S, y = r() * S, s = 1 + r() * 5;
-      g.beginPath(); g.ellipse(x, y, s, s * (0.6 + r() * 0.4), r() * 3, 0, Math.PI * 2); g.fill();
+    // fine gravel and small ironstone nodules, low contrast (not 'coins')
+    for (let k = 0; k < 2600; k++) {
+      g.fillStyle = hsl(12 + r() * 16, 30 + r() * 20, 20 + r() * 22, 0.35 + r() * 0.35);
+      const x = r() * S, y = r() * S, s = 0.6 + r() * r() * 3.2;
+      g.beginPath();
+      g.moveTo(x + s, y);
+      for (let q = 1; q < 6; q++) { const a = q / 6 * Math.PI * 2; const rr = s * (0.6 + r() * 0.6); g.lineTo(x + Math.cos(a) * rr, y + Math.sin(a) * rr * 0.8); }
+      g.closePath(); g.fill();
     }
   }, 102, 3);
   // 2 turf: grass base with fine strokes.

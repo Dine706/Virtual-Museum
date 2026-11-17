@@ -3,7 +3,7 @@
 import * as THREE from 'three';
 import { buildPlant, buildCover, PLANT_TYPES, type CoverType } from './plants';
 import { WalkEnv, walkMaterial, shared } from './env';
-import { leafCluster, LEAVES, bark, frond, mossStrands, grassBlades, groundTextures, bigLeaf } from './textures';
+import { leafCluster, LEAVES, bark, frond, mossStrands, grassBlades, groundTextures, bigLeaf, singleLeaf } from './textures';
 import { depthFor } from './forest';
 
 const q = new URLSearchParams(location.search);
@@ -27,12 +27,12 @@ ground.receiveShadow = true;
 scene.add(ground);
 
 const mats = {
-  leaf: Object.fromEntries(Object.entries(LEAVES).map(([k, v]) => [k, walkMaterial(new THREE.MeshStandardMaterial({ map: leafCluster(v, k.length * 13 + 5), alphaTest: 0.5, side: THREE.DoubleSide, vertexColors: true }), 'leaf')])),
-  bark: Object.fromEntries((['brown', 'grey', 'mossy', 'palm', 'fern'] as const).map((k) => { const t = bark(k, k.length * 17 + 3); return [k, walkMaterial(new THREE.MeshStandardMaterial({ map: t.map, normalMap: t.normal, vertexColors: true }))]; })),
+  leaf: { ...Object.fromEntries(Object.entries(LEAVES).map(([k, v]) => [k, walkMaterial(new THREE.MeshStandardMaterial({ map: leafCluster(v, k.length * 13 + 5), alphaTest: 0.5, side: THREE.DoubleSide, vertexColors: true }), 'leaf')])), single: walkMaterial(new THREE.MeshStandardMaterial({ map: singleLeaf(3), alphaTest: 0.5, side: THREE.DoubleSide, vertexColors: true }), 'leaf') } as Record<string, THREE.Material>,
+  bark: Object.fromEntries((['brown', 'grey', 'mossy', 'palm', 'fern', 'lichen'] as const).map((k) => { const t = bark(k, k.length * 17 + 3); return [k, walkMaterial(new THREE.MeshStandardMaterial({ map: t.map, normalMap: t.normal, vertexColors: true }))]; })),
   frond: Object.fromEntries((['fern', 'oilpalm', 'raphia'] as const).map((k) => [k, walkMaterial(new THREE.MeshStandardMaterial({ map: frond(k, k.length * 23 + 1), alphaTest: 0.45, side: THREE.DoubleSide, vertexColors: true }), 'frond')])),
   moss: walkMaterial(new THREE.MeshStandardMaterial({ map: mossStrands(9), alphaTest: 0.4, side: THREE.DoubleSide, vertexColors: true })),
 };
-const H: Record<string, number> = { emergent: 30, canopy: 18, understory: 8, montane: 14, treefern: 5, oilpalm: 12, raphia: 9, protea: 3, savanna: 7, regrowth: 4 };
+const H: Record<string, number> = { pole: 10, emergent: 30, canopy: 18, understory: 8, montane: 14, treefern: 5, oilpalm: 12, raphia: 9, protea: 3, savanna: 7, regrowth: 4 };
 let x = -PLANT_TYPES.length * 7;
 for (const type of PLANT_TYPES) {
   const p = buildPlant(type, Number(q.get('v') ?? 1));
@@ -47,7 +47,7 @@ for (const type of PLANT_TYPES) {
   scene.add(grp);
   x += 14;
 }
-const covers: CoverType[] = ['grassGolden', 'grassGreen', 'grassTall', 'fern', 'herb', 'stick', 'stone'];
+const covers: CoverType[] = ['grassGolden', 'grassGreen', 'grassTall', 'fern', 'herb', 'stick', 'stone', 'sapling'];
 const coverMat: Record<CoverType, THREE.Material> = {
   grassGolden: walkMaterial(new THREE.MeshStandardMaterial({ map: grassBlades('golden', 3), alphaTest: 0.45, side: THREE.DoubleSide, vertexColors: true }), 'grass'),
   grassGreen: walkMaterial(new THREE.MeshStandardMaterial({ map: grassBlades('green', 4), alphaTest: 0.45, side: THREE.DoubleSide, vertexColors: true }), 'grass'),
@@ -55,6 +55,7 @@ const coverMat: Record<CoverType, THREE.Material> = {
   fern: walkMaterial(new THREE.MeshStandardMaterial({ map: frond('fern', 6), alphaTest: 0.45, side: THREE.DoubleSide, vertexColors: true }), 'frond'),
   herb: walkMaterial(new THREE.MeshStandardMaterial({ map: bigLeaf(8), alphaTest: 0.45, side: THREE.DoubleSide, vertexColors: true }), 'frond'),
   stick: mats.bark.brown,
+  sapling: walkMaterial(new THREE.MeshStandardMaterial({ map: singleLeaf(5), alphaTest: 0.5, side: THREE.DoubleSide, vertexColors: true, roughness: 0.45 }), 'leaf'),
   stone: walkMaterial(new THREE.MeshStandardMaterial({ map: g.maps[3], normalMap: g.normals[3], vertexColors: true })),
 };
 covers.forEach((c, i) => {

@@ -3,7 +3,7 @@
 // DEM-derived streams and the species walk mode names. A 512 × 512 window around the walker is kept both
 // as JS arrays (player height, placement) and as GPU textures (ground mesh, shading) – the same numbers.
 import * as THREE from 'three';
-import { groundDetail } from './noise';
+import { groundDetail, vnoise } from './noise';
 
 export interface WalkIndex {
   frame: { lon0: number; lat0: number; kx: number; kz: number };
@@ -22,6 +22,21 @@ export interface SpeciesData {
   bands: Record<string, { plants: SpeciesRef[]; birds: SpeciesRef[]; butterflies: SpeciesRef[]; counts: { species: number; plants: number; birds: number } }>;
 }
 export interface Attr { canopy: number; cls: number; rock: number; streamMask: number }
+/** OpenStreetMap building as an oriented rectangle (centre, width along angle a, depth). */
+export interface Building { x: number; z: number; w: number; d: number; a: number; kind: string; levels: string | null }
+export interface Road { k: string; s?: string; p: number[] }
+export interface Place { name: string; kind: string; x: number; z: number }
+
+/** Half-width (m) of the beaten surface for an OSM highway class. */
+export function roadHalfWidth(k: string): number {
+  switch (k) {
+    case 'trunk': case 'primary': return 4.5;
+    case 'secondary': case 'tertiary': return 3.5;
+    case 'unclassified': case 'residential': case 'service': return 2.6;
+    case 'track': return 1.8;
+    default: return 0.65; // path, footway
+  }
+}
 
 const WIN = 512;            // window size in samples (15 m → 7.68 km)
 const SWIN = 512;           // stream field size in samples (2 m → 1.02 km)
@@ -57,6 +72,15 @@ export class WalkData {
   sX0 = 0; sZ0 = 0;
   readonly stream = new Uint8Array(SWIN * SWIN * 2);
   readonly streamTex: THREE.DataTexture;
+  // Path field: distance to the nearest OSM road/path (0.05 m steps, ≤ 12.75 m) and its half-width (0.05 m steps).
+  pX0 = 0; pZ0 = 0;
+  readonly path = new Uint8Array(SWIN * SWIN * 2);
+  readonly pathTex: THREE.DataTexture;
+  // OpenStreetMap (© OpenStreetMap contributors, ODbL): buildings / roads of the loaded 3 km tiles.
+  places: Place[] = [];
+  private osmTiles = new Map<string, Promise<{ buildings: Building[]; roads: Road[] }>>();
+  private osmLoaded = new Map<string, { buildings: Building[]; roads: Road[] }>();
+  private bGrid = new Map<string, Building[]>();
 
   constructor(readonly base: string) {
     this.heightTex = new THREE.DataTexture(this.height, WIN, WIN, THREE.RedFormat, THREE.FloatType);
@@ -68,6 +92,11 @@ export class WalkData {
     this.uniforms.uHeightTex.value = this.heightTex;
     this.uniforms.uAttrTex.value = this.attrTex;
     this.uniforms.uStreamTex.value = this.streamTex;
+    this.pathTex = new THREE.DataTexture(this.path, SWIN, SWIN, THREE.RGFormat, THREE.UnsignedByteType);
+    this.pathTex.minFilter = this.pathTex.magFilter = THREE.LinearFilter;
+    this.path.fill(255);
+    this.pathTex.needsUpdate = true;
+    this.uniforms.uPathTex.value = this.pathTex;
   }
 
   async init() {
@@ -283,6 +312,144 @@ export class WalkData {
     return out;
   }
 
+  // ---------------------------------------------------------------- OpenStreetMap
+
+  async loadPlaces() {
+    try {
+      const j = await (await fetch(`${this.base}walk/osm/places.json`)).json() as { places: Place[]; tiles: string[] };
+      this.places = j.places;
+      this.osmAvailable = new Set(j.tiles);
+    } catch { this.places = []; }
+  }
+  private osmAvailable = new Set<string>();
+
+  /** Load the OSM tiles around (x, z) (3 × 3 tiles of 3 km). */
+  async loadOsm(x: number, z: number) {
+    const { origin } = this.index;
+    const T = 3000;
+    const ci = Math.floor((x - origin) / T), cj = Math.floor((z - origin) / T);
+    const jobs: Promise<void>[] = [];
+    for (let j = cj - 1; j <= cj + 1; j++) for (let i = ci - 1; i <= ci + 1; i++) {
+      const key = `${i}_${j}`;
+      if (!this.osmAvailable.has(key) || this.osmTiles.has(key)) continue;
+      const pr = fetch(`${this.base}walk/osm/${key}.json`).then((r) => r.json());
+      this.osmTiles.set(key, pr);
+      jobs.push(pr.then((t) => {
+        this.osmLoaded.set(key, t);
+        for (const b of t.buildings) {
+          const k2 = `${Math.floor(b.x / 16)},${Math.floor(b.z / 16)}`;
+          let l = this.bGrid.get(k2);
+          if (!l) this.bGrid.set(k2, (l = []));
+          if (!l.includes(b)) l.push(b);
+        }
+      }).catch(() => { this.osmTiles.delete(key); }));
+    }
+    await Promise.all(jobs);
+  }
+
+  /** Buildings whose footprint (+ margin) may contain (x, z). */
+  buildingAt(x: number, z: number, margin = 0): Building | null {
+    const gx = Math.floor(x / 16), gz = Math.floor(z / 16);
+    for (let j = gz - 1; j <= gz + 1; j++) for (let i = gx - 1; i <= gx + 1; i++) {
+      const l = this.bGrid.get(`${i},${j}`);
+      if (!l) continue;
+      for (const b of l) {
+        const dx = x - b.x, dz = z - b.z;
+        const c = Math.cos(b.a), s = Math.sin(b.a);
+        const u = dx * c + dz * s, v = -dx * s + dz * c;
+        if (Math.abs(u) < b.w / 2 + margin && Math.abs(v) < b.d / 2 + margin) return b;
+      }
+    }
+    return null;
+  }
+
+  buildingsNear(x: number, z: number, r: number): Building[] {
+    const out: Building[] = [];
+    const g0 = Math.floor((x - r) / 16), g1 = Math.floor((x + r) / 16), h0 = Math.floor((z - r) / 16), h1 = Math.floor((z + r) / 16);
+    for (let j = h0; j <= h1; j++) for (let i = g0; i <= g1; i++) {
+      for (const b of this.bGrid.get(`${i},${j}`) ?? []) if (Math.hypot(b.x - x, b.z - z) < r && !out.includes(b)) out.push(b);
+    }
+    return out;
+  }
+
+  roadsNear(x: number, z: number, r: number): Road[] {
+    const out = new Set<Road>();
+    for (const t of this.osmLoaded.values()) for (const rd of t.roads) {
+      const p = rd.p;
+      for (let k = 0; k < p.length; k += 2) if (Math.abs(p[k] - x) < r && Math.abs(p[k + 1] - z) < r) { out.add(rd); break; }
+    }
+    return [...out];
+  }
+
+  /** Nearest named village / town / hamlet. */
+  nearestPlace(x: number, z: number): { place: Place; d: number } | null {
+    let best: { place: Place; d: number } | null = null;
+    for (const p of this.places) {
+      const d = Math.hypot(p.x - x, p.z - z);
+      if (!best || d < best.d) best = { place: p, d };
+    }
+    return best;
+  }
+
+  /** Rasterise OSM roads/paths into the 2 m path field around (x, z). */
+  updatePaths(x: number, z: number) {
+    const x0 = Math.round((x - (SWIN / 2) * SSTEP) / SSTEP) * SSTEP;
+    const z0 = Math.round((z - (SWIN / 2) * SSTEP) / SSTEP) * SSTEP;
+    const PMAX = 12.75;
+    const dist = new Float32Array(SWIN * SWIN).fill(PMAX);
+    const half = new Float32Array(SWIN * SWIN);
+    for (const rd of this.roadsNear(x, z, (SWIN / 2) * SSTEP + 20)) {
+      const hw = roadHalfWidth(rd.k);
+      const p = rd.p;
+      for (let k = 0; k + 3 < p.length; k += 2) {
+        const ax = p[k], az = p[k + 1], bx = p[k + 2], bz = p[k + 3];
+        const R = PMAX;
+        const c0 = Math.max(0, Math.floor((Math.min(ax, bx) - R - x0) / SSTEP)), c1 = Math.min(SWIN - 1, Math.ceil((Math.max(ax, bx) + R - x0) / SSTEP));
+        const r0 = Math.max(0, Math.floor((Math.min(az, bz) - R - z0) / SSTEP)), r1 = Math.min(SWIN - 1, Math.ceil((Math.max(az, bz) + R - z0) / SSTEP));
+        if (c0 > c1 || r0 > r1) continue;
+        const dx = bx - ax, dz = bz - az, len2 = dx * dx + dz * dz || 1;
+        for (let r = r0; r <= r1; r++) {
+          const pz = z0 + r * SSTEP;
+          for (let c = c0; c <= c1; c++) {
+            const px = x0 + c * SSTEP;
+            const t = Math.min(1, Math.max(0, ((px - ax) * dx + (pz - az) * dz) / len2));
+            const ex = ax + dx * t - px, ez = az + dz * t - pz;
+            // distance to the road *edge*, so wide roads and narrow paths share one field
+            const d = Math.max(0, Math.sqrt(ex * ex + ez * ez) - hw);
+            const kk = r * SWIN + c;
+            if (d < dist[kk]) { dist[kk] = d; half[kk] = hw; }
+          }
+        }
+      }
+    }
+    for (let k = 0; k < dist.length; k++) {
+      this.path[k * 2] = Math.round(dist[k] / 0.05);
+      this.path[k * 2 + 1] = Math.round(Math.min(12.75, half[k]) / 0.05);
+    }
+    this.pX0 = x0; this.pZ0 = z0;
+    this.uniforms.uPWin.value.set(x0, z0, SSTEP, SWIN);
+    this.pathTex.needsUpdate = true;
+  }
+
+  pathStale(x: number, z: number) {
+    const c = this.pX0 + (SWIN / 2) * SSTEP, d = this.pZ0 + (SWIN / 2) * SSTEP;
+    return Math.max(Math.abs(x - c), Math.abs(z - d)) > 200;
+  }
+
+  /** Distance (m) beyond the edge of the nearest road/path and its half-width; dist 0 = on the beaten surface. */
+  pathAt(x: number, z: number): { dist: number; half: number } {
+    const fx = (x - this.pX0) / SSTEP, fz = (z - this.pZ0) / SSTEP;
+    if (fx < 0 || fz < 0 || fx >= SWIN - 1 || fz >= SWIN - 1) return { dist: 12.75, half: 0 };
+    const ix = Math.floor(fx), iz = Math.floor(fz), tx = fx - ix, tz = fz - iz;
+    const g = (c: number, r: number, ch: number) => this.path[(r * SWIN + c) * 2 + ch];
+    const bl = (ch: number) => {
+      const a = g(ix, iz, ch) + (g(ix + 1, iz, ch) - g(ix, iz, ch)) * tx;
+      const b = g(ix, iz + 1, ch) + (g(ix + 1, iz + 1, ch) - g(ix, iz + 1, ch)) * tx;
+      return a + (b - a) * tz;
+    };
+    return { dist: bl(0) * 0.05, half: bl(1) * 0.05 };
+  }
+
   /** Uniforms for the GLSL mirror (shared objects; values follow the window). */
   readonly uniforms = {
     uHeightTex: { value: null as unknown as THREE.DataTexture },
@@ -290,6 +457,8 @@ export class WalkData {
     uStreamTex: { value: null as unknown as THREE.DataTexture },
     uWin: { value: new THREE.Vector4(0, 0, 15, WIN) },
     uSWin: { value: new THREE.Vector4(0, 0, SSTEP, SWIN) },
+    uPathTex: { value: null as unknown as THREE.DataTexture },
+    uPWin: { value: new THREE.Vector4(0, 0, SSTEP, SWIN) },
   };
 }
 
@@ -359,6 +528,21 @@ float bedK(float dist, float width) {
   float s = 1.0 - t * t * (3.0 - 2.0 * t);
   return s * s;
 }
+uniform sampler2D uPathTex;
+uniform vec4 uPWin;
+/** distance beyond the edge of the nearest OSM road/path (m) and its half-width (m) */
+vec2 pathAt(vec2 p) {
+  vec2 f = (p - uPWin.xy) / uPWin.z;
+  if (f.x < 0.0 || f.y < 0.0 || f.x >= uPWin.w - 1.0 || f.y >= uPWin.w - 1.0) return vec2(12.75, 0.0);
+  vec2 v = texture(uPathTex, (f + 0.5) / uPWin.w).rg;
+  return v * 12.75;
+}
+/** Animal / research trails under forest (narrow beaten earth), 0..1. Mirrors trailK() in data.ts. */
+float trailK(vec2 p, float forest) {
+  if (forest < 0.35) return 0.0;
+  float n = vnoise(p / 64.0, 41) + 0.45 * vnoise(p / 21.0, 42);
+  return (1.0 - smoothstep(0.012, 0.03, abs(n))) * smoothstep(0.35, 0.6, forest);
+}
 float groundHeight(vec2 p) {
   vec4 a = attrAt(p);
   vec2 s = streamAt(p);
@@ -366,3 +550,13 @@ float groundHeight(vec2 p) {
   return baseHeight(p) + groundDetail(p, 0.55 + a.b * 1.4) * (1.0 - 0.95 * k) - (0.35 + s.y * 0.32) * k;
 }
 `;
+
+/** Animal / research trails under forest (narrow beaten earth), 0..1. Mirrors trailK() in GLSL. */
+export function trailK(x: number, z: number, forest: number): number {
+  if (forest < 0.35) return 0;
+  const n = vnoise(x / 64, z / 64, 41) + 0.45 * vnoise(x / 21, z / 21, 42);
+  const a = Math.abs(n);
+  const t = Math.min(1, Math.max(0, (a - 0.012) / 0.018));
+  const f = Math.min(1, Math.max(0, (forest - 0.35) / 0.25));
+  return (1 - t * t * (3 - 2 * t)) * f * f * (3 - 2 * f);
+}

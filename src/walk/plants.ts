@@ -88,8 +88,8 @@ class Builder {
   }
 }
 
-export type LeafKind = 'lowland' | 'bigleaf' | 'montane' | 'protea' | 'regrowth' | 'savanna';
-export type BarkKind = 'brown' | 'grey' | 'mossy' | 'palm' | 'fern';
+export type LeafKind = 'lowland' | 'bigleaf' | 'montane' | 'protea' | 'regrowth' | 'savanna' | 'single';
+export type BarkKind = 'brown' | 'grey' | 'mossy' | 'palm' | 'fern' | 'lichen';
 export type FrondKind = 'fern' | 'oilpalm' | 'raphia';
 
 export interface PlantGeo {
@@ -106,9 +106,9 @@ export interface PlantGeo {
 }
 
 export type PlantType =
-  | 'emergent' | 'canopy' | 'understory' | 'montane' | 'treefern' | 'oilpalm' | 'raphia' | 'protea' | 'savanna' | 'regrowth';
+  | 'emergent' | 'canopy' | 'understory' | 'montane' | 'treefern' | 'oilpalm' | 'raphia' | 'protea' | 'savanna' | 'regrowth' | 'pole';
 
-export const PLANT_TYPES: PlantType[] = ['emergent', 'canopy', 'understory', 'montane', 'treefern', 'oilpalm', 'raphia', 'protea', 'savanna', 'regrowth'];
+export const PLANT_TYPES: PlantType[] = ['emergent', 'canopy', 'understory', 'montane', 'treefern', 'oilpalm', 'raphia', 'protea', 'savanna', 'regrowth', 'pole'];
 
 /** A wobbly path from `a` in direction `dir`. */
 function limb(a: THREE.Vector3, dir: THREE.Vector3, length: number, segs: number, wobble: number, r: () => number, gravity = 0) {
@@ -368,6 +368,21 @@ export function buildPlant(type: PlantType, seed: number): PlantGeo {
       crown = 0.32; leafKind = 'regrowth';
       break;
     }
+    case 'pole': {
+      // young tree of the understorey: a thin straight stem (5–15 cm) with a small crown lost in the canopy above
+      trunkR = 0.0075;
+      const stem = limb(new V(0, 0, 0), new V((r() - 0.5) * 0.06, 1, (r() - 0.5) * 0.06), 0.92, 8, 0.03, r);
+      b.tube(stem, taper(stem.length, trunkR * 1.25, trunkR * 0.55), 6, 1.4);
+      for (let k = 0; k < 4; k++) {
+        const from = stem[5 + Math.floor(r() * 3)];
+        const az = r() * 6.28;
+        const br = limb(from, new V(Math.cos(az), 0.9, Math.sin(az)), 0.1 + r() * 0.08, 3, 0.4, r);
+        b.tube(br, taper(br.length, 0.003, 0.0012), 4);
+        leafClusterAt(leaves, br[br.length - 1], 0.06, new V(0, 0.93, 0), 0.12, r, 2);
+      }
+      crown = 0.14; leafKind = 'bigleaf'; barkKind = 'lichen';
+      break;
+    }
   }
   return {
     trunk: b.empty ? null : b.build(),
@@ -380,7 +395,7 @@ export function buildPlant(type: PlantType, seed: number): PlantGeo {
 
 // ---------------------------------------------------------------- ground cover
 
-export type CoverType = 'grassGreen' | 'grassGolden' | 'grassTall' | 'fern' | 'herb' | 'stick' | 'stone';
+export type CoverType = 'grassGreen' | 'grassGolden' | 'grassTall' | 'fern' | 'herb' | 'stick' | 'stone' | 'sapling';
 
 /** Ground-cover clump, height 1. */
 export function buildCover(type: CoverType, seed: number): THREE.BufferGeometry {
@@ -420,6 +435,25 @@ export function buildCover(type: CoverType, seed: number): THREE.BufferGeometry 
         const ax = new V(Math.cos(az), 0.15, Math.sin(az)).normalize().multiplyScalar(0.26);
         const ay = new V(-Math.sin(az), 0.3, Math.cos(az)).normalize().multiplyScalar(0.26);
         b.card(c, ax, ay, null, 0.9 + r() * 0.2);
+      }
+      break;
+    }
+    case 'sapling': {
+      // a young tree seedling with alternate broad leaves (texture: one leaf per card, petiole at v = 0);
+      // the stem borrows the petiole colour at the bottom of the leaf texture
+      const stem = limb(new V(0, 0, 0), new V((r() - 0.5) * 0.2, 1, (r() - 0.5) * 0.2), 1, 6, 0.12, r);
+      const b0 = b.pos.length / 3;
+      b.tube(stem, taper(stem.length, 0.012, 0.004), 4, 1, 0.8);
+      for (let i = b0 * 2; i < b.uv.length; i += 2) { b.uv[i] = 0.5; b.uv[i + 1] = 0.02; }
+      const n = 7 + Math.floor(r() * 6);
+      for (let k = 0; k < n; k++) {
+        const t = 0.25 + (k / n) * 0.75;
+        const at = stem[Math.min(stem.length - 1, Math.round(t * (stem.length - 1)))];
+        const az = k * 2.4 + r() * 0.4;
+        const len = 0.2 + r() * 0.12 + (1 - t) * 0.08, wid = len * 0.24;
+        const dir = new V(Math.cos(az), 0.25 + r() * 0.35 - (1 - t) * 0.2, Math.sin(az)).normalize();
+        const side = new V(-Math.sin(az), 0, Math.cos(az)).multiplyScalar(wid);
+        b.card(at.clone().addScaledVector(dir, len / 2), side, dir.clone().multiplyScalar(len / 2), null, 0.85 + r() * 0.3);
       }
       break;
     }

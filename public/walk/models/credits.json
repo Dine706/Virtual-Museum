@@ -1,0 +1,58 @@
+[
+ {
+  "id": "fern_02",
+  "name": "Fern 02",
+  "authors": [
+   "Rob Tuytel",
+   "Rico Cilliers"
+  ],
+  "license": "CC0 1.0",
+  "url": "https://polyhaven.com/a/fern_02"
+ },
+ {
+  "id": "calathea_orbifolia_01",
+  "name": "Calathea Orbifolia 01",
+  "authors": [
+   "Rob Tuytel",
+   "Rico Cilliers"
+  ],
+  "license": "CC0 1.0",
+  "url": "https://polyhaven.com/a/calathea_orbifolia_01"
+ },
+ {
+  "id": "moss_01",
+  "name": "Moss 01",
+  "authors": [
+   "Rob Tuytel"
+  ],
+  "license": "CC0 1.0",
+  "url": "https://polyhaven.com/a/moss_01"
+ },
+ {
+  "id": "rock_moss_set_01",
+  "name": "Rock Moss Set 01",
+  "authors": [
+   "Kless Gyzen"
+  ],
+  "license": "CC0 1.0",
+  "url": "https://polyhaven.com/a/rock_moss_set_01"
+ },
+ {
+  "id": "rock_07",
+  "name": "Rock 07",
+  "authors": [
+   "Jenelle van Heerden"
+  ],
+  "license": "CC0 1.0",
+  "url": "https://polyhaven.com/a/rock_07"
+ },
+ {
+  "id": "single_root",
+  "name": "Single Root",
+  "authors": [
+   "Jenelle van Heerden"
+  ],
+  "license": "CC0 1.0",
+  "url": "https://polyhaven.com/a/single_root"
+ }
+]

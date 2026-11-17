@@ -9,9 +9,11 @@ import { hash2 } from './noise';
 import type { WalkData, Crown, ZoneInfo } from './data';
 import { biomeAt, type Biome } from './biome';
 import { buildPlant, PLANT_TYPES, type PlantGeo, type PlantType, type LeafKind, type BarkKind, type FrondKind } from './plants';
-import { LEAVES, leafCluster, bark, frond, mossStrands } from './textures';
+import { LEAVES, leafCluster, bark, frond, mossStrands, singleLeaf } from './textures';
+import { trailK } from './data';
 import { walkMaterial, shared } from './env';
 import type { PhotoSet } from './photo';
+import type { ModelSet } from './models';
 
 export interface TreeInst {
   type: PlantType; variant: number;
@@ -87,11 +89,12 @@ export class Forest {
   /** Build plant variants, materials and impostor textures (needs the renderer). */
   init(renderer: THREE.WebGLRenderer) {
     const msaa = !!renderer.getContext().getContextAttributes()?.antialias;
-    const leafTex = (k: LeafKind) => leafCluster(LEAVES[k], k.length * 13 + 5, this.opts.impostorRes >= 512 ? 512 : 256);
-    for (const k of Object.keys(LEAVES) as LeafKind[]) {
+    const leafTex = (k: keyof typeof LEAVES) => leafCluster(LEAVES[k], k.length * 13 + 5, this.opts.impostorRes >= 512 ? 512 : 256);
+    this.leafMats.set('single', foliage(walkMaterial(new THREE.MeshStandardMaterial({ map: singleLeaf(3), alphaTest: 0.5, side: THREE.DoubleSide, vertexColors: true, roughness: 0.45 }), 'leaf', translucency), msaa));
+    for (const k of Object.keys(LEAVES) as (keyof typeof LEAVES)[]) {
       this.leafMats.set(k, foliage(walkMaterial(new THREE.MeshStandardMaterial({ map: leafTex(k), alphaTest: 0.5, side: THREE.DoubleSide, vertexColors: true, roughness: 0.78 }), 'leaf', translucency), msaa));
     }
-    for (const k of ['brown', 'grey', 'mossy', 'palm', 'fern'] as BarkKind[]) {
+    for (const k of ['brown', 'grey', 'mossy', 'palm', 'fern', 'lichen'] as BarkKind[]) {
       const t = bark(k, k.length * 17 + 3);
       this.barkMats.set(k, walkMaterial(new THREE.MeshStandardMaterial({ map: t.map, normalMap: t.normal, normalScale: new THREE.Vector2(1.4, 1.4), roughness: 0.95, vertexColors: true }), 'leaf'));
     }
@@ -240,6 +243,17 @@ export class Forest {
     set('palm', p.palm, 1, 2);
   }
 
+  /** Scanned surface roots at the feet of the big trees near the walker (high-quality look). */
+  private roots: THREE.InstancedMesh | null = null;
+  useModels(m: ModelSet) {
+    const r = m.single_root;
+    if (!r) return;
+    this.roots = new THREE.InstancedMesh(r.geometry, walkMaterial(r.material, 'none', undefined, 'scan-root'), 900);
+    this.roots.count = 0; this.roots.castShadow = this.opts.shadows; this.roots.receiveShadow = this.opts.shadows; this.roots.frustumCulled = false;
+    this.group.add(this.roots);
+    this.dirty = true;
+  }
+
   /** Brightness of the baked impostors under the current light (they are unlit). */
   setImpostorLight(k: number) { for (const m of this.impMats) m.color.setScalar(k); }
 
@@ -303,6 +317,10 @@ export class Forest {
     const add = (type: PlantType, x: number, z: number, h: number, crownR: number, seed: number, measured: boolean) => {
       const s = this.data.streamAt(x, z);
       if (s.dist < s.width * 1.3 && type !== 'raphia' && type !== 'treefern') return;
+      // keep roads, paths, trails and houses clear (OpenStreetMap + forest trails)
+      if (this.data.pathAt(x, z).dist < 0.6 + (h > 8 ? 1 : 0)) return;
+      if (this.data.buildingAt(x, z, 1.5)) return;
+      if (h > 1.5 && trailK(x, z, 1) > 0.25) return;
       const geoCrown = type === 'emergent' ? 0.36 : type === 'montane' ? 0.42 : type === 'protea' ? 0.45 : type === 'oilpalm' ? 0.45 : type === 'raphia' ? 0.55 : type === 'treefern' ? 0.42 : type === 'savanna' ? 0.4 : 0.3;
       const crown = Math.min(1.45, Math.max(0.7, crownR / Math.max(1, h) / geoCrown));
       out.push({
@@ -334,7 +352,7 @@ export class Forest {
       const x = x0 + (i + 0.1 + H(i, j, 21) * 0.8) * (CELL / 6), z = z0 + (j + 0.1 + H(i, j, 22) * 0.8) * (CELL / 6);
       const b = biomeAt(this.data, x, z);
       const u = H(i, j, 23);
-      const pForest = b.forest * 0.5, pRegrowth = b.regrowth * 0.55, pWet = b.wet * 0.45 * (b.forest + b.regrowth > 0.2 ? 1 : 0.4);
+      const pForest = b.forest * 0.3, pRegrowth = b.regrowth * 0.55, pWet = b.wet * 0.45 * (b.forest + b.regrowth > 0.2 ? 1 : 0.4);
       const pProtea = (b.high > 0.3 || b.cloud > 0.6) && b.forest < 0.4 ? b.grass * 0.16 * (1 - b.rock) * (1 - Math.max(0, (b.elev - 1700) / 60)) : 0;
       const pSavanna = b.cloud < 0.5 ? b.grass * 0.04 : 0;
       const pPalm = b.built * 0.08;
@@ -349,11 +367,19 @@ export class Forest {
       else { type = 'oilpalm'; h = 8 + H(i, j, 25) * 7; }
       add(type, x, z, Math.max(1.2, h), (type === 'treefern' ? 0.45 : 0.3) * h + 0.5, 21, false);
     }
+    // 5. Poles: thin straight young trees (5–15 cm) everywhere under closed forest (4 m sub-grid).
+    for (let j = 0; j < 8; j++) for (let i = 0; i < 8; i++) {
+      const x = x0 + (i + 0.1 + H(i, j, 61) * 0.8) * 4, z = z0 + (j + 0.1 + H(i, j, 62) * 0.8) * 4;
+      const b = biomeAt(this.data, x, z);
+      if (H(i, j, 63) > b.forest * (b.cloud > 0.5 ? 0.3 : 0.5)) continue;
+      const h = Math.max(4, Math.min(b.canopy * 0.85, 5 + H(i, j, 64) * 10));
+      add('pole', x, z, h, h * 0.1, 61, false);
+    }
     // 4. Shrub layer (3.2 m sub-grid): young trees and bushes that close the view under the canopy.
     for (let j = 0; j < 10; j++) for (let i = 0; i < 10; i++) {
       const x = x0 + (i + 0.1 + H(i, j, 41) * 0.8) * 3.2, z = z0 + (j + 0.1 + H(i, j, 42) * 0.8) * 3.2;
       const b = biomeAt(this.data, x, z);
-      const p = b.forest * (b.cloud > 0.5 ? 0.3 : 0.42) + b.regrowth * 0.3;
+      const p = b.forest * (b.cloud > 0.5 ? 0.24 : 0.2) + b.regrowth * 0.3;
       if (H(i, j, 43) > p) continue;
       const fern = b.cloud > 0.5 && H(i, j, 44) < 0.35;
       const hs = fern ? 2 + H(i, j, 45) * 3 : 1.5 + H(i, j, 45) * 3.5;
@@ -427,6 +453,26 @@ export class Forest {
       }
     }
     this.nearTrees = close;
+    if (this.roots) {
+      let n = 0;
+      for (const t of close) {
+        if (n > 880) break;
+        if (t.h < 14 || !(t.type === 'emergent' || t.type === 'canopy' || t.type === 'montane')) continue;
+        if (Math.hypot(t.x - eye.x, t.z - eye.z) > NEAR * 1.4) continue;
+        const rt = t.h * t.crown * (t.type === 'montane' ? 0.04 : 0.024);
+        const k = 3 + Math.floor(t.tint * 10) % 3;
+        for (let q = 0; q < k; q++) {
+          const th = t.rot + q * (Math.PI * 2 / k) + (q % 2) * 0.3;
+          const L = t.h * (0.08 + 0.04 * ((q * 7 + Math.floor(t.h)) % 3) / 2);
+          tmpQ.setFromAxisAngle(Y, Math.PI / 2 - th);
+          tmpP.set(t.x + Math.cos(th) * rt * 0.5, t.y + 0.05, t.z + Math.sin(th) * rt * 0.5);
+          tmpS.setScalar(L);
+          this.roots.setMatrixAt(n++, tmpM.compose(tmpP, tmpQ, tmpS));
+        }
+      }
+      this.roots.count = n;
+      this.roots.instanceMatrix.needsUpdate = true;
+    }
     for (const [k, kind] of this.kinds) {
       const nl = near.get(k) ?? [], fl = far.get(k) ?? [];
       this.ensureCapacity(kind, nl.length, fl.length);

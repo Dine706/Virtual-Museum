@@ -135,5 +135,22 @@
   "walk.water": "Stream",
   "walk.waterNote": "Course derived from the terrain (approximate).",
   "walk.rock": "Rock",
-  "walk.iucn": "IUCN: {c}"
+  "walk.iucn": "IUCN: {c}",
+  "walk.person.title": "Villager – fictional figure",
+  "walk.person.note": "A generic, fictional figure: no real person is shown. The activity follows the sources below; the spot is illustrative.",
+  "walk.act.pound": "Pounding in a mortar. In Forest Guinea, boiled palm fruit is pounded in mortars, then kneaded to extract the oil.",
+  "walk.act.carry": "Carrying water or a load. In Guinea, children fetch water and firewood and help prepare food.",
+  "walk.act.firewood": "Bringing firewood. In Guinea, children fetch water and firewood and help prepare food.",
+  "walk.act.baby": "Mothers carry their babies on their backs, tied in a wrapper.",
+  "walk.act.hoe": "Working in a field. At Bossou, upland rice and cassava are the staples; among the Kpelle, men clear the fields and women plant.",
+  "walk.act.sit": "Talking in the shade in front of a house (everyday scene, no specific source).",
+  "walk.act.walk": "On the way along a real path (OpenStreetMap) linking houses, fields and villages.",
+  "walk.act.play": "Children playing (everyday scene, no specific source).",
+  "walk.village.bossou": "Bossou: about 2,000 people (village), Manon. Upland rice, cassava, oil palm; market on Wednesdays. Chimpanzees are protected there by a taboo.",
+  "walk.village.generic": "{name} village.",
+  "walk.house.round": "Round house",
+  "walk.house.rect": "House with a metal roof",
+  "walk.house.roundText": "The region's traditional house is round, wattle-and-daub, under a conical thatched roof; it now predominates only in remote villages.",
+  "walk.house.rectText": "Newer houses are mostly rectangular, wattle-and-daub or block, roofed with corrugated metal, often with a porch.",
+  "walk.house.note": "Position and size: a building mapped in OpenStreetMap. Shape and materials: typical of the region, not surveyed house by house."
 }

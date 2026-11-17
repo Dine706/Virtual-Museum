@@ -5,9 +5,11 @@ import { hash2, vnoise } from './noise';
 import type { WalkData } from './data';
 import { biomeAt } from './biome';
 import { buildCover, type CoverType } from './plants';
-import { grassBlades, frond, bigLeaf, bark, groundTextures } from './textures';
+import { grassBlades, frond, bigLeaf, bark, groundTextures, singleLeaf } from './textures';
+import { trailK } from './data';
 import { depthFor } from './forest';
 import type { PhotoSet } from './photo';
+import type { ModelSet, ScanModel } from './models';
 import { walkMaterial } from './env';
 
 function nearFade(s: THREE.WebGLProgramParametersWithUniforms) {
@@ -19,7 +21,7 @@ function nearFade(s: THREE.WebGLProgramParametersWithUniforms) {
 export interface CoverOpts { radius: number; spacing: number; shadows: boolean; rockRadius: number; texSize: number; msaa: boolean }
 
 const TILE = 8;
-const TYPES: CoverType[] = ['grassGolden', 'grassGreen', 'grassTall', 'fern', 'herb', 'stick', 'stone'];
+const TYPES: CoverType[] = ['grassGolden', 'grassGreen', 'grassTall', 'fern', 'herb', 'stick', 'stone', 'sapling'];
 
 interface Inst { x: number; y: number; z: number; s: number; sy: number; rot: number; tilt: number; tint: number }
 
@@ -45,6 +47,7 @@ export class GroundCover {
         case 'fern': return walkMaterial(new THREE.MeshStandardMaterial({ map: frond('fern', 6), alphaTest: 0.45, side: THREE.DoubleSide, vertexColors: true, roughness: 0.75 }), 'frond', nearFade);
         case 'herb': return walkMaterial(new THREE.MeshStandardMaterial({ map: bigLeaf(8), alphaTest: 0.45, side: THREE.DoubleSide, vertexColors: true, roughness: 0.6 }), 'frond', nearFade);
         case 'stick': return walkMaterial(new THREE.MeshStandardMaterial({ map: b.map, normalMap: b.normal, vertexColors: true, roughness: 0.95 }));
+        case 'sapling': return walkMaterial(new THREE.MeshStandardMaterial({ map: singleLeaf(5), alphaTest: 0.5, side: THREE.DoubleSide, vertexColors: true, roughness: 0.45 }), 'leaf', nearFade, 'sapling');
         case 'stone': return walkMaterial(new THREE.MeshStandardMaterial({ map: rock.maps[3], normalMap: rock.normals[3], normalScale: new THREE.Vector2(2, 2), vertexColors: true, roughness: 0.9 }));
       }
     };
@@ -84,6 +87,10 @@ export class GroundCover {
       const x = ti * TILE + (i + h1) * step, z = tj * TILE + (j + h2) * step;
       const b = biomeAt(this.data, x, z);
       if (b.streamDist < b.streamWidth * 0.9) continue; // the water itself
+      const pa = this.data.pathAt(x, z);
+      const onPath = pa.dist < 0.15 ? 1 : 0;
+      const trail = trailK(x, z, b.forest);
+      if (this.data.buildingAt(x, z, 0.4)) continue;
       const open = 1 - b.forest;
       const highGrass = b.grass * b.high + (b.cloud > 0.5 ? b.grass * 0.6 : 0);
       const lowGrass = b.grass * (1 - b.high) * (b.cloud > 0.5 ? 0.4 : 1);
@@ -94,10 +101,15 @@ export class GroundCover {
       const pGolden = Math.min(1, highGrass * 1.1 * pk) * (1 - b.rock * 0.7);
       const pTall = lowGrass * 0.75 * pk;
       const pGreen = Math.min(0.9, (b.regrowth * 0.7 + lowGrass * 0.25 + b.wet * open * 0.5 + b.built * 0.3) * pk);
-      const pFern = b.forest * (b.cloud > 0.5 ? 0.38 : 0.2) + b.wet * 0.3;
-      const pHerb = b.forest * (b.cloud > 0.5 ? 0.08 : 0.3) + b.regrowth * 0.1;
-      const pStick = b.forest * 0.035;
+      const pFern = b.forest * (b.cloud > 0.5 ? 0.3 : 0.08) + b.wet * 0.3;
+      const pHerb = b.forest * (b.cloud > 0.5 ? 0.06 : 0.11) + b.regrowth * 0.08;
+      const pStick = b.forest * 0.012;
       const pStone = b.rock * 0.25 + (b.high > 0.5 ? 0.025 : 0.006) + b.wet * 0.05;
+      const pSapling = (b.forest * (b.cloud > 0.5 ? 0.05 : 0.075) + b.regrowth * 0.05) * (1 - trail);
+      if (onPath || trail > 0.7) { // beaten earth: only the odd stone or twig
+        if (hash2(ti * 97 + i, tj * 97 + j, 7) < 0.02) push('stone', { x, y: this.data.heightAt(x, z) - 0.04, z, s: 0.08 + h1 * 0.12, sy: 0.08 + h2 * 0.1, rot: h3 * 6.28, tilt: 0.2, tint: 0.9 });
+        continue;
+      }
       const y = this.data.heightAt(x, z);
       const rot = h3 * Math.PI * 2;
       const tint = 0.8 + hash2(ti * 97 + i, tj * 97 + j, 4) * 0.35;
@@ -108,7 +120,8 @@ export class GroundCover {
       else if (pick(pGreen)) push('grassGreen', { x, y, z, s: 0.5 + h1 * 0.3, sy: 0.25 + h2 * 0.35, rot, tilt: 0, tint });
       else if (pick(pFern)) push('fern', { x, y, z, s: 0.5 + h1 * 0.8, sy: 0.5 + h2 * 0.7, rot, tilt: 0, tint });
       else if (pick(pHerb)) push('herb', { x, y, z, s: 0.6 + h1 * 0.6, sy: 0.4 + h2 * 0.6, rot, tilt: 0, tint });
-      else if (pick(pStick)) push('stick', { x, y: y + 0.03, z, s: 1 + h1 * 2.5, sy: 1 + h1 * 2, rot, tilt: 0, tint });
+      else if (pick(pStick)) push('stick', { x, y: y + 0.02, z, s: 0.8 + h1 * 1.6, sy: 0.5 + h1 * 0.6, rot, tilt: 0, tint });
+      else if (pick(pSapling)) push('sapling', { x, y, z, s: 0.6 + h1 * 1.8, sy: 0.6 + h1 * 1.8, rot, tilt: 0, tint });
       else if (pick(pStone)) push('stone', { x, y: y - 0.05, z, s: 0.2 + h1 * h1 * 0.9, sy: 0.2 + h1 * h1 * 0.8, rot, tilt: h2 * 0.4, tint });
     }
     return out;
@@ -163,7 +176,7 @@ export class GroundCover {
         this.caps.set(t, cap);
       }
       let n = 0;
-      const grass = t === 'grassGolden' || t === 'grassTall' || t === 'grassGreen';
+      const grass = t === 'grassGolden' || t === 'grassTall' || t === 'grassGreen' || t === 'sapling';
       const inner = R * 0.45;
       for (const it of l) {
         const d = Math.hypot(it.x - eye.x, it.z - eye.z);
@@ -179,7 +192,8 @@ export class GroundCover {
         e.set(it.tilt, it.rot, it.tilt * 0.5);
         q.setFromEuler(e);
         const grow = d > inner ? Math.min(1.6, d / inner) : 1;
-        sc.set(it.s * grow, it.sy * fade * (grass ? Math.min(1.3, grow) : 1), it.s * grow);
+        if (this.uniform.has(t)) { const k = it.s * grow * 1.15; sc.set(k, k * fade, k); }
+        else sc.set(it.s * grow, it.sy * fade * (grass ? Math.min(1.3, grow) : 1), it.s * grow);
         p.set(it.x, it.y, it.z);
         m.compose(p, q, sc);
         mesh.setMatrixAt(n, m);
@@ -216,6 +230,32 @@ export class GroundCover {
     if (this.boulderMesh.instanceColor) this.boulderMesh.instanceColor.needsUpdate = true;
     return true;
   }
+
+  /** Scanned models replace the drawn fern, forest herb and boulders (high-quality look). */
+  useModels(m: ModelSet) {
+    const swap = (t: CoverType, sm: ScanModel | undefined, wind: 'frond' | 'none', key: string) => {
+      if (!sm) return;
+      const mat = wind === 'none' ? walkMaterial(sm.material, 'none', undefined, key) : walkMaterial(sm.material, wind, nearFade, key);
+      this.geos.set(t, sm.geometry);
+      this.mats.set(t, mat);
+      this.uniform.add(t);
+      const mesh = this.meshes.get(t);
+      if (mesh) {
+        mesh.geometry = sm.geometry; mesh.material = mat;
+        const d = depthFor(mat); if (d) mesh.customDepthMaterial = d;
+      }
+      this.last.set(1e9, 0, 1e9);
+    };
+    swap('fern', m.fern_02, 'frond', 'scan-fern');
+    swap('herb', m.calathea_orbifolia_01, 'frond', 'scan-herb');
+    if (m.rock_07) {
+      this.boulderMesh.geometry = m.rock_07.geometry;
+      this.boulderMesh.material = walkMaterial(m.rock_07.material, 'none', undefined, 'scan-rock');
+      this.boulderMesh.customDepthMaterial = undefined;
+    }
+  }
+  /** Cover types drawn from scanned models keep their own proportions (uniform scale). */
+  private uniform = new Set<CoverType>();
 
   usePhotos(p: PhotoSet) {
     const m = this.mats.get('stone') as THREE.MeshStandardMaterial;
