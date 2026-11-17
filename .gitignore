@@ -4,3 +4,4 @@ data/raw_*.tif
 data/nimba_dem_30m.tif
 .venv
 __pycache__
+.worldpack-cache
