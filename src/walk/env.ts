@@ -150,6 +150,18 @@ export class WalkEnv {
 
   setTime(t: WalkTime) { this.time = t; this.preset = PRESETS[t]; this.apply(); }
 
+  /** Image-based light from the sky (glossy leaf highlights, soft sky fill). Rebuild after setTime(). */
+  envMap(renderer: THREE.WebGLRenderer, prev?: THREE.WebGLRenderTarget | null): THREE.WebGLRenderTarget {
+    prev?.dispose();
+    const pm = new THREE.PMREMGenerator(renderer);
+    const sc = new THREE.Scene();
+    const sky = new THREE.Mesh(this.sky.geometry, this.sky.material);
+    sc.add(sky);
+    const rt = pm.fromScene(sc, 0.02, 1, 60000);
+    pm.dispose();
+    return rt;
+  }
+
   private apply() {
     const p = this.preset;
     const az = THREE.MathUtils.degToRad(p.sunAz), el = THREE.MathUtils.degToRad(p.sunEl);

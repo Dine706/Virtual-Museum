@@ -1,0 +1,84 @@
+[
+ {
+  "role": "litter",
+  "id": "forest_leaves_02",
+  "name": "Forest Leaves 02",
+  "authors": [
+   "Rob Tuytel"
+  ],
+  "license": "CC0 1.0",
+  "url": "https://polyhaven.com/a/forest_leaves_02"
+ },
+ {
+  "role": "laterite",
+  "id": "red_laterite_soil_stones",
+  "name": "Red Laterite Soil Stones",
+  "authors": [
+   "Amal Kumar"
+  ],
+  "license": "CC0 1.0",
+  "url": "https://polyhaven.com/a/red_laterite_soil_stones"
+ },
+ {
+  "role": "turf",
+  "id": "leafy_grass",
+  "name": "Leafy Grass",
+  "authors": [
+   "Charlotte Baglioni"
+  ],
+  "license": "CC0 1.0",
+  "url": "https://polyhaven.com/a/leafy_grass"
+ },
+ {
+  "role": "rock",
+  "id": "rock_boulder_dry",
+  "name": "Rock Boulder Dry",
+  "authors": [
+   "Dimitrios Savva",
+   "Rico Cilliers"
+  ],
+  "license": "CC0 1.0",
+  "url": "https://polyhaven.com/a/rock_boulder_dry"
+ },
+ {
+  "role": "moss",
+  "id": "mossy_rock",
+  "name": "Mossy Rock",
+  "authors": [
+   "Rob Tuytel"
+  ],
+  "license": "CC0 1.0",
+  "url": "https://polyhaven.com/a/mossy_rock"
+ },
+ {
+  "role": "bark",
+  "id": "bark_brown_02",
+  "name": "Bark Brown 02",
+  "authors": [
+   "Rob Tuytel"
+  ],
+  "license": "CC0 1.0",
+  "url": "https://polyhaven.com/a/bark_brown_02"
+ },
+ {
+  "role": "barkGrey",
+  "id": "bark_platanus",
+  "name": "Bark Platanus",
+  "authors": [
+   "Dimitrios Savva"
+  ],
+  "license": "CC0 1.0",
+  "url": "https://polyhaven.com/a/bark_platanus"
+ },
+ {
+  "role": "palm",
+  "id": "palm_tree_bark",
+  "name": "Palm Tree Bark",
+  "authors": [
+   "Dimitrios Savva",
+   "Rico Cilliers"
+  ],
+  "license": "CC0 1.0",
+  "url": "https://polyhaven.com/a/palm_tree_bark"
+ }
+]

@@ -20,6 +20,8 @@ import { Hud, type Card, type CardItem } from './hud';
 import { biomeAt, habitatOf, fogFor, type HabitatId } from './biome';
 import { walkMaterial } from './env';
 import { groundTextures } from './textures';
+import { PostFX } from './post';
+import { loadPhotos } from './photo';
 
 export interface WalkContext {
   renderer: THREE.WebGLRenderer;
@@ -79,7 +81,10 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
   // ---- scene ----
   const params = new URLSearchParams(location.search);
   const time0 = (WALK_TIMES as string[]).includes(params.get('walktime') ?? '') ? params.get('walktime') as WalkTime : 'morning';
-  const env = new WalkEnv(time0, O.shadows);
+  // High-quality look: scanned textures, sky light, AO, bloom, light shafts, sharpening (high tier; ?fx=1/0 forces).
+  const fxParam = params.get('fx');
+  const fx = fxParam === '1' || (fxParam !== '0' && ctx.tier === 'high');
+  const env = new WalkEnv(time0, fx ? Math.max(O.shadows, 4096) : O.shadows);
   const ground = new Ground(data, ctx.hf, ctx.lcTex, { segments: O.seg, radius: O.R, shellStart: O.shell[0], shellEnd: O.shell[1], shadows: O.shadows > 0 }, env.sunDir, { hemiSky: env.hemi.color, hemiGround: env.hemi.groundColor, sun: env.sun.color });
   hud.setVeilText(`${t('walk.loading')} 30 %`);
   await nextFrame();
@@ -98,7 +103,18 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
   const farCam = new THREE.PerspectiveCamera(62, 1, 30, 60000);
   const cam = new THREE.PerspectiveCamera(62, 1, 0.1, Math.max(2600, O.R * 1.8));
 
-  renderer.shadowMap.enabled = O.shadows > 0;
+  let exited = false;
+  let post: PostFX | null = null;
+  let envRT: THREE.WebGLRenderTarget | null = null;
+  if (fx) {
+    post = new PostFX(renderer, cam, near);
+    const aniso = Math.min(8, renderer.capabilities.getMaxAnisotropy());
+    loadPhotos(ctx.base, aniso).then((p) => {
+      if (exited) return;
+      ground.usePhotos(p); forest.usePhotos(p); cover.usePhotos(p);
+    }).catch((e) => console.warn('walk: scanned textures unavailable', e));
+  }
+  renderer.shadowMap.enabled = O.shadows > 0 || fx;
   renderer.shadowMap.type = THREE.PCFShadowMap;
   renderer.autoClear = false;
   const resize = () => {
@@ -188,6 +204,11 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
   document.addEventListener('visibilitychange', onVis);
 
   function applyTime() {
+    if (fx) {
+      envRT = env.envMap(renderer, envRT);
+      near.environment = envRT.texture;
+      near.environmentIntensity = env.time === 'mist' ? 0.3 : 0.22;
+    }
     hud.setTime(t(`walk.time.${env.time}`));
     renderer.toneMappingExposure = env.exposure;
     ground.setClouds(env.time === 'mist' ? 1300 : 1220, env.time === 'mist' ? 0.95 : env.time === 'morning' ? 0.55 : 0.2);
@@ -266,14 +287,17 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
     // Under a closed canopy the sun barely reaches the floor: lift the sky fill a little (eyes adapt).
     const closed = habitat === 'lowlandForest' || habitat === 'cloudForest' || habitat === 'gallery' ? 1 : 0;
     canopyFill += (closed - canopyFill) * (1 - Math.exp(-dt * 0.7));
-    env.hemi.intensity = env.preset.hemi * (1 + canopyFill * 0.45);
+    env.hemi.intensity = env.preset.hemi * (1 + canopyFill * 0.45) * (fx ? 0.8 : 1);
     renderer.toneMappingExposure = env.exposure * (1 + canopyFill * 0.18);
 
-    renderer.setRenderTarget(null);
-    renderer.clear();
-    renderer.render(far, farCam);
-    renderer.clearDepth();
-    renderer.render(near, cam);
+    const drawScene = () => { renderer.clear(); renderer.render(far, farCam); renderer.clearDepth(); renderer.render(near, cam); };
+    if (post) {
+      // light shafts only under a canopy (in the open the whole sky would glare)
+      post.render(drawScene, env.sunDir, env.sun.color, (env.time === 'noon' ? 0.45 : env.time === 'mist' ? 0.8 : 1) * canopyFill);
+    } else {
+      renderer.setRenderTarget(null);
+      drawScene();
+    }
 
     // Adapt: if the first seconds run below ~24 fps, lower the resolution (once or twice).
     fpsT += dt; fpsN++;
@@ -446,7 +470,6 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
   }
 
   // ---- exit ----
-  let exited = false;
   function exit() {
     if (exited) return;
     exited = true;
@@ -468,6 +491,8 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
     disposeTree(near); disposeTree(far);
     data.heightTex.dispose(); data.attrTex.dispose(); data.streamTex.dispose();
     env.sun.shadow.map?.dispose();
+    post?.dispose();
+    envRT?.dispose();
     renderer.autoClear = saved.autoClear;
     renderer.shadowMap.enabled = saved.shadow;
     renderer.shadowMap.type = saved.shadowType;
@@ -487,6 +512,7 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
       look(yaw: number, pitch: number) { controls.yaw = yaw; controls.pitch = pitch; },
       teleport: (x: number, z: number) => relocate(x, z),
       setTime(tm: WalkTime) { env.setTime(tm); applyTime(); },
+      fx,
       /** Face the nearest visible animal of a kind (or any); returns its kind and distance. */
       lookAtAnimal(kind?: string) {
         let best: Agent | null = null, bd = Infinity;

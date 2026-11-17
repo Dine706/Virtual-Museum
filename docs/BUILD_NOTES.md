@@ -288,3 +288,21 @@ Dean asked for detail when zooming in: walk among the trees and plants, see anim
 * Dean asked for a preview link to review walk mode. `ignoreCommand` now skips **production** builds only (`$VERCEL_ENV = production` → exit 0). Every push to this branch is still a production deployment, and is still cancelled, so the live site (M8 app) does not change.
 * Preview deployments are created on request through the Vercel API (target *preview*). They build normally and get their own URL. Vercel Authentication is on for deployment URLs, so a preview opens only for logged-in team members.
 * **To go live after approval:** remove the `ignoreCommand` line and push.
+
+## Walk mode – high-quality look (example, 17 Nov 2026)
+
+Dean asked how to sharpen the graphics and the realism. This is an example of the first steps, on by default on the high tier; `?fx=1` / `?fx=0` forces it on or off.
+
+* **Scanned textures:** CC0 textures from Poly Haven, fetched by `scripts/fetch_textures.mjs` into `public/walk/tex/` with `credits.json`. They are WebP, diffuse 1K and normals 512 px, 2.4 MB in total, and load only in this mode.
+  * Ground: `forest_leaves_02` for leaf litter and `red_laterite_soil_stones` for laterite (tinted redder for Nimba), plus `leafy_grass`, `rock_boulder_dry` and `mossy_rock`.
+  * Bark: `bark_brown_02`, `bark_platanus` and `palm_tree_bark`. Stones use the rock texture.
+  * These are generic surfaces, never presented as photos of Nimba.
+* **Post-processing** (`src/walk/post.ts`): the scene renders into a 4× MSAA HDR target, then:
+  * GTAO ambient occlusion from the depth buffer, with normals reconstructed so there is no extra scene pass and the leaves keep their alpha cut-outs;
+  * light bloom on the sun;
+  * light shafts: a radial blur of the open sky toward the sun, only under a closed canopy, because in the open the whole sky glares;
+  * contrast-adaptive sharpening, colour grading (saturation, filmic toe, warm highlights and cool shadows) and a vignette.
+* **Lighting:** sky image-based light (PMREM of the sky dome) for leaf highlights and a soft fill. The hemisphere light is reduced to match, and shadows use a 4,096 px map.
+* **Comparisons:** `docs/screens/fx-*-before.png` and `fx-*-after.png`, at the mid tier with fx off and on.
+* **Not measured yet:** the GPU cost on real hardware. It is expected to suit desktops and recent laptops and iPads only, and phones stay on the light look.
+* The network allowlist gained `api.polyhaven.com` and `dl.polyhaven.org` for the fetch script.

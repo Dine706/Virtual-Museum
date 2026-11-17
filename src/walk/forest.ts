@@ -11,6 +11,7 @@ import { biomeAt, type Biome } from './biome';
 import { buildPlant, PLANT_TYPES, type PlantGeo, type PlantType, type LeafKind, type BarkKind, type FrondKind } from './plants';
 import { LEAVES, leafCluster, bark, frond, mossStrands } from './textures';
 import { walkMaterial, shared } from './env';
+import type { PhotoSet } from './photo';
 
 export interface TreeInst {
   type: PlantType; variant: number;
@@ -223,6 +224,20 @@ export class Forest {
     kind.capFar = 1;
     holder.clear();
     void type; void v;
+  }
+
+  /** Scanned bark for trunks (high-quality look). Impostors keep the baked look. */
+  usePhotos(p: PhotoSet) {
+    const set = (k: BarkKind, t: { map: THREE.Texture; normal: THREE.Texture }, rx: number, ry: number) => {
+      const m = this.barkMats.get(k) as THREE.MeshStandardMaterial | undefined;
+      if (!m) return;
+      t.map.repeat.set(rx, ry); t.normal.repeat.set(rx, ry);
+      m.map = t.map; m.normalMap = t.normal; m.normalScale.set(1.2, 1.2);
+      m.needsUpdate = true;
+    };
+    set('brown', p.bark, 2, 3);
+    set('grey', p.barkGrey, 2, 3);
+    set('palm', p.palm, 1, 2);
   }
 
   /** Brightness of the baked impostors under the current light (they are unlit). */

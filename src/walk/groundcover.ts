@@ -7,6 +7,7 @@ import { biomeAt } from './biome';
 import { buildCover, type CoverType } from './plants';
 import { grassBlades, frond, bigLeaf, bark, groundTextures } from './textures';
 import { depthFor } from './forest';
+import type { PhotoSet } from './photo';
 import { walkMaterial } from './env';
 
 function nearFade(s: THREE.WebGLProgramParametersWithUniforms) {
@@ -214,6 +215,11 @@ export class GroundCover {
     this.boulderMesh.instanceMatrix.needsUpdate = true;
     if (this.boulderMesh.instanceColor) this.boulderMesh.instanceColor.needsUpdate = true;
     return true;
+  }
+
+  usePhotos(p: PhotoSet) {
+    const m = this.mats.get('stone') as THREE.MeshStandardMaterial;
+    m.map = p.rock.map; m.normalMap = p.rock.normal; m.needsUpdate = true;
   }
 
   reset() { this.tiles.clear(); this.boulders.clear(); this.last.set(1e9, 0, 1e9); }

@@ -9,6 +9,7 @@ import { NOISE_GLSL } from './noise';
 import { DATA_GLSL, type WalkData } from './data';
 import { walkMaterial, shared } from './env';
 import { groundTextures } from './textures';
+import type { PhotoSet } from './photo';
 import type { Heightfield } from '../scene/heightfield';
 import { WORLD, WORLD_W, WORLD_D } from '../data/geo';
 
@@ -61,17 +62,19 @@ export class Ground {
   private uCam = { value: new THREE.Vector3() };
   private uShell: { value: THREE.Vector2 };
   private snap: number;
+  private texU: Record<string, { value: THREE.Texture }>;
+  private soilTint = { value: new THREE.Vector3(1, 1, 1) };
 
   constructor(data: WalkData, hf: Heightfield, lcTex: THREE.Texture, private opts: GroundOpts, sunDir: THREE.Vector3, sky: { hemiSky: THREE.Color; hemiGround: THREE.Color; sun: THREE.Color }) {
     const tex = groundTextures(opts.segments >= 300 ? 512 : 256);
     this.uShell = { value: new THREE.Vector2(opts.shellStart, opts.shellEnd) };
+    this.texU = {
+      uT0: { value: tex.maps[0] }, uT1: { value: tex.maps[1] }, uT2: { value: tex.maps[2] }, uT3: { value: tex.maps[3] }, uT4: { value: tex.maps[4] },
+      uN0: { value: tex.normals[0] }, uN1: { value: tex.normals[1] }, uN3: { value: tex.normals[3] },
+    };
     this.snap = 2 * opts.radius * 0.055 / opts.segments * 2; // a couple of centre cells
     const mat = walkMaterial(new THREE.MeshStandardMaterial({ roughness: 0.95, metalness: 0 }), 'none', (s) => {
-      Object.assign(s.uniforms, data.uniforms, {
-        uCam: this.uCam, uShell: this.uShell,
-        uT0: { value: tex.maps[0] }, uT1: { value: tex.maps[1] }, uT2: { value: tex.maps[2] }, uT3: { value: tex.maps[3] }, uT4: { value: tex.maps[4] },
-        uN0: { value: tex.normals[0] }, uN1: { value: tex.normals[1] }, uN3: { value: tex.normals[3] },
-      });
+      Object.assign(s.uniforms, data.uniforms, { uCam: this.uCam, uShell: this.uShell, uSoilTint: this.soilTint }, this.texU);
       s.vertexShader = s.vertexShader
         .replace('#include <common>', `#include <common>\n${NOISE_GLSL}\n${DATA_GLSL}\n${SURF_GLSL}\nvarying vec3 vWP; varying vec3 vNW; varying float vShell;`)
         .replace('#include <beginnormal_vertex>', /* glsl */ `
@@ -85,7 +88,7 @@ export class Ground {
         .replace('#include <begin_vertex>', `vec3 transformed = vec3(position.x, gh, position.z);\nvWP = vec3(gp.x, gh, gp.y);`);
       s.fragmentShader = s.fragmentShader
         .replace('#include <common>', `#include <common>\n${NOISE_GLSL}\n${DATA_GLSL}\nvarying vec3 vWP; varying vec3 vNW; varying float vShell;
-          uniform sampler2D uT0, uT1, uT2, uT3, uT4, uN0, uN1, uN3;
+          uniform sampler2D uT0, uT1, uT2, uT3, uT4, uN0, uN1, uN3; uniform vec3 uSoilTint;
           vec3 tri(sampler2D t, vec2 p, float s) {
             vec2 q = vec2(p.x * 0.8 - p.y * 0.6, p.x * 0.6 + p.y * 0.8);
             float k = smoothstep(-0.4, 0.4, vnoise(p / 11.0, 71));
@@ -114,7 +117,7 @@ export class Ground {
           wRock *= 1.0 - gWet * 0.6;
           float sum = wRock + wLitter + wGrass + wSoil + wMoss + 1e-3;
           gW[0] = wLitter / sum; gW[1] = wSoil / sum; gW[2] = wGrass / sum; gW[3] = wRock / sum; gW[4] = wMoss / sum;
-          vec3 cLit = tri(uT0, P, 2.6), cSoil = tri(uT1, P, 3.2), cGr = tri(uT2, P, 2.0), cRock = tri(uT3, P, 4.5), cMoss = tri(uT4, P, 2.2);
+          vec3 cLit = tri(uT0, P, 2.6), cSoil = tri(uT1, P, 3.2) * uSoilTint, cGr = tri(uT2, P, 2.0), cRock = tri(uT3, P, 4.5), cMoss = tri(uT4, P, 2.2);
           // Summit grassland reads golden-green, lowland turf greener.
           cGr = mix(cGr, vec3(dot(cGr, vec3(0.33))), 0.35) * mix(vec3(0.85, 1.0, 0.7), vec3(1.3, 1.12, 0.7), smoothstep(1150.0, 1450.0, vWP.y));
           vec3 g = cLit * gW[0] + cSoil * gW[1] + cGr * gW[2] + cRock * gW[3] + cMoss * gW[4];
@@ -229,6 +232,16 @@ export class Ground {
     this.mesh.position.set(Math.round(eye.x / s) * s, 0, Math.round(eye.z / s) * s);
     this.mesh.updateMatrixWorld();
     this.uCam.value.copy(eye);
+  }
+
+  /** Swap the drawn ground textures for scanned ones (high-quality look). */
+  usePhotos(p: PhotoSet) {
+    this.texU.uT0.value = p.litter.map; this.texU.uN0.value = p.litter.normal;
+    this.texU.uT1.value = p.laterite.map; this.texU.uN1.value = p.laterite.normal;
+    this.soilTint.value.set(1.18, 0.82, 0.68); // Nimba's laterite is redder than the scanned soil
+    this.texU.uT2.value = p.turf.map;
+    this.texU.uT3.value = p.rock.map; this.texU.uN3.value = p.rock.normal;
+    this.texU.uT4.value = p.moss.map;
   }
 
   setClouds(height: number, amount: number) {
