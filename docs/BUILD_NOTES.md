@@ -410,3 +410,15 @@ Steep rock and mine faces use triplanar mapping, so cliffs do not stretch. The d
 * `check-walk-flow` passes.
 * `check-panel` covers all 23 hotspots in FR and EN, on phone and desktop.
 * Terrain screenshots: `docs/screens/terrain-*.png`.
+
+### Lakes, place label and open-air fog (follow-up)
+- **Lakes were invisible:** they reused the stream shader, whose edge fade is driven by the ribbon's u coordinate
+  (0..1 across a stream). Lake UVs are world-scale, so the fade was 0 everywhere. Still water is now flagged by its
+  flow attribute (< 0.05) and drawn opaque-ish with sky reflections and slow ripples.
+- **Lake level:** the lowest shore point sat ~8 m under the measured water surface at the LAMCO pit lake (shore
+  outliers). The DEM over water is the water surface, so the level is now the lower quartile of heights sampled
+  inside the outline, − 0.3 m (pit lake: ≈ 852.8 m; interior median 853.4 m).
+- **Place label** follows the mapped surface under the walker or within 15 m (lakeshore, former mine / LAMCO,
+  rock, sand, wetland, fields, enclave) before the habitat name (it said "stream bank" next to the pit lake).
+- **Fog:** open mapped ground (water, mines, rock, sand, fields) uses open-air fog instead of the forest-creek fog
+  that turned the open pit into a white wall.

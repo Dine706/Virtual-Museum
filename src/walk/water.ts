@@ -21,24 +21,26 @@ export class Water {
         uniform float uTime; uniform vec3 uSky; uniform vec3 uSunView; uniform vec3 uSunColor; uniform vec3 uFogColor; uniform float uFogDensity; uniform float uHaze;
         varying vec2 vUv; varying vec3 vW; varying vec3 vWalkView; varying float vFlow;
         void main() {
-          vec2 q = vec2(vUv.x * 2.0, vUv.y - uTime * 0.9 * vFlow);
+          float lake = step(vFlow, 0.05); // still water (lakes, flooded pits) vs stream ribbons
+          vec2 q = mix(vec2(vUv.x * 2.0, vUv.y - uTime * 0.9 * vFlow), vUv + vec2(uTime * 0.015, uTime * 0.01), lake);
           float n1 = vnoise(q * vec2(3.0, 1.6), 3), n2 = vnoise(q * vec2(7.0, 4.0) + 3.1, 4);
-          vec3 nV = normalize(vec3(n1 * 0.25 + n2 * 0.12, 1.0, n2 * 0.2 - n1 * 0.1));
+          vec3 nV = normalize(vec3((n1 * 0.25 + n2 * 0.12) * (1.0 - lake * 0.75), 1.0, (n2 * 0.2 - n1 * 0.1) * (1.0 - lake * 0.75)));
           vec3 V = normalize(-vWalkView);
           vec3 Nv = normalize((viewMatrix * vec4(nV, 0.0)).xyz);
           float fres = pow(1.0 - max(dot(Nv, V), 0.0), 3.0);
           vec3 deep = vec3(0.035, 0.05, 0.03);
           // reflections of the forest more than the sky: streams run under the canopy
-          vec3 refl = mix(uSky * 0.75, vec3(0.08, 0.13, 0.06), 0.55);
+          // (open lakes mirror the sky)
+          vec3 refl = mix(uSky * 0.75, vec3(0.08, 0.13, 0.06), 0.55 - lake * 0.4);
           vec3 col = mix(deep, refl, 0.15 + fres * 0.6);
           vec3 R = reflect(-V, Nv);
           col += uSunColor * pow(max(dot(R, uSunView), 0.0), 120.0) * 2.0;
           // white water where the bed is steep
           col = mix(col, vec3(0.7), smoothstep(0.7, 0.98, n2 * 0.5 + 0.5) * clamp(vFlow - 1.0, 0.0, 1.0) * 0.35);
-          float edge = smoothstep(0.0, 0.18, vUv.x) * smoothstep(1.0, 0.82, vUv.x);
+          float edge = mix(smoothstep(0.0, 0.18, vUv.x) * smoothstep(1.0, 0.82, vUv.x), 1.0, lake);
           float d = length(vWalkView);
           col = mix(col, uFogColor, 1.0 - exp(-d * (uFogDensity + uHaze)));
-          gl_FragColor = vec4(col, (0.42 + fres * 0.4) * edge);
+          gl_FragColor = vec4(col, mix(0.42 + fres * 0.4, 0.86 + fres * 0.14, lake) * edge);
           #include <tonemapping_fragment>
           #include <colorspace_fragment>
         }`,
@@ -91,19 +93,16 @@ export class Water {
     for (const s of this.data.streamsNear(eye.x, eye.z, radius)) ribbon(s.p, 0.6 + Math.min(1, Math.sqrt(s.a) / 4) * 3.4);
     // … and the rivers and streams mapped in OpenStreetMap (real courses and widths)
     for (const rv of this.data.riversNear(eye.x, eye.z, radius)) ribbon(rv.p, Math.max(0.6, Math.min(4, rv.w / 2)));
-    // Lakes, reservoirs and flooded pits (OSM): flat still water just below the lowest shore point of the DEM
+    // Lakes, reservoirs and flooded pits (OSM): flat still water at the surface the DEM measured inside the outline
     for (const lk of this.data.lakesNear(eye.x, eye.z, radius + 400)) {
       const contour: THREE.Vector2[] = [];
-      let level = Infinity;
-      for (let k = 0; k < lk.p.length; k += 2) {
-        contour.push(new THREE.Vector2(lk.p[k], lk.p[k + 1]));
-        level = Math.min(level, this.data.baseHeight(lk.p[k], lk.p[k + 1]));
-      }
+      for (let k = 0; k < lk.p.length; k += 2) contour.push(new THREE.Vector2(lk.p[k], lk.p[k + 1]));
       if (contour.length > 3 && contour[0].distanceTo(contour[contour.length - 1]) < 0.01) contour.pop();
       if (contour.length < 3) continue;
+      const level = this.lakeLevel(lk.p);
       const tris = THREE.ShapeUtils.triangulateShape(contour, []);
       const b = pos.length / 3;
-      for (const v of contour) { pos.push(v.x, level - 0.35, v.y); uv.push(v.x / 12, v.y / 12); flow.push(0.04); }
+      for (const v of contour) { pos.push(v.x, level, v.y); uv.push(v.x / 12, v.y / 12); flow.push(0.04); }
       for (const t of tris) idx.push(b + t[0], b + t[2], b + t[1]);
     }
     const g = new THREE.BufferGeometry();
@@ -115,4 +114,25 @@ export class Water {
     this.mesh.geometry = g;
     return true;
   }
+
+  /** Water level of a lake outline: the DEM over water is the water surface, so take the lower quartile of the
+   *  heights sampled inside it (robust to shore cells and outliers), less a little so the shore stays dry. */
+  private lakeLevel(p: ArrayLike<number>): number {
+    let x0 = Infinity, x1 = -Infinity, z0 = Infinity, z1 = -Infinity;
+    for (let k = 0; k < p.length; k += 2) { x0 = Math.min(x0, p[k]); x1 = Math.max(x1, p[k]); z0 = Math.min(z0, p[k + 1]); z1 = Math.max(z1, p[k + 1]); }
+    const step = Math.max(4, Math.max(x1 - x0, z1 - z0) / 40);
+    const hs: number[] = [];
+    for (let x = x0 + step / 2; x < x1; x += step) for (let z = z0 + step / 2; z < z1; z += step) if (inside(p, x, z)) hs.push(this.data.baseHeight(x, z));
+    if (!hs.length) { let m = Infinity; for (let k = 0; k < p.length; k += 2) m = Math.min(m, this.data.baseHeight(p[k], p[k + 1])); return m - 0.35; }
+    hs.sort((a, b) => a - b);
+    return hs[Math.floor((hs.length - 1) * 0.25)] - 0.3;
+  }
+}
+
+function inside(p: ArrayLike<number>, x: number, z: number): boolean {
+  let c = false;
+  for (let i = 0, j = p.length - 2; i < p.length; j = i, i += 2) {
+    if ((p[i + 1] > z) !== (p[j + 1] > z) && x < ((p[j] - p[i]) * (z - p[i + 1])) / (p[j + 1] - p[i + 1]) + p[i]) c = !c;
+  }
+  return c;
 }

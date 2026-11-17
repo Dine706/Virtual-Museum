@@ -8,7 +8,7 @@ import { t, fmtMeters } from '../i18n';
 import type { Content } from '../data/content';
 import type { Heightfield } from '../scene/heightfield';
 import type { Tier } from '../scene/tier';
-import { WalkData } from './data';
+import { AREA, WalkData } from './data';
 import { WalkEnv, WALK_TIMES, shared, walkMaterial, type WalkTime } from './env';
 import { Ground } from './ground';
 import { Forest } from './forest';
@@ -183,6 +183,7 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
   let windowLoading = false;
   let relocating = false;
   let habitat: HabitatId = 'lowlandForest';
+  let air: HabitatId = habitat; // habitat that sets fog and canopy light (open mapped ground clears the air)
   const fogTint = new THREE.Color();
   let fpsT = 0, fpsN = 0, fpsChecks = 0;
 
@@ -213,12 +214,27 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
     forest.setImpostorLight(env.time === 'mist' ? 0.62 : env.time === 'noon' ? 0.95 : 0.85);
   }
 
+  // Mapped surface under the walker or within ~15 m (a lake shore counts as the lake), for the place label.
+  function placeArea(): string | null {
+    const names: Record<number, string> = { [AREA.water]: 'water', [AREA.mine]: 'mine', [AREA.enclave]: 'enclave', [AREA.rock]: 'rock', [AREA.sand]: 'sand', [AREA.wetland]: 'wetland', [AREA.field]: 'field' };
+    let best = data.areaAt(pos.x, pos.z);
+    for (let i = 0; i < 8 && best !== AREA.water; i++) {
+      const a = (i / 8) * Math.PI * 2, c = data.areaAt(pos.x + Math.cos(a) * 15, pos.z + Math.sin(a) * 15);
+      if (c === AREA.water || (!best && c)) best = c;
+    }
+    const n = names[best];
+    if (n === 'mine' && pos.z > 8000) return 'lamco'; // the Liberian side, south of the massif (as in cards.ts)
+    return n ?? null;
+  }
+
   function updatePlace() {
     const b = biomeAt(data, pos.x, pos.z);
     habitat = habitatOf(b);
     const zone = data.zoneAt(pos.x, pos.z);
     const np = data.nearestPlace(pos.x, pos.z);
-    hud.setPlace(t(`walk.habitat.${habitat}`), fmtMeters(Math.round(pos.y)), !!zone, np && np.d < 1500 ? np.place.name : undefined);
+    const area = placeArea();
+    air = area && area !== 'wetland' && area !== 'enclave' ? 'savanna' : habitat;
+    hud.setPlace(t(area ? `walk.place.${area}` : `walk.habitat.${habitat}`), fmtMeters(Math.round(pos.y)), !!zone, np && np.d < 1500 ? np.place.name : undefined);
     ctx.onPosition?.(pos.x, pos.z);
   }
   updatePlace();
@@ -287,10 +303,10 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
     village.update(eye, dt, shared.uTime.value);
     placeT += dt;
     if (placeT > 0.5) { placeT = 0; updatePlace(); }
-    const fog = fogFor(habitat, pos.y, fogTint);
+    const fog = fogFor(air, pos.y, fogTint);
     env.update(cam, eye, fog, fogTint, dt);
     // Under a closed canopy the sun barely reaches the floor: lift the sky fill a little (eyes adapt).
-    const closed = habitat === 'lowlandForest' || habitat === 'cloudForest' || habitat === 'gallery' ? 1 : 0;
+    const closed = air === 'lowlandForest' || air === 'cloudForest' || air === 'gallery' ? 1 : 0;
     canopyFill += (closed - canopyFill) * (1 - Math.exp(-dt * 0.7));
     env.hemi.intensity = env.preset.hemi * (1 + canopyFill * 0.7) * (fx ? 0.85 : 1);
     renderer.toneMappingExposure = env.exposure * (1 + canopyFill * 0.38);
@@ -447,6 +463,7 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
       get pos() { return pos.clone(); },
       get stats() { return forest.stats; },
       get habitat() { return habitat; },
+      water, data,
       look(yaw: number, pitch: number) { controls.yaw = yaw; controls.pitch = pitch; },
       teleport: (x: number, z: number) => relocate(x, z),
       setTime(tm: WalkTime) { env.setTime(tm); applyTime(); },
