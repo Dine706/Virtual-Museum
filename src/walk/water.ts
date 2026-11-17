@@ -27,16 +27,18 @@ export class Water {
           vec3 V = normalize(-vWalkView);
           vec3 Nv = normalize((viewMatrix * vec4(nV, 0.0)).xyz);
           float fres = pow(1.0 - max(dot(Nv, V), 0.0), 3.0);
-          vec3 deep = vec3(0.05, 0.07, 0.04);
-          vec3 col = mix(deep, uSky * 0.9, 0.25 + fres * 0.65);
+          vec3 deep = vec3(0.035, 0.05, 0.03);
+          // reflections of the forest more than the sky: streams run under the canopy
+          vec3 refl = mix(uSky * 0.75, vec3(0.08, 0.13, 0.06), 0.55);
+          vec3 col = mix(deep, refl, 0.15 + fres * 0.6);
           vec3 R = reflect(-V, Nv);
           col += uSunColor * pow(max(dot(R, uSunView), 0.0), 120.0) * 2.0;
           // white water where the bed is steep
-          col = mix(col, vec3(0.85), smoothstep(0.55, 0.95, n2 * 0.5 + 0.5) * clamp(vFlow - 0.8, 0.0, 1.0) * 0.5);
+          col = mix(col, vec3(0.7), smoothstep(0.7, 0.98, n2 * 0.5 + 0.5) * clamp(vFlow - 1.0, 0.0, 1.0) * 0.35);
           float edge = smoothstep(0.0, 0.18, vUv.x) * smoothstep(1.0, 0.82, vUv.x);
           float d = length(vWalkView);
           col = mix(col, uFogColor, 1.0 - exp(-d * (uFogDensity + uHaze)));
-          gl_FragColor = vec4(col, (0.55 + fres * 0.4) * edge);
+          gl_FragColor = vec4(col, (0.42 + fres * 0.4) * edge);
           #include <tonemapping_fragment>
           #include <colorspace_fragment>
         }`,
@@ -52,7 +54,7 @@ export class Water {
     const pos: number[] = [], uv: number[] = [], flow: number[] = [], idx: number[] = [];
     for (const s of this.data.streamsNear(eye.x, eye.z, radius)) {
       const w = 0.6 + Math.min(1, Math.sqrt(s.a) / 4) * 3.4;
-      const half = w * 1.6;
+      const half = w * 1.2;
       const depth = bedDepth(w);
       let len = 0;
       let started = false;
@@ -74,7 +76,7 @@ export class Water {
         const dl = Math.hypot(dx, dz) || 1; dx /= dl; dz /= dl;
         if (i > 0) len += Math.hypot(x - pts[i - 1][0], z - pts[i - 1][1]);
         // water level: smooth DEM bed + 45 % of the bed depth; never flows uphill
-        let y = this.data.baseHeight(x, z) - depth * 0.55;
+        let y = this.data.baseHeight(x, z) - depth * 0.78;
         y = Math.min(y, prevY + 0.05);
         const slope = Number.isFinite(prevY) ? Math.max(0, prevY - y) / 2 : 0;
         prevY = y;

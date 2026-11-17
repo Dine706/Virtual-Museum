@@ -234,6 +234,14 @@ function buttresses(b: Builder, r: () => number, trunkR: number, n: number, h: n
   }
 }
 
+/** Trunk tube closed at the top (palms and tree ferns are seen from above at eye level). */
+function capped(b: Builder, path: THREE.Vector3[], radii: number[], sides: number) {
+  const top = path[path.length - 1], prev = path[path.length - 2];
+  const dir = top.clone().sub(prev).normalize();
+  const r = radii[radii.length - 1];
+  b.tube([...path, top.clone().addScaledVector(dir, r * 0.6), top.clone().addScaledVector(dir, r * 0.9)], [...radii, r * 0.7, 0.001], sides);
+}
+
 function palmCrown(f: Builder, r: () => number, top: THREE.Vector3, n: number, len: number, width: number, rise: number, droop: number) {
   for (let k = 0; k < n; k++) {
     const az = k * 2.39996 + r() * 0.3; // golden-angle spiral
@@ -301,25 +309,25 @@ export function buildPlant(type: PlantType, seed: number): PlantGeo {
       break;
     }
     case 'treefern': {
-      trunkR = 0.035;
+      trunkR = 0.03;
       const trunk = limb(new V(0, 0, 0), new V((r() - 0.5) * 0.2, 1, (r() - 0.5) * 0.2), 0.8, 8, 0.12, r);
-      b.tube(trunk, taper(trunk.length, trunkR * 1.25, trunkR * 0.9), 7);
+      capped(b, trunk, taper(trunk.length, trunkR * 1.25, trunkR * 0.9), 7);
       palmCrown(fr, r, trunk[trunk.length - 1], 15, 0.5, 0.16, 0.9, 0.11);
       crown = 0.42; leafKind = null; frondKind = 'fern'; barkKind = 'fern';
       break;
     }
     case 'oilpalm': {
-      trunkR = 0.045;
+      trunkR = 0.032;
       const trunk = limb(new V(0, 0, 0), new V((r() - 0.5) * 0.15, 1, (r() - 0.5) * 0.15), 0.6, 6, 0.05, r);
-      b.tube(trunk, taper(trunk.length, trunkR * 1.2, trunkR), 9);
+      capped(b, trunk, taper(trunk.length, trunkR * 1.2, trunkR), 9);
       palmCrown(fr, r, trunk[trunk.length - 1], 30, 0.52, 0.11, 1.1, 0.07);
       crown = 0.45; leafKind = null; frondKind = 'oilpalm'; barkKind = 'palm';
       break;
     }
     case 'raphia': {
-      trunkR = 0.06;
+      trunkR = 0.03;
       const trunk = limb(new V(0, 0, 0), new V(0, 1, 0), 0.22, 3, 0.05, r);
-      b.tube(trunk, taper(trunk.length, trunkR * 1.2, trunkR), 9);
+      capped(b, trunk, taper(trunk.length, trunkR * 1.2, trunkR), 9);
       palmCrown(fr, r, trunk[trunk.length - 1], 18, 0.9, 0.13, 1.35, 0.045);
       crown = 0.55; leafKind = null; frondKind = 'raphia'; barkKind = 'palm';
       break;

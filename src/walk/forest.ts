@@ -447,7 +447,7 @@ export class Forest {
   /** Collision: push the walker out of trunks. */
   collide(p: THREE.Vector3, radius: number) {
     for (const t of this.nearTrees) {
-      const tr = (t.type === 'raphia' || t.type === 'oilpalm' ? 0.05 : t.type === 'protea' || t.type === 'regrowth' ? 0.01 : 0.03) * t.h * t.crown + radius;
+      const tr = (t.type === 'raphia' || t.type === 'oilpalm' ? 0.035 : t.type === 'protea' || t.type === 'regrowth' ? 0.01 : 0.03) * t.h * t.crown + radius;
       const dx = p.x - t.x, dz = p.z - t.z;
       const d = Math.hypot(dx, dz);
       if (d < tr && d > 1e-4) { p.x = t.x + dx / d * tr; p.z = t.z + dz / d * tr; }

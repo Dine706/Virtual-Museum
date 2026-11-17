@@ -211,7 +211,7 @@ export class WalkData {
     const a = this.attrAt(x, z);
     const s = this.streamAt(x, z);
     const k = bedK(s.dist, s.width);
-    return this.baseHeight(x, z) + groundDetail(x, z, roughness(a.rock)) * (1 - 0.85 * k) - bedDepth(s.width) * k;
+    return this.baseHeight(x, z) + groundDetail(x, z, roughness(a.rock)) * (1 - 0.95 * k) - bedDepth(s.width) * k;
   }
 
   // ---------------------------------------------------------------- streams
@@ -363,6 +363,6 @@ float groundHeight(vec2 p) {
   vec4 a = attrAt(p);
   vec2 s = streamAt(p);
   float k = bedK(s.x, s.y);
-  return baseHeight(p) + groundDetail(p, 0.55 + a.b * 1.4) * (1.0 - 0.85 * k) - (0.35 + s.y * 0.32) * k;
+  return baseHeight(p) + groundDetail(p, 0.55 + a.b * 1.4) * (1.0 - 0.95 * k) - (0.35 + s.y * 0.32) * k;
 }
 `;

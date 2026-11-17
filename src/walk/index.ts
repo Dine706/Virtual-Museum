@@ -304,6 +304,7 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
     fauna.populate(eye);
     lastFauna.copy(eye);
     relocating = false;
+    updatePlace();
     hud.veilOff();
   }
 
