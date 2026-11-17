@@ -182,3 +182,8 @@ Running log of decisions, measured budgets and issues (CLAUDE.md §15).
 * **Favicon:** an inline SVG mountain glyph (no logo). This removes the `/favicon.ico` 404, the only console error Lighthouse found.
 * Dev tooling: `scripts/serve-dist.mjs` (gzip static server for `dist/`, used for Lighthouse); `sharp` dev dependency.
 * All checks pass: perf, flyover, panel, picking, overlays. The flyover check now waits for the lazily loaded panel on deep links.
+
+### Automatic deployments paused (17 Nov 2026, Dean's request)
+* Dean asked that nothing change on Vercel until he approves the results. `vercel.json` now has `"ignoreCommand": "… exit 0"`. Vercel's *Ignored Build Step* exits 0, so **every push is skipped**: it shows as *Canceled* in the Vercel dashboard and the live site stays exactly as it is.
+* The live site is the M8 app (commit `b3937b3`). The three pushes after it (setup guide, stage-1 massif and zones) only added docs and data, and no web-build file has changed since.
+* **To deploy again after approval:** remove the `ignoreCommand` line and push. That commit builds normally, because Vercel reads `vercel.json` from the commit being deployed.
