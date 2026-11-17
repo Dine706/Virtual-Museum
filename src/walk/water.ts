@@ -52,8 +52,7 @@ export class Water {
     if (!force && this.last.distanceTo(eye) < 120) return false;
     this.last.copy(eye);
     const pos: number[] = [], uv: number[] = [], flow: number[] = [], idx: number[] = [];
-    for (const s of this.data.streamsNear(eye.x, eye.z, radius)) {
-      const w = 0.6 + Math.min(1, Math.sqrt(s.a) / 4) * 3.4;
+    const ribbon = (p: ArrayLike<number>, w: number) => {
       const half = w * 1.2;
       const depth = bedDepth(w);
       let len = 0;
@@ -61,21 +60,20 @@ export class Water {
       let prevY = Infinity;
       const pts: [number, number][] = [];
       // resample every ~2 m
-      for (let k = 0; k + 3 < s.p.length; k += 2) {
-        const ax = s.p[k], az = s.p[k + 1], bx = s.p[k + 2], bz = s.p[k + 3];
+      for (let k = 0; k + 3 < p.length; k += 2) {
+        const ax = p[k], az = p[k + 1], bx = p[k + 2], bz = p[k + 3];
         const L = Math.hypot(bx - ax, bz - az), n = Math.max(1, Math.ceil(L / 2));
         for (let q = 0; q < n; q++) pts.push([ax + (bx - ax) * q / n, az + (bz - az) * q / n]);
       }
-      pts.push([s.p[s.p.length - 2], s.p[s.p.length - 1]]);
+      pts.push([p[p.length - 2], p[p.length - 1]]);
       for (let i = 0; i < pts.length; i++) {
         const [x, z] = pts[i];
-        const inside = Math.hypot(x - eye.x, z - eye.z) < radius;
-        if (!inside) { started = false; continue; }
+        if (Math.hypot(x - eye.x, z - eye.z) > radius) { started = false; continue; }
         const [nx, nz] = pts[Math.min(pts.length - 1, i + 1)], [px, pz] = pts[Math.max(0, i - 1)];
         let dx = nx - px, dz = nz - pz;
         const dl = Math.hypot(dx, dz) || 1; dx /= dl; dz /= dl;
         if (i > 0) len += Math.hypot(x - pts[i - 1][0], z - pts[i - 1][1]);
-        // water level: smooth DEM bed + 45 % of the bed depth; never flows uphill
+        // water level: smooth DEM bed + a quarter of the bed depth; never flows uphill
         let y = this.data.baseHeight(x, z) - depth * 0.78;
         y = Math.min(y, prevY + 0.05);
         const slope = Number.isFinite(prevY) ? Math.max(0, prevY - y) / 2 : 0;
@@ -88,6 +86,25 @@ export class Water {
         if (started) idx.push(b - 2, b, b - 1, b - 1, b, b + 1);
         started = true;
       }
+    };
+    // DEM-derived streams (approximate) …
+    for (const s of this.data.streamsNear(eye.x, eye.z, radius)) ribbon(s.p, 0.6 + Math.min(1, Math.sqrt(s.a) / 4) * 3.4);
+    // … and the rivers and streams mapped in OpenStreetMap (real courses and widths)
+    for (const rv of this.data.riversNear(eye.x, eye.z, radius)) ribbon(rv.p, Math.max(0.6, Math.min(4, rv.w / 2)));
+    // Lakes, reservoirs and flooded pits (OSM): flat still water just below the lowest shore point of the DEM
+    for (const lk of this.data.lakesNear(eye.x, eye.z, radius + 400)) {
+      const contour: THREE.Vector2[] = [];
+      let level = Infinity;
+      for (let k = 0; k < lk.p.length; k += 2) {
+        contour.push(new THREE.Vector2(lk.p[k], lk.p[k + 1]));
+        level = Math.min(level, this.data.baseHeight(lk.p[k], lk.p[k + 1]));
+      }
+      if (contour.length > 3 && contour[0].distanceTo(contour[contour.length - 1]) < 0.01) contour.pop();
+      if (contour.length < 3) continue;
+      const tris = THREE.ShapeUtils.triangulateShape(contour, []);
+      const b = pos.length / 3;
+      for (const v of contour) { pos.push(v.x, level - 0.35, v.y); uv.push(v.x / 12, v.y / 12); flow.push(0.04); }
+      for (const t of tris) idx.push(b + t[0], b + t[2], b + t[1]);
     }
     const g = new THREE.BufferGeometry();
     g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));

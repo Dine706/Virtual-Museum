@@ -80,5 +80,65 @@
   ],
   "license": "CC0 1.0",
   "url": "https://polyhaven.com/a/palm_tree_bark"
+ },
+ {
+  "role": "mud",
+  "id": "brown_mud_02",
+  "name": "Brown Mud 02",
+  "authors": [
+   "Rob Tuytel"
+  ],
+  "license": "CC0 1.0",
+  "url": "https://polyhaven.com/a/brown_mud_02"
+ },
+ {
+  "role": "road",
+  "id": "red_dirt_mud_01",
+  "name": "Red Dirt Mud 01",
+  "authors": [
+   "Rob Tuytel"
+  ],
+  "license": "CC0 1.0",
+  "url": "https://polyhaven.com/a/red_dirt_mud_01"
+ },
+ {
+  "role": "mine",
+  "id": "red_mud_stones",
+  "name": "Red Mud Stones",
+  "authors": [
+   "Rob Tuytel"
+  ],
+  "license": "CC0 1.0",
+  "url": "https://polyhaven.com/a/red_mud_stones"
+ },
+ {
+  "role": "highgrass",
+  "id": "aerial_grass_rock",
+  "name": "Aerial Grass Rock",
+  "authors": [
+   "Rob Tuytel"
+  ],
+  "license": "CC0 1.0",
+  "url": "https://polyhaven.com/a/aerial_grass_rock"
+ },
+ {
+  "role": "sand",
+  "id": "coast_sand_rocks_02",
+  "name": "Coast Sand Rocks 02",
+  "authors": [
+   "Rob Tuytel"
+  ],
+  "license": "CC0 1.0",
+  "url": "https://polyhaven.com/a/coast_sand_rocks_02"
+ },
+ {
+  "role": "field",
+  "id": "farm_soil",
+  "name": "Farm Soil",
+  "authors": [
+   "Amal Kumar"
+  ],
+  "license": "CC0 1.0",
+  "url": "https://polyhaven.com/a/farm_soil"
  }
 ]

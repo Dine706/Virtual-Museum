@@ -1,4 +1,4 @@
-// Dev-only lab (walk-lab.html, not part of the build): every plant type next to its impostor, and the
+// Dev-only lab (dev/walk-lab.html, not part of the build): every plant type next to its impostor, and the
 // ground-cover types, on a flat lit ground — for checking geometry, textures and lighting quickly.
 import * as THREE from 'three';
 import { buildPlant, buildCover, PLANT_TYPES, type CoverType } from './plants';

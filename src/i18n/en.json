@@ -152,5 +152,21 @@
   "walk.house.rect": "House with a metal roof",
   "walk.house.roundText": "The region's traditional house is round, wattle-and-daub, under a conical thatched roof; it now predominates only in remote villages.",
   "walk.house.rectText": "Newer houses are mostly rectangular, wattle-and-daub or block, roofed with corrugated metal, often with a porch.",
-  "walk.house.note": "Position and size: a building mapped in OpenStreetMap. Shape and materials: typical of the region, not surveyed house by house."
+  "walk.house.note": "Position and size: a building mapped in OpenStreetMap. Shape and materials: typical of the region, not surveyed house by house.",
+  "walk.area.lamco": "Former LAMCO iron-ore mine (Liberia)",
+  "walk.area.enclave": "Guinean mining enclave (approximate outline)",
+  "walk.area.industrial": "Industrial site or brownfield",
+  "walk.area.industrialText": "Ground mapped as industrial, quarry or brownfield in OpenStreetMap.",
+  "walk.area.mineNote": "Outline: OpenStreetMap. The benches and bare ground are a reconstruction from this outline and the terrain, not a survey.",
+  "walk.area.water": "Water body",
+  "walk.area.field": "Field",
+  "walk.area.fieldText": "At Bossou, upland rice and cassava are the staples; maize, banana, pineapple and fruit are also grown.",
+  "walk.area.rock": "Rock and bare ground",
+  "walk.area.rockText": "Here the land-cover map or OpenStreetMap shows rock or bare ground without vegetation.",
+  "walk.area.sand": "Sand",
+  "walk.area.wetland": "Wetland",
+  "walk.area.wetlandText": "Waterlogged ground covered with tall grasses and marsh plants.",
+  "walk.area.osmNote": "Outline: OpenStreetMap; the look of the ground is a reconstruction.",
+  "walk.area.wcNote": "Land-cover class: ESA WorldCover (10 m); the look of the ground is a reconstruction.",
+  "walk.area.enclaveNote": "Approximate outline: OpenStreetMap. The ground shows the vegetation measured here (land-cover and canopy-height maps); no pit is invented."
 }

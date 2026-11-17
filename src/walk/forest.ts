@@ -10,7 +10,7 @@ import type { WalkData, Crown, ZoneInfo } from './data';
 import { biomeAt, type Biome } from './biome';
 import { buildPlant, PLANT_TYPES, type PlantGeo, type PlantType, type LeafKind, type BarkKind, type FrondKind } from './plants';
 import { LEAVES, leafCluster, bark, frond, mossStrands, singleLeaf } from './textures';
-import { trailK } from './data';
+import { trailK, AREA } from './data';
 import { walkMaterial, shared } from './env';
 import type { PhotoSet } from './photo';
 import type { ModelSet } from './models';
@@ -108,7 +108,7 @@ export class Forest {
         const geo = buildPlant(type, v + 1);
         const kind: Kind = { geo, imp: null as unknown as THREE.InstancedMesh, impW: 0.5, capNear: 0, capFar: 0 };
         this.kinds.set(`${type}:${v}`, kind);
-        this.makeImpostor(renderer, type, v, kind);
+        this.makeImpostor(renderer, kind);
       }
     }
   }
@@ -160,7 +160,7 @@ export class Forest {
   }
 
   /** Render the plant from two sides into one texture; distant instances are two crossed quads. */
-  private makeImpostor(renderer: THREE.WebGLRenderer, type: PlantType, v: number, kind: Kind) {
+  private makeImpostor(renderer: THREE.WebGLRenderer, kind: Kind) {
     const g = kind.geo;
     const box = new THREE.Box3();
     for (const geo of [g.trunk, g.leaves, g.fronds]) if (geo) { geo.computeBoundingBox(); box.union(geo.boundingBox!); }
@@ -226,7 +226,6 @@ export class Forest {
     kind.imp.receiveShadow = false;
     kind.capFar = 1;
     holder.clear();
-    void type; void v;
   }
 
   /** Scanned bark for trunks (high-quality look). Impostors keep the baked look. */
@@ -317,6 +316,13 @@ export class Forest {
     const add = (type: PlantType, x: number, z: number, h: number, crownR: number, seed: number, measured: boolean) => {
       const s = this.data.streamAt(x, z);
       if (s.dist < s.width * 1.3 && type !== 'raphia' && type !== 'treefern') return;
+      // terrain type: no trees in water or on sand, sparse regrowth on old mine ground, crops only in fields,
+      // only low growth on bare rock, none in open water of the land-cover map
+      const ac = this.data.areaAt(x, z);
+      if (ac === AREA.water || ac === AREA.sand || this.data.attrAt(x, z).cls === 80) return;
+      if (ac === AREA.mine && this.data.attrAt(x, z).canopy < 6 && (h > 5 || hash2(Math.floor(x * 3), Math.floor(z * 3), 71) > 0.3)) return;
+      if (ac === AREA.field && type !== 'oilpalm' && h > 3) return;
+      if (ac === AREA.rock && h > 6) return;
       // keep roads, paths, trails and houses clear (OpenStreetMap + forest trails)
       if (this.data.pathAt(x, z).dist < 0.6 + (h > 8 ? 1 : 0)) return;
       if (this.data.buildingAt(x, z, 1.5)) return;

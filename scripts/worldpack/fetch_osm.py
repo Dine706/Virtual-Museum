@@ -92,7 +92,7 @@ def main():
                     ways[el['id']] = el
             if k % 8 == 0:
                 print(f'  tiles {k}/{total}: {len(ways)} ways')
-    buildings, roads, areas = [], [], []
+    buildings, roads, areas, rivers = [], [], [], []
     for wy in ways.values():
         t = wy.get('tags', {})
         pts = [nodes[n] for n in wy.get('nodes', []) if n in nodes]
@@ -110,10 +110,20 @@ def main():
             buildings.append({'x': round(cx, 1), 'z': round(cz, 1), 'w': round(w, 1), 'd': round(dd, 1), 'a': round(a, 3),
                               'kind': t.get('building', 'yes'), 'levels': t.get('building:levels'),
                               'roof': t.get('roof:material') or t.get('roof:shape')})
+        elif 'waterway' in t and t['waterway'] in ('river', 'stream', 'canal', 'drain'):
+            w = t.get('width')
+            try:
+                w = float(str(w).split()[0]) if w else None
+            except ValueError:
+                w = None
+            rivers.append({'k': t['waterway'], 'w': w or (12.0 if t['waterway'] == 'river' else 3.0), 'name': t.get('name'), 'p': [c for xy in p for c in xy]})
         elif 'highway' in t:
             roads.append({'k': t['highway'], 's': t.get('surface'), 'p': [c for xy in p for c in xy]})
-        elif 'landuse' in t or t.get('natural') in ('water', 'bare_rock', 'scrub', 'wood', 'grassland', 'wetland'):
-            areas.append({'k': t.get('landuse') or t.get('natural'), 'p': [c for xy in p for c in xy]})
+        elif 'landuse' in t or t.get('natural') in ('water', 'bare_rock', 'scrub', 'wood', 'grassland', 'wetland', 'cliff', 'sand', 'scree'):
+            k = t.get('landuse') or t.get('natural')
+            if k == 'reservoir':
+                k = 'water'
+            areas.append({'k': k, 'name': t.get('name'), 'p': [c for xy in p for c in xy]})
     places = []
     for el in place_nodes.values():
         x, z = xz(el['lon'], el['lat'])
@@ -122,7 +132,7 @@ def main():
     TILE, HALF = 3000.0, 15000.0
     tiles = {}
     def put(key, kind, item):
-        tiles.setdefault(key, {'buildings': [], 'roads': [], 'areas': []})[kind].append(item)
+        tiles.setdefault(key, {'buildings': [], 'roads': [], 'areas': [], 'rivers': []})[kind].append(item)
     def keys_for(xs, zs):
         i0, i1 = int((min(xs) + HALF) // TILE), int((max(xs) + HALF) // TILE)
         j0, j1 = int((min(zs) + HALF) // TILE), int((max(zs) + HALF) // TILE)
@@ -130,7 +140,7 @@ def main():
     for b in buildings:
         for k in keys_for([b['x']], [b['z']]):
             put(k, 'buildings', b)
-    for kind, lst in (('roads', roads), ('areas', areas)):
+    for kind, lst in (('roads', roads), ('areas', areas), ('rivers', rivers)):
         for it in lst:
             for k in keys_for(it['p'][0::2], it['p'][1::2]):
                 put(k, kind, it)
@@ -145,7 +155,7 @@ def main():
     if OUT.exists():
         OUT.unlink()
     size = sum(f.stat().st_size for f in tdir.glob('*.json'))
-    print(f'{len(buildings)} buildings, {len(roads)} roads/paths, {len(areas)} areas, {len(places)} places → '
+    print(f'{len(buildings)} buildings, {len(roads)} roads/paths, {len(rivers)} rivers/streams, {len(areas)} areas, {len(places)} places → '
           f'{len(tiles)} tiles in {tdir.relative_to(ROOT)} ({size / 1e6:.2f} MB)')
 
 

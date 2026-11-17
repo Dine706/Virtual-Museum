@@ -26,6 +26,48 @@ export interface Attr { canopy: number; cls: number; rock: number; streamMask: n
 export interface Building { x: number; z: number; w: number; d: number; a: number; kind: string; levels: string | null }
 export interface Road { k: string; s?: string; p: number[] }
 export interface Place { name: string; kind: string; x: number; z: number }
+export interface River { k: string; w: number; name?: string | null; p: number[] }
+export interface Area { k: string; name?: string | null; p: number[] }
+
+/** Area classes rasterised from OpenStreetMap land use (2 m field around the walker). */
+/** `enclave` = the Guinean mining enclave ("Mine de Nimba" in OSM): exploration, not an open pit – the land keeps its
+ *  measured cover and only the card mentions the enclave. `mine` = quarries / brownfields (old LAMCO workings). */
+export const AREA = { none: 0, water: 1, mine: 2, field: 3, rock: 4, sand: 5, wetland: 6, enclave: 7 } as const;
+const AREA_CODE: Record<string, number> = {
+  water: AREA.water, quarry: AREA.mine, brownfield: AREA.mine, industrial: AREA.mine,
+  farmland: AREA.field, orchard: AREA.field, cliff: AREA.rock, bare_rock: AREA.rock, scree: AREA.rock, sand: AREA.sand, wetland: AREA.wetland,
+};
+
+function bboxHits(p: ArrayLike<number>, x0: number, z0: number, x1: number, z1: number) {
+  for (let k = 0; k < p.length; k += 2) if (p[k] >= x0 && p[k] <= x1 && p[k + 1] >= z0 && p[k + 1] <= z1) return true;
+  // polygon larger than the box: test the box centre against the polygon bbox
+  let a = Infinity, b = -Infinity, c = Infinity, d = -Infinity;
+  for (let k = 0; k < p.length; k += 2) { a = Math.min(a, p[k]); b = Math.max(b, p[k]); c = Math.min(c, p[k + 1]); d = Math.max(d, p[k + 1]); }
+  return a < x1 && b > x0 && c < z1 && d > z0;
+}
+
+/** Scan-line fill of a polygon (flat x,z array) into a size × size grid starting at (x0, z0) with cell `step`. */
+function fillPolygon(p: ArrayLike<number>, x0: number, z0: number, step: number, size: number, put: (k: number) => void) {
+  const n = p.length / 2;
+  if (n < 3) return;
+  let zmin = Infinity, zmax = -Infinity;
+  for (let k = 0; k < n; k++) { zmin = Math.min(zmin, p[k * 2 + 1]); zmax = Math.max(zmax, p[k * 2 + 1]); }
+  const r0 = Math.max(0, Math.ceil((zmin - z0) / step)), r1 = Math.min(size - 1, Math.floor((zmax - z0) / step));
+  const xs: number[] = [];
+  for (let r = r0; r <= r1; r++) {
+    const pz = z0 + r * step;
+    xs.length = 0;
+    for (let k = 0; k < n; k++) {
+      const ax = p[k * 2], az = p[k * 2 + 1], bx = p[((k + 1) % n) * 2], bz = p[((k + 1) % n) * 2 + 1];
+      if ((az <= pz && bz > pz) || (bz <= pz && az > pz)) xs.push(ax + (pz - az) / (bz - az) * (bx - ax));
+    }
+    xs.sort((a, b) => a - b);
+    for (let q = 0; q + 1 < xs.length; q += 2) {
+      const c0 = Math.max(0, Math.ceil((xs[q] - x0) / step)), c1 = Math.min(size - 1, Math.floor((xs[q + 1] - x0) / step));
+      for (let c = c0; c <= c1; c++) put(r * size + c);
+    }
+  }
+}
 
 /** Half-width (m) of the beaten surface for an OSM highway class. */
 export function roadHalfWidth(k: string): number {
@@ -78,8 +120,10 @@ export class WalkData {
   readonly pathTex: THREE.DataTexture;
   // OpenStreetMap (© OpenStreetMap contributors, ODbL): buildings / roads of the loaded 3 km tiles.
   places: Place[] = [];
-  private osmTiles = new Map<string, Promise<{ buildings: Building[]; roads: Road[] }>>();
-  private osmLoaded = new Map<string, { buildings: Building[]; roads: Road[] }>();
+  private osmTiles = new Map<string, Promise<{ buildings: Building[]; roads: Road[]; areas?: Area[]; rivers?: River[] }>>();
+  private osmLoaded = new Map<string, { buildings: Building[]; roads: Road[]; areas?: Area[]; rivers?: River[] }>();
+  readonly area = new Uint8Array(SWIN * SWIN);
+  readonly areaTex: THREE.DataTexture;
   private bGrid = new Map<string, Building[]>();
 
   constructor(readonly base: string) {
@@ -92,6 +136,10 @@ export class WalkData {
     this.uniforms.uHeightTex.value = this.heightTex;
     this.uniforms.uAttrTex.value = this.attrTex;
     this.uniforms.uStreamTex.value = this.streamTex;
+    this.areaTex = new THREE.DataTexture(this.area, SWIN, SWIN, THREE.RedFormat, THREE.UnsignedByteType);
+    this.areaTex.minFilter = this.areaTex.magFilter = THREE.NearestFilter;
+    this.areaTex.needsUpdate = true;
+    this.uniforms.uAreaTex.value = this.areaTex;
     this.pathTex = new THREE.DataTexture(this.path, SWIN, SWIN, THREE.RGFormat, THREE.UnsignedByteType);
     this.pathTex.minFilter = this.pathTex.magFilter = THREE.LinearFilter;
     this.path.fill(255);
@@ -245,18 +293,18 @@ export class WalkData {
 
   // ---------------------------------------------------------------- streams
 
-  /** Rasterise stream distances into the 2 m field around (x, z). */
+  /** Rasterise, into the 2 m fields around (x, z): distances to streams (DEM-derived lines and OpenStreetMap
+   *  rivers/streams; inside OSM lakes the distance is 0, so the bed is carved below the water) and the area
+   *  class (water, mine, field, rock, sand, wetland) from OSM land use. */
   updateStreams(x: number, z: number) {
     const x0 = Math.round((x - (SWIN / 2) * SSTEP) / SSTEP) * SSTEP;
     const z0 = Math.round((z - (SWIN / 2) * SSTEP) / SSTEP) * SSTEP;
     const ext = SWIN * SSTEP;
     const dist = new Float32Array(SWIN * SWIN).fill(SMAX);
     const width = new Float32Array(SWIN * SWIN);
-    for (const s of this.streams) {
-      if (s.maxX < x0 - SMAX || s.minX > x0 + ext + SMAX || s.maxZ < z0 - SMAX || s.minZ > z0 + ext + SMAX) continue;
-      const w = Math.min(1, Math.sqrt(s.a) / 4);
-      for (let k = 0; k + 3 < s.p.length; k += 2) {
-        const ax = s.p[k], az = s.p[k + 1], bx = s.p[k + 2], bz = s.p[k + 3];
+    const line = (p: ArrayLike<number>, w: number) => {
+      for (let k = 0; k + 3 < p.length; k += 2) {
+        const ax = p[k], az = p[k + 1], bx = p[k + 2], bz = p[k + 3];
         const c0 = Math.max(0, Math.floor((Math.min(ax, bx) - SMAX - x0) / SSTEP)), c1 = Math.min(SWIN - 1, Math.ceil((Math.max(ax, bx) + SMAX - x0) / SSTEP));
         const r0 = Math.max(0, Math.floor((Math.min(az, bz) - SMAX - z0) / SSTEP)), r1 = Math.min(SWIN - 1, Math.ceil((Math.max(az, bz) + SMAX - z0) / SSTEP));
         if (c0 > c1 || r0 > r1) continue;
@@ -273,6 +321,25 @@ export class WalkData {
           }
         }
       }
+    };
+    for (const s of this.streams) {
+      if (s.maxX < x0 - SMAX || s.minX > x0 + ext + SMAX || s.maxZ < z0 - SMAX || s.minZ > z0 + ext + SMAX) continue;
+      line(s.p, Math.min(1, Math.sqrt(s.a) / 4));
+    }
+    // OpenStreetMap rivers and streams (real courses; bed half-width from the mapped width)
+    for (const rv of this.osmRivers()) {
+      if (!bboxHits(rv.p, x0 - SMAX, z0 - SMAX, x0 + ext + SMAX, z0 + ext + SMAX)) continue;
+      line(rv.p, Math.min(1, Math.max(0, (Math.min(rv.w / 2, 4) - 0.6) / 3.4)));
+    }
+    // OSM area classes; lakes also become "on the stream" (dist 0, widest bed) so the ground is carved under the water
+    this.area.fill(0);
+    for (const a of this.osmAreas()) {
+      const code = a.name === 'Mine de Nimba' ? AREA.enclave : AREA_CODE[a.k];
+      if (!code || !bboxHits(a.p, x0, z0, x0 + ext, z0 + ext)) continue;
+      fillPolygon(a.p, x0, z0, SSTEP, SWIN, (k) => {
+        if (code === AREA.water) { dist[k] = 0; width[k] = 1; }
+        if (this.area[k] === 0 || code === AREA.water) this.area[k] = code;
+      });
     }
     for (let k = 0; k < dist.length; k++) {
       this.stream[k * 2] = Math.round((dist[k] / SMAX) * 255);
@@ -281,7 +348,22 @@ export class WalkData {
     this.sX0 = x0; this.sZ0 = z0;
     this.uniforms.uSWin.value.set(x0, z0, SSTEP, SWIN);
     this.streamTex.needsUpdate = true;
+    this.areaTex.needsUpdate = true;
   }
+
+  /** OSM area class at (x, z) (nearest 2 m cell; 0 outside the field). */
+  areaAt(x: number, z: number): number {
+    const c = Math.round((x - this.sX0) / SSTEP), r = Math.round((z - this.sZ0) / SSTEP);
+    if (c < 0 || r < 0 || c >= SWIN || r >= SWIN) return 0;
+    return this.area[r * SWIN + c];
+  }
+
+  private osmRivers(): River[] { const o: River[] = []; for (const t of this.osmLoaded.values()) for (const r of t.rivers ?? []) if (!o.includes(r)) o.push(r); return o; }
+  osmAreas(): Area[] { const o: Area[] = []; for (const t of this.osmLoaded.values()) for (const a of t.areas ?? []) if (!o.includes(a)) o.push(a); return o; }
+  /** OSM rivers near (x, z) (water ribbons). */
+  riversNear(x: number, z: number, r: number) { return this.osmRivers().filter((rv) => bboxHits(rv.p, x - r, z - r, x + r, z + r)); }
+  /** OSM lakes / reservoirs / pit lakes near (x, z) (water surfaces). */
+  lakesNear(x: number, z: number, r: number) { return this.osmAreas().filter((a) => AREA_CODE[a.k] === AREA.water && bboxHits(a.p, x - r, z - r, x + r, z + r)); }
 
   streamStale(x: number, z: number) {
     const c = this.sX0 + (SWIN / 2) * SSTEP, d = this.sZ0 + (SWIN / 2) * SSTEP;
@@ -459,6 +541,7 @@ export class WalkData {
     uSWin: { value: new THREE.Vector4(0, 0, SSTEP, SWIN) },
     uPathTex: { value: null as unknown as THREE.DataTexture },
     uPWin: { value: new THREE.Vector4(0, 0, SSTEP, SWIN) },
+    uAreaTex: { value: null as unknown as THREE.DataTexture },
   };
 }
 
@@ -536,6 +619,23 @@ vec2 pathAt(vec2 p) {
   if (f.x < 0.0 || f.y < 0.0 || f.x >= uPWin.w - 1.0 || f.y >= uPWin.w - 1.0) return vec2(12.75, 0.0);
   vec2 v = texture(uPathTex, (f + 0.5) / uPWin.w).rg;
   return v * 12.75;
+}
+uniform sampler2D uAreaTex;
+/** OSM area classes around p, bilinearly blended one-hot: x water, y mine, z field, w rock; sand / wetland via out params. */
+vec4 areaW(vec2 p, out float wSand, out float wWet) {
+  wSand = 0.0; wWet = 0.0;
+  vec2 f = (p - uSWin.xy) / uSWin.z;
+  if (f.x < 0.0 || f.y < 0.0 || f.x >= uSWin.w - 1.0 || f.y >= uSWin.w - 1.0) return vec4(0.0);
+  ivec2 i = ivec2(floor(f)); vec2 t = fract(f);
+  vec4 acc = vec4(0.0);
+  for (int k = 0; k < 4; k++) {
+    ivec2 o = ivec2(k & 1, k >> 1);
+    float wt = (o.x == 1 ? t.x : 1.0 - t.x) * (o.y == 1 ? t.y : 1.0 - t.y);
+    int c = int(texelFetch(uAreaTex, i + o, 0).r * 255.0 + 0.5);
+    if (c == 1) acc.x += wt; else if (c == 2) acc.y += wt; else if (c == 3) acc.z += wt; else if (c == 4) acc.w += wt;
+    else if (c == 5) wSand += wt; else if (c == 6) wWet += wt;
+  }
+  return acc;
 }
 /** Animal / research trails under forest (narrow beaten earth), 0..1. Mirrors trailK() in data.ts. */
 float trailK(vec2 p, float forest) {

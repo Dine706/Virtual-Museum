@@ -4,26 +4,26 @@
 // Rendering: two passes with separate depth ranges (no z-fighting at ground level, 30 km views from the
 // summit): far = sky, whole massif (DSM), outer clouds; near = ground patch, forest, cover, water, animals.
 import * as THREE from 'three';
-import { getLang, t, fmtMeters } from '../i18n';
-import { loc, type Content, type Hotspot } from '../data/content';
+import { t, fmtMeters } from '../i18n';
+import type { Content } from '../data/content';
 import type { Heightfield } from '../scene/heightfield';
 import type { Tier } from '../scene/tier';
-import { WalkData, type SpeciesRef } from './data';
-import { WalkEnv, WALK_TIMES, shared, type WalkTime } from './env';
+import { WalkData } from './data';
+import { WalkEnv, WALK_TIMES, shared, walkMaterial, type WalkTime } from './env';
 import { Ground } from './ground';
-import { Forest, type TreeInst } from './forest';
+import { Forest } from './forest';
 import { GroundCover } from './groundcover';
 import { Water } from './water';
 import { Fauna, type Agent } from './fauna';
 import { WalkControls } from './controls';
-import { Hud, type Card, type CardItem } from './hud';
+import { Hud, type Card } from './hud';
+import { makeCards, type Hit } from './cards';
 import { biomeAt, habitatOf, fogFor, type HabitatId } from './biome';
-import { walkMaterial } from './env';
 import { groundTextures } from './textures';
 import { PostFX } from './post';
 import { loadPhotos } from './photo';
 import { loadModels } from './models';
-import { Village, type Person } from './village';
+import { Village } from './village';
 
 export interface WalkContext {
   renderer: THREE.WebGLRenderer;
@@ -38,9 +38,6 @@ export interface WalkContext {
   onPosition?: (x: number, z: number) => void;
 }
 
-type Hit = { kind: 'tree'; tree: TreeInst } | { kind: 'animal'; agent: Agent } | { kind: 'site' } | { kind: 'ground'; p: THREE.Vector3 }
-  | { kind: 'person'; person: Person } | { kind: 'house'; round: boolean };
-
 export interface WalkHandle { exit(): void; debug: Record<string, unknown> }
 
 const TIER_OPTS = {
@@ -49,22 +46,10 @@ const TIER_OPTS = {
   low: { seg: 160, R: 1000, shell: [150, 240], range: 170, near: 20, variants: 2, imp: 128, shadows: 0, cover: 34, spacing: 1.0, rock: 70, birds: 4, flies: 6, dpr: 1, tex: 256 },
 } as const;
 
-const HABITAT_HOTSPOT: Record<HabitatId, string> = {
-  lowlandForest: 'lowland-forest', cloudForest: 'cloud-forest', montaneGrass: 'montane-grassland', savanna: 'savanna-fire',
-  regrowth: 'lowland-forest', village: 'cultural-landscape', gallery: 'cavally',
-};
-const PLANT_HOTSPOT: Record<string, string> = {
-  emergent: 'lowland-forest', canopy: 'lowland-forest', understory: 'lowland-forest', montane: 'cloud-forest', treefern: 'cloud-forest',
-  oilpalm: 'bossou-chimpanzees', raphia: 'lowland-forest', protea: 'montane-grassland', savanna: 'savanna-fire', regrowth: 'lowland-forest',
-};
-const PLANT_TAXA: Record<string, string> = { treefern: 'tree_fern', protea: 'protea', montane: 'parinari', oilpalm: 'oil_palm', raphia: 'raphia' };
-const ANIMAL_TAXA: Record<string, string> = { hornbill: 'hornbill', turaco: 'turaco', sunbird: 'sunbird', acraea: 'acraea', swallowtail: 'swallowtail', graphium: 'swallowtail' };
-
 const EYE = 1.65;
 
 export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
   const { renderer } = ctx;
-  const lang = getLang();
   const O = TIER_OPTS[ctx.tier];
   const coarse = matchMedia('(pointer: coarse)').matches;
   const hud = new Hud(coarse);
@@ -119,7 +104,7 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
     const aniso = Math.min(8, renderer.capabilities.getMaxAnisotropy());
     loadPhotos(ctx.base, aniso).then((p) => {
       if (exited) return;
-      ground.usePhotos(p); forest.usePhotos(p); cover.usePhotos(p);
+      ground.usePhotos(p, aniso); forest.usePhotos(p); cover.usePhotos(p);
     }).catch((e) => console.warn('walk: scanned textures unavailable', e));
     loadModels(ctx.base, aniso, { single_root: 'root' }).then((m) => {
       if (exited) return;
@@ -290,7 +275,7 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
     if (data.streamStale(pos.x, pos.z)) { data.updateStreams(pos.x, pos.z); water.update(eye); }
     if (data.pathStale(pos.x, pos.z)) {
       data.updatePaths(pos.x, pos.z);
-      void data.loadOsm(pos.x, pos.z).then(() => { data.updatePaths(pos.x, pos.z); village.reset(); });
+      void data.loadOsm(pos.x, pos.z).then(() => { data.updatePaths(pos.x, pos.z); data.updateStreams(pos.x, pos.z); water.update(eye, 420, true); village.reset(); });
     }
     forest.update(eye);
     cover.update(eye);
@@ -419,109 +404,8 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
     hud.showCard(cardFromHit(hit));
   }
 
-  const hotspot = (id: string) => ctx.content.hotspots.find((h) => h.id === id) as Hotspot | undefined;
-  const sciItems = (refs: SpeciesRef[] | undefined, max = 5): CardItem[] => (refs ?? []).slice(0, max).map((s) => ({
-    label: (lang === 'fr' ? s.fr : s.en) ? `${lang === 'fr' ? s.fr : s.en} (${s.sci})` : s.sci,
-    sub: [t('walk.recorded', { n: nf.format(s.records) }), s.iucn && s.iucn !== 'NE' ? t('walk.iucn', { c: s.iucn }) : ''].filter(Boolean).join(' · '),
-    url: s.gbif,
-  }));
-  const nf = new Intl.NumberFormat(lang === 'fr' ? 'fr-FR' : 'en-GB');
-  const bandOf = (elev: number) => elev < 1000 ? 'lowland_lt1000m' : elev < 1400 ? 'montane_1000-1400m' : 'summit_gt1400m';
-
-  function cardFromHit(hit: Hit): Card {
-    if (hit.kind === 'person') {
-      const p: Person = hit.person;
-      const SRC = {
-        guinea: { label: 'Countries and Their Cultures – Guinea', url: 'https://www.everyculture.com/Ge-It/Guinea.html' },
-        gret: { label: 'Gret – Guide pratique de l\'huile de palme (Guinée forestière)', url: 'https://gret.org/wp-content/uploads/2021/12/Guide-Pratique-Huile-de-Palme.pdf' },
-        bossou: { label: 'Yamakoshi & Leblan 2013, Revue de primatologie 5', url: 'https://journals.openedition.org/primatologie/1762' },
-        green: { label: 'Green Corridor Project – People of Bossou', url: 'https://www.greencorridor.info/en/people/' },
-        kpelle: { label: 'Encyclopedia of World Cultures – Kpelle economy', url: 'https://www.everyculture.com/Africa-Middle-East/Kpelle-Economy.html' },
-        osm: { label: '© OpenStreetMap contributors (ODbL)', url: 'https://www.openstreetmap.org/copyright' },
-      };
-      const src = p.activity === 'pound' ? [SRC.gret] : p.activity === 'hoe' ? [SRC.bossou, SRC.kpelle] : p.activity === 'walk' ? [SRC.osm] : p.activity === 'play' || p.activity === 'sit' ? [] : [SRC.guinea];
-      const lines = [t(`walk.act.${p.activity}`)];
-      if (p.village === 'Bossou') { lines.push(t('walk.village.bossou')); src.push(SRC.bossou, SRC.green); }
-      else if (p.village) lines.push(t('walk.village.generic', { name: p.village }));
-      return { kicker: p.village ?? t(`walk.habitat.${habitat}`), title: t('walk.person.title'), lines, note: t('walk.person.note'), sources: src };
-    }
-    if (hit.kind === 'house') {
-      return {
-        kicker: data.nearestPlace(pos.x, pos.z)?.place.name ?? '',
-        title: t(hit.round ? 'walk.house.round' : 'walk.house.rect'),
-        lines: [t(hit.round ? 'walk.house.roundText' : 'walk.house.rectText')],
-        note: t('walk.house.note'),
-        sources: [
-          { label: 'Encyclopedia of World Cultures – Kpelle settlements', url: 'https://www.everyculture.com/Africa-Middle-East/Kpelle-Settlements.html' },
-          { label: 'Countries and Their Cultures – Liberia', url: 'https://www.everyculture.com/Ja-Ma/Liberia.html' },
-          { label: '© OpenStreetMap contributors (ODbL)', url: 'https://www.openstreetmap.org/copyright' },
-        ],
-      };
-    }
-    if (hit.kind === 'tree') {
-      const tr = hit.tree;
-      const hs = hotspot(PLANT_HOTSPOT[tr.type]);
-      const taxa = PLANT_TAXA[tr.type] ? data.species.taxa[PLANT_TAXA[tr.type]] : undefined;
-      const b = biomeAt(data, tr.x, tr.z);
-      const hab = t(`walk.habitat.${habitatOf(b)}`);
-      const heightLine = tr.measured ? t('walk.height.measured', { h: fmtMeters(Math.round(tr.h)) }) : t('walk.height.model', { h: fmtMeters(Math.max(1, Math.round(tr.h))) });
-      const single = taxa && taxa.length === 1 ? taxa[0] : null;
-      return {
-        kicker: `${hab} · ${fmtMeters(Math.round(tr.y))}`,
-        title: t(`walk.plant.${tr.type}`),
-        sci: single ? single.sci : undefined,
-        lines: [t(`walk.desc.${tr.type}`), heightLine],
-        items: taxa && taxa.length > 1 ? sciItems(taxa) : single ? sciItems([single]) : undefined,
-        itemsTitle: taxa && taxa.length > 1 && tr.type !== 'treefern' ? t('walk.recordedSpecies') : undefined,
-        note: t('walk.illustrative'),
-        sources: [...(hs?.sources ?? []), { label: 'Meta / WRI – High Resolution Canopy Height Maps (CC BY 4.0)', url: 'https://registry.opendata.aws/dataforgood-fb-forests/' }],
-      };
-    }
-    if (hit.kind === 'animal') {
-      const a = hit.agent;
-      const taxa = data.species.taxa[ANIMAL_TAXA[a.kind]];
-      const refs = a.kind === 'graphium' ? taxa?.filter((s) => s.sci.startsWith('Graphium')) : a.kind === 'swallowtail' ? taxa?.filter((s) => s.sci.startsWith('Papilio')) : taxa;
-      return {
-        kicker: t(`walk.habitat.${habitat}`),
-        title: t(`walk.animal.${a.kind}`),
-        lines: [],
-        items: sciItems(refs),
-        itemsTitle: t('walk.recordedSpecies'),
-        note: t('walk.animalNote'),
-        sources: [{ label: 'GBIF.org – occurrence records (Nimba window)', url: 'https://www.gbif.org/occurrence/search?geometry=POLYGON((-8.56%207.48,-8.28%207.48,-8.28%207.76,-8.56%207.76,-8.56%207.48))' }],
-      };
-    }
-    if (hit.kind === 'site') {
-      const hs = hotspot('bossou-chimpanzees');
-      return {
-        kicker: hs ? loc(hs, 'title', lang) : '',
-        title: t('walk.site.title'),
-        lines: hs ? [loc(hs, 'short', lang)] : [],
-        note: t('walk.site.note'),
-        sources: hs?.sources ?? [],
-      };
-    }
-    const p = hit.p;
-    const b = biomeAt(data, p.x, p.z);
-    const hId = habitatOf(b);
-    const inWater = b.streamDist < b.streamWidth * 1.2;
-    const hs = hotspot(inWater ? 'cavally' : HABITAT_HOTSPOT[hId]);
-    const band = bandOf(p.y);
-    const bd = data.species.bands[band];
-    const lines = [hs ? loc(hs, 'short', lang) : ''];
-    if (hId === 'regrowth' && !inWater) lines.unshift(t('walk.desc.regrowth'));
-    lines.push(t('walk.band', { band: t(`walk.band.${band}`) }));
-    if (bd) lines.push(t('walk.bandCounts', { n: nf.format(bd.counts.species), p: nf.format(bd.counts.plants), b: nf.format(bd.counts.birds) }));
-    return {
-      kicker: `${fmtMeters(Math.round(p.y))}`,
-      title: inWater ? t('walk.water') : t(`walk.habitat.${hId}`),
-      lines: lines.filter(Boolean),
-      items: sciItems(bd?.plants, 5),
-      itemsTitle: t('walk.topPlants'),
-      note: inWater ? t('walk.waterNote') : undefined,
-      sources: hs?.sources ?? [],
-    };
-  }
+  const cardFor = makeCards(data, ctx.content);
+  const cardFromHit = (hit: Hit): Card => cardFor(hit, { habitat, village: data.nearestPlace(pos.x, pos.z)?.place.name ?? '' });
 
   // ---- exit ----
   function exit() {

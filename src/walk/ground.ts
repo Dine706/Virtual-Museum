@@ -8,8 +8,9 @@ import * as THREE from 'three';
 import { NOISE_GLSL } from './noise';
 import { DATA_GLSL, type WalkData } from './data';
 import { walkMaterial, shared } from './env';
-import { groundTextures } from './textures';
-import type { PhotoSet } from './photo';
+import { drawnLayers } from './textures';
+import { photoLayers, type PhotoSet } from './photo';
+import { TERRAIN_FRAG_GLSL, TERRAIN_MAP_GLSL, TERRAIN_NORMAL_GLSL } from './terrainShader';
 import type { Heightfield } from '../scene/heightfield';
 import { WORLD, WORLD_W, WORLD_D } from '../data/geo';
 
@@ -62,16 +63,13 @@ export class Ground {
   private uCam = { value: new THREE.Vector3() };
   private uShell: { value: THREE.Vector2 };
   private snap: number;
-  private texU: Record<string, { value: THREE.Texture }>;
+  private texU: { uDiff: { value: THREE.DataArrayTexture }; uNorm: { value: THREE.DataArrayTexture } };
   private soilTint = { value: new THREE.Vector3(1, 1, 1) };
 
   constructor(data: WalkData, hf: Heightfield, lcTex: THREE.Texture, private opts: GroundOpts, sunDir: THREE.Vector3, sky: { hemiSky: THREE.Color; hemiGround: THREE.Color; sun: THREE.Color }) {
-    const tex = groundTextures(opts.segments >= 300 ? 512 : 256);
+    const layers = drawnLayers(opts.segments >= 300 ? 512 : 256);
     this.uShell = { value: new THREE.Vector2(opts.shellStart, opts.shellEnd) };
-    this.texU = {
-      uT0: { value: tex.maps[0] }, uT1: { value: tex.maps[1] }, uT2: { value: tex.maps[2] }, uT3: { value: tex.maps[3] }, uT4: { value: tex.maps[4] },
-      uN0: { value: tex.normals[0] }, uN1: { value: tex.normals[1] }, uN3: { value: tex.normals[3] },
-    };
+    this.texU = { uDiff: { value: layers.diff }, uNorm: { value: layers.nor } };
     this.snap = 2 * opts.radius * 0.055 / opts.segments * 2; // a couple of centre cells
     const mat = walkMaterial(new THREE.MeshStandardMaterial({ roughness: 0.95, metalness: 0 }), 'none', (s) => {
       Object.assign(s.uniforms, data.uniforms, { uCam: this.uCam, uShell: this.uShell, uSoilTint: this.soilTint }, this.texU);
@@ -87,67 +85,10 @@ export class Ground {
           vShell = smoothstep(uShell.x, uShell.y, dc) * smoothstep(2.0, 8.0, attrAt(gp).r * 255.0);`)
         .replace('#include <begin_vertex>', `vec3 transformed = vec3(position.x, gh, position.z);\nvWP = vec3(gp.x, gh, gp.y);`);
       s.fragmentShader = s.fragmentShader
-        .replace('#include <common>', `#include <common>\n${NOISE_GLSL}\n${DATA_GLSL}\nvarying vec3 vWP; varying vec3 vNW; varying float vShell;
-          uniform sampler2D uT0, uT1, uT2, uT3, uT4, uN0, uN1, uN3; uniform vec3 uSoilTint;
-          vec3 tri(sampler2D t, vec2 p, float s) {
-            vec2 q = vec2(p.x * 0.8 - p.y * 0.6, p.x * 0.6 + p.y * 0.8);
-            float k = smoothstep(-0.4, 0.4, vnoise(p / 11.0, 71));
-            return mix(texture(t, p / s).rgb, texture(t, q / (s * 2.7)).rgb, k * 0.55);
-          }
-          vec3 nrm(sampler2D t, vec2 p, float s) { return texture(t, p / s).xyz * 2.0 - 1.0; }
-          float gW[5]; float gWet; float gRough; float gBare;`)
-        .replace('#include <map_fragment>', /* glsl */ `
-          vec2 P = vWP.xz;
-          vec4 at = attrAt(P);
-          float canopy = at.r * 255.0, cls = at.g * 255.0, rockM = at.b;
-          vec2 st = streamAt(P);
-          float forest = smoothstep(3.0, 12.0, canopy);
-          float grassy = (abs(cls - 30.0) < 1.0 || abs(cls - 40.0) < 1.0 || abs(cls - 20.0) < 1.0) ? 1.0 : 0.0;
-          float woody = (abs(cls - 10.0) < 1.0 || abs(cls - 20.0) < 1.0) ? 1.0 : 0.0;
-          float built = abs(cls - 50.0) < 1.0 ? 1.0 : 0.0;
-          float slope = 1.0 - clamp(vNW.y, 0.0, 1.0);
-          float n1 = vnoise(P / 3.1, 81), n2 = vnoise(P / 17.0, 82);
-          float wRock = clamp(rockM * 1.3 + smoothstep(0.32, 0.55, slope) + n2 * 0.25 - 0.12, 0.0, 1.0);
-          float wLitter = clamp(forest + woody * (1.0 - forest) * 0.55 + n1 * 0.2, 0.0, 1.0);
-          float wGrass = clamp(grassy * (1.0 - forest) + woody * (1.0 - forest) * 0.45 - n1 * 0.2, 0.0, 1.0);
-          float wSoil = clamp(built * 0.9 + 0.12 + n2 * 0.15 - forest * 0.1, 0.0, 1.0);
-          float cloudBelt = smoothstep(850.0, 1050.0, vWP.y);
-          float wMoss = cloudBelt * (forest * 0.55 + wRock * 0.5) * (0.6 + n1 * 0.4);
-          gWet = 1.0 - smoothstep(st.y * 1.2, st.y * 4.5, st.x);
-          wRock *= 1.0 - gWet * 0.6;
-          float sum = wRock + wLitter + wGrass + wSoil + wMoss + 1e-3;
-          gW[0] = wLitter / sum; gW[1] = wSoil / sum; gW[2] = wGrass / sum; gW[3] = wRock / sum; gW[4] = wMoss / sum;
-          vec3 cLit = tri(uT0, P, 2.6), cSoil = tri(uT1, P, 3.2) * uSoilTint, cGr = tri(uT2, P, 2.0), cRock = tri(uT3, P, 4.5), cMoss = tri(uT4, P, 2.2);
-          // Summit grassland reads golden-green, lowland turf greener.
-          cGr = mix(cGr, vec3(dot(cGr, vec3(0.33))), 0.35) * mix(vec3(0.85, 1.0, 0.7), vec3(1.3, 1.12, 0.7), smoothstep(1150.0, 1450.0, vWP.y));
-          vec3 g = cLit * gW[0] + cSoil * gW[1] + cGr * gW[2] + cRock * gW[3] + cMoss * gW[4];
-          // Roads and footpaths (OpenStreetMap) and animal/research trails under forest: beaten earth.
-          vec2 pa = pathAt(P);
-          float onPath = 1.0 - smoothstep(0.0, 0.7, pa.x);
-          float tr = trailK(P, forest);
-          gBare = max(onPath, tr * 0.85);
-          vec3 earth = cSoil * mix(vec3(0.72, 0.62, 0.55), vec3(1.05, 0.95, 0.9), smoothstep(1.2, 3.0, pa.y));
-          earth *= 0.82 + 0.3 * vnoise(P / 1.3, 95) + 0.12 * vnoise(P / 0.35, 96);
-          earth = mix(earth, cLit * 0.8, tr * (1.0 - onPath) * 0.35); // a few leaves on trails
-          g = mix(g, earth, gBare);
-          g = mix(g, g * vec3(0.55, 0.52, 0.5), gWet * 0.8);
-          // Distant canopy shell: dark crowns with lit tops.
-          float lump = 0.5 + 0.5 * vnoise(P / 5.0, 91);
-          vec3 crownCol = mix(vec3(0.045, 0.085, 0.03), vec3(0.16, 0.24, 0.07), lump * lump) * mix(vec3(1.0), vec3(0.9, 1.0, 1.08), cloudBelt);
-          g = mix(g, crownCol, vShell);
-          diffuseColor.rgb *= g;
-          gRough = mix(0.95, 0.55, gWet) - gW[3] * 0.1 + gBare * 0.02;`)
+        .replace('#include <common>', `#include <common>\n${NOISE_GLSL}\n${DATA_GLSL}\n${TERRAIN_FRAG_GLSL}`)
+        .replace('#include <map_fragment>', TERRAIN_MAP_GLSL)
         .replace('#include <roughnessmap_fragment>', 'float roughnessFactor = gRough;')
-        .replace('#include <normal_fragment_maps>', /* glsl */ `
-          {
-            vec3 t = nrm(uN0, P, 2.6) * gW[0] + nrm(uN1, P, 3.2) * gW[1] + nrm(uN3, P, 4.5) * gW[3] + vec3(0.0, 0.0, 1.0) * (gW[2] + gW[4]);
-            t.xy *= (1.0 - vShell) * 1.2 * (1.0 - gBare * 0.5);
-            vec3 N = normalize(vNW);
-            vec3 T = normalize(vec3(1.0, 0.0, 0.0) - N * N.x);
-            vec3 B = cross(N, T);
-            vec3 nw = normalize(T * t.x - B * t.y + N * max(t.z, 0.2));
-            normal = normalize((viewMatrix * vec4(nw, 0.0)).xyz);
-          }`);
+        .replace('#include <normal_fragment_maps>', TERRAIN_NORMAL_GLSL);
     });
     this.mesh = new THREE.Mesh(patchGeometry(opts.segments, opts.radius), mat);
     this.mesh.frustumCulled = false;
@@ -243,14 +184,12 @@ export class Ground {
     this.uCam.value.copy(eye);
   }
 
-  /** Swap the drawn ground textures for scanned ones (high-quality look). */
-  usePhotos(p: PhotoSet) {
-    this.texU.uT0.value = p.litter.map; this.texU.uN0.value = p.litter.normal;
-    this.texU.uT1.value = p.laterite.map; this.texU.uN1.value = p.laterite.normal;
+  /** Swap the drawn ground layers for scanned ones (high-quality look). */
+  usePhotos(p: PhotoSet, anisotropy: number) {
+    const { diff, nor } = photoLayers(p, anisotropy);
+    this.texU.uDiff.value.dispose(); this.texU.uNorm.value.dispose();
+    this.texU.uDiff.value = diff; this.texU.uNorm.value = nor;
     this.soilTint.value.set(1.18, 0.82, 0.68); // Nimba's laterite is redder than the scanned soil
-    this.texU.uT2.value = p.turf.map;
-    this.texU.uT3.value = p.rock.map; this.texU.uN3.value = p.rock.normal;
-    this.texU.uT4.value = p.moss.map;
   }
 
   setClouds(height: number, amount: number) {

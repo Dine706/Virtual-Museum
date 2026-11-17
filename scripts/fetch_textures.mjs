@@ -16,11 +16,20 @@ const SET = {
   bark: 'bark_brown_02',                // brown bark
   barkGrey: 'bark_platanus',            // smooth mottled bark
   palm: 'palm_tree_bark',               // palm trunk
+  mud: 'brown_mud_02',                  // wet mud: stream banks, wetlands
+  road: 'red_dirt_mud_01',              // beaten red earth: roads and tracks
+  mine: 'red_mud_stones',               // red stony ground: mine benches and spoil
+  highgrass: 'aerial_grass_rock',       // dry grass with rock: summit grassland ground
+  sand: 'coast_sand_rocks_02',          // sand and gravel: riverbeds
+  field: 'farm_soil',                   // worked soil: fields
 };
+const ONLY = process.argv[2] ? new Set(process.argv[2].split(',')) : null;
 
 fs.mkdirSync(OUT, { recursive: true });
 const credits = [];
+const prev = fs.existsSync(path.join(OUT, 'credits.json')) ? JSON.parse(fs.readFileSync(path.join(OUT, 'credits.json'), 'utf8')) : [];
 for (const [role, id] of Object.entries(SET)) {
+  if (ONLY && !ONLY.has(role)) { const c = prev.find((x) => x.role === role); if (c) credits.push(c); continue; }
   const files = await (await fetch(`https://api.polyhaven.com/files/${id}`)).json();
   const info = await (await fetch(`https://api.polyhaven.com/info/${id}`)).json();
   for (const [kind, key, q, size] of [['diff', 'Diffuse', 76, 1024], ['nor', 'nor_gl', 82, 512]]) {

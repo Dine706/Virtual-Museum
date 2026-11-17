@@ -267,7 +267,7 @@ Dean asked for detail when zooming in: walk among the trees and plants, see anim
 **Checks:**
 * `scripts/check-walk.mjs [tier] [place]`: five places, screenshots in `docs/screens/walk-*.png`, console clean.
 * `scripts/check-walk-flow.mjs`: phone flow, readout → walk → card → back, with the deep link and no overflow.
-* `walk-lab.html` (dev only, not built): every plant and cover type in a row.
+* `dev/walk-lab.html` (dev only, not built): every plant and cover type in a row.
 
 **Bugs found and fixed during the build:**
 * Fog started at full density.
@@ -368,3 +368,45 @@ Its uses:
 
 ### Live again (18 Nov 2026)
 * Dean asked for the result to be pushed live, so the `ignoreCommand` pause is removed. Every push to this branch deploys to production again (nimba-3d.vercel.app).
+
+## Every place looks like what is there: terrain types, water, rock, mines (18 Nov 2026)
+
+Dean asked that walk mode match the real terrain type wherever you are, with water, rocks and the old mine, and then a clean-up, tests and a live push.
+
+**Ground (`src/walk/terrainShader.ts`):** 11 layers in two texture arrays (colour and normals), so WebGL's sampler limit no longer caps the number of surface types. The layers are:
+* forest litter, laterite, lowland turf, rock, moss;
+* mud, beaten earth (roads and paths), mine benches and spoil, summit grass, river sand and gravel, worked fields.
+
+Each fragment blends them from:
+* canopy height, land cover, altitude and slope (measured data);
+* streams and lakes (DEM + OSM), roads and paths (OSM);
+* a 2 m area field rasterised from OSM land use: water, mine, field, rock, sand, wetland and the Guinean enclave.
+
+Steep rock and mine faces use triplanar mapping, so cliffs do not stretch. The drawn layers are used on phones and the scanned CC0 layers (Poly Haven, 14 textures, 3.9 MB) in the high-quality mode. The new scans are `brown_mud_02`, `red_dirt_mud_01`, `red_mud_stones`, `aerial_grass_rock`, `coast_sand_rocks_02` and `farm_soil`. Draw cost is bounded: layers with a weight under 1.5 % are skipped, and samples use `textureGrad`.
+
+**Water:**
+* The 99 OSM rivers and streams join the DEM streams in the carved 2 m stream field and get ribbons at their mapped width (Diougou / upper Cavally, Ban, Goué, Kahnla…).
+* OSM lakes, reservoirs and the flooded pit next to the LAMCO quarry are rasterised as "in the bed", so the ground is carved under them, and get a flat water surface just below the lowest DEM shore point.
+* WorldCover water (80) and wetland (90) give mud and tall reeds.
+
+**Rock:** WorldCover bare ground (60) and OSM cliff, bare rock and scree give the rock layer, dense stones and boulders, and no trees above 6 m.
+
+**Mines:**
+* **The old LAMCO workings in Liberia.** OSM quarry and brownfields; ESA's densest bare-ground cluster is the pit at −8.4995, 7.5394. They are shown as bare iron-ore ground with bench lines every 9 m of height and sparse grass, scrub and stones coming back (about 35 years after the mine closed in 1989). The card uses content.json's sourced `yekepa-lamco` text.
+* **The Guinean "Mine de Nimba" enclave** (OSM outline). The sources describe exploration, and the land cover and canopy model show grassland and forest there. So the land keeps its measured cover, no pit is invented, and only the card says you are in the approximate enclave, with the sourced `mining-enclave` text (UNESCO 48 COM 7A.46).
+
+**Fields:** OSM farmland and orchards, and WorldCover cropland, become worked soil with crop rows. The card says upland rice and cassava are the Bossou staples, with maize, banana, pineapple and fruit (Yamakoshi & Leblan 2013; Green Corridor).
+
+**Clean-up:**
+* Card logic moved from `walk/index.ts` into `walk/cards.ts`.
+* The shader's layer scales are generated from the single TypeScript list.
+* Unused parameters removed; the dev lab moved to `dev/walk-lab.html`.
+* The unused `vite-plugin-pwa` dependency removed; it can be re-added for M10.
+* npm scripts added for the checks and the data and asset pipelines.
+* `README.md` is now the app README: run, code map, data rebuild, checks, licences. The kit's hand-over notes moved to `docs/KIT_README.md`.
+
+**Tests:**
+* `npm run build` passes: walk chunk 82 KB gz, main 187 KB gz.
+* `check-walk-flow` passes.
+* `check-panel` covers all 23 hotspots in FR and EN, on phone and desktop.
+* Terrain screenshots: `docs/screens/terrain-*.png`.

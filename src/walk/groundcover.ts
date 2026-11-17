@@ -6,7 +6,7 @@ import type { WalkData } from './data';
 import { biomeAt } from './biome';
 import { buildCover, type CoverType } from './plants';
 import { grassBlades, frond, bigLeaf, bark, groundTextures, singleLeaf } from './textures';
-import { trailK } from './data';
+import { trailK, AREA } from './data';
 import { depthFor } from './forest';
 import type { PhotoSet } from './photo';
 import type { ModelSet, ScanModel } from './models';
@@ -106,6 +106,30 @@ export class GroundCover {
       const pStick = b.forest * 0.012;
       const pStone = b.rock * 0.25 + (b.high > 0.5 ? 0.025 : 0.006) + b.wet * 0.05;
       const pSapling = (b.forest * (b.cloud > 0.5 ? 0.05 : 0.075) + b.regrowth * 0.05) * (1 - trail);
+      const ac = this.data.areaAt(x, z);
+      const lcWater = b.cls === 80, lcWet = b.cls === 90, lcBare = b.cls === 60;
+      if (ac === AREA.water || lcWater) continue;
+      if (ac === AREA.sand || (ac === AREA.mine && b.forest < 0.5) || ac === AREA.rock || lcBare) {
+        // bare ground: stones and gravel; on old mine ground a little grass recolonising
+        const u2 = hash2(ti * 97 + i, tj * 97 + j, 8);
+        const yy = this.data.heightAt(x, z);
+        if (u2 < (ac === AREA.rock || lcBare ? 0.14 : 0.06)) push('stone', { x, y: yy - 0.05, z, s: 0.15 + h1 * h1 * 0.9, sy: 0.15 + h1 * h1 * 0.7, rot: h3 * 6.28, tilt: h2 * 0.4, tint: 0.85 + h2 * 0.25 });
+        else if (ac === AREA.mine && u2 < 0.22) push('grassGreen', { x, y: yy, z, s: 0.4 + h1 * 0.3, sy: 0.2 + h2 * 0.3, rot: h3 * 6.28, tilt: 0, tint: 0.8 + h2 * 0.2 });
+        continue;
+      }
+      if (ac === AREA.field) {
+        // crop rows (upland rice and cassava are the staples at Bossou)
+        const row = (((z / 0.9) % 1) + 1) % 1;
+        if (row > 0.55) continue;
+        const yy = this.data.heightAt(x, z);
+        if (hash2(ti * 97 + i, tj * 97 + j, 9) < 0.18) push('sapling', { x, y: yy, z, s: 0.7 + h1 * 0.8, sy: 0.7 + h1 * 0.8, rot: h3 * 6.28, tilt: 0, tint: 1 });
+        else push('grassGreen', { x, y: yy, z, s: 0.45 + h1 * 0.2, sy: 0.4 + h2 * 0.35, rot: h3 * 6.28, tilt: 0, tint: 0.9 + h2 * 0.2 });
+        continue;
+      }
+      if (ac === AREA.wetland || lcWet) {
+        if (hash2(ti * 97 + i, tj * 97 + j, 10) < 0.7) push('grassTall', { x, y: this.data.heightAt(x, z), z, s: 0.7 + h1 * 0.5, sy: 1.0 + h2 * 1.1, rot: h3 * 6.28, tilt: 0, tint: 0.85 + h2 * 0.2 });
+        continue;
+      }
       if (onPath || trail > 0.7) { // beaten earth: only the odd stone or twig
         if (hash2(ti * 97 + i, tj * 97 + j, 7) < 0.02) push('stone', { x, y: this.data.heightAt(x, z) - 0.04, z, s: 0.08 + h1 * 0.12, sy: 0.08 + h2 * 0.1, rot: h3 * 6.28, tilt: 0.2, tint: 0.9 });
         continue;
@@ -133,7 +157,9 @@ export class GroundCover {
     for (let k = 0; k < 6; k++) {
       const x = bi * 24 + hash2(bi, bj * 7 + k, 31) * 24, z = bj * 24 + hash2(bi * 7 + k, bj, 32) * 24;
       const b = biomeAt(this.data, x, z);
-      const p = b.rock * 0.8 + (b.high > 0.5 ? 0.08 : 0.01);
+      const ac = this.data.areaAt(x, z);
+      const p = b.rock * 0.8 + (b.high > 0.5 ? 0.08 : 0.01) + (ac === AREA.rock || b.cls === 60 ? 0.5 : 0) + (ac === AREA.mine ? 0.12 : 0);
+      if (ac === AREA.water || b.cls === 80) continue;
       if (hash2(bi + k, bj, 33) > p) continue;
       const sz = 0.8 + Math.pow(hash2(bi, bj + k, 34), 2) * 4 * (0.5 + b.rock);
       out.push({ x, y: this.data.heightAt(x, z) - sz * 0.25, z, s: sz * (1 + hash2(k, bi, 35) * 0.6), sy: sz, rot: hash2(bj, k, 36) * 6.28, tilt: hash2(k, bj, 37) * 0.5, tint: 0.75 + hash2(bi, k, 38) * 0.4 });

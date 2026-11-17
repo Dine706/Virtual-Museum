@@ -152,5 +152,21 @@
   "walk.house.rect": "Maison au toit de tôle",
   "walk.house.roundText": "La maison traditionnelle de la région est ronde, en torchis, sous un toit conique de chaume ; elle ne domine plus que dans les villages éloignés.",
   "walk.house.rectText": "Les maisons récentes sont surtout rectangulaires, en torchis ou en parpaings, couvertes de tôle ondulée, souvent avec une véranda.",
-  "walk.house.note": "Emplacement et dimensions : bâtiment cartographié dans OpenStreetMap. Forme et matériaux : typiques de la région, pas relevés maison par maison."
+  "walk.house.note": "Emplacement et dimensions : bâtiment cartographié dans OpenStreetMap. Forme et matériaux : typiques de la région, pas relevés maison par maison.",
+  "walk.area.lamco": "Ancienne mine de fer de LAMCO (Libéria)",
+  "walk.area.enclave": "Enclave minière guinéenne (contour approximatif)",
+  "walk.area.industrial": "Site industriel ou friche",
+  "walk.area.industrialText": "Terrain cartographié comme industriel, carrière ou friche dans OpenStreetMap.",
+  "walk.area.mineNote": "Contour : OpenStreetMap. Les gradins et le sol nu sont une reconstitution d'après ce contour et le relief, pas un relevé.",
+  "walk.area.water": "Plan d'eau",
+  "walk.area.field": "Champ",
+  "walk.area.fieldText": "À Bossou, le riz pluvial et le manioc sont les cultures de base ; on cultive aussi maïs, banane, ananas et fruits.",
+  "walk.area.rock": "Rocher et sol nu",
+  "walk.area.rockText": "Ici, la carte d'occupation du sol ou OpenStreetMap indique de la roche ou un sol nu, sans végétation.",
+  "walk.area.sand": "Sable",
+  "walk.area.wetland": "Zone humide",
+  "walk.area.wetlandText": "Sol gorgé d'eau, couvert d'herbes hautes et de plantes de marais.",
+  "walk.area.osmNote": "Contour : OpenStreetMap ; l'aspect du sol est une reconstitution.",
+  "walk.area.wcNote": "Classe d'occupation du sol : ESA WorldCover (10 m) ; l'aspect du sol est une reconstitution.",
+  "walk.area.enclaveNote": "Contour approximatif : OpenStreetMap. Le terrain montre la végétation mesurée ici (carte d'occupation du sol, hauteur de canopée), sans fosse inventée."
 }

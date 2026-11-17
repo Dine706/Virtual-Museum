@@ -553,3 +553,81 @@ export function wingTexture(kind: 'acraea' | 'swallowtail' | 'graphium'): THREE.
   }
   return alphaTex(c);
 }
+
+// ---------------------------------------------------------------- terrain layers (texture arrays)
+
+/** Ground layers of the terrain shader, in array order. */
+export const LAYERS = ['litter', 'laterite', 'turf', 'rock', 'moss', 'mud', 'road', 'mine', 'highgrass', 'sand', 'field'] as const;
+export type Layer = typeof LAYERS[number];
+/** Tiling size (m) of each layer on the ground. */
+export const LAYER_SCALE = [2.6, 3.2, 2.0, 4.5, 2.2, 2.6, 3.0, 3.6, 2.6, 2.8, 3.0];
+
+/** Pack images (canvases / bitmaps) into one repeat-wrapped, mipmapped 2D texture array. */
+export function packArray(images: CanvasImageSource[], size: number, srgb: boolean, anisotropy = 4): THREE.DataArrayTexture {
+  const data = new Uint8Array(size * size * 4 * images.length);
+  const c = canvas(size);
+  const g = ctx2d(c);
+  images.forEach((img, i) => {
+    g.clearRect(0, 0, size, size);
+    g.drawImage(img, 0, 0, size, size);
+    const px = g.getImageData(0, 0, size, size).data;
+    // flip rows like CanvasTexture.flipY so drawn and scanned layers share one orientation
+    for (let y = 0; y < size; y++) data.set(px.subarray((size - 1 - y) * size * 4, (size - y) * size * 4), (i * size + y) * size * 4);
+  });
+  const t = new THREE.DataArrayTexture(data, size, size, images.length);
+  t.format = THREE.RGBAFormat;
+  t.type = THREE.UnsignedByteType;
+  t.colorSpace = srgb ? THREE.SRGBColorSpace : THREE.NoColorSpace;
+  t.wrapS = t.wrapT = THREE.RepeatWrapping;
+  t.minFilter = THREE.LinearMipmapLinearFilter;
+  t.magFilter = THREE.LinearFilter;
+  t.generateMipmaps = true;
+  t.anisotropy = anisotropy;
+  t.needsUpdate = true;
+  return t;
+}
+
+/** Drawn versions of the 11 layers (phones and the default look): the 5 drawn ground textures plus 6 derived ones. */
+export function drawnLayers(size: number): { diff: THREE.DataArrayTexture; nor: THREE.DataArrayTexture } {
+  const set = groundTextures(size);
+  const d = set.maps.map((t) => t.image as HTMLCanvasElement);
+  const n = set.normals.map((t) => t.image as HTMLCanvasElement);
+  const derive = (base: HTMLCanvasElement, paint: (g: Ctx, r: () => number) => void, seed: number) => {
+    const c = canvas(size);
+    const g = ctx2d(c);
+    g.drawImage(base, 0, 0, size, size);
+    paint(g, rng(seed));
+    return c;
+  };
+  const S = size;
+  const mud = derive(d[1], (g, r) => {
+    g.globalCompositeOperation = 'multiply'; g.fillStyle = 'hsl(30,25%,45%)'; g.fillRect(0, 0, S, S);
+    g.globalCompositeOperation = 'source-over';
+    for (let k = 0; k < 40; k++) { g.fillStyle = hsla(30, 20, 18, 0.25); g.beginPath(); g.ellipse(r() * S, r() * S, 10 + r() * 40, 6 + r() * 20, r() * 3, 0, 7); g.fill(); }
+  }, 201);
+  const road = derive(d[1], (g, r) => {
+    g.globalCompositeOperation = 'screen'; g.fillStyle = 'hsl(18,25%,14%)'; g.fillRect(0, 0, S, S);
+    g.globalCompositeOperation = 'source-over';
+    for (const x of [S * 0.3, S * 0.7]) { g.strokeStyle = hsla(15, 30, 22, 0.35); g.lineWidth = S * 0.06; g.beginPath(); g.moveTo(x, 0); for (let y = 0; y <= S; y += S / 8) g.lineTo(x + (r() - 0.5) * 6, y); g.stroke(); }
+  }, 202);
+  const mine = derive(d[3], (g, r) => {
+    g.globalCompositeOperation = 'multiply'; g.fillStyle = 'hsl(12,55%,62%)'; g.fillRect(0, 0, S, S);
+    g.globalCompositeOperation = 'source-over';
+    for (let k = 0; k < 900; k++) { g.fillStyle = hsla(10 + r() * 20, 30 + r() * 30, 18 + r() * 30, 0.6); g.fillRect(r() * S, r() * S, 1 + r() * 4, 1 + r() * 3); }
+  }, 203);
+  const high = derive(d[2], (g) => { g.globalCompositeOperation = 'multiply'; g.fillStyle = 'hsl(44,55%,72%)'; g.fillRect(0, 0, S, S); }, 204);
+  const sand = derive(d[1], (g, r) => {
+    g.globalCompositeOperation = 'source-over'; g.fillStyle = hsla(40, 22, 58, 0.75); g.fillRect(0, 0, S, S);
+    for (let k = 0; k < 600; k++) { g.fillStyle = hsla(30 + r() * 20, 10, 30 + r() * 40, 0.7); g.beginPath(); g.ellipse(r() * S, r() * S, 1 + r() * 5, 1 + r() * 4, r() * 3, 0, 7); g.fill(); }
+  }, 205);
+  const field = derive(d[1], (g, r) => {
+    g.globalCompositeOperation = 'multiply'; g.fillStyle = 'hsl(25,30%,62%)'; g.fillRect(0, 0, S, S);
+    g.globalCompositeOperation = 'source-over';
+    for (let y = 0; y < S; y += S / 10) { g.fillStyle = hsla(22, 25, 20, 0.25); g.fillRect(0, y + (r() - 0.5) * 3, S, S / 30); }
+  }, 206);
+  const diff = packArray([d[0], d[1], d[2], d[3], d[4], mud, road, mine, high, sand, field], size, true);
+  const nor = packArray([n[0], n[1], n[2], n[3], n[4], n[1], n[1], n[3], n[2], n[1], n[1]], size, false);
+  return { diff, nor };
+}
+
+function hsla(h: number, s: number, l: number, a: number) { return `hsla(${h},${s}%,${l}%,${a})`; }
