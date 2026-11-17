@@ -283,3 +283,8 @@ Dean asked for detail when zooming in: walk among the trees and plants, see anim
 * The ground under 30 m is generated.
 * Animals are simple models, often hard to spot behind leaves, as in a real forest.
 * This is a browser, so it will not reach Unreal-level photorealism. The same data feeds the Unreal world pack.
+
+### Preview deployments (17 Nov 2026, Dean's request)
+* Dean asked for a preview link to review walk mode. `ignoreCommand` now skips **production** builds only (`$VERCEL_ENV = production` → exit 0). Every push to this branch is still a production deployment, and is still cancelled, so the live site (M8 app) does not change.
+* Preview deployments are created on request through the Vercel API (target *preview*). They build normally and get their own URL. Vercel Authentication is on for deployment URLs, so a preview opens only for logged-in team members.
+* **To go live after approval:** remove the `ignoreCommand` line and push.
