@@ -3,7 +3,7 @@
 import * as THREE from 'three';
 import { NOISE_GLSL } from './noise';
 import { bedDepth, type WalkData } from './data';
-import { shared } from './env';
+import { shared, FOG_TAU_GLSL } from './env';
 
 export class Water {
   readonly mesh: THREE.Mesh;
@@ -19,6 +19,7 @@ export class Water {
       fragmentShader: /* glsl */ `
         ${NOISE_GLSL}
         uniform float uTime; uniform vec3 uSky; uniform vec3 uSunView; uniform vec3 uSunColor; uniform vec3 uFogColor; uniform float uFogDensity; uniform float uHaze;
+        ${FOG_TAU_GLSL}
         varying vec2 vUv; varying vec3 vW; varying vec3 vWalkView; varying float vFlow;
         void main() {
           float lake = step(vFlow, 0.05); // still water (lakes, flooded pits) vs stream ribbons
@@ -39,7 +40,7 @@ export class Water {
           col = mix(col, vec3(0.7), smoothstep(0.7, 0.98, n2 * 0.5 + 0.5) * clamp(vFlow - 1.0, 0.0, 1.0) * 0.35);
           float edge = mix(smoothstep(0.0, 0.18, vUv.x) * smoothstep(1.0, 0.82, vUv.x), 1.0, lake);
           float d = length(vWalkView);
-          col = mix(col, uFogColor, 1.0 - exp(-d * (uFogDensity + uHaze)));
+          col = mix(col, uFogColor, 1.0 - exp(-walkTau(d, uFogDensity, uHaze)));
           gl_FragColor = vec4(col, mix(0.42 + fres * 0.4, 0.86 + fres * 0.14, lake) * edge);
           #include <tonemapping_fragment>
           #include <colorspace_fragment>

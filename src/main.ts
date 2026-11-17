@@ -544,9 +544,9 @@ async function boot() {
     pinsArrive();
     showHint();
   };
-  const startFlyover = () => {
+  const startFlyover = (after?: () => void) => {
     controls.autoRotate = false;
-    if (reducedMotion) { applyPose(homePose()); controls.update(); stage.invalidate(); endIntro(); return; }
+    if (reducedMotion) { applyPose(homePose()); controls.update(); stage.invalidate(); endIntro(); after?.(); return; }
     const home = homePose();
     const plan = planFlyover(hf, exag, { pos: camera.position.clone(), target: controls.target.clone() }, { pos: poseToPosition(home), target: home.target });
     introPlanMin = minClearance(plan, hf, exag);
@@ -559,6 +559,7 @@ async function boot() {
       window.removeEventListener('pointerdown', skip, true);
       window.removeEventListener('keydown', onKey, true);
       endIntro();
+      after?.();
     };
     const fly = runFlyover(plan, camera, controls.target, hf, exag, {
       onFrame: (tt, clearance) => { subs.update(tt); if (flags.debug) flyLog.push(clearance); },
@@ -579,6 +580,30 @@ async function boot() {
     }, 0);
     stage.addAnimator(fly.animator);
   };
+
+  // ---- Guided tour (flyover → four places on foot → back to the map) ----
+  let tour: { stop: () => void } | null = null;
+  async function startTour() {
+    if (tour) return;
+    if (selected) selectHotspot(null, true);
+    readout.hide();
+    const { runTour } = await import('./ui/tour');
+    tour = runTour({
+      content, reducedMotion, hold: new URLSearchParams(location.search).has('tourhold'),
+      flyover: () => new Promise<void>((res) => {
+        if (walking) { walking.exit(); }
+        document.body.classList.add('flying');
+        if (overlays) overlays.group.visible = false;
+        startFlyover(res);
+      }),
+      enterWalk: async (x, z) => { await startWalk(x, z); return walking; },
+      walking: () => walking,
+      goHome: () => flyTo(homePose(), reducedMotion ? 0 : 1400),
+    });
+    const t0 = tour;
+    const check = setInterval(() => { if (!document.querySelector('.tour')) { clearInterval(check); if (tour === t0) tour = null; } }, 1000);
+  }
+  chrome.onTour = () => void startTour();
 
   // A shared hotspot link opens straight on that hotspot: no title card, no flyover.
   if (location.hash) routeFromHash();
@@ -603,7 +628,9 @@ async function boot() {
     window.addEventListener('keydown', titleInput);
     setTimeout(pauseDrift, 30000);
     showTitleCard({
-      onExplore: startFlyover,
+      onExplore: () => startFlyover(),
+      onTour: () => void startTour(),
+      tourFirst: location.hash === '#/tour',
       onSkip: () => { flyTo(homePose(), reducedMotion ? 0 : 1200); endIntro(); },
     });
   }

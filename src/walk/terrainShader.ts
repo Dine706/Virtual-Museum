@@ -84,13 +84,22 @@ export const TERRAIN_MAP_GLSL = /* glsl */ `
   for (int i = 0; i < ${N}; i++) sum += gW[i];
   for (int i = 0; i < ${N}; i++) gW[i] /= sum;
   float kTile = smoothstep(-0.4, 0.4, vnoise(P / 11.0, 71));
+  // Far away a repeating texture reads as fabric: fade each layer to its mean colour (top mip) with broad,
+  // natural variation instead.
+  float farK = smoothstep(90.0, 420.0, length(vWalkView));
+  float macro = 0.86 + 0.2 * vnoise(P / 47.0, 73) + 0.08 * vnoise(P / 13.0, 74);
   vec3 g = vec3(0.0);
   for (int i = 0; i < ${N}; i++) {
     if (gW[i] < 0.015) continue;
-    vec3 c = ((i == 3 || i == 7) && gSteep > 0.05) ? mix(layerColor(i, P, kTile), layerTri(i, vWP, normalize(vNW)), gSteep) : layerColor(i, P, kTile);
+    vec3 c = textureLod(uDiff, vec3(0.5, 0.5, float(i)), 12.0).rgb * macro; // mean colour of the layer
+    if (farK < 1.0) {
+      vec3 det = ((i == 3 || i == 7) && gSteep > 0.05) ? mix(layerColor(i, P, kTile), layerTri(i, vWP, normalize(vNW)), gSteep) : layerColor(i, P, kTile);
+      c = mix(det, c, farK);
+    }
     if (i == 1) c *= uSoilTint;
     if (i == 8) c *= vec3(1.08, 1.02, 0.86);
-    if (i == 7) c *= mix(0.72, 1.0, smoothstep(0.0, 0.07, fract(vWP.y / 9.0))); // bench lines of an open-pit mine
+    // bench lines of an open-pit mine, faded out where they would be thinner than a pixel (no moiré far away)
+    if (i == 7) c *= mix(mix(0.72, 1.0, smoothstep(0.0, 0.07, fract(vWP.y / 9.0))), 0.93, smoothstep(0.02, 0.12, fwidth(vWP.y / 9.0)));
     g += c * gW[i];
   }
   gBare = gW[6];
@@ -112,7 +121,7 @@ export const TERRAIN_NORMAL_GLSL = /* glsl */ `
       vec3 nn = layerNormal(i, P);
       t += vec3(nn.xy * k, nn.z) * gW[i];
     }
-    t.xy *= (1.0 - vShell) * 1.2 * (1.0 - gSteep * 0.5);
+    t.xy *= (1.0 - vShell) * 1.2 * (1.0 - gSteep * 0.5) * (1.0 - farK * 0.6);
     vec3 N = normalize(vNW);
     vec3 T = normalize(vec3(1.0, 0.0, 0.0) - N * N.x);
     vec3 B = cross(N, T);

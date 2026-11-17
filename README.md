@@ -112,6 +112,7 @@ Run these with `npm run dev` running in another terminal. They use Playwright an
 |---|---|
 | `node scripts/check-panel.mjs` | All 23 hotspots open in FR and EN, on phone and desktop |
 | `node scripts/check-walk-flow.mjs` | Phone flow: readout → walk → card → back |
+| `node scripts/check-tour.mjs` | Guided tour: all five stops on phone and desktop, captions, back to the map |
 | `node scripts/check-walk.mjs [tier]` | Walk mode at five places, with screenshots |
 | `node scripts/screens.mjs` | Screens at 390 × 844, 820 × 1180 and 1440 × 900 |
 | `check-picking`, `check-overlays`, `check-flyover`, `check-perf` | The M5–M8 acceptance checks |

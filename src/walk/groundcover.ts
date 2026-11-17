@@ -220,7 +220,8 @@ export class GroundCover {
         const grow = d > inner ? Math.min(1.6, d / inner) : 1;
         if (this.uniform.has(t)) { const k = it.s * grow * 1.15; sc.set(k, k * fade, k); }
         else sc.set(it.s * grow, it.sy * fade * (grass ? Math.min(1.3, grow) : 1), it.s * grow);
-        p.set(it.x, it.y, it.z);
+        // sink grass roots a little: on a slope the downhill side would otherwise float
+        p.set(it.x, it.y - (grass ? 0.06 * sc.y : 0), it.z);
         m.compose(p, q, sc);
         mesh.setMatrixAt(n, m);
         mesh.setColorAt(n, c.setScalar(it.tint));

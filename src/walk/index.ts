@@ -38,7 +38,13 @@ export interface WalkContext {
   onPosition?: (x: number, z: number) => void;
 }
 
-export interface WalkHandle { exit(): void; debug: Record<string, unknown> }
+export interface WalkTour {
+  go(x: number, z: number, yaw: number, pitch: number, time: WalkTime): Promise<void>;
+  look(yaw: number, pitch: number, time?: WalkTime): void;
+  facePeople(): boolean;
+  autopilot(speed: number, turn?: number): void;
+}
+export interface WalkHandle { exit(): void; tour: WalkTour; debug: Record<string, unknown> }
 
 const TIER_OPTS = {
   high: { seg: 320, R: 1500, shell: [380, 560], range: 420, near: 55, variants: 3, imp: 256, shadows: 2048, cover: 80, spacing: 0.55, rock: 160, birds: 8, flies: 14, dpr: 1.5, tex: 512 },
@@ -149,12 +155,12 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
   // Warm up: generate the nearest cells / tiles before revealing.
   const eye = new THREE.Vector3(pos.x, eyeY, pos.z);
   for (let k = 0; k < 8; k++) { forest.update(eye, 200); await nextFrame(); }
-  // Start in the most open spot within ~14 m (not inside a bush or against a trunk).
-  {
-    let bestScore = Infinity, bx = pos.x, bz = pos.z;
+  // Start in the most open spot within ~22 m (not inside a bush, a house or a stream, not against a trunk).
+  function openSpot(x0: number, z0: number): [number, number] {
+    let bestScore = Infinity, bx = x0, bz = z0;
     for (let k = 0; k < 48; k++) {
       const a = k * 2.39996, d = Math.sqrt(k / 48) * 22;
-      const cx = ctx.start.x + Math.cos(a) * d, cz = ctx.start.z + Math.sin(a) * d;
+      const cx = x0 + Math.cos(a) * d, cz = z0 + Math.sin(a) * d;
       const st = data.streamAt(cx, cz);
       let score = st.dist < st.width * 1.5 ? 50 : 0;
       if (data.buildingAt(cx, cz, 1.5)) score += 100;
@@ -166,6 +172,10 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
       score += d * 0.02;
       if (score < bestScore) { bestScore = score; bx = cx; bz = cz; }
     }
+    return [bx, bz];
+  }
+  {
+    const [bx, bz] = openSpot(ctx.start.x, ctx.start.z);
     pos.set(bx, data.heightAt(bx, bz), bz);
     eyeY = pos.y + EYE;
     eye.set(pos.x, eyeY, pos.z);
@@ -186,6 +196,8 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
   let air: HabitatId = habitat; // habitat that sets fog and canopy light (open mapped ground clears the air)
   const fogTint = new THREE.Color();
   let fpsT = 0, fpsN = 0, fpsChecks = 0;
+  // Guided tour: walk slowly forward while turning gently (the user's own input always wins).
+  const auto = { on: false, speed: 0, turn: 0 };
 
   controls.onActivity = () => { idleSince = performance.now(); };
   controls.onInspect = (x, y) => inspect(x, y);
@@ -252,7 +264,12 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
     shared.uTime.value += dt;
 
     // Movement.
-    const moving = controls.poll(dt);
+    let moving = controls.poll(dt);
+    if (auto.on && !moving) {
+      controls.move.set(0, auto.speed);
+      if (!ctx.reducedMotion) controls.yaw += auto.turn * dt;
+      moving = auto.speed > 0;
+    }
     if (moving) idleSince = now;
     const speed = (controls.run ? 4.2 : 1.7) * (coarse ? 1.15 : 1);
     if (controls.move.lengthSq() > 0) {
@@ -347,6 +364,11 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
     eye.set(pos.x, eyeY, pos.z);
     ground.update(eye);
     for (let k = 0; k < 8; k++) { forest.update(eye, 200); await nextFrame(); }
+    const [bx, bz] = openSpot(x, z);
+    pos.set(bx, data.heightAt(bx, bz), bz);
+    eyeY = pos.y + EYE;
+    eye.set(pos.x, eyeY, pos.z);
+    ground.update(eye);
     cover.update(eye);
     water.update(eye, 420, true);
     fauna.populate(eye);
@@ -459,6 +481,31 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
 
   return {
     exit,
+    tour: {
+      /** Jump to a place (open spot nearby), set the view and the time of day. */
+      async go(x: number, z: number, yaw: number, pitch: number, time: WalkTime) {
+        auto.on = false;
+        controls.move.set(0, 0);
+        env.setTime(time); applyTime();
+        controls.yaw = yaw; controls.pitch = pitch;
+        await relocate(x, z);
+      },
+      look(yaw: number, pitch: number, time?: WalkTime) {
+        controls.yaw = yaw; controls.pitch = pitch;
+        if (time) { env.setTime(time); applyTime(); }
+      },
+      /** Turn towards the nearest villagers (within 80 m), if any. */
+      facePeople() {
+        let best: THREE.Vector3 | null = null, bd = 80;
+        for (const p of village.people) { const d = p.pos.distanceTo(eye); if (d > 4 && d < bd) { bd = d; best = p.pos; } }
+        if (!best) return false;
+        controls.yaw = Math.atan2(-(best.x - eye.x), -(best.z - eye.z));
+        controls.pitch = Math.atan2(best.y + 1.0 - eye.y, bd) * 0.6;
+        return true;
+      },
+      /** speed: fraction of walking pace (0..1); turn: rad/s. */
+      autopilot(speed: number, turn = 0) { auto.on = speed > 0 || turn !== 0; auto.speed = speed; auto.turn = turn; if (!auto.on) controls.move.set(0, 0); },
+    },
     debug: {
       get pos() { return pos.clone(); },
       get stats() { return forest.stats; },

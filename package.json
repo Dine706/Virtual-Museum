@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "Monts Nimba interactive 3D demo – unofficial Phase 0 prototype (Tech Guinée for CSIG, fiche P19)",
+  "description": "Monts Nimba interactive 3D demo \u2013 unofficial Phase 0 prototype (Tech Guin\u00e9e for CSIG, fiche P19)",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
@@ -16,7 +16,8 @@
     "data:osm": ".venv/bin/python scripts/worldpack/fetch_osm.py",
     "data:walk": ".venv/bin/python scripts/worldpack/build_walk_data.py",
     "assets:textures": "NODE_USE_ENV_PROXY=1 node scripts/fetch_textures.mjs",
-    "assets:models": "NODE_USE_ENV_PROXY=1 node scripts/fetch_models.mjs"
+    "assets:models": "NODE_USE_ENV_PROXY=1 node scripts/fetch_models.mjs",
+    "check:tour": "node scripts/check-tour.mjs"
   },
   "dependencies": {
     "@fontsource-variable/fraunces": "^5.3.0",

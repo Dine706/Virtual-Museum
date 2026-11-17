@@ -409,9 +409,10 @@ export function buildCover(type: CoverType, seed: number): THREE.BufferGeometry 
         const a = (k / n) * Math.PI + r() * 0.4;
         const ax = new V(Math.cos(a), 0, Math.sin(a)).multiplyScalar(0.36);
         const off = new V((r() - 0.5) * 0.35, 0, (r() - 0.5) * 0.35);
-        // two stacked rows so the card can bend in the wind
-        const pts = [off.clone(), off.clone().add(new V(0, 0.5, 0)), off.clone().add(new V((r() - 0.5) * 0.15, 1, (r() - 0.5) * 0.15))];
-        b.strip(pts, [0.36, 0.4, 0.42], ax.clone().normalize(), 0.85 + r() * 0.3, up);
+        // two stacked rows so the card can bend in the wind; the cards lean out from a common root
+        // (constant width: a tapered card is split into two triangles that kink the blades)
+        const pts = [off.clone().multiplyScalar(0.35), off.clone().multiplyScalar(0.8).add(new V(0, 0.5, 0)), off.clone().add(new V((r() - 0.5) * 0.15, 1, (r() - 0.5) * 0.15))];
+        b.strip(pts, [0.38, 0.38, 0.38], ax.clone().normalize(), 0.85 + r() * 0.3, up);
       }
       break;
     }
@@ -478,5 +479,14 @@ export function buildCover(type: CoverType, seed: number): THREE.BufferGeometry 
       return g;
     }
   }
-  return b.build();
+  const g = b.build();
+  if (type === 'grassGreen' || type === 'grassGolden' || type === 'grassTall') {
+    // dark, soil-coloured roots (self-shadowing inside the tuft): the base melts into the ground
+    const p = g.getAttribute('position'), c = g.getAttribute('color');
+    for (let i = 0; i < p.count; i++) {
+      const y = p.getY(i), k = 0.42 + 0.58 * Math.min(1, y / 0.45);
+      c.setXYZ(i, c.getX(i) * k, c.getY(i) * k * 0.96, c.getZ(i) * k * 0.9);
+    }
+  }
+  return g;
 }

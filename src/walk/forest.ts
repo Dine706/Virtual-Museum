@@ -447,7 +447,8 @@ export class Forest {
       if (cd > R + CELL) continue;
       for (const t of list) {
         const d = Math.hypot(t.x - eye.x, t.z - eye.z);
-        if (d > R) continue;
+        // ragged outer edge: each tree has its own cut-off in the last 15 % of the range (no visible circle)
+        if (d > R * (0.85 + 0.15 * hash2(Math.floor(t.x * 7), Math.floor(t.z * 7), 5))) continue;
         const k = `${t.type}:${t.variant}`;
         // Tall trees stay detailed a little further (their crowns are big on screen).
         const lim = NEAR * (t.h > 20 ? 1.35 : t.h < 4 ? 0.6 : 1);

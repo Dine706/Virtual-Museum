@@ -7,7 +7,7 @@
 import * as THREE from 'three';
 import { NOISE_GLSL } from './noise';
 import { DATA_GLSL, type WalkData } from './data';
-import { walkMaterial, shared } from './env';
+import { walkMaterial, shared, FOG_TAU_GLSL } from './env';
 import { drawnLayers } from './textures';
 import { photoLayers, type PhotoSet } from './photo';
 import { TERRAIN_FRAG_GLSL, TERRAIN_MAP_GLSL, TERRAIN_NORMAL_GLSL } from './terrainShader';
@@ -119,6 +119,7 @@ export class Ground {
         uniform vec3 uSunDir, uSunC, uSkyC, uGrC;
         uniform vec3 uFogColor; uniform float uFogDensity; uniform float uHaze; uniform vec3 uSunView; uniform vec3 uSunColor;
         varying vec3 vWalkView; varying vec3 vN; varying vec3 vW;
+        ${FOG_TAU_GLSL}
         void main() {
           float d = length(vW.xz - uCam.xz);
           if (d < uHole - 60.0 * whash(ivec2(gl_FragCoord.xy), 3)) discard;
@@ -129,7 +130,7 @@ export class Ground {
           vec3 col = base * light;
           float dist = length(vWalkView);
           vec3 dir = vWalkView / dist;
-          float f = 1.0 - exp(-dist * (uFogDensity * 0.12 + uHaze));
+          float f = 1.0 - exp(-walkTau(dist, uFogDensity, uHaze));
           float sunAmt = pow(max(dot(dir, uSunView), 0.0), 6.0);
           col = mix(col, mix(uFogColor, uSunColor * 1.15, sunAmt * 0.55), f);
           gl_FragColor = vec4(col, 1.0);
@@ -156,15 +157,17 @@ export class Ground {
           if ((uInner > 0.5) != (d < uHole)) discard;
           vec2 p = vW.xz / 900.0 + vec2(uTime * 0.0035, uTime * 0.0012);
           float c = fbm3(p, 17) * 0.5 + 0.5;
-          c = smoothstep(1.0 - uCloudAmt * 0.8, 1.05 - uCloudAmt * 0.35, c + vnoise(vW.xz / 160.0, 19) * 0.12);
+          float raw = c + vnoise(vW.xz / 160.0, 19) * 0.12;
+          c = smoothstep(1.0 - uCloudAmt * 0.85, 1.12 - uCloudAmt * 0.3, raw);
           float edge = 1.0 - smoothstep(14000.0, 26000.0, d);
           // fade when the walker is close to the cloud deck
           float near = smoothstep(20.0, 160.0, abs(uCam.y - uCloudH));
-          vec3 col = mix(vec3(0.86, 0.88, 0.9), uSunColor, 0.35) * (0.92 + 0.12 * c);
+          // thin edges are greyer and see-through, thick cores bright (reads as volume, not as a decal)
+          vec3 col = mix(vec3(0.86, 0.88, 0.9), uSunColor, 0.35) * mix(0.8, 1.04, smoothstep(0.15, 0.95, c));
           if (uCam.y < uCloudH) col *= 0.82;
           float dist = length(vWalkView);
           col = mix(col, uFogColor, 1.0 - exp(-dist * uHaze * 0.6));
-          gl_FragColor = vec4(col, c * edge * near * 0.95);
+          gl_FragColor = vec4(col, pow(c, 1.4) * edge * near * 0.95);
           #include <tonemapping_fragment>
           #include <colorspace_fragment>
         }`,

@@ -422,3 +422,26 @@ Steep rock and mine faces use triplanar mapping, so cliffs do not stretch. The d
   rock, sand, wetland, fields, enclave) before the habitat name (it said "stream bank" next to the pit lake).
 - **Fog:** open mapped ground (water, mines, rock, sand, fields) uses open-air fog instead of the forest-creek fog
   that turned the open pit into a white wall.
+
+## Guided tour + distant-terrain polish
+**Guided tour** (`src/ui/tour.ts`, button on the title card and in the tool rail, play icon): the intro flyover,
+then four places on foot – cloud forest, Bossou (turned towards the villagers), the LAMCO pit lake, the true
+summit (1,751 m DEM) looking NE along the ridge – each ~15 s with a slow autopilot walk/turn, a caption and a
+progress bar; then back to the map ("Your turn to explore"). Captions reuse sourced texts only (hotspot `short_*`
+from content.json, the village text from VILLAGE_SOURCES.md); the village note says the people are fictional.
+"Next" skips, "Exit tour"/Esc leaves the visitor where they are; leaving walk mode ends the tour. Reduced motion:
+no autopilot, instant flyover. `?tourhold=1` = presenter mode (stops wait for Next) – also used by
+`scripts/check-tour.mjs` because software GL is too slow for the timers. The walk handle gained `tour.go/look/
+autopilot/facePeople`; tour stops reuse the open-spot search (no start inside a trunk/house/stream).
+
+**Distant terrain:**
+- *Pale band / white wall:* the near ground patch used the habitat fog (forest humidity) at full strength out to
+  1.3 km while the far massif used 12 % of it, so a pale band sat between them. Fog is now one shared optical
+  depth (`walkTau`): the habitat mist saturates after ~350 m, the haze keeps growing. Same in near, far and water.
+- *"Fabric" on far slopes:* texture tiling and the 9 m mine bench lines (moiré) were visible hundreds of metres
+  away. Each ground layer now fades to its mean colour (top mip) × broad noise between 90 and 420 m, the bench
+  lines fade by screen-space frequency (`fwidth`), and far normal detail is reduced.
+- *Clouds* (sea of clouds): thin edges greyer and more transparent, cores brighter – less like flat decals.
+**Grass tufts:** blades lean out of a common root, darker soil-coloured roots, sunk 6 % into the ground. (A tapered
+card was tried and rejected: a trapezoid split in two triangles kinks the blade texture into zigzags.)
+**Forest edge:** trees past 85 % of the range drop out one by one (per-tree hash) instead of at one radius.

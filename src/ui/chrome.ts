@@ -15,6 +15,7 @@ export interface ChromeHandlers {
 const atmoIcon: Record<AtmoName, string> = { clear: icons.sun, golden: icons.sunset, mist: icons.mist };
 
 export class Chrome {
+  onTour: () => void = () => {};
   private atmoBtn: HTMLButtonElement;
   private modeBtns = new Map<Mode, HTMLButtonElement>();
   private atmo: AtmoName = 'clear';
@@ -60,10 +61,12 @@ export class Chrome {
     this.atmoBtn = this.iconButton('', () => h.onAtmo());
     const reset = this.iconButton(icons.locate, () => h.onReset());
     reset.dataset.i18nAttr = 'aria-label:view.reset;data-tip:view.reset';
+    const tour = this.iconButton(icons.play, () => this.onTour());
+    tour.dataset.i18nAttr = 'aria-label:tour.button;data-tip:tour.button';
     const langSlot = document.createElement('div');
     langSlot.className = 'lang-slot';
     langSlot.append(langToggle());
-    tools.append(this.atmoBtn, reset, langSlot);
+    tools.append(this.atmoBtn, reset, tour, langSlot);
 
     document.getElementById('app')!.append(top, modes, tools);
     applyStatic();

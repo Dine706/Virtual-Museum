@@ -433,3 +433,31 @@ body.walking .readout, body.walking .readout-dot, body.walking .hint, body.walki
   .walk-hint { bottom: calc(196px + var(--sab)); }
 }
 @media (prefers-reduced-motion: reduce) { .walk-marker.pulse { animation: none; } .walk-veil { transition: none; } }
+
+/* ---- Guided tour ---- */
+.tour { position: fixed; z-index: 70; left: 50%; bottom: calc(20px + var(--sab)); transform: translate(-50%, 12px); width: min(560px, calc(100vw - 32px));
+  padding: 18px 20px 16px; border-radius: 18px; background: rgba(15, 26, 11, .82); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--hairline); color: var(--cloud-50); opacity: 0; pointer-events: none; transition: opacity .4s var(--ease), transform .4s var(--ease); }
+.tour.on { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+.tour-kicker { margin: 0 0 4px; font: 600 .75rem/1.3 var(--font-ui); letter-spacing: .08em; text-transform: uppercase; color: var(--straw-300); }
+.tour-title { margin: 0 0 6px; font: 600 clamp(1.25rem, 3.6vw, 1.6rem)/1.2 var(--font-display); }
+.tour-text { margin: 0; font: 400 1rem/1.5 var(--font-ui); }
+.tour-note { margin: 8px 0 0; font: 400 .8125rem/1.4 var(--font-ui); color: var(--mist-300); }
+.tour-bar { height: 3px; margin: 14px 0 12px; border-radius: 2px; background: rgba(239, 244, 242, .15); overflow: hidden; }
+.tour-bar i { display: block; height: 100%; background: var(--straw-300); transform-origin: left; transform: scaleX(0); }
+.tour-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.tour-actions .btn-primary { min-height: 44px; padding: 0 24px; }
+.tour.busy .tour-bar, .tour.busy .tour-next { visibility: hidden; }
+.tour.busy .tour-title { font-size: 1rem; color: var(--straw-300); }
+body.touring .walk-hint, body.touring .walk-stick, body.touring .hint { display: none !important; }
+body.touring .walk-veil p { visibility: hidden; }
+.title-card .actions { flex-wrap: wrap; justify-content: center; }
+@media (prefers-reduced-motion: reduce) { .tour, .tour-bar i { transition: none !important; } }
+@media (max-width: 600px) {
+  .tour { bottom: calc(10px + var(--sab)); padding: 12px 14px 12px; border-radius: 16px; }
+  .tour-title { font-size: 1.125rem; margin-bottom: 4px; }
+  .tour-text { font-size: .875rem; line-height: 1.45; }
+  .tour-note { font-size: .75rem; margin-top: 6px; }
+  .tour-bar { margin: 10px 0 10px; }
+  .tour-actions .btn-primary, .tour-actions .btn-ghost { min-height: 44px; padding: 0 18px; }
+}

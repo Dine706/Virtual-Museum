@@ -29,14 +29,20 @@ export const shared = {
 
 const FOG_PARS_VERT = /* glsl */ `varying vec3 vWalkView;`;
 const FOG_VERT = /* glsl */ `vWalkView = mvPosition.xyz;`;
+/** Optical depth of the walk atmosphere over a distance d: the habitat's local mist (forest humidity, cloud)
+ *  saturates after a few hundred metres, the thin haze (aerial perspective) keeps growing with distance. Shared
+ *  by the near and far passes so the two meet without a band. */
+export const FOG_TAU_GLSL = /* glsl */ `
+float walkTau(float d, float dens, float haze) { return dens * 350.0 * (1.0 - exp(-d / 350.0)) + d * haze; }`;
+
 const FOG_PARS_FRAG = /* glsl */ `
 varying vec3 vWalkView;
-uniform vec3 uFogColor; uniform float uFogDensity; uniform float uHaze;
+uniform vec3 uFogColor; uniform float uFogDensity; uniform float uHaze;${FOG_TAU_GLSL}
 uniform vec3 uSunView; uniform vec3 uSunColor;
 vec3 walkFog(vec3 col) {
   float d = length(vWalkView);
   vec3 dir = vWalkView / max(d, 1e-3);
-  float f = 1.0 - exp(-d * (uFogDensity + uHaze));
+  float f = 1.0 - exp(-walkTau(d, uFogDensity, uHaze));
   float sunAmt = pow(max(dot(dir, uSunView), 0.0), 6.0);
   vec3 fc = mix(uFogColor, uSunColor * 1.1, sunAmt * 0.35);
   return mix(col, fc, f);
