@@ -365,3 +365,6 @@ Its uses:
 * No market scene; the Wednesday market is only mentioned in the cards.
 * Fields are not yet drawn as rice or cassava rows.
 * Real-GPU performance is still unmeasured.
+
+### Live again (18 Nov 2026)
+* Dean asked for the result to be pushed live, so the `ignoreCommand` pause is removed. Every push to this branch deploys to production again (nimba-3d.vercel.app).
