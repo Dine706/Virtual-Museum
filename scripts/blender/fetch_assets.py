@@ -1,6 +1,7 @@
 """Download the CC0 Poly Haven models used by the Blender renders (glTF + textures) into scripts/blender/assets/.
 
     python scripts/blender/fetch_assets.py [1k|2k|4k]
+    blender -b --python scripts/blender/fetch_assets.py -- 2k      (no separate Python needed)
 
 Standard library only (runs on any machine with Python 3). Already-downloaded files are skipped.
 Writes assets/credits.json (name, authors, licence, URL) for the app's credits.
@@ -61,4 +62,5 @@ def main(res: str = "1k") -> None:
 
 
 if __name__ == "__main__":
-    main(sys.argv[1] if len(sys.argv) > 1 else "1k")
+    args = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else sys.argv[1:]
+    main(args[0] if args else "1k")

@@ -24,6 +24,8 @@ Needs Blender 5.x (or `pip install bpy==5.3.0` with Python 3.13) and the reposit
 python scripts/blender/fetch_assets.py 2k
 ```
 
+(Without a separate Python, e.g. on Windows: `blender -b --python scripts/blender/fetch_assets.py -- 2k`.)
+
 ```bash
 blender -b --python scripts/blender/nimba_render.py -- --spot summit --pano --res 4096 --samples 256 --gpu --publish
 ```
