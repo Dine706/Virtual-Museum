@@ -11,6 +11,18 @@
    },
    "title_fr": "Au sommet du mont Richard-Molard",
    "title_en": "On top of Mount Richard-Molard"
+  },
+  {
+   "id": "lamco",
+   "lon": -8.4995,
+   "lat": 7.541,
+   "yaw": -2.32,
+   "src": {
+    "lg": "pano/lamco.jpg",
+    "sm": "pano/lamco_2k.jpg"
+   },
+   "title_fr": "Le lac de l'ancienne mine LAMCO",
+   "title_en": "The lake of the former LAMCO mine"
   }
  ],
  "note": "Computer-generated (Blender/Cycles) from the app's terrain and land-cover data; generic CC0 plants (Poly Haven). scripts/blender/nimba_render.py"
