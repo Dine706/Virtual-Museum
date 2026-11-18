@@ -65,7 +65,7 @@ export function openPano(entry: PanoEntry, base: string, lang: 'fr' | 'en', redu
 
     // lon = 0 looks at the image centre (the spot's walk direction); positive = to the right
     let lon = 0, lat = 0, fov = 70, dirty = true, closed = false;
-    const big = Math.max(innerWidth, innerHeight) * Math.min(devicePixelRatio || 1, 2) > 1600;
+    const big = Math.max(innerWidth, innerHeight) * Math.min(devicePixelRatio || 1, 2) > 1000; // phones get the 2k image
     new THREE.TextureLoader().load(`${base}${big ? entry.src.lg : entry.src.sm}`, (tex) => {
       if (closed) { tex.dispose(); return; }
       tex.colorSpace = THREE.SRGBColorSpace;
