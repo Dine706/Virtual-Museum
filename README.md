@@ -22,6 +22,16 @@ npm run build
 
 The build output in `dist/` is a static site. Vercel builds it from `vercel.json` on every push to the deployed branch.
 
+### Test area first, then live
+
+| | Branch | Address |
+|---|---|---|
+| **Test area** (all new work) | `claude/test-area` | https://nimba-3d-git-claude-test-area-dine706s-projects.vercel.app (Vercel login; red **TEST** badge) |
+| **Live site** | `claude/new-session-96lrge` | https://nimba-3d.vercel.app |
+
+Every change is pushed to `claude/test-area` only. Vercel builds it as a preview at the address above.
+The live branch is updated only when Dean approves, by merging the test branch into it.
+
 URL flags:
 * `?skipintro=1` skips the title and flyover;
 * `?debug=1` shows uncertain badges, an FPS meter and the test hooks;

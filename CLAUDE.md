@@ -149,6 +149,9 @@ Hotspots with `photos: []` (otter shrew, bat, N'Zo, Yéalé) show a tasteful ill
 - [ ] README of the final app explains how to rebuild data (`scripts/`).
 
 ## 15. Working style
+* **Test area first (Dean's rule):** push all work to the branch `claude/test-area` (Vercel preview,
+  https://nimba-3d-git-claude-test-area-dine706s-projects.vercel.app, shows a red TEST badge). Never push to the live
+  branch `claude/new-session-96lrge` (https://nimba-3d.vercel.app) until Dean says to go live; then merge the test branch.
 * Make decisions yourself using this brief; ask Dean only for things that need his input (hosting domain, CSIG wording changes, extra photos he owns).
 * Keep commits small, one per milestone. Keep `src/` readable: `scene/terrain.ts`, `scene/sky.ts`, `scene/overlays.ts`, `scene/camera.ts`, `scene/picking.ts`, `ui/panel.ts`, `ui/pins.ts`, `ui/list.ts`, `i18n/`, `data/content.ts` (types generated from the schema above).
 * Write a short `docs/BUILD_NOTES.md` as you go (decisions, budgets measured, issues).

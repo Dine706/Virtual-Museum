@@ -596,8 +596,9 @@ def build_near(T, cx, cz, R, spacing, tree_r, areas):
         lvs = np.where(np.isnan(lvs), H, lvs)
         bed = np.minimum(H, lvs - 1.2)
         ease = np.clip(s_water * 1.6, 0, 1)
-        H = H * (1 - ease) + bed * ease
-        H = np.where(m_water, np.minimum(H, lvs - 0.6), H)
+        eased = H * (1 - ease) + bed * ease
+        # outside the outline the bank stops at the waterline (never a dry hollow below the lake surface)
+        H = np.where(m_water, np.minimum(eased, lvs - 0.6), np.maximum(eased, np.minimum(H, lvs + 0.25)))
     w_mine = np.maximum(bare * (1 - forest) * 0.8, s_mine * 1.6)
     w_rock = np.maximum(w_rock, s_rock * 1.2)
     w_turf = w_turf * (1 - s_mine * 0.85)
@@ -664,13 +665,18 @@ def scatter(T, cx, cz, F, assets, tree_r, density, areas=(), seed=7):
                 m |= inside(P, x, z)
         return m
 
-    def put(aid, x, z, s, tilt=0.06):
+    def put(aid, x, z, s, tilt=0.06, max_w=None):
+        """s: uniform scale per instance; max_w caps the footprint (m) – long, flat scans (a 1.7 m strip of grass)
+        get their height from s but are not widened with it."""
         if aid not in assets or not len(x):
             return
         y = ground(x, z)
         P = np.stack([x, -z, y - 0.04 * s], -1)
         rot = np.stack([rng.normal(0, tilt, len(x)), rng.normal(0, tilt, len(x)), rng.uniform(0, 2 * np.pi, len(x))], -1)
         scl = np.repeat(np.asarray(s, np.float32)[:, None], 3, 1)
+        if max_w is not None:
+            w = max(assets[aid]["size"][:2])
+            scl[:, :2] = np.minimum(scl[:, :2], max_w / max(w, 1e-3))
         prev = out.get(aid)
         out[aid] = (np.concatenate([prev[0], P]), np.concatenate([prev[1], rot]), np.concatenate([prev[2], scl])) if prev else (P, rot, scl)
 
@@ -707,7 +713,7 @@ def scatter(T, cx, cz, F, assets, tree_r, density, areas=(), seed=7):
         sz = assets[aid]["size"] if aid in assets else [1, 1, 1]
         # montane grassland: a dense, knee-high sward; lowland savanna grass taller still
         target = np.where(high[k], 0.62, 0.85) * (0.55 + 0.9 * rng.random(k.sum()) * (0.6 + 0.4 * patch[k])) * np.where(inner[k], 1.0, 1.35)
-        put(aid, x[k], z[k], target / max(sz[2], 0.05))
+        put(aid, x[k], z[k], target / max(sz[2], 0.05), max_w=1.6)
     shrub = (~sel) & open_ & (rng.random(x.size) < np.where(mine, 0.025, 0.04))
     for i, aid in enumerate(("shrub_01", "shrub_02", "shrub_03", "shrub_04")):
         k = shrub & (rng.integers(0, 4, x.size) == i)
