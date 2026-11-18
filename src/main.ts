@@ -44,7 +44,18 @@ function webglAvailable(): boolean {
   } catch { return false; }
 }
 
+/** Test-area builds (Vercel previews) say so on screen, so the live site and the test site are never confused. */
+function testBadge() {
+  if (!__TEST_AREA__) return;
+  const b = document.createElement('div');
+  b.className = 'test-badge';
+  b.textContent = 'TEST';
+  b.title = 'Test area – not the live site';
+  document.body.append(b);
+}
+
 async function boot() {
+  testBadge();
   const mark = (n: string) => performance.mark(`nimba:${n}`);
   mark('boot');
   if (!webglAvailable()) { showFatal(t('loading.error')); return; }

@@ -478,3 +478,7 @@ body.touring .walk-veil p { visibility: hidden; }
 .pano-hint.fade { opacity: 0; }
 .walk-pano .pano-dot { font: 700 .6875rem/1 var(--font-ui); padding: 3px 5px; border-radius: 6px; background: var(--straw-300); color: var(--forest-900); }
 @media (max-width: 600px) { .pano-title { padding: 8px 12px; } .pano-title strong { font-size: .9375rem; } .pano-title span { font-size: .6875rem; } .walk-pano span:last-child { display: none; } }
+
+/* Test-area marker (preview builds only) */
+.test-badge { position: fixed; z-index: 200; left: 50%; top: calc(4px + var(--sat)); transform: translateX(-50%); padding: 2px 10px; border-radius: 999px;
+  background: #C8553D; color: #fff; font: 700 .6875rem/1.6 var(--font-ui); letter-spacing: .12em; pointer-events: none; box-shadow: 0 1px 4px rgba(0, 0, 0, .35); }

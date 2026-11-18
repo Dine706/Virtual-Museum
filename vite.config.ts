@@ -32,6 +32,8 @@ function pruneDist(): Plugin {
 export default defineConfig({
   base: './',
   plugins: [pruneDist()],
+  // Vercel sets VERCEL_ENV: 'preview' for the test area (branch claude/test-area), 'production' for the live site.
+  define: { __TEST_AREA__: JSON.stringify(process.env.VERCEL_ENV === 'preview' || process.env.NIMBA_TEST_AREA === '1') },
   server: { port: 5173, strictPort: true, host: true },
   build: { target: 'es2022', assetsInlineLimit: 0, chunkSizeWarningLimit: 800 },
 });
