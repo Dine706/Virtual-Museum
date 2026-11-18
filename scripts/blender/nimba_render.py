@@ -129,6 +129,64 @@ def detail(x, y, amp=1.0):
     return amp * (0.9 * value_noise(x, y, 23.0, 1) + 0.35 * value_noise(x, y, 7.0, 2) + 0.12 * value_noise(x, y, 2.3, 3))
 
 
+# ---------------------------------------------------------------- OpenStreetMap areas (as in walk mode)
+
+AREA_KIND = {"water": "water", "quarry": "mine", "brownfield": "mine", "industrial": "mine",
+             "farmland": "field", "orchard": "field", "cliff": "rock", "bare_rock": "rock", "scree": "rock",
+             "sand": "sand", "wetland": "wetland"}
+
+
+def osm_areas(T, cx, cz, R):
+    """Mapped areas near (cx, cz): list of (kind, name, (n, 2) array of x, z), deduplicated across tiles."""
+    import json
+    out, seen = [], set()
+    t = 3000.0
+    i0, i1 = int((cx - R - T.origin) // t), int((cx + R - T.origin) // t)
+    j0, j1 = int((cz - R - T.origin) // t), int((cz + R - T.origin) // t)
+    for j in range(max(0, j0), min(9, j1) + 1):
+        for i in range(max(0, i0), min(9, i1) + 1):
+            f = WALK / "osm" / f"{i}_{j}.json"
+            if not f.exists():
+                continue
+            for a in json.loads(f.read_text()).get("areas", []):
+                kind = "enclave" if a.get("name") == "Mine de Nimba" else AREA_KIND.get(a["k"])
+                key = (a["k"], tuple(a["p"][:6]), len(a["p"]))
+                if not kind or key in seen:
+                    continue
+                seen.add(key)
+                P = np.asarray(a["p"], np.float64).reshape(-1, 2)
+                if P[:, 0].max() < cx - R or P[:, 0].min() > cx + R or P[:, 1].max() < cz - R or P[:, 1].min() > cz + R:
+                    continue
+                out.append((kind, a.get("name"), P))
+    return out
+
+
+def inside(P, x, z):
+    """Even-odd point-in-polygon for arrays of points x, z (vectorised over the points)."""
+    x, z = np.asarray(x), np.asarray(z)
+    res = np.zeros(x.shape, bool)
+    xs, zs = P[:, 0], P[:, 1]
+    xj, zj = np.roll(xs, 1), np.roll(zs, 1)
+    for k in range(len(P)):
+        a, b, c, d = xs[k], zs[k], xj[k], zj[k]
+        if b == d:
+            continue
+        cross = ((b > z) != (d > z)) & (x < (c - a) * (z - b) / (d - b) + a)
+        res ^= cross
+    return res
+
+
+def lake_level(T, P):
+    """Water level: lower quartile of the terrain sampled inside the outline (the DEM over water is the
+    water surface), less 0.3 m – as in src/walk/water.ts."""
+    x0, x1, z0, z1 = P[:, 0].min(), P[:, 0].max(), P[:, 1].min(), P[:, 1].max()
+    st = max(4.0, max(x1 - x0, z1 - z0) / 40)
+    gx, gz = np.meshgrid(np.arange(x0 + st / 2, x1, st), np.arange(z0 + st / 2, z1, st))
+    m = inside(P, gx, gz)
+    hs = T.sample(T.h, gx[m], gz[m]) if m.any() else T.sample(T.h, P[:, 0], P[:, 1])
+    return float(np.quantile(hs, 0.25 if m.any() else 0.0)) - 0.3
+
+
 # ---------------------------------------------------------------- mesh helpers
 
 def grid_mesh(name, X, Y, Z, attrs=None):
@@ -333,7 +391,8 @@ def ground_material():
         mp2.inputs["Rotation"].default_value = (0, 0, 0.64)
         L.new(tc.outputs["Object"], mp2.inputs["Vector"])
         d1, d2 = tex_node(nt, WALK / "tex" / f"{name}_diff.webp"), tex_node(nt, WALK / "tex" / f"{name}_diff.webp")
-        d1.projection = d2.projection = "FLAT"
+        d1.projection = d2.projection = "BOX"  # walls and benches without smearing
+        d1.projection_blend = d2.projection_blend = 0.25
         L.new(mp.outputs[0], d1.inputs["Vector"])
         L.new(mp2.outputs[0], d2.inputs["Vector"])
         mix = N.new("ShaderNodeMix")
@@ -344,9 +403,18 @@ def ground_material():
         nn = tex_node(nt, WALK / "tex" / f"{name}_nor.webp", non_color=True)
         L.new(mp.outputs[0], nn.inputs["Vector"])
         wv = sep[w].outputs[ch] if ch < 3 else vcol[w].outputs["Alpha"]
+        tint = {"laterite": (1.18, 0.82, 0.68), "mine": (1.22, 0.7, 0.52)}.get(name)  # Nimba's iron-rich soils are redder
+        if tint:
+            tm = N.new("ShaderNodeVectorMath")
+            tm.operation = "MULTIPLY"
+            L.new(mix.outputs[2], tm.inputs[0])
+            tm.inputs[1].default_value = tint
+            mix_out = tm.outputs[0]
+        else:
+            mix_out = mix.outputs[2]
         sc = N.new("ShaderNodeVectorMath")
         sc.operation = "SCALE"
-        L.new(mix.outputs[2], sc.inputs[0])
+        L.new(mix_out, sc.inputs[0])
         L.new(wv, sc.inputs["Scale"])
         sn = N.new("ShaderNodeVectorMath")
         sn.operation = "SCALE"
@@ -444,7 +512,8 @@ def build_far(T, cx, cz, hole, spacing):
     H = g + can * 0.9
     # sink it under the fine patch so the two never fight
     inside = (np.abs(X - cx) < hole - 40) & (np.abs(Zs - cz) < hole - 40)
-    H = np.where(inside, H - 6, H)
+    # far under the fine patch: its coarse triangles would otherwise bridge pits and valleys above the camera
+    H = np.where(inside, g - 300, H)
     base = np.zeros(X.shape + (3,), np.float32)
     for k, c in CLASS_COL.items():
         base[cls == k] = c
@@ -455,7 +524,7 @@ def build_far(T, cx, cz, hole, spacing):
     return ob
 
 
-def build_near(T, cx, cz, R, spacing, tree_r):
+def build_near(T, cx, cz, R, spacing, tree_r, areas):
     n = int(R / spacing)
     ax = np.arange(-n, n + 1) * spacing
     X, Zs = np.meshgrid(cx + ax, cz + ax)
@@ -465,7 +534,33 @@ def build_near(T, cx, cz, R, spacing, tree_r):
     cls = T.sample(T.cls, X, Zs, nearest=True)
     d = np.hypot(X - cx, Zs - cz)
     edge = np.clip((R - np.maximum(np.abs(X - cx), np.abs(Zs - cz))) / 80, 0, 1)
-    H = g + detail(X, Zs, 0.55 + rock * 1.2) * edge
+    # mapped areas (OpenStreetMap): lakes are carved below their water level, mines are bare spoil
+    m_water = np.zeros(X.shape, bool)
+    m_mine = np.zeros(X.shape, bool)
+    m_rock = np.zeros(X.shape, bool)
+    level = np.full(X.shape, np.inf, np.float32)
+    for kind, _name, P in areas:
+        if kind not in ("water", "mine", "rock"):
+            continue
+        msk = inside(P, X, Zs)
+        if kind == "water":
+            m_water |= msk
+            level = np.where(msk, np.minimum(level, lake_level(T, P)), level)
+        elif kind == "mine":
+            m_mine |= msk
+        else:
+            m_rock |= msk
+    can = np.where(m_water, 0, np.where(m_mine, np.minimum(can, 3), can))
+
+    def soft(m, r=3):
+        """Box-blurred mask (r cells each way, twice): surfaces blend across mapped outlines."""
+        a = m.astype(np.float32)
+        for _ in range(2):
+            for ax in (0, 1):
+                a = sum(np.roll(a, k, ax) for k in range(-r, r + 1)) / (2 * r + 1)
+        return a
+    H = g + detail(X, Zs, 0.55 + rock * 1.2 + m_mine * 0.8) * edge
+    # (the carve itself is applied below, eased in over the shore so the bank slopes into the water)
     # beyond the tree radius the canopy is drawn as relief (like the far massif)
     shell = np.clip((d - tree_r) / 120, 0, 1)
     H = H + can * 0.9 * shell
@@ -488,8 +583,28 @@ def build_near(T, cx, cz, R, spacing, tree_r):
     w_rock = np.clip(rock * 1.3 + steep + n2 * 0.25 - 0.15 + bare * 0.5, 0, 1)
     w_moss = cloud * (forest * 0.55 + w_rock * 0.4) * (0.6 + n1 * 0.4)
     w_high = turf * high
-    w_mine = bare * (1 - forest) * 0.8
-    w_sand = np.zeros_like(X)
+    s_mine, s_water, s_rock = soft(m_mine), soft(m_water), soft(m_rock)
+    if m_water.any():
+        lv = np.where(np.isfinite(level), level, np.nan)
+        # spread the lake level a little beyond the outline so the eased bank has a target
+        lvs = lv.copy()
+        for _ in range(6):
+            for ax in (0, 1):
+                for k in (-1, 1):
+                    sh = np.roll(lvs, k, ax)
+                    lvs = np.where(np.isnan(lvs), sh, lvs)
+        lvs = np.where(np.isnan(lvs), H, lvs)
+        bed = np.minimum(H, lvs - 1.2)
+        ease = np.clip(s_water * 1.6, 0, 1)
+        H = H * (1 - ease) + bed * ease
+        H = np.where(m_water, np.minimum(H, lvs - 0.6), H)
+    w_mine = np.maximum(bare * (1 - forest) * 0.8, s_mine * 1.6)
+    w_rock = np.maximum(w_rock, s_rock * 1.2)
+    w_turf = w_turf * (1 - s_mine * 0.85)
+    w_high = w_high * (1 - s_mine * 0.85)
+    w_litter = w_litter * (1 - s_mine * 0.8)
+    w_sand = s_water * 1.0
+    w_laterite = w_laterite * (1 - s_water)
     W = np.stack([w_litter, w_laterite, w_turf, w_rock, w_moss, w_high, w_mine, w_sand], -1)
     W = W / (W.sum(-1, keepdims=True) + 1e-4)
     ob = grid_mesh("near", X, -Zs, H, {"w1": W[..., :4], "w2": W[..., 4:]})
@@ -497,15 +612,62 @@ def build_near(T, cx, cz, R, spacing, tree_r):
     return ob, dict(X=X, Z=Zs, H=H, g=g, can=can, cls=cls, rock=rock, slope=slope, high=high, bare=bare, d=d)
 
 
-def scatter(T, cx, cz, F, assets, tree_r, density, seed=7):
+def build_water(T, areas, cx, cz, R):
+    """OpenStreetMap lakes / flooded pits near the camera: flat water at the measured level."""
+    import bmesh
+    mat = water_material()
+    for kind, name, P in areas:
+        if kind != "water" or len(P) < 3:
+            continue
+        if np.hypot(P[:, 0].mean() - cx, P[:, 1].mean() - cz) > R * 1.5:
+            continue
+        lv = lake_level(T, P)
+        log(f"lake: {len(P)} points, level {lv:.1f} m")
+        Q = P[:-1] if np.allclose(P[0], P[-1]) else P
+        me = bpy.data.meshes.new("lake")
+        bm = bmesh.new()
+        vs = [bm.verts.new((float(x), float(-z), lv)) for x, z in Q]
+        try:
+            f = bm.faces.new(vs)
+            if f.normal.z < 0:
+                f.normal_flip()
+            bmesh.ops.triangulate(bm, faces=[f], quad_method="BEAUTY", ngon_method="EAR_CLIP")
+        except ValueError:
+            bm.free()
+            continue
+        bm.to_mesh(me)
+        bm.free()
+        ob = bpy.data.objects.new("lake", me)
+        ob.data.materials.append(mat)
+        bpy.context.scene.collection.objects.link(ob)
+
+
+def scatter(T, cx, cz, F, assets, tree_r, density, areas=(), seed=7):
     """Place plants and rocks from the data (deterministic). Returns {asset id: (points, rot, scl)}."""
     rng = np.random.default_rng(seed)
     out = {}
+    gx, gz, gh = F["X"][0], F["Z"][:, 0], F["H"]
+    sp = gx[1] - gx[0]
+
+    def ground(x, z):
+        """Height of the fine ground mesh (carved lakes, mine relief) at x, z (bilinear on its grid)."""
+        u = np.clip((x - gx[0]) / sp, 0, len(gx) - 1.001)
+        v = np.clip((z - gz[0]) / sp, 0, len(gz) - 1.001)
+        i, j = np.floor(u).astype(int), np.floor(v).astype(int)
+        fu, fv = u - i, v - j
+        return (gh[j, i] * (1 - fu) + gh[j, i + 1] * fu) * (1 - fv) + (gh[j + 1, i] * (1 - fu) + gh[j + 1, i + 1] * fu) * fv
+
+    def area(kind, x, z):
+        m = np.zeros(np.shape(x), bool)
+        for k, _n, P in areas:
+            if k == kind:
+                m |= inside(P, x, z)
+        return m
 
     def put(aid, x, z, s, tilt=0.06):
         if aid not in assets or not len(x):
             return
-        y = T.sample(T.h, x, z) + detail(x, z, 0.55 + T.sample(T.rock, x, z) * 1.2)
+        y = ground(x, z)
         P = np.stack([x, -z, y - 0.04 * s], -1)
         rot = np.stack([rng.normal(0, tilt, len(x)), rng.normal(0, tilt, len(x)), rng.uniform(0, 2 * np.pi, len(x))], -1)
         scl = np.repeat(np.asarray(s, np.float32)[:, None], 3, 1)
@@ -532,8 +694,9 @@ def scatter(T, cx, cz, F, assets, tree_r, density, seed=7):
     cls = T.sample(T.cls, x, z, nearest=True)
     rock = T.sample(T.rock, x, z)
     g = T.sample(T.h, x, z)
-    open_ = (can < 4) & (cls != 80)
-    p_grass = np.where(open_, np.clip(0.97 - rock * 1.1, 0, 1), 0.05)
+    water, mine = area("water", x, z), area("mine", x, z)
+    open_ = (can < 4) & (cls != 80) & ~water
+    p_grass = np.where(open_, np.clip(0.97 - rock * 1.1, 0, 1), 0.05) * np.where(mine, 0.3, 1.0) * ~water  # old spoil: patchy regrowth
     patch = value_noise(x, z, 6.0, 31) * 0.5 + 0.5  # grass grows in clumps and patches
     u = rng.random(x.size)
     sel = u < p_grass * (0.55 + 0.45 * patch)
@@ -545,7 +708,7 @@ def scatter(T, cx, cz, F, assets, tree_r, density, seed=7):
         # montane grassland: a dense, knee-high sward; lowland savanna grass taller still
         target = np.where(high[k], 0.62, 0.85) * (0.55 + 0.9 * rng.random(k.sum()) * (0.6 + 0.4 * patch[k])) * np.where(inner[k], 1.0, 1.35)
         put(aid, x[k], z[k], target / max(sz[2], 0.05))
-    shrub = (~sel) & open_ & (rng.random(x.size) < 0.04)
+    shrub = (~sel) & open_ & (rng.random(x.size) < np.where(mine, 0.025, 0.04))
     for i, aid in enumerate(("shrub_01", "shrub_02", "shrub_03", "shrub_04")):
         k = shrub & (rng.integers(0, 4, x.size) == i)
         sz = assets.get(aid, {}).get("size", [1, 1, 1])
@@ -554,7 +717,8 @@ def scatter(T, cx, cz, F, assets, tree_r, density, seed=7):
     x, z, d = field(160, 3.0)
     rock = T.sample(T.rock, x, z)
     bare = T.sample(T.cls, x, z, nearest=True) == 60
-    p = np.clip(rock * 0.6 + bare * 0.25, 0.01, 0.8) * np.clip(1.2 - d / 160, 0.2, 1)
+    p = np.clip(rock * 0.6 + bare * 0.25 + area("mine", x, z) * 0.35, 0.01, 0.8) * np.clip(1.2 - d / 160, 0.2, 1)
+    p = p * ~area("water", x, z)
     k = rng.random(x.size) < p
     for aid in ("boulder_01", "rock_07", "rock_09", "rock_moss_set_01"):
         kk = k & (rng.integers(0, 4, x.size) == ("boulder_01", "rock_07", "rock_09", "rock_moss_set_01").index(aid))
@@ -563,7 +727,7 @@ def scatter(T, cx, cz, F, assets, tree_r, density, seed=7):
     # trees: one per crown-sized cell where the canopy model says there is forest
     x, z, d = field(tree_r, 7.0)
     can = T.sample(T.canopy, x, z)
-    k = (can > 4) & (rng.random(x.size) < np.clip(can / 12, 0.2, 0.95))
+    k = (can > 4) & (rng.random(x.size) < np.clip(can / 12, 0.2, 0.95)) & ~area("water", x, z) & ~area("mine", x, z)
     trees = [a for a in ("island_tree_01", "island_tree_02", "island_tree_03", "tree_small_02") if a in assets]
     if trees:
         pick = rng.integers(0, len(trees), x.size)
@@ -759,9 +923,32 @@ def main(argv):
 
     log("far massif")
     build_far(T, cx, cz, a.near, a.far_spacing)
+    areas = osm_areas(T, cx, cz, a.near + 200)
+    log(f"{len(areas)} mapped areas (OpenStreetMap)")
     log("fine ground")
-    near, F = build_near(T, cx, cz, a.near, a.spacing, a.trees)
-    ground_z = float(T.sample(T.h, cx, cz) + detail(cx, cz, 0.55 + float(T.sample(T.rock, cx, cz)) * 1.2))
+    near, F = build_near(T, cx, cz, a.near, a.spacing, a.trees, areas)
+    build_water(T, areas, cx, cz, a.near)
+    # stand on dry, not too steep ground nearest the spot (a spot on a lake moves to its shore)
+    wet = [P for k, _n, P in areas if k == "water"]
+    gxs, gzs, gH = F["X"][0], F["Z"][:, 0], F["H"]
+    sp = gxs[1] - gxs[0]
+    best = None
+    for r in np.arange(0, 160, sp):
+        for ang in np.linspace(0, 2 * np.pi, max(1, int(2 * np.pi * r / sp)), endpoint=False):
+            x, z = cx + r * np.cos(ang), cz + r * np.sin(ang)
+            if any(inside(P, np.array([x]), np.array([z]))[0] for P in wet):
+                continue
+            i, j = int(round((x - gxs[0]) / sp)), int(round((z - gzs[0]) / sp))
+            sl = abs(gH[j, i + 1] - gH[j, i - 1]) + abs(gH[j + 1, i] - gH[j - 1, i])
+            if sl / (2 * sp) < 0.35:
+                best = (x, z, float(gH[j, i]))
+                break
+        if best:
+            break
+    if best and (best[0], best[1]) != (cx, cz):
+        log(f"camera moved {np.hypot(best[0] - cx, best[1] - cz):.0f} m to dry ground")
+    cam_x, cam_z, ground_z = best if best else (cx, cz, float(T.sample(T.h, cx, cz)))
+    log(f"camera at x {cam_x:.0f} z {cam_z:.0f}, ground {ground_z:.1f} m (data {float(T.sample(T.h, cam_x, cam_z)):.1f} m)")
 
     if not a.no_plants:
         log("assets")
@@ -771,11 +958,11 @@ def main(argv):
             if ob:
                 assets[ob.name] = {"ob": ob, "size": list(ob["size"])}
         log(f"{len(assets)} assets; scattering")
-        placed = scatter(T, cx, cz, F, assets, a.trees, a.density)
+        placed = scatter(T, cx, cz, F, assets, a.trees, a.density, areas)
         total = 0
         for aid, (P, rot, scl) in placed.items():
             # keep the camera's own spot clear
-            far_enough = np.hypot(P[:, 0] - cx, P[:, 1] + cz) > 1.2
+            far_enough = np.hypot(P[:, 0] - cam_x, P[:, 1] + cam_z) > 1.2
             po = points_object(f"pts_{aid}", P[far_enough], rot[far_enough], scl[far_enough])
             instancer(po, assets[aid]["ob"])
             total += int(far_enough.sum())
@@ -787,7 +974,7 @@ def main(argv):
         cloud_volume(cx, -cz, 1080, 1420, 0.6 if a.time != "mist" else 0.9)
 
     yaw = a.yaw if a.yaw is not None else spot["yaw"]
-    camera(cx, -cz, ground_z + 1.7, yaw, a.pano, pitch=a.pitch)
+    camera(cam_x, -cam_z, ground_z + 1.7, yaw, a.pano, pitch=a.pitch)
 
     r = sc.render
     r.engine = "CYCLES"

@@ -463,3 +463,9 @@ grass otherwise goes black). `grass_medium_01` dropped. The sky node's `sun_rota
 (measured with a marker render). Equirect centre = camera view direction (rotation X = 90°).
 First panorama: summit, 3072 × 1536, 32 samples, ≈ 15 min on this container's CPU (54k plant instances). The
 Shadow PC GPU is for 4096 × 2048 at 256 samples and the other spots.
+Blender scene, second pass (LAMCO): OpenStreetMap areas now drive the render as in walk mode – lakes are flat
+water at the measured level (lower quartile of the DEM inside, −0.3 m) with an eased bank (a hard carve left
+vertical "curtains" along the shore), mines are red iron-ore spoil with patchy regrowth and more stones; masks
+are blurred so surfaces blend across outlines; ground textures use box projection (no smearing on pit walls);
+the camera steps to the nearest dry, gentle ground. Bug: the far massif mesh, only 6 m under the fine patch,
+bridged the pit with its coarse triangles and covered the camera (black render) – now sunk 300 m there.
