@@ -4,7 +4,8 @@
 // Rendering: two passes with separate depth ranges (no z-fighting at ground level, 30 km views from the
 // summit): far = sky, whole massif (DSM), outer clouds; near = ground patch, forest, cover, water, animals.
 import * as THREE from 'three';
-import { t, fmtMeters } from '../i18n';
+import { t, fmtMeters, getLang } from '../i18n';
+import { lonLatToXZ } from '../data/geo';
 import type { Content } from '../data/content';
 import type { Heightfield } from '../scene/heightfield';
 import type { Tier } from '../scene/tier';
@@ -42,6 +43,8 @@ export interface WalkTour {
   go(x: number, z: number, yaw: number, pitch: number, time: WalkTime): Promise<void>;
   look(yaw: number, pitch: number, time?: WalkTime): void;
   facePeople(): boolean;
+  openPano(): Promise<void>;
+  readonly hasPano: boolean;
   autopilot(speed: number, turn?: number): void;
 }
 export interface WalkHandle { exit(): void; tour: WalkTour; debug: Record<string, unknown> }
@@ -239,6 +242,18 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
     return n ?? null;
   }
 
+  // Photo-real 360° panoramas rendered offline (public/pano/): offered within 400 m of their spot.
+  let panos: import('../ui/pano').PanoEntry[] = [];
+  let panoHere: import('../ui/pano').PanoEntry | null = null;
+  let panoOpen = false;
+  void import('../ui/pano').then((m) => m.loadPanos(ctx.base)).then((l) => { panos = l; updatePlace(); });
+  hud.onPano = () => {
+    if (!panoHere || panoOpen) return;
+    panoOpen = true;
+    if (document.pointerLockElement) document.exitPointerLock();
+    void import('../ui/pano').then((m) => m.openPano(panoHere!, ctx.base, getLang(), ctx.reducedMotion)).finally(() => { panoOpen = false; last = performance.now(); });
+  };
+
   function updatePlace() {
     const b = biomeAt(data, pos.x, pos.z);
     habitat = habitatOf(b);
@@ -247,6 +262,12 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
     const area = placeArea();
     air = area && area !== 'wetland' && area !== 'enclave' ? 'savanna' : habitat;
     hud.setPlace(t(area ? `walk.place.${area}` : `walk.habitat.${habitat}`), fmtMeters(Math.round(pos.y)), !!zone, np && np.d < 1500 ? np.place.name : undefined);
+    panoHere = null;
+    for (const pe of panos) {
+      const [px, pz] = lonLatToXZ(pe.lon, pe.lat);
+      if (Math.hypot(px - pos.x, pz - pos.z) < 400) { panoHere = pe; break; }
+    }
+    hud.setPano(!!panoHere);
     ctx.onPosition?.(pos.x, pos.z);
   }
   updatePlace();
@@ -256,7 +277,7 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
   const frame = (now: number) => {
     if (!running) return;
     requestAnimationFrame(frame);
-    if (document.hidden) return;
+    if (document.hidden || panoOpen) return; // the 360° viewer covers the screen: no walk frames meanwhile
     const dt = Math.min(0.1, (now - last) / 1000);
     // Idle for 40 s: drop to ~15 fps (battery).
     if (now - idleSince > 40000 && now - last < 66) return;
@@ -503,6 +524,9 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
         controls.pitch = Math.atan2(best.y + 1.0 - eye.y, bd) * 0.6;
         return true;
       },
+      /** Open the 360° view of this place, if there is one (resolves when closed). */
+      async openPano() { if (panoHere) hud.onPano(); },
+      get hasPano() { return !!panoHere; },
       /** speed: fraction of walking pace (0..1); turn: rad/s. */
       autopilot(speed: number, turn = 0) { auto.on = speed > 0 || turn !== 0; auto.speed = speed; auto.turn = turn; if (!auto.on) controls.move.set(0, 0); },
     },

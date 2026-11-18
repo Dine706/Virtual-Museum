@@ -23,6 +23,8 @@ export class Hud {
   onExit: () => void = () => {};
   onTime: () => void = () => {};
   onCardClose: () => void = () => {};
+  onPano: () => void = () => {};
+  private panoBtn: HTMLButtonElement;
 
   constructor(coarse: boolean) {
     this.root = document.createElement('div');
@@ -31,6 +33,7 @@ export class Hud {
       <div class="walk-top">
         <div class="walk-place" aria-live="polite"></div>
         <div class="walk-actions">
+          <button type="button" class="walk-btn walk-pano" hidden></button>
           <button type="button" class="walk-btn walk-time"></button>
           <button type="button" class="walk-btn walk-exit"></button>
         </div>
@@ -53,6 +56,9 @@ export class Hud {
     exit.setAttribute('aria-label', t('walk.exitLabel'));
     exit.addEventListener('click', () => this.onExit());
     this.timeBtn.addEventListener('click', () => this.onTime());
+    this.panoBtn = this.root.querySelector('.walk-pano')!;
+    this.panoBtn.innerHTML = `<span class="pano-dot" aria-hidden="true">360°</span><span>${esc(t('pano.button'))}</span>`;
+    this.panoBtn.addEventListener('click', () => this.onPano());
     this.hint.textContent = t(coarse ? 'walk.hint.touch' : 'walk.hint.desktop');
     setTimeout(() => this.hint.classList.add('fade'), 9000);
   }
@@ -65,6 +71,9 @@ export class Hud {
   setPlace(habitat: string, elev: string, zone: boolean, near?: string) {
     this.place.innerHTML = `<strong>${esc(habitat)}</strong><span>${icons.mountain}${esc(elev)}${near ? ` · ${esc(near)}` : ''}</span>${zone ? `<em>${esc(t('walk.zone'))}</em>` : ''}`;
   }
+
+  /** Offer the photo-real 360° view when one was rendered near here. */
+  setPano(on: boolean) { this.panoBtn.hidden = !on; }
 
   veilOn(text = t('walk.loading')) { this.veilText.textContent = text; this.veil.classList.remove('off'); }
   veilOff() { this.veil.classList.add('off'); }

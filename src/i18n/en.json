@@ -191,5 +191,14 @@
   "walk.area.wetlandText": "Waterlogged ground covered with tall grasses and marsh plants.",
   "walk.area.osmNote": "Outline: OpenStreetMap; the look of the ground is a reconstruction.",
   "walk.area.wcNote": "Land-cover class: ESA WorldCover (10 m); the look of the ground is a reconstruction.",
-  "walk.area.enclaveNote": "Approximate outline: OpenStreetMap. The ground shows the vegetation measured here (land-cover and canopy-height maps); no pit is invented."
+  "walk.area.enclaveNote": "Approximate outline: OpenStreetMap. The ground shows the vegetation measured here (land-cover and canopy-height maps); no pit is invented.",
+  "pano.button": "360° view",
+  "pano.caption": "Computer-generated image: terrain, vegetation cover and light from the real data; generic plants and rocks (free CC0 scans). Not a photograph.",
+  "pano.close": "Close",
+  "pano.gyro": "Tilt",
+  "pano.loading": "Loading the 360° view…",
+  "pano.error": "Image unavailable for now.",
+  "pano.hint.touch": "Drag to look around · pinch to zoom",
+  "pano.hint.desktop": "Drag or use the arrow keys · wheel to zoom · Esc to close",
+  "pano.summit": "On top of Mount Richard-Molard"
 }

@@ -191,5 +191,14 @@
   "walk.area.wetlandText": "Sol gorgé d'eau, couvert d'herbes hautes et de plantes de marais.",
   "walk.area.osmNote": "Contour : OpenStreetMap ; l'aspect du sol est une reconstitution.",
   "walk.area.wcNote": "Classe d'occupation du sol : ESA WorldCover (10 m) ; l'aspect du sol est une reconstitution.",
-  "walk.area.enclaveNote": "Contour approximatif : OpenStreetMap. Le terrain montre la végétation mesurée ici (carte d'occupation du sol, hauteur de canopée), sans fosse inventée."
+  "walk.area.enclaveNote": "Contour approximatif : OpenStreetMap. Le terrain montre la végétation mesurée ici (carte d'occupation du sol, hauteur de canopée), sans fosse inventée.",
+  "pano.button": "Vue 360°",
+  "pano.caption": "Image de synthèse : relief, couvert végétal et lumière d'après les données réelles ; plantes et rochers génériques (scans libres CC0). Ce n'est pas une photographie.",
+  "pano.close": "Fermer",
+  "pano.gyro": "Inclinaison",
+  "pano.loading": "Chargement de la vue 360°…",
+  "pano.error": "Image indisponible pour le moment.",
+  "pano.hint.touch": "Glissez pour regarder autour · pincez pour zoomer",
+  "pano.hint.desktop": "Faites glisser ou utilisez les flèches · molette pour zoomer · Échap pour fermer",
+  "pano.summit": "Au sommet du mont Richard-Molard"
 }

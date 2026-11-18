@@ -445,3 +445,21 @@ autopilot/facePeople`; tour stops reuse the open-spot search (no start inside a 
 **Grass tufts:** blades lean out of a common root, darker soil-coloured roots, sunk 6 % into the ground. (A tapered
 card was tried and rejected: a trapezoid split in two triangles kinks the blade texture into zigzags.)
 **Forest edge:** trees past 85 % of the range drop out one by one (per-tree hash) instead of at one radius.
+
+## Photo-real 360° views (Blender / Cycles)
+`scripts/blender/nimba_render.py` builds a true-scale scene from the app's own data and renders it with Cycles:
+walk-mode tiles (15 m terrain, canopy height, WorldCover classes, rock) → a fine ground patch with micro-relief
+(the app's scanned ground layers blended per vertex) + the whole massif with the canopy as relief; CC0 Poly
+Haven plants/rocks scattered from the same data (dense two-ring grass sward, shrubs, outcrops, trees where the
+canopy model has forest); physical sky + sun (walk-mode presets), height-falling haze volume, sea-of-clouds
+volume. `--pano --publish` writes `public/pano/<spot>.jpg` (+ `_2k` for phones) and `panos.json`.
+The web viewer (`src/ui/pano.ts`, lazy, 2 KB gz) opens from walk mode within 400 m of a spot and from the tour
+card; drag/arrows/wheel/pinch, phone tilt on touch-only devices; the caption always says it is a
+computer-generated image, not a photograph. The walk loop stops rendering while the viewer is open and the
+tour's timer pauses.
+Findings: Poly Haven glTF takes transparency from the colour JPEG (no alpha) → cards render as dark blocks; the
+fetcher now also downloads the `*_alpha_*` masks and the script wires them in, with leaf translucency (backlit
+grass otherwise goes black). `grass_medium_01` dropped. The sky node's `sun_rotation` is the compass azimuth
+(measured with a marker render). Equirect centre = camera view direction (rotation X = 90°).
+First panorama: summit, 3072 × 1536, 32 samples, ≈ 15 min on this container's CPU (54k plant instances). The
+Shadow PC GPU is for 4096 × 2048 at 256 samples and the other spots.

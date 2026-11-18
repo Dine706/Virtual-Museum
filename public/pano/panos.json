@@ -1,0 +1,17 @@
+{
+ "panos": [
+  {
+   "id": "summit",
+   "lon": -8.4083,
+   "lat": 7.6219,
+   "yaw": -0.8,
+   "src": {
+    "lg": "pano/summit.jpg",
+    "sm": "pano/summit_2k.jpg"
+   },
+   "title_fr": "Au sommet du mont Richard-Molard",
+   "title_en": "On top of Mount Richard-Molard"
+  }
+ ],
+ "note": "Computer-generated (Blender/Cycles) from the app's terrain and land-cover data; generic CC0 plants (Poly Haven). scripts/blender/nimba_render.py"
+}

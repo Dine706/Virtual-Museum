@@ -52,6 +52,7 @@ export function runTour(d: TourDeps): { stop: () => void } {
     <div class="tour-bar"><i></i></div>
     <div class="tour-actions">
       <button type="button" class="btn-primary tour-next" data-i18n="tour.next"></button>
+      <button type="button" class="btn-ghost tour-pano" hidden data-i18n="pano.button"></button>
       <button type="button" class="btn-ghost tour-exit" data-i18n="tour.exit"></button>
     </div>`;
   applyStatic(el);
@@ -82,8 +83,9 @@ export function runTour(d: TourDeps): { stop: () => void } {
   const busy = () => { el.classList.add('busy'); title.textContent = t('tour.loading'); text.textContent = ''; note.hidden = true; };
   /** Wait ms, or until Next / exit; also ends if the visitor left walk mode themselves. */
   const wait = (ms: number, needWalk: boolean) => new Promise<void>((res) => {
-    const t0 = performance.now();
+    let t0 = performance.now();
     const iv = setInterval(() => {
+      if (document.querySelector('.pano-viewer')) { t0 += 200; return; } // the 360° view pauses the stop
       if (aborted || performance.now() - t0 >= ms || (needWalk && !d.walking())) { if (needWalk && !d.walking()) stop(); done(); }
     }, 200);
     const done = () => { clearInterval(iv); wake = null; res(); };
@@ -100,6 +102,8 @@ export function runTour(d: TourDeps): { stop: () => void } {
     setTimeout(() => el.remove(), 400);
   }
   next.addEventListener('click', () => wake?.());
+  const panoBtn = $<HTMLButtonElement>('.tour-pano');
+  panoBtn.addEventListener('click', () => { void d.walking()?.tour.openPano(); });
   exitBtn.addEventListener('click', stop);
   const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape' && !aborted) { e.preventDefault(); e.stopImmediatePropagation(); stop(); } };
   window.addEventListener('keydown', onKey, true);
@@ -127,12 +131,14 @@ export function runTour(d: TourDeps): { stop: () => void } {
       if (s.people) { await new Promise((r) => setTimeout(r, 600)); walk.tour.facePeople(); }
       const ms = d.hold ? 0 : d.reducedMotion ? STOP_MS * 0.8 : STOP_MS;
       show(i + 2, s.key, s.text(), ms);
+      panoBtn.hidden = !walk.tour.hasPano;
       walk.tour.autopilot(d.reducedMotion ? 0 : s.speed, d.reducedMotion ? 0 : s.turn);
       await wait(ms || 3.6e6, true);
       walk.tour.autopilot(0);
     }
     if (aborted) return;
     // Back to the map: the visitor's turn.
+    panoBtn.hidden = true;
     d.walking()?.exit();
     d.goHome();
     show(total + 1, 'end', t('tour.end.text'), 0);
