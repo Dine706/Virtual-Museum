@@ -44,6 +44,7 @@ export class RegionalFlora {
       o.material.dispose();
       if(this.disposed){o.geometry.dispose();return;}
       o.geometry.applyMatrix4(o.matrixWorld);
+      o.geometry.computeBoundingBox();
       const mesh=new THREE.InstancedMesh(o.geometry,mat,900);
       mesh.name=o.name; mesh.count=0; mesh.frustumCulled=false;
       mesh.castShadow=this.radius>22; mesh.receiveShadow=true;
@@ -105,14 +106,12 @@ export class RegionalFlora {
     const m=new THREE.Matrix4(), v=new THREE.Vector3();
     let best=Infinity, leaf:THREE.Vector3|null=null;
     for(const mesh of this.batches.values()){
-      const position=mesh.geometry.attributes.position;
       for(let i=0;i<mesh.count;i++){
         mesh.getMatrixAt(i,m);
         v.setFromMatrixPosition(m);
         const d=v.distanceTo(eye);
         if(d<1 || d>best) continue;
-        const index=Math.floor(position.count*.46);
-        leaf=new THREE.Vector3().fromBufferAttribute(position,index).applyMatrix4(m);
+        leaf=mesh.geometry.boundingBox!.getCenter(new THREE.Vector3()).applyMatrix4(m);
         best=d;
       }
     }
@@ -121,10 +120,31 @@ export class RegionalFlora {
 
   pick(ray:THREE.Raycaster, limit:number):Card|null {
     ray.far=Math.min(7,limit);
-    const hit=ray.intersectObjects(this.group.children,false)[0];
+    let form=ray.intersectObjects(this.group.children,false)[0]?.object.name;
+    // A leaf moves in the wind and much of a frond is open space. Let a tap between
+    // nearby leaves identify the plant while respecting nearer terrain and tree hits.
+    if(!form){
+      const matrix=new THREE.Matrix4(), center=new THREE.Vector3(), hit=new THREE.Vector3();
+      const sphere=new THREE.Sphere();
+      let nearest=ray.far;
+      for(const mesh of this.batches.values()){
+        const box=mesh.geometry.boundingBox!;
+        for(let i=0;i<mesh.count;i++){
+          mesh.getMatrixAt(i,matrix);
+          box.getCenter(center).applyMatrix4(matrix);
+          if(center.distanceToSquared(ray.ray.origin)>64)continue;
+          const scale=matrix.getMaxScaleOnAxis();
+          sphere.center.copy(center);
+          sphere.radius=Math.max(.10,Math.min(.60,(box.max.y-box.min.y)*.48)*scale);
+          if(!ray.ray.intersectSphere(sphere,hit))continue;
+          const d=hit.distanceTo(ray.ray.origin);
+          if(d<nearest){nearest=d;form=mesh.name;}
+        }
+      }
+    }
     ray.far=Infinity;
-    if(!hit)return null;
-    const [name,id,en,fr]=species[hit.object.name.slice(0,-1) as Form];
+    if(!form)return null;
+    const [name,id,en,fr]=species[form.slice(0,-1) as Form];
     return {kicker:getLang()==='fr'?'Flore du Nimba':'Nimba flora',title:name,
       lines:[getLang()==='fr'?fr:en],sources:[{label:'GBIF',url:'https://www.gbif.org/species/'+id}]};
   }
