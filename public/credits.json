@@ -177,6 +177,13 @@
       "license": "Project reconstruction artwork",
       "url": "landscape/tussock-grass.webp",
       "provenance": "scripts/blender/reference/landscape-art/manifest.json"
+    },
+    {
+      "name": "Village plaster, hardwood, thatch and galvanized roofing",
+      "author": "Higgsfield",
+      "license": "Project reconstruction artwork",
+      "url": "walk/art/village/plaster.webp",
+      "provenance": "Higgsfield job da8dca7c-cb86-4dfd-b981-88b14af3425a, four generated material swatches."
     }
   ],
   "data": [

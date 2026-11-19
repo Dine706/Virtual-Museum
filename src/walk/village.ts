@@ -146,7 +146,10 @@ export class Village {
     hoeBlade: new THREE.BoxGeometry(0.16, 0.02, 0.14),
   };
 
-  constructor(private data: WalkData, private maxPeople: number) {
+  private artRequested = false;
+  private disposed = false;
+
+  constructor(private data: WalkData, private maxPeople: number, private artBase?: string) {
     const W = (m: THREE.Material) => walkMaterial(m);
     this.mats.wallDoor = W(new THREE.MeshStandardMaterial({ map: plaster('door', 22, 1), roughness: 0.95 }));
     this.mats.wallWin = W(new THREE.MeshStandardMaterial({ map: plaster('window', 22, 2), roughness: 0.95 }));
@@ -158,6 +161,7 @@ export class Village {
     this.mats.rust = W(new THREE.MeshStandardMaterial({ map: metal(0.9, 8), roughness: 0.7, metalness: 0.3, side: THREE.DoubleSide }));
     this.mats.gable = W(new THREE.MeshStandardMaterial({ map: plaster('plain', 22, 9), roughness: 0.95, side: THREE.DoubleSide }));
     this.mats.wood = W(new THREE.MeshStandardMaterial({ color: '#5b3d25', roughness: 0.85 }));
+    this.mats.joinery = W(new THREE.MeshStandardMaterial({ color: this.artBase ? 0xffffff : 0x694b39, roughness: 0.87 }));
     this.mats.woodLight = W(new THREE.MeshStandardMaterial({ color: '#7d5a38', roughness: 0.8 }));
     this.mats.hair = W(new THREE.MeshStandardMaterial({ color: '#141010', roughness: 0.95 }));
     this.mats.basin = W(new THREE.MeshStandardMaterial({ color: '#9aa3a8', roughness: 0.35, metalness: 0.6 }));
@@ -167,11 +171,41 @@ export class Village {
 
   // ---------------------------------------------------------------- houses
 
+  private streamMaterials() {
+    if (!this.artBase || this.artRequested) return;
+    this.artRequested = true;
+    const surfaces: Record<string, string[]> = {
+      door: ['wallDoor', 'wallDoor2', 'hutWall'], windows: ['wallWin', 'wallWin2'],
+      plaster: ['gable'], boards: ['joinery'], zinc: ['metal', 'rust'], thatch: ['thatch'],
+    };
+    const loader = new THREE.TextureLoader();
+    for (const [file, names] of Object.entries(surfaces)) {
+      void loader.loadAsync(`${this.artBase}walk/art/village/${file}.webp`).then(map => {
+        if (this.disposed) { map.dispose(); return; }
+        map.colorSpace = THREE.SRGBColorSpace;
+        map.wrapS = map.wrapT = THREE.RepeatWrapping;
+        map.anisotropy = 4;
+        for (const name of names) {
+          const material = this.mats[name] as THREE.MeshStandardMaterial;
+          material.map?.dispose();
+          material.map = map;
+          material.bumpMap = map;
+          material.bumpScale = file === 'zinc' ? 0.055 : 0.024;
+          if (name === 'rust') material.color.set('#ba947b');
+          material.needsUpdate = true;
+        }
+      }).catch(() => { /* Retain the procedural building material when a detail map is unavailable. */ });
+    }
+  }
+
+  dispose() { this.disposed = true; }
+
   private buildHouses(eye: THREE.Vector3) {
     for (const m of this.houseMeshes) { this.group.remove(m); (m as THREE.InstancedMesh).dispose?.(); }
     this.houseMeshes = [];
     this.houses.length = 0;
     const list = this.data.buildingsNear(eye.x, eye.z, 650);
+    if (list.length) this.streamMaterials();
     for (const b of list) {
       const hs = [[-1, -1], [1, -1], [1, 1], [-1, 1], [0, 0]].map(([su, sv]) => {
         const c = Math.cos(b.a), s = Math.sin(b.a);
@@ -210,7 +244,7 @@ export class Village {
     const mHut = mk(cyl, this.mats.hutWall, n((x) => x.round));
     const mCone = mk(cone, this.mats.thatch, n((x) => x.round));
     const mPorch = mk(new THREE.BoxGeometry(1, 0.04, 1).translate(0, 0, 0.5), this.mats.metal, n((x) => x.porch));
-    const trim = mk(box, this.mats.wood, n((x) => !x.round) * 9);
+    const trim = mk(box, this.mats.joinery, n((x) => !x.round) * 9);
     const mPost = mk(post, this.mats.wood, n((x) => x.porch) * 3);
     const M = new THREE.Matrix4(), Q = new THREE.Quaternion(), P = new THREE.Vector3(), S = new THREE.Vector3(), Y = new THREE.Vector3(0, 1, 0);
     const put = (m: THREE.InstancedMesh, px: number, py: number, pz: number, rot: number, sx: number, sy: number, sz: number) => {

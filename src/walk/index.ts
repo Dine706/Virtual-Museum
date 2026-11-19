@@ -119,7 +119,7 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
   const cover = new GroundCover(data, { radius: O.cover, spacing: O.spacing, shadows: O.shadows > 0, rockRadius: O.rock, texSize: O.tex, msaa: !!renderer.getContext().getContextAttributes()?.antialias });
   const water = new Water(data, env.hemi.color);
   const fauna = new Fauna(data, { birds: O.birds, butterflies: O.flies });
-  const village = new Village(data, quality === 'high' ? 26 : quality === 'mid' ? 16 : 8);
+  const village = new Village(data, quality === 'high' ? 26 : quality === 'mid' ? 16 : 8, quality === 'high' ? ctx.base : undefined);
 
   const far = new THREE.Scene();
   far.add(env.sky, ground.far);
@@ -580,6 +580,7 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
       }
     });
     disposeTree(near); disposeTree(far);
+    village.dispose();
     forest.dispose();
     ground.dispose();
     if (landscapeMaps) for (const map of Object.values(landscapeMaps)) map.dispose();
