@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="fr">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Monts Nimba · Crédits</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath fill='%2316210f' d='M0 0h32v32H0z'/%3E%3Cpath fill='%23ae905b' d='m3 25 10-17 5 8 3-5 9 14z'/%3E%3C/svg%3E">
+<style>
+  *{box-sizing:border-box}body{margin:0;background:#101a0c;color:#eff4f2;font:16px/1.65 system-ui,sans-serif}main{max-width:900px;margin:auto;padding:40px 24px}header{display:flex;align-items:center;justify-content:space-between;gap:20px}h1{font:600 clamp(2rem,6vw,3rem)/1.2 Georgia,serif}h2{font:600 1.5rem Georgia,serif;color:#c1b69e;margin-top:40px}a{color:#c1b69e}button{background:#ae905b;color:#101a0c;padding:12px 18px;border:0;border-radius:24px;font:inherit;cursor:pointer}li{margin:16px 0}small{display:block;color:#acc2c5}ul{padding-left:20px}.intro{max-width:70ch;padding:20px;background:#1e2c16;border-radius:16px}:focus-visible{outline:3px solid #ae905b;outline-offset:4px}
+</style>
+<main><header><a href="./">← Monts Nimba</a><button type="button" id="language">English</button></header>
+<h1 id="title">Crédits et données</h1><p class="intro" id="disclosure">Reconstitution numérique. Les images illustrent les paysages ; elles ne sont pas des photographies documentaires.</p><div id="credits" aria-live="polite"></div></main>
+<script type="module">
+let lang='fr',registry;
+const titles={fr:['Données','Création visuelle','Bibliothèque de matériaux et modèles'],en:['Data','Visual artwork','Material and model libraries']};
+function render(){
+  document.documentElement.lang=lang;document.querySelector('#language').textContent=lang==='fr'?'English':'Français';
+  document.querySelector('#title').textContent=lang==='fr'?'Crédits et données':'Credits and data';
+  if(!registry)return;document.querySelector('#disclosure').textContent=registry[`disclosure_${lang}`];
+  const body=document.querySelector('#credits');body.replaceChildren();
+  [registry.data,registry.assets,registry.libraryAssets].forEach((list,index)=>{
+    const heading=document.createElement('h2');heading.textContent=titles[lang][index];body.append(heading);
+    const ul=document.createElement('ul');for(const item of list){
+      const li=document.createElement('li'),a=document.createElement('a');a.textContent=item.name;a.href=item.url;a.rel='noopener';a.target='_blank';
+      const detail=document.createElement('small');detail.textContent=`${item.author??item.authors?.join(', ')??''} · ${item.license}`;
+      li.append(a,detail);if(item.attribution){const p=document.createElement('small');p.textContent=item.attribution;li.append(p)}ul.append(li);
+    }body.append(ul);
+  });
+}
+document.querySelector('#language').addEventListener('click',()=>{lang=lang==='fr'?'en':'fr';render()});
+try{const response=await fetch('./credits.json');if(!response.ok)throw new Error();registry=await response.json();render()}
+catch{document.querySelector('#credits').textContent='Crédits indisponibles / Credits unavailable.'}
+</script>
+</html>

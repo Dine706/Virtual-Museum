@@ -157,8 +157,7 @@
     "The Copernicus DEM is a surface model that includes vegetation, so 1,755 m is not a survey height."
    ],
    "photos": [
-    "peak-cloudcap",
-    "hero-massif"
+    "reconstruction-summit"
    ],
    "camera": {
     "distance_m": 3200,
@@ -221,7 +220,7 @@
     "Marker position is DEM-snapped and approximate."
    ],
    "photos": [
-    "peak-strata"
+    "reconstruction-ridge"
    ],
    "camera": {
     "distance_m": 2800,
@@ -288,7 +287,7 @@
     "Three different heights are published; show a range, not a single value."
    ],
    "photos": [
-    "valley-view"
+    "reconstruction-ridge"
    ],
    "camera": {
     "distance_m": 2600,
@@ -356,10 +355,7 @@
     "Lower limit of the grassland (1,200 vs 1,400 m) is given as a range by Wikipedia."
    ],
    "photos": [
-    "montane-grassland",
-    "grassland-valley",
-    "grassland-above-forest",
-    "protea-bushland"
+    "reconstruction-summit"
    ],
    "camera": {
     "distance_m": 1800,
@@ -423,7 +419,7 @@
     "Altitude bands differ between UNESCO (dense forest up to 1,000 m) and Wikipedia (montane forest 600–1,200/1,400 m)."
    ],
    "photos": [
-    "cloud-forest"
+    "reconstruction-cloudforest"
    ],
    "camera": {
     "distance_m": 1500,
@@ -481,8 +477,7 @@
     "Marker is illustrative; forests occur around the entire base."
    ],
    "photos": [
-    "forest-canopy",
-    "rainforest-stream"
+    "reconstruction-lowland"
    ],
    "camera": {
     "distance_m": 1600,
@@ -543,8 +538,7 @@
    ],
    "uncertain": [],
    "photos": [
-    "savanna",
-    "reserve-edge-ridge"
+    "reconstruction-savanna"
    ],
    "camera": {
     "distance_m": 2200,
@@ -611,8 +605,7 @@
     "The marker is symbolic: individual springs are not mapped in the kit."
    ],
    "photos": [
-    "forest-stream",
-    "rainforest-stream"
+    "reconstruction-stream"
    ],
    "camera": {
     "distance_m": 2000,
@@ -692,9 +685,7 @@
     "Gestation length (≈9 months) is from a secondary summary of Sandberger-Loua et al. 2017; confirm before publishing."
    ],
    "photos": [
-    "toad-gestating-female",
-    "toad-amplexus",
-    "toad-young-female"
+    "reconstruction-summit"
    ],
    "camera": {
     "distance_m": 1200,
@@ -757,7 +748,9 @@
     "Status may have changed since 2017; recheck the Red List before launch.",
     "No openly licensed photo found: use an illustration or a silhouette, never a stock photo of another species."
    ],
-   "photos": [],
+   "photos": [
+    "reconstruction-stream"
+   ],
    "camera": {
     "distance_m": 1400,
     "azimuth_deg": 280,
@@ -825,7 +818,9 @@
     "The number of roost tunnels (reported as four in secondary sources) is not confirmed; do not display it.",
     "Wikipedia says 'recorded from only one mining site'; sources differ."
    ],
-   "photos": [],
+   "photos": [
+    "reconstruction-ridge"
+   ],
    "camera": {
     "distance_m": 1500,
     "azimuth_deg": 220,
@@ -907,10 +902,7 @@
     "A 2024 incident (see CLAUDE.md sensitivity notes) means tone matters: do not present chimpanzees as 'tame' or 'approachable'."
    ],
    "photos": [
-    "chimp-bossou-1",
-    "chimp-bossou-2",
-    "chimp-nimba-lowland",
-    "oil-palm-fruit"
+    "reconstruction-lowland"
    ],
    "camera": {
     "distance_m": 1500,
@@ -970,8 +962,7 @@
     "The research centre was damaged by residents in September 2024 (Wikipedia/press); verify the current status before showing this hotspot to the public."
    ],
    "photos": [
-    "ireb-building",
-    "ireb-sign"
+    "reconstruction-village"
    ],
    "camera": {
     "distance_m": 900,
@@ -1031,8 +1022,7 @@
     "Current planting progress was not verified."
    ],
    "photos": [
-    "corridor-planting",
-    "corridor-seedlings"
+    "reconstruction-lowland"
    ],
    "camera": {
     "distance_m": 2000,
@@ -1092,8 +1082,7 @@
     "Consult communities before showing or naming any sacred site."
    ],
    "photos": [
-    "bossou-village",
-    "bossou-market"
+    "reconstruction-village"
    ],
    "camera": {
     "distance_m": 1800,
@@ -1160,7 +1149,7 @@
     "Earlier drafts assumed the station was at Séringbara; sources point to Gbakoré."
    ],
    "photos": [
-    "reserve-edge-ridge"
+    "reconstruction-village"
    ],
    "camera": {
     "distance_m": 1500,
@@ -1215,7 +1204,9 @@
    "uncertain": [
     "Population and local facts for N'Zo were not sourced."
    ],
-   "photos": [],
+   "photos": [
+    "reconstruction-village"
+   ],
    "camera": {
     "distance_m": 2000,
     "azimuth_deg": 80,
@@ -1280,7 +1271,9 @@
    "uncertain": [
     "Track condition is from a 2022 plan and may have changed."
    ],
-   "photos": [],
+   "photos": [
+    "reconstruction-village"
+   ],
    "camera": {
     "distance_m": 2200,
     "azimuth_deg": 200,
@@ -1346,7 +1339,7 @@
     "Area of East Nimba Nature Reserve comes from a management plan summary; check the exact figure."
    ],
    "photos": [
-    "lamco-mine-1976"
+    "reconstruction-lamco"
    ],
    "camera": {
     "distance_m": 2400,
@@ -1420,7 +1413,7 @@
     "Other permits (Nimba North/West, Equatorial Resources Ltd; Nimba Development Company project) are mentioned in the 2026 decision but not mapped."
    ],
    "photos": [
-    "liberia-pit-road"
+    "reconstruction-ridge"
    ],
    "camera": {
     "distance_m": 2600,
@@ -1494,7 +1487,7 @@
     "Total area differs: 17,540 ha in the UNESCO text vs 17,632.62 ha in the property field; WDPA GIS gives 135.5 + 51.0 km²."
    ],
    "photos": [
-    "liberia-side-summit"
+    "reconstruction-ridge"
    ],
    "camera": {
     "distance_m": 3200,
@@ -1569,8 +1562,7 @@
     "Property area: 17,540 ha in text vs 17,632.62 ha in the UNESCO property field."
    ],
    "photos": [
-    "hero-massif",
-    "biosphere-sign"
+    "reconstruction-summit"
    ],
    "camera": {
     "distance_m": 4500,
@@ -1640,7 +1632,7 @@
     "Wikipedia notes iron-ore exploration began in 1992 in the montane zone; the UNESCO page itself only gives the 1992 inscription year."
    ],
    "photos": [
-    "peak-green"
+    "reconstruction-cloudforest"
    ],
    "camera": {
     "distance_m": 4500,

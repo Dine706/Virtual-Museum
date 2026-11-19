@@ -1,0 +1,1120 @@
+{
+  "project": "Monts Nimba — Tech Guinée",
+  "disclosure_fr": "Reconstitution numérique : les images sont illustratives ; les textes gardent leurs sources documentaires.",
+  "disclosure_en": "Digital reconstruction: images are illustrative; text retains its documentary sources.",
+  "assets": [
+    {
+      "name": "Animated generic sapling",
+      "author": "Tech Guinée",
+      "license": "Project reconstruction artwork",
+      "url": "walk/models/generated_sapling.glb",
+      "provenance": "scripts/blender/build_animated_sapling.py; Blender 5.3, looping branch animation"
+    },
+    {
+      "name": "foliage",
+      "author": "Tech Guinée",
+      "license": "Project reconstruction artwork",
+      "url": "walk/art/foliage.webp",
+      "provenance": "scripts/blender/reference/world-art/manifest.json"
+    },
+    {
+      "name": "bark",
+      "author": "Tech Guinée",
+      "license": "Project reconstruction artwork",
+      "url": "walk/art/bark.webp",
+      "provenance": "scripts/blender/reference/world-art/manifest.json"
+    },
+    {
+      "name": "litter",
+      "author": "Tech Guinée",
+      "license": "Project reconstruction artwork",
+      "url": "walk/art/litter.webp",
+      "provenance": "scripts/blender/reference/world-art/manifest.json"
+    },
+    {
+      "name": "canopy",
+      "author": "Tech Guinée",
+      "license": "Project reconstruction artwork",
+      "url": "walk/art/canopy.webp",
+      "provenance": "scripts/blender/reference/world-art/manifest.json"
+    },
+    {
+      "name": "summit",
+      "author": "Tech Guinée",
+      "license": "Project reconstruction artwork",
+      "url": "photos/reconstruction-summit.jpg",
+      "provenance": "scripts/blender/reference/world-art/manifest.json"
+    },
+    {
+      "name": "cloudforest",
+      "author": "Tech Guinée",
+      "license": "Project reconstruction artwork",
+      "url": "photos/reconstruction-cloudforest.jpg",
+      "provenance": "scripts/blender/reference/world-art/manifest.json"
+    },
+    {
+      "name": "lowland",
+      "author": "Tech Guinée",
+      "license": "Project reconstruction artwork",
+      "url": "photos/reconstruction-lowland.jpg",
+      "provenance": "scripts/blender/reference/world-art/manifest.json"
+    },
+    {
+      "name": "stream",
+      "author": "Tech Guinée",
+      "license": "Project reconstruction artwork",
+      "url": "photos/reconstruction-stream.jpg",
+      "provenance": "scripts/blender/reference/world-art/manifest.json"
+    },
+    {
+      "name": "village",
+      "author": "Tech Guinée",
+      "license": "Project reconstruction artwork",
+      "url": "photos/reconstruction-village.jpg",
+      "provenance": "scripts/blender/reference/world-art/manifest.json"
+    },
+    {
+      "name": "savanna",
+      "author": "Tech Guinée",
+      "license": "Project reconstruction artwork",
+      "url": "photos/reconstruction-savanna.jpg",
+      "provenance": "scripts/blender/reference/world-art/manifest.json"
+    },
+    {
+      "name": "lamco",
+      "author": "Tech Guinée",
+      "license": "Project reconstruction artwork",
+      "url": "photos/reconstruction-lamco.jpg",
+      "provenance": "scripts/blender/reference/world-art/manifest.json"
+    },
+    {
+      "name": "ridge",
+      "author": "Tech Guinée",
+      "license": "Project reconstruction artwork",
+      "url": "photos/reconstruction-ridge.jpg",
+      "provenance": "scripts/blender/reference/world-art/manifest.json"
+    },
+    {
+      "name": "laterite",
+      "author": "Tech Guinée",
+      "license": "Project reconstruction artwork",
+      "url": "walk/art/laterite.webp",
+      "provenance": "scripts/blender/reference/world-art/manifest.json"
+    },
+    {
+      "name": "grass",
+      "author": "Tech Guinée",
+      "license": "Project reconstruction artwork",
+      "url": "walk/art/grass.webp",
+      "provenance": "scripts/blender/reference/world-art/manifest.json"
+    },
+    {
+      "name": "rock",
+      "author": "Tech Guinée",
+      "license": "Project reconstruction artwork",
+      "url": "walk/art/rock.webp",
+      "provenance": "scripts/blender/reference/world-art/manifest.json"
+    },
+    {
+      "name": "moss",
+      "author": "Tech Guinée",
+      "license": "Project reconstruction artwork",
+      "url": "walk/art/moss.webp",
+      "provenance": "scripts/blender/reference/world-art/manifest.json"
+    },
+    {
+      "name": "mud",
+      "author": "Tech Guinée",
+      "license": "Project reconstruction artwork",
+      "url": "walk/art/mud.webp",
+      "provenance": "scripts/blender/reference/world-art/manifest.json"
+    },
+    {
+      "name": "sand",
+      "author": "Tech Guinée",
+      "license": "Project reconstruction artwork",
+      "url": "walk/art/sand.webp",
+      "provenance": "scripts/blender/reference/world-art/manifest.json"
+    },
+    {
+      "name": "palm",
+      "author": "Tech Guinée",
+      "license": "Project reconstruction artwork",
+      "url": "walk/art/palm.webp",
+      "provenance": "scripts/blender/reference/world-art/manifest.json"
+    }
+  ],
+  "data": [
+    {
+      "name": "Copernicus DEM",
+      "author": "DLR / Airbus / EU / ESA",
+      "license": "Copernicus DEM licence",
+      "url": "https://dataspace.copernicus.eu/explore-data/data-collections/copernicus-contributing-missions/collections-description/COP-DEM",
+      "attribution": "Contains modified Copernicus DEM GLO-30 data © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved."
+    },
+    {
+      "name": "ESA WorldCover",
+      "author": "ESA WorldCover consortium",
+      "license": "CC BY 4.0",
+      "url": "https://esa-worldcover.org",
+      "attribution": "Contains modified Copernicus Sentinel data (2021) processed by ESA WorldCover consortium (CC BY 4.0)."
+    },
+    {
+      "name": "Canopy height",
+      "author": "Meta / WRI; Tolan et al. (2024)",
+      "license": "CC BY 4.0",
+      "url": "https://registry.opendata.aws/dataforgood-fb-forests/"
+    },
+    {
+      "name": "OpenStreetMap",
+      "author": "© OpenStreetMap contributors",
+      "license": "ODbL",
+      "url": "https://www.openstreetmap.org/copyright"
+    },
+    {
+      "name": "WDPA",
+      "author": "UNEP-WCMC and IUCN (2026), Protected Planet",
+      "license": "Non-commercial terms",
+      "url": "https://www.protectedplanet.net"
+    },
+    {
+      "name": "geoBoundaries",
+      "author": "William & Mary geoLab",
+      "license": "Guinea CC BY-SA 2.0; Liberia CC BY 3.0 IGO; Côte d’Ivoire public domain",
+      "url": "https://www.geoboundaries.org"
+    },
+    {
+      "name": "Species records",
+      "author": "GBIF contributors",
+      "license": "Per-dataset; see worldpack/species/gbif_datasets.json",
+      "url": "https://www.gbif.org"
+    },
+    {
+      "name": "Wikidata",
+      "author": "Wikidata contributors",
+      "license": "CC0",
+      "url": "https://www.wikidata.org"
+    },
+    {
+      "name": "Fonts",
+      "author": "Inter / Fraunces contributors",
+      "license": "SIL OFL 1.1",
+      "url": "https://fonts.google.com"
+    },
+    {
+      "name": "three.js",
+      "author": "three.js contributors",
+      "license": "MIT",
+      "url": "https://threejs.org"
+    }
+  ],
+  "libraryAssets": [
+    {
+      "role": "litter",
+      "id": "forest_leaves_02",
+      "name": "Forest Leaves 02",
+      "authors": [
+        "Rob Tuytel"
+      ],
+      "license": "CC0 1.0",
+      "url": "https://polyhaven.com/a/forest_leaves_02"
+    },
+    {
+      "role": "laterite",
+      "id": "red_laterite_soil_stones",
+      "name": "Red Laterite Soil Stones",
+      "authors": [
+        "Amal Kumar"
+      ],
+      "license": "CC0 1.0",
+      "url": "https://polyhaven.com/a/red_laterite_soil_stones"
+    },
+    {
+      "role": "turf",
+      "id": "leafy_grass",
+      "name": "Leafy Grass",
+      "authors": [
+        "Charlotte Baglioni"
+      ],
+      "license": "CC0 1.0",
+      "url": "https://polyhaven.com/a/leafy_grass"
+    },
+    {
+      "role": "rock",
+      "id": "rock_boulder_dry",
+      "name": "Rock Boulder Dry",
+      "authors": [
+        "Dimitrios Savva",
+        "Rico Cilliers"
+      ],
+      "license": "CC0 1.0",
+      "url": "https://polyhaven.com/a/rock_boulder_dry"
+    },
+    {
+      "role": "moss",
+      "id": "mossy_rock",
+      "name": "Mossy Rock",
+      "authors": [
+        "Rob Tuytel"
+      ],
+      "license": "CC0 1.0",
+      "url": "https://polyhaven.com/a/mossy_rock"
+    },
+    {
+      "role": "bark",
+      "id": "bark_brown_02",
+      "name": "Bark Brown 02",
+      "authors": [
+        "Rob Tuytel"
+      ],
+      "license": "CC0 1.0",
+      "url": "https://polyhaven.com/a/bark_brown_02"
+    },
+    {
+      "role": "barkGrey",
+      "id": "bark_platanus",
+      "name": "Bark Platanus",
+      "authors": [
+        "Dimitrios Savva"
+      ],
+      "license": "CC0 1.0",
+      "url": "https://polyhaven.com/a/bark_platanus"
+    },
+    {
+      "role": "palm",
+      "id": "palm_tree_bark",
+      "name": "Palm Tree Bark",
+      "authors": [
+        "Dimitrios Savva",
+        "Rico Cilliers"
+      ],
+      "license": "CC0 1.0",
+      "url": "https://polyhaven.com/a/palm_tree_bark"
+    },
+    {
+      "role": "mud",
+      "id": "brown_mud_02",
+      "name": "Brown Mud 02",
+      "authors": [
+        "Rob Tuytel"
+      ],
+      "license": "CC0 1.0",
+      "url": "https://polyhaven.com/a/brown_mud_02"
+    },
+    {
+      "role": "road",
+      "id": "red_dirt_mud_01",
+      "name": "Red Dirt Mud 01",
+      "authors": [
+        "Rob Tuytel"
+      ],
+      "license": "CC0 1.0",
+      "url": "https://polyhaven.com/a/red_dirt_mud_01"
+    },
+    {
+      "role": "mine",
+      "id": "red_mud_stones",
+      "name": "Red Mud Stones",
+      "authors": [
+        "Rob Tuytel"
+      ],
+      "license": "CC0 1.0",
+      "url": "https://polyhaven.com/a/red_mud_stones"
+    },
+    {
+      "role": "highgrass",
+      "id": "aerial_grass_rock",
+      "name": "Aerial Grass Rock",
+      "authors": [
+        "Rob Tuytel"
+      ],
+      "license": "CC0 1.0",
+      "url": "https://polyhaven.com/a/aerial_grass_rock"
+    },
+    {
+      "role": "sand",
+      "id": "coast_sand_rocks_02",
+      "name": "Coast Sand Rocks 02",
+      "authors": [
+        "Rob Tuytel"
+      ],
+      "license": "CC0 1.0",
+      "url": "https://polyhaven.com/a/coast_sand_rocks_02"
+    },
+    {
+      "role": "field",
+      "id": "farm_soil",
+      "name": "Farm Soil",
+      "authors": [
+        "Amal Kumar"
+      ],
+      "license": "CC0 1.0",
+      "url": "https://polyhaven.com/a/farm_soil"
+    },
+    {
+      "id": "fern_02",
+      "name": "Fern 02",
+      "authors": [
+        "Rob Tuytel",
+        "Rico Cilliers"
+      ],
+      "license": "CC0 1.0",
+      "url": "https://polyhaven.com/a/fern_02"
+    },
+    {
+      "id": "calathea_orbifolia_01",
+      "name": "Calathea Orbifolia 01",
+      "authors": [
+        "Rob Tuytel",
+        "Rico Cilliers"
+      ],
+      "license": "CC0 1.0",
+      "url": "https://polyhaven.com/a/calathea_orbifolia_01"
+    },
+    {
+      "id": "moss_01",
+      "name": "Moss 01",
+      "authors": [
+        "Rob Tuytel"
+      ],
+      "license": "CC0 1.0",
+      "url": "https://polyhaven.com/a/moss_01"
+    },
+    {
+      "id": "rock_moss_set_01",
+      "name": "Rock Moss Set 01",
+      "authors": [
+        "Kless Gyzen"
+      ],
+      "license": "CC0 1.0",
+      "url": "https://polyhaven.com/a/rock_moss_set_01"
+    },
+    {
+      "id": "rock_07",
+      "name": "Rock 07",
+      "authors": [
+        "Jenelle van Heerden"
+      ],
+      "license": "CC0 1.0",
+      "url": "https://polyhaven.com/a/rock_07"
+    },
+    {
+      "id": "single_root",
+      "name": "Single Root",
+      "authors": [
+        "Jenelle van Heerden"
+      ],
+      "license": "CC0 1.0",
+      "url": "https://polyhaven.com/a/single_root"
+    }
+  ],
+  "documentaryReferences": [
+    {
+      "file": "assets/photos/hero-massif.jpg",
+      "thumb": "assets/photos/thumb/hero-massif.jpg",
+      "width": 1600,
+      "height": 1200,
+      "commons_title": "File:Mount Nimba Strict Nature Reserve-108450.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File%3AMount_Nimba_Strict_Nature_Reserve-108450.jpg",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/e/e9/Mount_Nimba_Strict_Nature_Reserve-108450.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "author": "Guy Debonnet",
+      "license": "CC BY-SA 3.0 igo",
+      "license_url": "https://creativecommons.org/licenses/by-sa/3.0/igo/deed.en",
+      "attribution": "\"Mount Nimba Strict Nature Reserve-108450\" by Guy Debonnet, CC BY-SA 3.0 igo, via Wikimedia Commons (https://commons.wikimedia.org/wiki/File%3AMount_Nimba_Strict_Nature_Reserve-108450.jpg)",
+      "date": "2007-05-17",
+      "description": "Mount Nimba",
+      "verified_as": "UNESCO-provided photo, file title and UNESCO page name Mount Nimba; green massif rising above savanna (viewed)",
+      "hotspots": [
+        "richard-molard",
+        "unesco-inscription"
+      ],
+      "modified": "resized and recompressed for web",
+      "alt_en": "Green massif rising above grassland and savanna under a hazy sky",
+      "alt_fr": "Massif vert s'élevant au-dessus de la prairie et de la savane sous un ciel voilé"
+    },
+    {
+      "file": "assets/photos/grassland-valley.jpg",
+      "thumb": "assets/photos/thumb/grassland-valley.jpg",
+      "width": 1600,
+      "height": 1200,
+      "commons_title": "File:Mount Nimba Strict Nature Reserve-123989.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File%3AMount_Nimba_Strict_Nature_Reserve-123989.jpg",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/4/44/Mount_Nimba_Strict_Nature_Reserve-123989.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "author": "Guy Debonnet",
+      "license": "CC BY-SA 3.0 igo",
+      "license_url": "https://creativecommons.org/licenses/by-sa/3.0/igo/deed.en",
+      "attribution": "\"Mount Nimba Strict Nature Reserve-123989\" by Guy Debonnet, CC BY-SA 3.0 igo, via Wikimedia Commons (https://commons.wikimedia.org/wiki/File%3AMount_Nimba_Strict_Nature_Reserve-123989.jpg)",
+      "date": "2007-05-06",
+      "description": "Mount Nimba Strict Nature Reserve",
+      "verified_as": "UNESCO-provided; montane grass slopes under cloud (viewed)",
+      "hotspots": [
+        "montane-grassland"
+      ],
+      "modified": "resized and recompressed for web",
+      "alt_en": "Grass-covered slopes of the massif under low cloud",
+      "alt_fr": "Pentes herbeuses du massif sous des nuages bas"
+    },
+    {
+      "file": "assets/photos/peak-green.jpg",
+      "thumb": "assets/photos/thumb/peak-green.jpg",
+      "width": 1200,
+      "height": 1600,
+      "commons_title": "File:Mount Nimba Strict Nature Reserve-108445.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File%3AMount_Nimba_Strict_Nature_Reserve-108445.jpg",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/4/45/Mount_Nimba_Strict_Nature_Reserve-108445.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "author": "Guy Debonnet",
+      "license": "CC BY-SA 3.0 igo",
+      "license_url": "https://creativecommons.org/licenses/by-sa/3.0/igo/deed.en",
+      "attribution": "\"Mount Nimba Strict Nature Reserve-108445\" by Guy Debonnet, CC BY-SA 3.0 igo, via Wikimedia Commons (https://commons.wikimedia.org/wiki/File%3AMount_Nimba_Strict_Nature_Reserve-108445.jpg)",
+      "date": "2007-05-17",
+      "description": "Mount Nimba",
+      "verified_as": "UNESCO-provided; green peak above grassland (viewed)",
+      "hotspots": [
+        "danger-list"
+      ],
+      "modified": "resized and recompressed for web",
+      "alt_en": "Green peak above montane grassland and drifting cloud",
+      "alt_fr": "Sommet vert au-dessus de la prairie d'altitude et de nuages"
+    },
+    {
+      "file": "assets/photos/forest-canopy.jpg",
+      "thumb": "assets/photos/thumb/forest-canopy.jpg",
+      "width": 1600,
+      "height": 1200,
+      "commons_title": "File:Mount Nimba Strict Nature Reserve-108448.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File%3AMount_Nimba_Strict_Nature_Reserve-108448.jpg",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/9/95/Mount_Nimba_Strict_Nature_Reserve-108448.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "author": "Guy Debonnet",
+      "license": "CC BY-SA 3.0 igo",
+      "license_url": "https://creativecommons.org/licenses/by-sa/3.0/igo/deed.en",
+      "attribution": "\"Mount Nimba Strict Nature Reserve-108448\" by Guy Debonnet, CC BY-SA 3.0 igo, via Wikimedia Commons (https://commons.wikimedia.org/wiki/File%3AMount_Nimba_Strict_Nature_Reserve-108448.jpg)",
+      "date": "2007-05-17",
+      "description": "Mount Nimba",
+      "verified_as": "UNESCO-provided; forest canopy (viewed)",
+      "hotspots": [
+        "lowland-forest"
+      ],
+      "modified": "resized and recompressed for web",
+      "alt_en": "Forest canopy seen from below",
+      "alt_fr": "Canopée de la forêt vue d'en dessous"
+    },
+    {
+      "file": "assets/photos/forest-stream.jpg",
+      "thumb": "assets/photos/thumb/forest-stream.jpg",
+      "width": 1600,
+      "height": 1200,
+      "commons_title": "File:Mount Nimba Strict Nature Reserve-108453.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File%3AMount_Nimba_Strict_Nature_Reserve-108453.jpg",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/a/a8/Mount_Nimba_Strict_Nature_Reserve-108453.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "author": "Guy Debonnet",
+      "license": "CC BY-SA 3.0 igo",
+      "license_url": "https://creativecommons.org/licenses/by-sa/3.0/igo/deed.en",
+      "attribution": "\"Mount Nimba Strict Nature Reserve-108453\" by Guy Debonnet, CC BY-SA 3.0 igo, via Wikimedia Commons (https://commons.wikimedia.org/wiki/File%3AMount_Nimba_Strict_Nature_Reserve-108453.jpg)",
+      "date": "2007-05-17",
+      "description": "Mount Nimba",
+      "verified_as": "UNESCO-provided; forest stream under a rock overhang (viewed)",
+      "hotspots": [
+        "cavally"
+      ],
+      "modified": "resized and recompressed for web",
+      "alt_en": "Forest stream flowing beneath a rock overhang",
+      "alt_fr": "Ruisseau forestier sous un surplomb rocheux"
+    },
+    {
+      "file": "assets/photos/biosphere-sign.jpg",
+      "thumb": "assets/photos/thumb/biosphere-sign.jpg",
+      "width": 1600,
+      "height": 1200,
+      "commons_title": "File:Mount Nimba Strict Nature Reserve-108442.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File%3AMount_Nimba_Strict_Nature_Reserve-108442.jpg",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/0/06/Mount_Nimba_Strict_Nature_Reserve-108442.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "author": "Guy Debonnet",
+      "license": "CC BY-SA 3.0 igo",
+      "license_url": "https://creativecommons.org/licenses/by-sa/3.0/igo/deed.en",
+      "attribution": "\"Mount Nimba Strict Nature Reserve-108442\" by Guy Debonnet, CC BY-SA 3.0 igo, via Wikimedia Commons (https://commons.wikimedia.org/wiki/File%3AMount_Nimba_Strict_Nature_Reserve-108442.jpg)",
+      "date": "2007-05-17",
+      "description": "Mount Nimba",
+      "verified_as": "UNESCO-provided; sign reading Reserve de la Biosphere des Monts Nimba, Aire centrale, Site du Patrimoine mondial, Defense d'entrer (viewed)",
+      "hotspots": [
+        "unesco-inscription"
+      ],
+      "modified": "resized and recompressed for web",
+      "alt_en": "Green sign: Biosphere Reserve of the Nimba Mountains, central area, World Heritage site, entry forbidden",
+      "alt_fr": "Panneau vert : Réserve de la biosphère des Monts Nimba, aire centrale, site du patrimoine mondial, défense d'entrer"
+    },
+    {
+      "file": "assets/photos/montane-grassland.jpg",
+      "thumb": "assets/photos/thumb/montane-grassland.jpg",
+      "width": 1600,
+      "height": 1067,
+      "commons_title": "File:Nimba montanegrassland.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File%3ANimba_montanegrassland.jpg",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/3/3e/Nimba_montanegrassland.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "author": "Yakoo1986",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "attribution": "\"Nimba montanegrassland\" by Yakoo1986, CC BY-SA 4.0, via Wikimedia Commons (https://commons.wikimedia.org/wiki/File%3ANimba_montanegrassland.jpg)",
+      "date": "2016-11-23",
+      "description": "Mount Nimba - montane grassland",
+      "verified_as": "Commons caption: Mount Nimba - montane grassland (2016-11-23); viewed",
+      "hotspots": [
+        "montane-grassland"
+      ],
+      "modified": "resized and recompressed for web",
+      "alt_en": "Montane grassland on the Nimba ridge",
+      "alt_fr": "Prairie d'altitude sur la crête du Nimba"
+    },
+    {
+      "file": "assets/photos/protea-bushland.jpg",
+      "thumb": "assets/photos/thumb/protea-bushland.jpg",
+      "width": 1600,
+      "height": 1067,
+      "commons_title": "File:Nimba proteabush.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File%3ANimba_proteabush.jpg",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/4/4b/Nimba_proteabush.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "author": "Yakoo1986",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "attribution": "\"Nimba proteabush\" by Yakoo1986, CC BY-SA 4.0, via Wikimedia Commons (https://commons.wikimedia.org/wiki/File%3ANimba_proteabush.jpg)",
+      "date": "2016-11-23",
+      "description": "Mount Nimba - Protea bushland",
+      "verified_as": "Commons caption: Mount Nimba - Protea bushland (2016-11-23); viewed",
+      "hotspots": [
+        "montane-grassland"
+      ],
+      "modified": "resized and recompressed for web",
+      "alt_en": "Protea bushland on a misty Nimba slope",
+      "alt_fr": "Fourré à Protea sur une pente brumeuse du Nimba"
+    },
+    {
+      "file": "assets/photos/cloud-forest.jpg",
+      "thumb": "assets/photos/thumb/cloud-forest.jpg",
+      "width": 1600,
+      "height": 1067,
+      "commons_title": "File:Mount Nimba - cloud forests.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File%3AMount_Nimba_-_cloud_forests.jpg",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/a/a0/Mount_Nimba_-_cloud_forests.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "author": "Yakoo1986",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "attribution": "\"Mount Nimba - cloud forests\" by Yakoo1986, CC BY-SA 4.0, via Wikimedia Commons (https://commons.wikimedia.org/wiki/File%3AMount_Nimba_-_cloud_forests.jpg)",
+      "date": "2016-11-23",
+      "description": "Mount Nimba - cloud forests",
+      "verified_as": "Commons caption: Mount Nimba - cloud forests (2016-11-23); viewed",
+      "hotspots": [
+        "cloud-forest"
+      ],
+      "modified": "resized and recompressed for web",
+      "alt_en": "Cloud-covered ridge with montane forest",
+      "alt_fr": "Crête couverte de nuages avec forêt montagnarde"
+    },
+    {
+      "file": "assets/photos/rainforest-stream.jpg",
+      "thumb": "assets/photos/thumb/rainforest-stream.jpg",
+      "width": 1600,
+      "height": 1067,
+      "commons_title": "File:Mount Nimba rainforest.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File%3AMount_Nimba_rainforest.jpg",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/f/f9/Mount_Nimba_rainforest.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "author": "Yakoo1986",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "attribution": "\"Mount Nimba rainforest\" by Yakoo1986, CC BY-SA 4.0, via Wikimedia Commons (https://commons.wikimedia.org/wiki/File%3AMount_Nimba_rainforest.jpg)",
+      "date": "2006-11-28",
+      "description": "Photo by Manfred Schweda http://www.thisfabtrek.com/journey/africa/guinea/20061129-nzerekore.php",
+      "verified_as": "Commons: Photo by Manfred Schweda, 2006-11-28, Nzerekore trek page; stream in rainforest (viewed)",
+      "hotspots": [
+        "lowland-forest",
+        "cavally"
+      ],
+      "modified": "resized and recompressed for web",
+      "alt_en": "Narrow stream through dense rainforest with a fallen log",
+      "alt_fr": "Ruisseau étroit dans la forêt dense avec un tronc tombé"
+    },
+    {
+      "file": "assets/photos/savanna.jpg",
+      "thumb": "assets/photos/thumb/savanna.jpg",
+      "width": 1600,
+      "height": 1067,
+      "commons_title": "File:Nimba savana.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File%3ANimba_savana.jpg",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/c/c1/Nimba_savana.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "author": "Yakoo1986",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "attribution": "\"Nimba savana\" by Yakoo1986, CC BY-SA 4.0, via Wikimedia Commons (https://commons.wikimedia.org/wiki/File%3ANimba_savana.jpg)",
+      "date": "2016-11-22",
+      "description": "Mount Nimba - sorrounding savanna",
+      "verified_as": "Commons caption: Mount Nimba - surrounding savanna (2016-11-22); viewed",
+      "hotspots": [
+        "savanna-fire"
+      ],
+      "modified": "resized and recompressed for web",
+      "alt_en": "Dry golden savanna with scattered trees around the massif",
+      "alt_fr": "Savane dorée avec arbres épars autour du massif"
+    },
+    {
+      "file": "assets/photos/reserve-edge-ridge.jpg",
+      "thumb": "assets/photos/thumb/reserve-edge-ridge.jpg",
+      "width": 1600,
+      "height": 1067,
+      "commons_title": "File:Nimba mountainridge.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File%3ANimba_mountainridge.jpg",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/d/d5/Nimba_mountainridge.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "author": "Yakoo1986",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "attribution": "\"Nimba mountainridge\" by Yakoo1986, CC BY-SA 4.0, via Wikimedia Commons (https://commons.wikimedia.org/wiki/File%3ANimba_mountainridge.jpg)",
+      "date": "2016-11-20",
+      "description": "Mount Nimba - border of the reserve",
+      "verified_as": "Commons caption: Mount Nimba - border of the reserve (2016-11-20); viewed",
+      "hotspots": [
+        "savanna-fire",
+        "cegens-gbakore"
+      ],
+      "modified": "resized and recompressed for web",
+      "alt_en": "Grass ridge at the edge of the reserve near Gbakoré",
+      "alt_fr": "Crête herbeuse en limite de réserve près de Gbakoré"
+    },
+    {
+      "file": "assets/photos/grassland-above-forest.jpg",
+      "thumb": "assets/photos/thumb/grassland-above-forest.jpg",
+      "width": 1600,
+      "height": 1067,
+      "commons_title": "File:Mount Nimba high-altidtude grasslands above forest zone.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File%3AMount_Nimba_high-altidtude_grasslands_above_forest_zone.jpg",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/7/71/Mount_Nimba_high-altidtude_grasslands_above_forest_zone.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "author": "Yakoo1986",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "attribution": "\"Mount Nimba high-altidtude grasslands above forest zone\" by Yakoo1986, CC BY-SA 4.0, via Wikimedia Commons (https://commons.wikimedia.org/wiki/File%3AMount_Nimba_high-altidtude_grasslands_above_forest_zone.jpg)",
+      "date": "2006-11-28",
+      "description": "Photo by Manfred Schweda http://www.thisfabtrek.com/journey/africa/guinea/20061129-nzerekore.php",
+      "verified_as": "Commons: Photo by Manfred Schweda, 2006-11-28; high grassland above forest (viewed)",
+      "hotspots": [
+        "montane-grassland"
+      ],
+      "modified": "resized and recompressed for web",
+      "alt_en": "Walkers resting in high grassland above the forest zone",
+      "alt_fr": "Randonneurs au repos dans la prairie d'altitude au-dessus de la forêt"
+    },
+    {
+      "file": "assets/photos/peak-strata.jpg",
+      "thumb": "assets/photos/thumb/peak-strata.jpg",
+      "width": 1600,
+      "height": 1067,
+      "commons_title": "File:Monts Nimba 22.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File%3AMonts_Nimba_22.jpg",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/5/5a/Monts_Nimba_22.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "author": "Aboubacarkhoraa",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "attribution": "\"Monts Nimba 22\" by Aboubacarkhoraa, CC BY-SA 4.0, via Wikimedia Commons (https://commons.wikimedia.org/wiki/File%3AMonts_Nimba_22.jpg)",
+      "date": "2021-06-27 15:20:42",
+      "description": "Monts Nimba",
+      "verified_as": "Commons category Monts Nimba, 2021-06-27; peak with terraced slopes (viewed); exact peak not identified",
+      "hotspots": [
+        "grands-rochers"
+      ],
+      "modified": "resized and recompressed for web",
+      "alt_en": "Rocky peak with terraced slopes under cloud",
+      "alt_fr": "Sommet rocheux aux pentes en terrasses sous les nuages"
+    },
+    {
+      "file": "assets/photos/peak-cloudcap.jpg",
+      "thumb": "assets/photos/thumb/peak-cloudcap.jpg",
+      "width": 1600,
+      "height": 1067,
+      "commons_title": "File:Mont Nimba 01.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File%3AMont_Nimba_01.jpg",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/e/ea/Mont_Nimba_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "author": "Aboubacarkhoraa",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "attribution": "\"Mont Nimba 01\" by Aboubacarkhoraa, CC BY-SA 4.0, via Wikimedia Commons (https://commons.wikimedia.org/wiki/File%3AMont_Nimba_01.jpg)",
+      "date": "2021-06-27 15:53:37",
+      "description": "Mont Nimba",
+      "verified_as": "Commons title Mont Nimba, 2021-06-27; cloud-capped peak (viewed); exact peak not identified",
+      "hotspots": [
+        "richard-molard"
+      ],
+      "modified": "resized and recompressed for web",
+      "alt_en": "Cloud-capped peak seen from the foothills",
+      "alt_fr": "Sommet coiffé de nuages vu depuis le piémont"
+    },
+    {
+      "file": "assets/photos/valley-view.jpg",
+      "thumb": "assets/photos/thumb/valley-view.jpg",
+      "width": 1600,
+      "height": 1067,
+      "commons_title": "File:Vue des Mont Nimba.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File%3AVue_des_Mont_Nimba.jpg",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/f/f3/Vue_des_Mont_Nimba.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "author": "Aboubacarkhoraa",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "attribution": "\"Vue des Mont Nimba\" by Aboubacarkhoraa, CC BY-SA 4.0, via Wikimedia Commons (https://commons.wikimedia.org/wiki/File%3AVue_des_Mont_Nimba.jpg)",
+      "date": "2021-06-27 16:01:03",
+      "description": "Mont Nimba",
+      "verified_as": "Commons title Vue des Mont Nimba, 2021-06-27; viewed",
+      "hotspots": [
+        "pierre-richaud"
+      ],
+      "modified": "resized and recompressed for web",
+      "alt_en": "View across a green valley towards the Nimba mountains",
+      "alt_fr": "Vue sur une vallée verte vers les monts Nimba"
+    },
+    {
+      "file": "assets/photos/liberia-side-summit.jpg",
+      "thumb": "assets/photos/thumb/liberia-side-summit.jpg",
+      "width": 1600,
+      "height": 1067,
+      "commons_title": "File:Atop Mount Nimba.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File%3AAtop_Mount_Nimba.jpg",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/b/b1/Atop_Mount_Nimba.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "author": "Bethel. Anthony Chisom",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "attribution": "\"Atop Mount Nimba\" by Bethel. Anthony Chisom, CC BY-SA 4.0, via Wikimedia Commons (https://commons.wikimedia.org/wiki/File%3AAtop_Mount_Nimba.jpg)",
+      "date": "2020-03-06",
+      "description": "Atop Mount Nimba, at Nimba county..",
+      "verified_as": "Commons caption: Atop Mount Nimba, at Nimba county (Liberia), 2020-03-06; viewed",
+      "hotspots": [
+        "tripoint"
+      ],
+      "modified": "resized and recompressed for web",
+      "alt_en": "Walkers on the Liberian side of Mount Nimba",
+      "alt_fr": "Marcheurs sur le versant libérien du Mont Nimba"
+    },
+    {
+      "file": "assets/photos/liberia-pit-road.jpg",
+      "thumb": "assets/photos/thumb/liberia-pit-road.jpg",
+      "width": 1600,
+      "height": 1067,
+      "commons_title": "File:The Mount Nimba frontal view.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File%3AThe_Mount_Nimba_frontal_view.jpg",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/5/57/The_Mount_Nimba_frontal_view.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "author": "Bethel. Anthony Chisom",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "attribution": "\"The Mount Nimba frontal view\" by Bethel. Anthony Chisom, CC BY-SA 4.0, via Wikimedia Commons (https://commons.wikimedia.org/wiki/File%3AThe_Mount_Nimba_frontal_view.jpg)",
+      "date": "2020-03-06",
+      "description": "Atop Mount Nimba, at Nimba county - Liberia",
+      "verified_as": "Commons caption says Atop Mount Nimba, Nimba county, Liberia, but the image (viewed) shows a dirt road into a terraced open-pit/quarry-like landscape with a pond: use only as Liberian-side mining-landscape, caption ambiguity flagged",
+      "hotspots": [
+        "mining-enclave"
+      ],
+      "modified": "resized and recompressed for web",
+      "alt_en": "Dirt road into a terraced pit landscape with a pond (Liberian side, caption ambiguous)",
+      "alt_fr": "Piste de terre vers un paysage de fosse en gradins avec un étang (côté libérien, légende ambiguë)"
+    },
+    {
+      "file": "assets/photos/toad-gestating-female.jpg",
+      "thumb": "assets/photos/thumb/toad-gestating-female.jpg",
+      "width": 1039,
+      "height": 830,
+      "commons_title": "File:Nimbaphrynoides occidentalis gestating female.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File%3ANimbaphrynoides_occidentalis_gestating_female.jpg",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/8/8f/Nimbaphrynoides_occidentalis_gestating_female.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "author": "Sandberger-Loua L, Müller H, Rödel M-O",
+      "license": "CC BY 4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0",
+      "attribution": "\"Nimbaphrynoides occidentalis gestating female\" by Sandberger-Loua L, Müller H, Rödel M-O, CC BY 4.0, via Wikimedia Commons (https://commons.wikimedia.org/wiki/File%3ANimbaphrynoides_occidentalis_gestating_female.jpg)",
+      "date": "2017-02-03",
+      "description": "Nimbaphrynoides occidentalis - a large gestating female in June, shortly before parturition",
+      "verified_as": "Scientific-paper photo, species named in file title and description (Sandberger-Loua et al. 2017); viewed",
+      "hotspots": [
+        "viviparous-toad"
+      ],
+      "modified": "resized and recompressed for web",
+      "alt_en": "Large gestating female Nimba viviparous toad",
+      "alt_fr": "Grande femelle gestante du crapaud vivipare du Nimba"
+    },
+    {
+      "file": "assets/photos/toad-amplexus.jpg",
+      "thumb": "assets/photos/thumb/toad-amplexus.jpg",
+      "width": 954,
+      "height": 497,
+      "commons_title": "File:Nimbaphrynoides occidentalis female and male in amplexus.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File%3ANimbaphrynoides_occidentalis_female_and_male_in_amplexus.jpg",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/1/19/Nimbaphrynoides_occidentalis_female_and_male_in_amplexus.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "author": "Sandberger-Loua L, Müller H, Rödel M-O",
+      "license": "CC BY 4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0",
+      "attribution": "\"Nimbaphrynoides occidentalis female and male in amplexus\" by Sandberger-Loua L, Müller H, Rödel M-O, CC BY 4.0, via Wikimedia Commons (https://commons.wikimedia.org/wiki/File%3ANimbaphrynoides_occidentalis_female_and_male_in_amplexus.jpg)",
+      "date": "2017-02-03",
+      "description": "Nimbaphrynoides occidentalis - female and male in amplexus",
+      "verified_as": "Same source and authors; viewed",
+      "hotspots": [
+        "viviparous-toad"
+      ],
+      "modified": "resized and recompressed for web",
+      "alt_en": "Male and female Nimba viviparous toads in amplexus",
+      "alt_fr": "Mâle et femelle du crapaud vivipare du Nimba en amplexus"
+    },
+    {
+      "file": "assets/photos/toad-young-female.jpg",
+      "thumb": "assets/photos/thumb/toad-young-female.jpg",
+      "width": 748,
+      "height": 830,
+      "commons_title": "File:Nimbaphrynoides occidentalis young female.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File%3ANimbaphrynoides_occidentalis_young_female.jpg",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/e/e0/Nimbaphrynoides_occidentalis_young_female.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "author": "Sandberger-Loua L, Müller H, Rödel M-O",
+      "license": "CC BY 4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0",
+      "attribution": "\"Nimbaphrynoides occidentalis young female\" by Sandberger-Loua L, Müller H, Rödel M-O, CC BY 4.0, via Wikimedia Commons (https://commons.wikimedia.org/wiki/File%3ANimbaphrynoides_occidentalis_young_female.jpg)",
+      "date": "2017-02-03",
+      "description": "Nimbaphrynoides occidentalis - young female towards the end of the rainy season",
+      "verified_as": "Same source and authors; viewed",
+      "hotspots": [
+        "viviparous-toad"
+      ],
+      "modified": "resized and recompressed for web",
+      "alt_en": "Young female Nimba viviparous toad",
+      "alt_fr": "Jeune femelle du crapaud vivipare du Nimba"
+    },
+    {
+      "file": "assets/photos/chimp-bossou-1.jpg",
+      "thumb": "assets/photos/thumb/chimp-bossou-1.jpg",
+      "width": 1600,
+      "height": 1067,
+      "commons_title": "File:Chimpanzé de Bossou 15.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File%3AChimpanz%C3%A9_de_Bossou_15.jpg",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/8/8a/Chimpanz%C3%A9_de_Bossou_15.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "author": "Aboubacarkhoraa",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "attribution": "\"Chimpanzé de Bossou 15\" by Aboubacarkhoraa, CC BY-SA 4.0, via Wikimedia Commons (https://commons.wikimedia.org/wiki/File%3AChimpanz%C3%A9_de_Bossou_15.jpg)",
+      "date": "2021-06-28 12:51:52",
+      "description": "Chimpanzé de Bossou",
+      "verified_as": "Uploader label Chimpanze de Bossou (2021-06-28); chimpanzee visible; location from uploader label only",
+      "hotspots": [
+        "bossou-chimpanzees"
+      ],
+      "modified": "resized and recompressed for web",
+      "alt_en": "Chimpanzee among ferns, holding fruit",
+      "alt_fr": "Chimpanzé parmi les fougères, tenant un fruit"
+    },
+    {
+      "file": "assets/photos/chimp-bossou-2.jpg",
+      "thumb": "assets/photos/thumb/chimp-bossou-2.jpg",
+      "width": 1600,
+      "height": 1275,
+      "commons_title": "File:Chimpanzé de Bossou 27.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File%3AChimpanz%C3%A9_de_Bossou_27.jpg",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/3/36/Chimpanz%C3%A9_de_Bossou_27.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "author": "Aboubacarkhoraa",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "attribution": "\"Chimpanzé de Bossou 27\" by Aboubacarkhoraa, CC BY-SA 4.0, via Wikimedia Commons (https://commons.wikimedia.org/wiki/File%3AChimpanz%C3%A9_de_Bossou_27.jpg)",
+      "date": "2021-06-28 13:05:20",
+      "description": "Chimpanzé de Bossou",
+      "verified_as": "Uploader label Chimpanze de Bossou (2021-06-28); chimpanzee visible; location from uploader label only",
+      "hotspots": [
+        "bossou-chimpanzees"
+      ],
+      "modified": "resized and recompressed for web",
+      "alt_en": "Chimpanzee seated on a mossy branch",
+      "alt_fr": "Chimpanzé assis sur une branche moussue"
+    },
+    {
+      "file": "assets/photos/chimp-nimba-lowland.jpg",
+      "thumb": "assets/photos/thumb/chimp-nimba-lowland.jpg",
+      "width": 1600,
+      "height": 1067,
+      "commons_title": "File:Nimba westernchimps.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File%3ANimba_westernchimps.jpg",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/c/cf/Nimba_westernchimps.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "author": "Yakoo1986",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "attribution": "\"Nimba westernchimps\" by Yakoo1986, CC BY-SA 4.0, via Wikimedia Commons (https://commons.wikimedia.org/wiki/File%3ANimba_westernchimps.jpg)",
+      "date": "2016-11-24",
+      "description": "Mount Nimba -Western chimpanzees in lowland rainforest",
+      "verified_as": "Commons caption: Mount Nimba - Western chimpanzees in lowland rainforest (2016-11-24); chimpanzee visible (viewed)",
+      "hotspots": [
+        "bossou-chimpanzees"
+      ],
+      "modified": "resized and recompressed for web",
+      "alt_en": "Western chimpanzee partly hidden in lowland rainforest",
+      "alt_fr": "Chimpanzé d'Afrique de l'Ouest à demi caché dans la forêt de basse altitude"
+    },
+    {
+      "file": "assets/photos/oil-palm-fruit.jpg",
+      "thumb": "assets/photos/thumb/oil-palm-fruit.jpg",
+      "width": 1600,
+      "height": 1067,
+      "commons_title": "File:Fruit pour les chimpanzé de Bossou.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File%3AFruit_pour_les_chimpanz%C3%A9_de_Bossou.jpg",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/8/8d/Fruit_pour_les_chimpanz%C3%A9_de_Bossou.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "author": "Aboubacarkhoraa",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "attribution": "\"Fruit pour les chimpanzé de Bossou\" by Aboubacarkhoraa, CC BY-SA 4.0, via Wikimedia Commons (https://commons.wikimedia.org/wiki/File%3AFruit_pour_les_chimpanz%C3%A9_de_Bossou.jpg)",
+      "date": "2021-06-27 16:12:14",
+      "description": "fruit des Chimpanzé de Bossou",
+      "verified_as": "Uploader caption: fruit for the Bossou chimpanzees (2021-06-27); bunch of red palm fruits (viewed)",
+      "hotspots": [
+        "bossou-chimpanzees"
+      ],
+      "modified": "resized and recompressed for web",
+      "alt_en": "Bunch of red oil-palm fruits",
+      "alt_fr": "Régime de fruits rouges du palmier à huile"
+    },
+    {
+      "file": "assets/photos/bossou-village.jpg",
+      "thumb": "assets/photos/thumb/bossou-village.jpg",
+      "width": 1600,
+      "height": 1067,
+      "commons_title": "File:Village de Bossou.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File%3AVillage_de_Bossou.jpg",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/1/19/Village_de_Bossou.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "author": "Aboubacarkhoraa",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "attribution": "\"Village de Bossou\" by Aboubacarkhoraa, CC BY-SA 4.0, via Wikimedia Commons (https://commons.wikimedia.org/wiki/File%3AVillage_de_Bossou.jpg)",
+      "date": "2021-06-28 13:37:00",
+      "description": "village de Bossou",
+      "verified_as": "Commons title Village de Bossou, 2021-06-28; viewed",
+      "hotspots": [
+        "cultural-landscape"
+      ],
+      "modified": "resized and recompressed for web",
+      "alt_en": "Rooftops of Bossou village among trees",
+      "alt_fr": "Toits du village de Bossou parmi les arbres"
+    },
+    {
+      "file": "assets/photos/ireb-building.jpg",
+      "thumb": "assets/photos/thumb/ireb-building.jpg",
+      "width": 1600,
+      "height": 1200,
+      "commons_title": "File:IREB de Bossou.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File%3AIREB_de_Bossou.jpg",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/8/87/IREB_de_Bossou.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "author": "Aboubacarkhoraa",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "attribution": "\"IREB de Bossou\" by Aboubacarkhoraa, CC BY-SA 4.0, via Wikimedia Commons (https://commons.wikimedia.org/wiki/File%3AIREB_de_Bossou.jpg)",
+      "date": "2021-06-26 09:14:20",
+      "description": "IREB de Bossou",
+      "verified_as": "Commons geotag 7.64446, -8.50299; IREB building (viewed)",
+      "hotspots": [
+        "ireb-bossou"
+      ],
+      "modified": "resized and recompressed for web",
+      "alt_en": "IREB research building at Bossou with lawn and path",
+      "alt_fr": "Bâtiment de recherche de l'IREB à Bossou avec pelouse et allée"
+    },
+    {
+      "file": "assets/photos/ireb-sign.jpg",
+      "thumb": "assets/photos/thumb/ireb-sign.jpg",
+      "width": 1600,
+      "height": 1200,
+      "commons_title": "File:Plaque de l'IREB.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File%3APlaque_de_l%27IREB.jpg",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/7/75/Plaque_de_l%27IREB.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "author": "Aboubacarkhoraa",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "attribution": "\"Plaque de l'IREB\" by Aboubacarkhoraa, CC BY-SA 4.0, via Wikimedia Commons (https://commons.wikimedia.org/wiki/File%3APlaque_de_l%27IREB.jpg)",
+      "date": "2021-06-26",
+      "description": "Plaque a la rentre de l'IREB",
+      "verified_as": "Commons geotag 7.64520, -8.50436; sign reads Institut de Recherche Environnementale de Bossou (viewed)",
+      "hotspots": [
+        "ireb-bossou"
+      ],
+      "modified": "resized and recompressed for web",
+      "alt_en": "Sign: Institut de Recherche Environnementale de Bossou (IREB)",
+      "alt_fr": "Panneau : Institut de Recherche Environnementale de Bossou (IREB)"
+    },
+    {
+      "file": "assets/photos/bossou-market.jpg",
+      "thumb": "assets/photos/thumb/bossou-market.jpg",
+      "width": 1600,
+      "height": 1200,
+      "commons_title": "File:Marché de Bossou.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File%3AMarch%C3%A9_de_Bossou.jpg",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/b/b1/March%C3%A9_de_Bossou.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "author": "Aboubacarkhoraa",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "attribution": "\"Marché de Bossou\" by Aboubacarkhoraa, CC BY-SA 4.0, via Wikimedia Commons (https://commons.wikimedia.org/wiki/File%3AMarch%C3%A9_de_Bossou.jpg)",
+      "date": "2021-06-28 16:46:14",
+      "description": "Marché de Bossou",
+      "verified_as": "Commons title Marche de Bossou, 2021-06-28; viewed",
+      "hotspots": [
+        "cultural-landscape"
+      ],
+      "modified": "resized and recompressed for web",
+      "alt_en": "Empty market stalls at Bossou on red earth",
+      "alt_fr": "Étals vides du marché de Bossou sur terre rouge"
+    },
+    {
+      "file": "assets/photos/corridor-planting.jpg",
+      "thumb": "assets/photos/thumb/corridor-planting.jpg",
+      "width": 1600,
+      "height": 1063,
+      "commons_title": "File:Transplantation au corridor.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File%3ATransplantation_au_corridor.jpg",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/d/da/Transplantation_au_corridor.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "author": "Dr Aly Gaspard SOUMAH",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "attribution": "\"Transplantation au corridor\" by Dr Aly Gaspard SOUMAH, CC BY-SA 4.0, via Wikimedia Commons (https://commons.wikimedia.org/wiki/File%3ATransplantation_au_corridor.jpg)",
+      "date": "2019-05-28 15:46:16",
+      "description": "action de reforestation du couloir de migration des chimpanzés",
+      "verified_as": "Uploader caption: reforestation of the chimpanzee migration corridor (2019-05-28); viewed",
+      "hotspots": [
+        "green-corridor"
+      ],
+      "modified": "resized and recompressed for web",
+      "alt_en": "Two people planting trees in the Green Corridor",
+      "alt_fr": "Deux personnes plantant des arbres dans le Corridor vert"
+    },
+    {
+      "file": "assets/photos/corridor-seedlings.jpg",
+      "thumb": "assets/photos/thumb/corridor-seedlings.jpg",
+      "width": 720,
+      "height": 1600,
+      "commons_title": "File:Les plantules.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File%3ALes_plantules.jpg",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/6/68/Les_plantules.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "author": "Zaoro yèdè kolié",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "attribution": "\"Les plantules\" by Zaoro yèdè kolié, CC BY-SA 4.0, via Wikimedia Commons (https://commons.wikimedia.org/wiki/File%3ALes_plantules.jpg)",
+      "date": "2021-06-28",
+      "description": "Pepenière de certaines plantes utilisées pour la restauration du corridor",
+      "verified_as": "Uploader caption: nursery of plants used to restore the corridor (2021-06-28); viewed",
+      "hotspots": [
+        "green-corridor"
+      ],
+      "modified": "resized and recompressed for web",
+      "alt_en": "Tree seedlings in a nursery for corridor restoration",
+      "alt_fr": "Plantules en pépinière pour la restauration du corridor"
+    },
+    {
+      "file": "assets/photos/lamco-mine-1976.jpg",
+      "thumb": "assets/photos/thumb/lamco-mine-1976.jpg",
+      "width": 1600,
+      "height": 1058,
+      "commons_title": "File:ASC Leiden - F. van der Kraaij Collection - 13 - 001 - LAMCO J.V. A landscape with open pit mining for iron ore. Excavators and lorries - Yekepa, Nimba county, Liberia - 1976.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File%3AASC_Leiden_-_F._van_der_Kraaij_Collection_-_13_-_001_-_LAMCO_J.V._A_landscape_with_open_pit_mining_for_iron_ore._Excavators_and_lorries_-_Yekepa%2C_Nimba_county%2C_Liberia_-_1976.jpg",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/c/c2/ASC_Leiden_-_F._van_der_Kraaij_Collection_-_13_-_001_-_LAMCO_J.V._A_landscape_with_open_pit_mining_for_iron_ore._Excavators_and_lorries_-_Yekepa%2C_Nimba_county%2C_Liberia_-_1976.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "author": "Fred van der Kraaij",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "attribution": "\"ASC Leiden - F. van der Kraaij Collection - 13 - 001 - LAMCO J.V. A landscape with open pit mining for iron ore. Excavators and lorries - Yekepa, Nimba county, Liberia - 1976\" by Fred van der Kraaij, CC BY-SA 4.0, via Wikimedia Commons (https://commons.wikimedia.org/wiki/File%3AASC_Leiden_-_F._van_der_Kraaij_Collection_-_13_-_001_-_LAMCO_J.V._A_landscape_with_open_pit_mining_for_iron_ore._Excavators_and_lorries_-_Yekepa%2C_Nimba_county%2C_Liberia_-_1976.jpg)",
+      "date": "1976date QS:P571,+1976-00-00T00:00:00Z/9",
+      "description": "LAMCO J.V. A landscape with open pit mining for iron ore. Excavators and lorries, a pickup truck. Mountains in the background. Lamco JV, the Liberian American-Swedish Minerals Company Joint Venture.",
+      "verified_as": "Archival photo, ASC Leiden; open-pit iron-ore mining at Yekepa, Liberia, 1976 (title and description)",
+      "hotspots": [
+        "yekepa-lamco"
+      ],
+      "modified": "resized and recompressed for web",
+      "alt_en": "Open-pit iron-ore mine at Yekepa, Liberia, in 1976",
+      "alt_fr": "Mine de fer à ciel ouvert à Yekepa, Liberia, en 1976"
+    }
+  ]
+}
