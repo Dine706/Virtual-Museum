@@ -26,7 +26,42 @@ URL flags:
 * `?skipintro=1` skips the title and flyover;
 * `?debug=1` shows uncertain badges, an FPS meter and the test hooks;
 * `?tier=high|mid|low` forces a quality tier;
-* `?fx=1|0` turns walk mode's high-quality look (scanned textures, post-processing) on or off.
+* `?fx=1|0` turns walk mode's high-quality look (generated surface textures, post-processing) on or off.
+
+### Open-world development build
+
+Walk mode now includes jumping, gravity, slope limits, rock collision, a standard-gamepad mapping,
+touch jump and a compass. Open **Réglages / Settings** while walking to change FOV, sensitivity,
+head bob, reduced motion and language. Quality selection applies on the next walk entry.
+
+All 23 cards use generated landscape illustrations with **Digital reconstruction** captions.
+Original licensed photographs remain as documentary references. High-quality walk mode adds
+generated canopy/bark/litter textures and a small Blender-animated generic sapling. The sapling
+is a filler, not an identified Nimba species. This is the first open-world implementation milestone;
+the complete hero-plant/animal/weather/exploration roadmap remains in `docs/OPEN_WORLD_NOTES.md`.
+
+Credits are available from walk settings and `credits.html`; `CREDITS.md` and `public/credits.json`
+record attribution. Image-generation prompts, hashes and rebuild instructions are under
+`scripts/blender/reference/world-art/`. The compressed runtime images and model are committed;
+raw generation PNGs and the Blender scene stay outside tracked production assets.
+
+Additional checks:
+
+```bash
+npm run check:walk-physics
+npm run check:world-art
+BROWSER_PATH=/usr/bin/chromium npm run check:walk-controls
+BROWSER_PATH=/usr/bin/chromium npm run check:walk-quality
+BROWSER_PATH=/usr/bin/chromium npm run check:art-ui
+```
+
+`BROWSER_PATH` is optional when Playwright's bundled Chromium is installed. `BASE_URL` selects
+a running dev or preview server; screenshot/report output paths can be set with `RESULTS_DIR`.
+Use Node 22.23+ (or Node 24) for native TypeScript stripping in the physics check. Software-renderer
+FPS and JS heap figures do not establish GPU performance or total GPU-memory use.
+
+For Blender assets, use Python 3.13 and `scripts/blender/requirements.txt`. The tested cloud
+interpreter is `/workspace/.tools/nimba-blender/bin/python`; the asset README has exact commands.
 
 ## Code map
 

@@ -469,3 +469,73 @@ vertical "curtains" along the shore), mines are red iron-ore spoil with patchy r
 are blurred so surfaces blend across outlines; ground textures use box projection (no smearing on pit walls);
 the camera steps to the nearest dry, gentle ground. Bug: the far massif mesh, only 6 m under the fine patch,
 bridged the pit with its coarse triangles and covered the camera (black render) – now sunk 300 m there.
+
+## Open world M1 — controls, generated artwork and Blender animation
+
+**Result:** a working first-person development build with generated imagery, improved controls and a real
+Blender-exported vegetation animation. This is the first implementation milestone plus Dean's requested
+artwork replacement; the full M2–M8 world, hero plants, animals, weather and exploration roadmap is unfinished.
+
+* All 23 cards now use eight generated habitat/scenery illustrations. JPEG, WebP and AVIF versions and small
+  thumbnails are committed. Some related cards share an illustration. Captions say “Reconstitution numérique /
+  Digital reconstruction” in the chosen language, without an “AI” badge. These are illustrative viewpoints,
+  not surveyed scenes. Species cards show habitats rather than unverified generated animal anatomy.
+* Eleven material/reference images supply generic foliage and all fourteen High ground/bark roles. Nine
+  opaque surfaces have subtle derived normal maps. These are generated surface textures, not physical scans.
+  High impostors are baked from the generated canopy texture too, keeping nearby/distant foliage consistent.
+  Low/Mid retain their lightweight procedural rendering; existing CC0 cover meshes remain available.
+* Original documentary photos, licences and card associations are retained. A structural comparison with
+  source commit `cba3f1b4a1d216b3387ec9594d2041209aca5ffb` confirms all card facts, sources and generalised
+  locations are unchanged. Only the card-image associations changed.
+* `scripts/blender/reference/world-art/manifest.json` records all 19 source images, prompts and SHA-256 hashes.
+  Raw PNGs stay in `/workspace/generated_images`; compact runtime outputs are in Git. `CREDITS.md`,
+  `public/credits.json`, the bilingual credits page and walk-settings credits record attribution.
+* Blender 5.3 / Python 3.13 builds a generic sapling with mesh geometry, generated leaf/bark textures and a
+  looping branch animation. The meshopt/WebP GLB is about 555 KB, with one clip and nine animated branches.
+  High walk mode loads it lazily and plays it through AnimationMixer; reduced motion freezes it. It is a
+  generic filler, not a species identification. A 512×512, 48-frame, 24 fps, two-second review video was rendered
+  from Blender's timeline and encoded separately from production assets.
+* First-person controls add jump/gravity, ground snapping on walkable descents, slope/step limits, boulder
+  collision, standard gamepad input and touch jump. Settings persist validated FOV, sensitivity, head bob,
+  reduced motion and quality. The dialog pauses movement and stops redundant world rendering. Language
+  changes immediately; quality applies on the next walk entry. A compass shows the player's bearing.
+* Tile failures can be retried instead of poisoning the cache. The height-tile cache is bounded, and exit
+  releases the path/area textures, off-screen impostor framebuffers, custom depth materials and animation resources.
+* Input tests found two issues: small downhill steps could momentarily prevent jumping, and map gestures
+  measured handler execution time rather than event timestamps. Both are corrected. The old Skip test selected
+  the Tour button because both shared `.btn-ghost`; it now selects the actual Skip action.
+
+**Validation:**
+
+| Check | Outcome |
+|---|---|
+| Frozen dependency install, Node 22 production build, TypeScript | Pass |
+| Movement physics | 8 checks pass, including slope, jump, landing, edge fall, collision substeps and frame-rate independence |
+| Generated artwork | 23 cards, image variants, source hashes, normal-map dimensions and compressed glTF animation pass |
+| Panels | All 23 cards in FR/EN, phone and desktop pass |
+| Picking and double-tap | Pass; timed touch input tests the gesture independently of automation round-trip delays |
+| Flyover | Pass after correcting the Skip selector; clearance, skip paths, reduced motion and deep links checked |
+| Tour, phone walk flow, desktop/touch/gamepad controls and settings | Pass |
+| Card imagery, full-size viewer and bilingual credits | Pass, with no console errors |
+| Fixed High/phone captures | Pass, with no console errors; High capture is 1920×1080, phone viewport 390×664 |
+| Download budgets, throttled networks, watchdog and idle rendering | Pass |
+| Overlay mode appearance and labels | Pass |
+| Overlay transition deadline of 300 ms | **Fails two timing assertions on SwiftShader**, also reproduced in the original source baseline |
+
+Initial load measured **908 KB mobile / 2,366 KB desktop**, with **193 KB gzipped JS**. The title became ready
+in **20.6 s at 400 kbps** and **6.3 s on Slow 4G**. High/phone capture diagnostics recorded about 135/58 MiB JS
+heap; this excludes native allocations and GPU memory. No GPU-memory budget or real-device FPS claim is made.
+
+The current overlay timings were 665 / 278 / 312 ms (Conservation / Culture / Nature); the original source
+measured 713 / 216 / 394 ms under the same software renderer. The colour/label assertions pass in both.
+The 300 ms failures are recorded, not disabled. Real GPU timing remains a separate validation requirement.
+
+The cloud has a four-core CPU quota and no exposed NVIDIA GPU. Full-resolution High captures use a smaller
+warm-up viewport, render a genuine final frame at 1920×1080, then freeze submissions for capture. Timing logs
+include warm-up and are diagnostics, not hardware benchmarks. The low-tier canopy and some silhouettes still
+look procedural; species-specific hero modelling remains M3. No animated animal or completed weather system
+is represented as delivered.
+
+Reusable `install_script` and `start_skill` were saved in the environment draft after exercising the install,
+Blender import/export, build and startup workflow. Draft persistence does not publish the environment or deploy
+the application. Local commits only; no push or deployment has been performed.

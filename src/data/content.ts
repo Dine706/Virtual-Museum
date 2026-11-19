@@ -54,6 +54,7 @@ export interface PhotoCredit {
   attribution: string;
   alt_en: string; alt_fr: string;
   hotspots: string[];
+  reconstruction?: boolean;
 }
 
 /** Pick the FR or EN variant of a `*_fr` / `*_en` field pair. */

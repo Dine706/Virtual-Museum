@@ -187,7 +187,7 @@ export class Ground {
     this.uCam.value.copy(eye);
   }
 
-  /** Swap the drawn ground layers for scanned ones (high-quality look). */
+  /** Swap the drawn ground layers for generated surface textures (high-quality look). */
   usePhotos(p: PhotoSet, anisotropy: number) {
     const { diff, nor } = photoLayers(p, anisotropy);
     this.texU.uDiff.value.dispose(); this.texU.uNorm.value.dispose();

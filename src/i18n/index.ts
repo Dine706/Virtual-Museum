@@ -34,7 +34,7 @@ export function setLang(lang: Lang) {
   listeners.forEach((fn) => fn(lang));
 }
 
-export function onLang(fn: (l: Lang) => void) { listeners.add(fn); }
+export function onLang(fn: (l: Lang) => void) { listeners.add(fn); return () => { listeners.delete(fn); }; }
 
 /** Fill every element carrying data-i18n / data-i18n-attr from the dictionary. */
 export function applyStatic(root: ParentNode = document) {

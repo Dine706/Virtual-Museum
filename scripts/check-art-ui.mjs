@@ -1,0 +1,41 @@
+import assert from 'node:assert/strict';
+import { createRequire } from 'node:module';
+import fs from 'node:fs/promises';
+const { chromium } = createRequire(import.meta.url)('playwright');
+const base = process.env.BASE_URL || 'http://localhost:5173/';
+const out = process.env.RESULTS_DIR || '/tmp/nimba-art-ui';
+await fs.mkdir(out, { recursive: true });
+const browser = await chromium.launch({ executablePath: process.env.BROWSER_PATH, args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
+try {
+  const page = await browser.newPage({ viewport: { width: 960, height: 720 } });
+  page.setDefaultTimeout(180000);
+  const errors = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  page.on('response', (r) => { if (r.status() >= 400) console.log('HTTP', r.status(), r.url()); });
+  page.on('console', (m) => { if (['error', 'warning'].includes(m.type())) errors.push(m.text()); });
+  await page.goto(`${base}?skipintro=1&tier=low#/h/cloud-forest`);
+  await page.waitForSelector('#panel.open');
+  await page.waitForFunction(() => document.querySelector('#panel .photo-btn img')?.naturalWidth > 0);
+  await page.waitForFunction(() => {
+    const el = document.querySelector('#panel'), r = el.getBoundingClientRect();
+    const style = getComputedStyle(el);
+    return style.visibility === 'visible' && style.transform === 'none' && r.left < innerWidth - 100 && r.right > 100 && r.top < innerHeight - 100;
+  });
+  const card = await page.locator('#panel .media').innerText();
+  assert.match(card, /reconstitution numérique/i);
+  assert.doesNotMatch(card, /\bAI\b|\bIA\b/);
+  assert.ok((await page.locator('#panel .photo-btn img').getAttribute('src')).includes('reconstruction-cloudforest'));
+  await page.screenshot({ path: `${out}/cloud-forest-card.png` });
+  await page.click('#panel .photo-btn');
+  await page.waitForFunction(() => document.querySelector('.viewer img')?.naturalWidth > 0);
+  assert.match(await page.locator('.viewer').innerText(), /reconstitution numérique/i);
+  await page.goto(new URL('credits.html', base).href);
+  await page.waitForFunction(() => document.querySelectorAll('#credits li').length > 20);
+  await page.click('#language');
+  assert.equal(await page.locator('#title').innerText(), 'Credits and data');
+  assert.match(await page.locator('#credits').innerText(), /Copernicus DEM/);
+  assert.match(await page.locator('#credits').innerText(), /Animated generic sapling/);
+  await page.screenshot({ path: `${out}/credits.png`, fullPage: true });
+  assert.equal(errors.length, 0, errors.join(' | '));
+  console.log('PASS generated card image, reconstruction caption, full-size viewer and bilingual credits page');
+} finally { await browser.close(); }

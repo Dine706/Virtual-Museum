@@ -351,7 +351,7 @@ export class Panel {
       a.href = p.source_url;
       a.target = '_blank';
       a.rel = 'noopener';
-      a.textContent = `© ${p.author} · ${p.license}`;
+      a.textContent = `© ${p.author} · ${p.reconstruction ? t('image.reconstruction') : p.license}`;
       const altSpan = document.createElement('span');
       altSpan.className = 'cap-alt';
       altSpan.textContent = alt;

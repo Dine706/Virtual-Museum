@@ -167,13 +167,14 @@ async function boot() {
   let lastTap: { x: number; y: number; t: number } | null = null;
   canvas.addEventListener('pointerdown', (e) => {
     if (!e.isPrimary) { down = null; return; }
-    down = { x: e.clientX, y: e.clientY, t: performance.now(), id: e.pointerId };
+    down = { x: e.clientX, y: e.clientY, t: e.timeStamp, id: e.pointerId };
   });
   canvas.addEventListener('pointerup', async (e) => {
     const d = down;
     down = null;
-    if (!d || d.id !== e.pointerId || Math.hypot(e.clientX - d.x, e.clientY - d.y) > 8 || performance.now() - d.t > 450) return;
-    const now = performance.now();
+    if (!d || d.id !== e.pointerId || Math.hypot(e.clientX - d.x, e.clientY - d.y) > 8 || e.timeStamp - d.t > 450) return;
+    // Measure the gesture, not the time spent waiting behind a busy render on the main thread.
+    const now = e.timeStamp;
     const isDouble = !!lastTap && now - lastTap.t < 330 && Math.hypot(e.clientX - lastTap.x, e.clientY - lastTap.y) < 30;
     lastTap = isDouble ? null : { x: e.clientX, y: e.clientY, t: now };
     const p = pickGround(e.clientX, e.clientY, canvas, camera, hf, exag);

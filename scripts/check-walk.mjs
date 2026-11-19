@@ -9,7 +9,7 @@ try { pw = await import('playwright'); } catch { pw = createRequire(import.meta.
 const BASE = process.env.BASE_URL || 'http://localhost:5173/';
 const tier = process.argv[2] || 'mid';
 const only = process.argv[3] || '';
-const browser = await pw.chromium.launch({ args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
+const browser = await pw.chromium.launch({ executablePath: process.env.BROWSER_PATH, args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
 const errors = [];
 fs.mkdirSync('docs/screens', { recursive: true });
 
@@ -60,3 +60,5 @@ console.log('card:', card?.slice(0, 300));
 await page.screenshot({ path: `docs/screens/walk-card.png` });
 console.log(errors.length ? `ERRORS:\n${[...new Set(errors)].join('\n')}` : 'no console errors');
 await browser.close();
+
+process.exitCode = errors.length ? 1 : 0;

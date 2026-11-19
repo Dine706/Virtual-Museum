@@ -82,12 +82,13 @@ export class Forest {
   private frondMats = new Map<FrondKind, THREE.Material>();
   private mossMat: THREE.Material | null = null;
   private impMats: THREE.MeshBasicMaterial[] = [];
+  private impostorTargets: THREE.WebGLRenderTarget[] = [];
   dirty = true;
 
   constructor(private data: WalkData, private opts: ForestOpts) {}
 
   /** Build plant variants, materials and impostor textures (needs the renderer). */
-  init(renderer: THREE.WebGLRenderer) {
+  init(renderer: THREE.WebGLRenderer, generatedFoliage?: THREE.Texture) {
     const msaa = !!renderer.getContext().getContextAttributes()?.antialias;
     const leafTex = (k: keyof typeof LEAVES) => leafCluster(LEAVES[k], k.length * 13 + 5, this.opts.impostorRes >= 512 ? 512 : 256);
     this.leafMats.set('single', foliage(walkMaterial(new THREE.MeshStandardMaterial({ map: singleLeaf(3), alphaTest: 0.5, side: THREE.DoubleSide, vertexColors: true, roughness: 0.45 }), 'leaf', translucency), msaa));
@@ -102,6 +103,9 @@ export class Forest {
       this.frondMats.set(k, foliage(walkMaterial(new THREE.MeshStandardMaterial({ map: frond(k, k.length * 23 + 1), alphaTest: 0.45, side: THREE.DoubleSide, vertexColors: true, roughness: 0.7 }), 'frond', translucency), msaa));
     }
     this.mossMat = walkMaterial(new THREE.MeshStandardMaterial({ map: mossStrands(9), alphaTest: 0.4, side: THREE.DoubleSide, vertexColors: true, roughness: 0.9 }), 'leaf');
+
+    // Bake distant impostors from the same foliage used nearby, so the LOD boundary keeps its look.
+    if (generatedFoliage) this.useFoliage(generatedFoliage);
 
     for (const type of PLANT_TYPES) {
       for (let v = 0; v < Math.min(VARIANTS, this.opts.variants); v++) {
@@ -169,6 +173,7 @@ export class Forest {
     kind.impW = halfW;
     const res = this.opts.impostorRes;
     const rt = new THREE.WebGLRenderTarget(res * 2, res, { generateMipmaps: true, minFilter: THREE.LinearMipmapLinearFilter, magFilter: THREE.LinearFilter });
+    this.impostorTargets.push(rt);
     rt.texture.colorSpace = THREE.SRGBColorSpace;
     const scene = new THREE.Scene();
     const hemi = new THREE.HemisphereLight('#E9E4D2', '#4B4630', 1.6);
@@ -228,7 +233,7 @@ export class Forest {
     holder.clear();
   }
 
-  /** Scanned bark for trunks (high-quality look). Impostors keep the baked look. */
+  /** Generated bark for trunks (high-quality look). */
   usePhotos(p: PhotoSet) {
     const set = (k: BarkKind, t: { map: THREE.Texture; normal: THREE.Texture }, rx: number, ry: number) => {
       const m = this.barkMats.get(k) as THREE.MeshStandardMaterial | undefined;
@@ -239,7 +244,21 @@ export class Forest {
     };
     set('brown', p.bark, 2, 3);
     set('grey', p.barkGrey, 2, 3);
+    set('mossy', p.barkGrey, 2, 3);
+    set('lichen', p.barkGrey, 2, 3);
     set('palm', p.palm, 1, 2);
+  }
+
+  /** Generated generic broadleaf texture; specialised palms/ferns/Protea keep their own silhouettes. */
+  useFoliage(texture: THREE.Texture) {
+    texture.colorSpace = THREE.SRGBColorSpace;
+    texture.anisotropy = 8;
+    for (const key of ['lowland', 'montane', 'regrowth', 'bigleaf'] as LeafKind[]) {
+      const material = this.leafMats.get(key) as THREE.MeshStandardMaterial | undefined;
+      if (!material) continue;
+      material.map?.dispose(); material.map = texture; material.needsUpdate = true;
+      material.roughness = 0.68;
+    }
   }
 
   /** Scanned surface roots at the feet of the big trees near the walker (high-quality look). */
@@ -526,5 +545,11 @@ export class Forest {
     let n = 0, f = 0;
     for (const k of this.kinds.values()) { n += (k.trunk ?? k.leaves ?? k.fronds)?.count ?? 0; f += k.imp.count; }
     return { near: n, far: f, cells: this.cells.size };
+  }
+
+  dispose() {
+    // Disposing only the material's texture leaves the off-screen framebuffer/depth attachment alive.
+    for (const target of this.impostorTargets) target.dispose();
+    this.impostorTargets = [];
   }
 }

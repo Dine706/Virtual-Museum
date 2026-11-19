@@ -5,7 +5,7 @@ import { createRequire } from 'node:module';
 let pw;
 try { pw = await import('playwright'); } catch { pw = createRequire(import.meta.url)('playwright'); }
 const BASE = process.env.BASE_URL || 'http://localhost:5173/';
-const browser = await pw.chromium.launch({ args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
+const browser = await pw.chromium.launch({ executablePath: process.env.BROWSER_PATH, args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
 const ctx = await browser.newContext({ ...pw.devices['iPhone 13'], deviceScaleFactor: 1 });
 const page = await ctx.newPage();
 page.setDefaultTimeout(240000);
