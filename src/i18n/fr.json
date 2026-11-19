@@ -1,4 +1,11 @@
 {
+  "walk.optics": "Jumelles",
+  "walk.encounter": "Observer la faune",
+  "walk.animal.chimpanzee": "Chimpanzé occidental",
+  "walk.animal.nimba-toad": "Crapaud vivipare du Nimba",
+  "walk.animal.otter-shrew": "Micropotamogale du Nimba",
+  "walk.animal.roundleaf-bat": "Hipposidère de Lamotte",
+
   "app.name": "Nimba",
   "app.title": "Monts Nimba – exploration 3D",
   "loading.text": "Chargement du massif…",

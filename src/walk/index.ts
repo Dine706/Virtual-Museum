@@ -12,6 +12,7 @@ import type { Tier } from '../scene/tier';
 import { AREA, WalkData } from './data';
 import { WalkEnv, WALK_TIMES, shared, walkMaterial, type WalkTime } from './env';
 import { Ground } from './ground';
+import { RidgeMosaic } from './ridgeMosaic';
 import { CanopyBelt } from './canopyBelt';
 import { loadCrown } from './crownModels';
 import { loadHinterland } from './hinterland';
@@ -20,7 +21,8 @@ import { Lianas } from './lianas';
 import { Forest } from './forest';
 import { GroundCover } from './groundcover';
 import { Water } from './water';
-import { Fauna, type Agent } from './fauna';
+import { Encounter, facePoint } from './encounter';
+import { Fauna, type Agent, type AnimalKind } from './fauna';
 import { WalkControls } from './controls';
 import { Hud, type Card } from './hud';
 import { makeCards, type Hit } from './cards';
@@ -44,7 +46,7 @@ export interface WalkContext {
   content: Content;
   base: string;
   tier: Tier;
-  start: { x: number; z: number; yaw?: number };
+  start: { x: number; z: number; yaw?: number; subject?:string };
   reducedMotion: boolean;
   onExit: () => void;
   onPosition?: (x: number, z: number) => void;
@@ -124,7 +126,7 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
   const cover = new GroundCover(data, { radius: O.cover, spacing: O.spacing, shadows: O.shadows > 0, rockRadius: O.rock, texSize: O.tex, msaa: !!renderer.getContext().getContextAttributes()?.antialias });
   const water = new Water(data, env.hemi.color);
   const fauna = new Fauna(data, { birds: O.birds, butterflies: O.flies });
-  const village = new Village(data, quality === 'high' ? 26 : quality === 'mid' ? 16 : 8, quality === 'high' ? ctx.base : undefined);
+  const village = new Village(data, quality === 'high' ? 26 : quality === 'mid' ? 16 : 8, ctx.base, quality === 'high');
 
   const far = new THREE.Scene();
   far.add(env.sky, ground.far);
@@ -132,6 +134,8 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
   near.add(ground.mesh, forest.group, cover.group, water.mesh, fauna.group, village.group, ground.cloudNear, env.hemi, env.sun, env.sun.target);
   const animatedPlants = fx ? new AnimatedPlants() : null;
   let landscapeMaps: LandscapeMaps | null = null;
+  const ridgeMosaic=quality==='high'?new RidgeMosaic(data,ctx.base):null;
+  if(ridgeMosaic)near.add(ridgeMosaic.group);
   let canopyBelt: CanopyBelt | null = null;
   let distantForest: LandscapeForest | null = null;
   if (animatedPlants) near.add(animatedPlants.group);
@@ -170,7 +174,7 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
       near.add(canopyBelt.group);
       cover.useGrass(maps.grass);
       distantForest = new LandscapeForest(ctx.hf, ctx.lcTex, maps.tree, {
-        atmosphere: 'walk', uniforms: shared, inner: 550, outer: 22000,
+        atmosphere: 'walk', uniforms: shared, inner: 550, outer: 26000, spacing:31,
       });
       far.add(distantForest.mesh);
     }).catch(e => console.warn('walk: optional landscape unavailable', e)).finally(() => { scansPending--; });
@@ -191,6 +195,7 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
   renderer.shadowMap.enabled = O.shadows > 0 || fx;
   renderer.shadowMap.type = THREE.PCFShadowMap;
   renderer.autoClear = false;
+  let magnified=!!ctx.start.subject && ['nimba-toad','roundleaf-bat','otter-shrew','graphium','acraea','swallowtail'].includes(ctx.start.subject);
   const resize = () => {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, O.dpr * dprScale));
     const w = innerWidth, h = innerHeight;
@@ -199,9 +204,17 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
       c.aspect = w / h;
       // Settings specify horizontal FOV. Preserve a useful vertical FOV on portrait screens.
       c.fov = THREE.MathUtils.clamp(2 * Math.atan(Math.tan(THREE.MathUtils.degToRad(settings.fov / 2)) / (w / h)) * 180 / Math.PI, 45, 100);
+      if(magnified)c.fov/=3.2;
       c.updateProjectionMatrix();
     }
   };
+  if(ctx.start.subject && ctx.start.subject!=='village'){
+    const optics=document.createElement('button');optics.type='button';optics.className='walk-btn';
+    const updateOptics=()=>{optics.textContent=t('walk.optics')+(magnified?' ×3.2':' ×1');optics.setAttribute('aria-pressed',String(magnified));};
+    updateOptics();
+    optics.onclick=()=>{magnified=!magnified;resize();updateOptics();};
+    hud.root.querySelector('.walk-actions')?.prepend(optics);
+  }
   let dprScale = 1;
   resize();
   window.addEventListener('resize', resize);
@@ -255,7 +268,15 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
     return [bx, bz];
   }
   {
-    const [bx, bz] = openSpot(ctx.start.x, ctx.start.z);
+    let x=ctx.start.x,z=ctx.start.z;
+    if(ctx.start.subject==='village'){
+      const house=data.buildingsNear(x,z,500).filter(b=>b.w>3 && b.d>3)
+        .sort((p,q)=>Math.hypot(p.x-x,p.z-z)-Math.hypot(q.x-x,q.z-z))[0];
+      if(house){x=house.x-Math.sin(house.a)*(house.d/2+7);z=house.z+Math.cos(house.a)*(house.d/2+7);}
+      const spot=openSpot(x,z);x=spot[0];z=spot[1];
+      if(house)controls.yaw=Math.atan2(x-house.x,z-house.z);
+    }else [x,z]=openSpot(x,z);
+    const bx=x,bz=z;
     pos.set(bx, data.heightAt(bx, bz), bz);
     eyeY = pos.y + EYE;
     eye.set(pos.x, eyeY, pos.z);
@@ -266,6 +287,21 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
   water.update(eye);
   fauna.viewYaw = controls.yaw;
   fauna.populate(eye);
+  const subject=ctx.start.subject;
+  let encounter:Encounter|null=null;
+  if(subject && Encounter.supported(subject)){
+    const animal=new Encounter(subject,data);
+    const startEye=eye.clone();
+    scansPending++;
+    const arrival=animal.enter(ctx.base,startEye,controls,forest.nearTrees).then(()=>{
+      if(exited)return;
+      encounter=animal; near.add(animal.group);
+    }).catch(e=>console.warn('Encounter asset unavailable',e)).finally(()=>scansPending--);
+    await Promise.race([arrival,new Promise(resolve=>setTimeout(resolve,4000))]);
+  }else if(subject && subject!=='village'){
+    const animal=fauna.observe(subject as AnimalKind,eye);
+    facePoint(controls,eye,animal.pos);
+  }
   ground.update(eye);
   applyTime();
 
@@ -446,12 +482,14 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
     water.update(eye);
     ground.update(eye);
     canopyBelt?.update(eye);
+    ridgeMosaic?.update(eye);
     flora.update(eye,forest.nearTrees);
     lianas.update(eye,forest.nearTrees);
     fauna.viewYaw = controls.yaw;
     if (eye.distanceTo(lastFauna) > 200) { fauna.populate(eye); lastFauna.copy(eye); }
     fauna.update(dt, eye, shared.uTime.value);
-    village.update(eye, dt, shared.uTime.value);
+    encounter?.update(dt,eye);
+    village.update(eye);
     animatedPlants?.update(data, eye, dt, reduceMotion());
     placeT += dt;
     if (placeT > 0.5) { placeT = 0; updatePlace(); }
@@ -577,6 +615,10 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
       }
       prev = tt;
     }
+    if(encounter){
+      const dist=sphere(encounter.focus,encounter.kind==='chimpanzee'?.48:.13);
+      if(dist<best){hud.showMarker(sx,sy);hud.showCard(encounter.card());return;}
+    }
     const plant = flora.pick(ray,best);
     if (plant) { hud.showMarker(sx,sy); hud.showCard(plant); return; }
     if (!hit) return;
@@ -674,6 +716,7 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
       get animation() { return animatedPlants?.stats ?? null; },
       get landscape() { return { distantTrees: distantForest?.count ?? 0, detailedTreeRange: O.range, geometryRange: O.near, groundRadius: O.R, farTerrainSegments: O.seg >= 500 ? 700 : 300, horizon: distantForest ? 22000 : 0 }; },
       nearestLeaf: () => flora.nearestLeaf(eye),
+      get encounter(){return encounter?{kind:encounter.kind,state:encounter.state,pos:encounter.group.position.clone(),focus:encounter.focus}:fauna.encounterStatus;},
       get localFlora() { return flora.counts; },
       get groundCover() { return cover.stats; },
       /** Test capture: render one real frame at the current viewport, then stop submitting GPU work. */

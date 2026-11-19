@@ -1,4 +1,11 @@
 {
+  "walk.optics": "Binoculars",
+  "walk.encounter": "Wildlife encounter",
+  "walk.animal.chimpanzee": "Western chimpanzee",
+  "walk.animal.nimba-toad": "Nimba viviparous toad",
+  "walk.animal.otter-shrew": "Nimba otter shrew",
+  "walk.animal.roundleaf-bat": "Lamotte’s roundleaf bat",
+
   "app.name": "Nimba",
   "app.title": "Mount Nimba – 3D exploration",
   "loading.text": "Loading the massif…",

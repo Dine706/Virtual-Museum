@@ -516,3 +516,6 @@ body.touring .walk-veil p { visibility: hidden; }
 .walk-menu :focus-visible { outline: 3px solid var(--savanna-500); outline-offset: 3px; }
 @media (max-width: 1100px) { .walk-compass { top: auto; bottom: calc(16px + var(--sab)); } }
 @media (max-width: 600px) { .walk-place { max-width: 52vw; } .walk-actions { gap: 4px; } .walk-menu header { padding: 22px 20px 16px; } .walk-menu-body { padding: 18px 20px; } .walk-hint { max-width: calc(100vw - 32px); white-space: normal; text-align: center; } }
+.animal-destinations { padding: .6rem 0 1rem; }
+.animal-destinations h3 { margin: 0 0 .45rem; }
+.animal-destinations button { margin: .15rem .4rem .15rem 0; padding: .52rem .85rem; border-radius: 1rem; background: #303f31; color: #fff; border: 1px solid #70806e; cursor: pointer; }

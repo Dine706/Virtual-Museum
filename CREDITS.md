@@ -70,3 +70,7 @@ The fallen timber uses the CC0 [Dead Tree Trunk 02 scan](https://polyhaven.com/a
 ### Regional understory
 
 The forest walk adds original Blender growth-form reconstructions of five plants in the local GBIF occurrence compilation. Illustrative patches follow canopy cover and elevation, and fern rosettes attach to tree trunks. The individual plant positions are reconstructed. [Aframomum chrysanthum](https://www.gbif.org/species/2758878) · [Marantochloa leucantha](https://www.gbif.org/species/2761169) · [Palisota barteri](https://www.gbif.org/species/2763803) · [Begonia quadrialata](https://www.gbif.org/species/7303227) · [Asplenium mannii](https://www.gbif.org/species/7417555)
+
+### Wildlife encounters, summit and courtyards
+
+The four featured wildlife models and three seated residents were authored in Blender for this reconstruction. Wildlife encounters use illustrative placements at the existing generalised map markers. Species references remain in the hotspot cards. Courtyard arrangements follow the [village references](docs/VILLAGE_SOURCES.md). The outer watersheds use Copernicus Sentinel-2 true-colour imagery from scene S2A_29NNJ_20241215_0_L2A alongside Copernicus GLO-30 elevations.

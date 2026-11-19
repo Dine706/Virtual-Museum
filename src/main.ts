@@ -252,12 +252,12 @@ async function boot() {
       onClose: () => selectHotspot(null, true),
       onNavigate: (id) => selectHotspot(id, true),
       onShowOnMap: (id) => { const h = content.hotspots.find((x) => x.id === id); if (h) flyTo(hotspotPose(h)); },
-      onWalk: (id) => {
+      onWalk: (id, subject) => {
         const h = content.hotspots.find((x) => x.id === id);
         if (!h) return;
         // Markers of threatened species are already generalised in content.json (CLAUDE.md §10.2).
         const [x, z] = lonLatToXZ(h.lon, h.lat);
-        void startWalk(x, z);
+        void startWalk(x,z,undefined,subject??(['nzo','yeale','cegens-gbakore','ireb-bossou','yekepa-lamco','cultural-landscape'].includes(id)?'village':undefined));
       },
       onObscure: (right, bottom) => stage.setViewInset(right, bottom, reducedMotion),
     }, flags.debug);
@@ -337,7 +337,7 @@ async function boot() {
   // ---- Walk mode (first-person, lazy-loaded) ----
   let walking: WalkHandle | null = null;
   let walkStarting = false;
-  async function startWalk(x: number, z: number, heading?: number) {
+  async function startWalk(x: number, z: number, heading?: number, subject?:string) {
     if (walking || walkStarting) return;
     walkStarting = true;
     readout.hide();
@@ -351,7 +351,7 @@ async function boot() {
       let lastHash = 0;
       walking = await enterWalk({
         renderer: stage.renderer, hf, lcTex: terrainMat.uniforms.uLand.value as THREE.Texture, content, base: BASE,
-        tier: stage.tier.tier, start: { x, z, yaw }, reducedMotion,
+        tier: stage.tier.tier, start: { x, z, yaw, subject }, reducedMotion,
         onExit: () => {
           walking = null;
           document.body.classList.remove('walking');

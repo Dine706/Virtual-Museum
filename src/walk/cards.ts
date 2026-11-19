@@ -52,7 +52,7 @@ export function makeCards(data: WalkData, content: Content) {
   }));
 
   function person(p: Person, habitat: HabitatId): Card {
-    const src = p.activity === 'pound' ? [SRC.gret] : p.activity === 'hoe' ? [SRC.bossou, SRC.kpelle] : p.activity === 'walk' ? [SRC.osm] : p.activity === 'play' || p.activity === 'sit' ? [] : [SRC.guinea];
+    const src:{label:string;url:string}[]=[];
     const lines = [t(`walk.act.${p.activity}`)];
     if (p.village === 'Bossou') { lines.push(t('walk.village.bossou')); src.push(SRC.bossou, SRC.green); } else if (p.village) lines.push(t('walk.village.generic', { name: p.village }));
     return { kicker: p.village ?? t(`walk.habitat.${habitat}`), title: t('walk.person.title'), lines, note: t('walk.person.note'), sources: src };

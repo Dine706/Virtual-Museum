@@ -1,4 +1,4 @@
-import{Bt as e,Dt as t,E as n,Ot as r,S as i,Tt as a,_n as o,en as s,l as c,sn as l,tn as u,un as d}from"./index-BYsmB73X.js";var f=null;function p(e){return f??=fetch(`${e}pano/panos.json`).then(e=>e.ok?e.json():[]).then(e=>e.panos??[]).catch(()=>[]),f}function m(f,p,m,h){return new Promise(g=>{let _=document.createElement(`div`);_.className=`pano-viewer`,_.setAttribute(`role`,`dialog`),_.setAttribute(`aria-modal`,`true`),_.setAttribute(`aria-label`,m===`fr`?f.title_fr:f.title_en),_.innerHTML=`
+import{Bt as e,Dt as t,E as n,Ot as r,S as i,Tt as a,_n as o,en as s,l as c,sn as l,tn as u,un as d}from"./index-wFR9idpY.js";var f=null;function p(e){return f??=fetch(`${e}pano/panos.json`).then(e=>e.ok?e.json():[]).then(e=>e.panos??[]).catch(()=>[]),f}function m(f,p,m,h){return new Promise(g=>{let _=document.createElement(`div`);_.className=`pano-viewer`,_.setAttribute(`role`,`dialog`),_.setAttribute(`aria-modal`,`true`),_.setAttribute(`aria-label`,m===`fr`?f.title_fr:f.title_en),_.innerHTML=`
       <canvas class="pano-canvas" aria-hidden="true"></canvas>
       <div class="pano-top">
         <div class="pano-title"><strong></strong><span></span></div>

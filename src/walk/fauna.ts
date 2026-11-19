@@ -17,7 +17,7 @@ export interface Agent {
   obj: THREE.Object3D;
   flap: { value: number };
   pos: THREE.Vector3; vel: THREE.Vector3; target: THREE.Vector3;
-  speed: number; height: number; size: number; phase: number; rate: number; glide: number;
+  speed: number; height: number; size: number; phase: number; rate: number; glide: number; perched?:boolean; fleeing?:number;
 }
 
 interface Part { geo: THREE.BufferGeometry; color: string }
@@ -65,12 +65,13 @@ function birdGeometry(kind: 'hornbill' | 'turaco' | 'sunbird'): THREE.BufferGeom
   const wing = (side: number) => {
     const g = new THREE.BufferGeometry();
     const p: number[] = [], w: number[] = [], c: number[] = [];
-    const segs = 4;
+    const segs = 16;
     for (let i = 0; i <= segs; i++) {
       const t = i / segs;
       const x = side * (0.12 + t * span);
-      const chord = 0.45 * (1 - t * 0.55);
-      p.push(x, 0.04, 0.18, x, 0.04, 0.18 - chord);
+      const chord = .45 * Math.pow(Math.max(.001,1-t*t),.54) * (i%2 && t>.56?.78:1);
+      const lead=.18-.19*t*t;
+      p.push(x,.04+.07*Math.sin(t*Math.PI),lead,x,.025,lead-chord);
       w.push(t, t);
       const col = new THREE.Color(t > 0.62 ? C.tip : C.wing);
       c.push(col.r, col.g, col.b, col.r, col.g, col.b);
@@ -142,13 +143,15 @@ function flapMaterial(base: THREE.MeshStandardMaterial, flap: { value: number },
            { float a = sin(uFlap) * ${amp.toFixed(2)} * aWing; float x = transformed.x; transformed.x = x * cos(a); transformed.y += abs(x) * sin(a); }`
         : `#include <begin_vertex>
            { float a = sin(uFlap) * ${amp.toFixed(2)}; float x = transformed.x; float k = aWing;
-             transformed.y += abs(x) * sin(a * k) * 0.9; transformed.x = x * mix(1.0, cos(a), k); }`);
+             if(uFlap < -7.0){transformed.z -= abs(x)*.55*k;transformed.x *= 1.-.83*k;transformed.y += .04*k;} else
+             transformed.y += abs(x) * sin(a * k) * 0.9; transformed.x *= mix(1.0, cos(a), k); }`);
   }, `flap:${amp}:${butterfly}`);
 }
 
 export class Fauna {
   readonly group = new THREE.Group();
   readonly agents: Agent[] = [];
+  private featured?:Agent;
   private r = rng(4242);
   /** Walker's view direction (yaw, radians): new animals favour what the walker is looking at. */
   viewYaw = 0;
@@ -237,7 +240,7 @@ export class Fauna {
   /** Populate for the walker's surroundings (called when the walker arrives / moves far). */
   populate(eye: THREE.Vector3) {
     for (const a of this.agents) { this.group.remove(a.obj); ((a.obj as THREE.Mesh).material as THREE.Material).dispose(); }
-    this.agents.length = 0;
+    this.agents.length = 0; this.featured=undefined;
     const b = biomeAt(this.data, eye.x, eye.z);
     const nb = this.counts.birds, nf = this.counts.butterflies;
     const kinds: AnimalKind[] = [];
@@ -251,14 +254,35 @@ export class Fauna {
     for (const k of kinds) this.spawn(k, eye);
   }
 
+  observe(kind:AnimalKind,eye:THREE.Vector3) {
+    const a=this.agents.find(v=>v.kind===kind)??this.spawn(kind,eye);
+    const bird=['hornbill','turaco','sunbird'].includes(kind);
+    const d=bird?4.0:1.35;
+    const x=eye.x-Math.sin(this.viewYaw)*d,z=eye.z-Math.cos(this.viewYaw)*d;
+    a.pos.set(x,this.data.heightAt(x,z)+(bird?.22:.47),z);
+    a.vel.set(0,0,0);a.obj.visible=true;a.obj.position.copy(a.pos);
+    a.obj.rotation.y=this.viewYaw+.9; a.perched=true; this.featured=a;
+    return a;
+  }
+  get encounterStatus(){const a=this.featured;return a?{kind:a.kind,state:a.perched?'watching':a.fleeing?'flying':'foraging',pos:a.pos.clone(),focus:a.pos.clone()}:null;}
   update(dt: number, eye: THREE.Vector3, time: number) {
     const dir = new THREE.Vector3();
     for (const a of this.agents) {
       if (!a.obj.visible) { if (this.r() < 0.05) this.place(a, eye, false); continue; }
       const bird = a.kind === 'hornbill' || a.kind === 'turaco' || a.kind === 'sunbird';
+      const distance=Math.hypot(eye.x-a.pos.x,eye.z-a.pos.z);
+      if(a.perched && distance>(bird?2.85:.92)){a.flap.value=bird?-8:time*.9;continue;}
+      if((!a.fleeing || a.fleeing<=0) && distance<(bird?2.85:.92) && Math.abs(a.pos.y-eye.y)<4){
+        dir.set(a.pos.x-eye.x,0,a.pos.z-eye.z).normalize();
+        const range=bird?9:2.7;
+        a.target.copy(a.pos).addScaledVector(dir,range);
+        a.target.y=Math.max(a.pos.y+(bird?2.6:.62),this.data.heightAt(a.target.x,a.target.z)+1.1);
+        a.perched=false;a.fleeing=bird?2.2:1.6;
+      }
+      a.fleeing=Math.max(0,(a.fleeing??0)-dt);
       dir.subVectors(a.target, a.pos);
       const dist = dir.length();
-      if (dist < (bird ? 3 : 0.6)) this.newTarget(a, eye);
+      if (!a.fleeing && dist < (bird ? 3 : 0.6)) this.newTarget(a, eye);
       dir.normalize();
       // butterflies: erratic; birds: smooth turns
       if (!bird) { dir.x += Math.sin(time * 3.1 + a.phase) * 0.9; dir.y += Math.sin(time * 5.3 + a.phase * 2) * 0.8; dir.z += Math.cos(time * 2.7 + a.phase) * 0.9; dir.normalize(); }

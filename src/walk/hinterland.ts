@@ -18,18 +18,23 @@ export async function loadHinterland(base: string, sunDir: THREE.Vector3) {
   const pos = geometry.attributes.position;
   for (let i=0; i<pos.count; i++) pos.setY(i, elevations[i] - 3);
   geometry.computeVertexNormals();
+  const satellite=await new THREE.TextureLoader().loadAsync(base+"landscape/outer-watersheds.webp");
+  satellite.colorSpace=THREE.SRGBColorSpace; satellite.anisotropy=4;
   const material = new THREE.ShaderMaterial({
-    uniforms: { ...shared, sunDir: { value: sunDir }, bounds: {value: new THREE.Vector4(WORLD.minX,WORLD.minZ,WORLD_W,WORLD_D)} },
+    uniforms: { ...shared, satellite:{value:satellite}, region:{value:new THREE.Vector4(west,north,east-west,south-north)}, sunDir: { value: sunDir }, bounds: {value: new THREE.Vector4(WORLD.minX,WORLD.minZ,WORLD_W,WORLD_D)} },
     vertexShader: `varying vec3 p,n,v;
       void main(){p=position;n=normal;vec4 mv=modelViewMatrix*vec4(p,1.);v=mv.xyz;gl_Position=projectionMatrix*mv;}`,
     fragmentShader: `varying vec3 p,n,v; uniform vec3 sunDir,uFogColor,uSunColor,uSunView;
-      uniform vec4 bounds; uniform float uFogDensity,uHaze;
+      uniform vec4 bounds,region; uniform sampler2D satellite; uniform float uFogDensity,uHaze;
       ${FOG_TAU_GLSL}
       void main(){
         vec2 uv=(p.xz-bounds.xy)/bounds.zw;
         if(all(greaterThan(uv,vec2(0.))) && all(lessThan(uv,vec2(1.))))discard;
         float direct=max(dot(normalize(n),sunDir),0.);
         vec3 col=mix(vec3(.033,.064,.043),vec3(.10,.12,.063),smoothstep(850.,1350.,p.y))*(.56+direct);
+        vec2 groundUV=(p.xz-region.xy)/region.zw;
+        vec4 survey=texture2D(satellite,vec2(groundUV.x,1.-groundUV.y));
+        col=mix(col,survey.rgb*(1.2+.75*direct),survey.a*.92);
         float tau=walkTau(length(v),uFogDensity,uHaze);
         vec3 haze=mix(uFogColor,uSunColor*1.15,.55*pow(max(dot(normalize(v),uSunView),0.),6.));
         gl_FragColor=vec4(mix(col,haze,1.-exp(-tau)),1.);

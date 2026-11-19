@@ -3,6 +3,7 @@
 // modal with a focus trap. Landscape tablets / desktop: non-modal glass side panel (380 / 440 px).
 import { getLang, fmtMeters, t } from '../i18n';
 import { loc, pictureFor, type Content, type Hotspot, type Lang, type PhotoCredit } from '../data/content';
+import { destinations } from '../data/encounters';
 import { BASE } from '../flags';
 import { categoryColor, glyphs, icons } from './icons';
 import { illustration } from './illustrations';
@@ -13,7 +14,7 @@ export interface PanelHandlers {
   onNavigate: (id: string) => void;
   onShowOnMap: (id: string) => void;
   /** Walk at this hotspot in first-person view (habitats, peaks and places on the ground). */
-  onWalk?: (id: string) => void;
+  onWalk?: (id: string, subject?: string) => void;
   /** Pixels of the canvas covered by the panel (right edge on desktop, bottom edge for the sheet). */
   onObscure: (right: number, bottom: number) => void;
 }
@@ -254,6 +255,19 @@ export class Panel {
     long.className = 'long';
     long.textContent = loc(h, 'long', lang);
     this.body.append(long);
+    const subjects=destinations[h.id];
+    if(subjects && this.h.onWalk){
+      const section=document.createElement('section');
+      section.className='animal-destinations';
+      const label=document.createElement('h3'); label.textContent=t('walk.encounter');
+      section.append(label);
+      for(const kind of subjects){
+        const button=document.createElement('button');button.type='button';button.dataset.animal=kind;
+        button.textContent=t('walk.animal.'+kind);button.onclick=()=>this.h.onWalk!(h.id,kind);
+        section.append(button);
+      }
+      this.body.insertBefore(section,long);
+    }
 
     if (h.facts.length) {
       const sec = document.createElement('section');
@@ -435,7 +449,7 @@ export class Panel {
         if (this.sheet) this.setSnap(0);
         this.h.onShowOnMap(h.id);
       }),
-      ...(this.h.onWalk ? [mk('foot-walk', icons.walk, t('walk.enter'), t('walk.enterLabel'), () => this.h.onWalk!(h.id))] : []),
+      ...(this.h.onWalk ? [mk('foot-walk', icons.walk, t('walk.enter'), t('walk.enterLabel'), () => this.h.onWalk!(h.id,destinations[h.id]?.[0]))] : []),
       mk('foot-next', icons.chevronRight, t('panel.next'), t('panel.nextLabel', { title: loc(next, 'title', lang) }), () => this.h.onNavigate(next.id), true),
     );
   }
