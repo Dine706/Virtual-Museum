@@ -87,6 +87,8 @@ Detect once (`navigator.deviceMemory`, `hardwareConcurrency`, `matchMedia('(poin
 | Low | ≤ 2 GB RAM or < 28 fps | 160² mesh, `terrarium_504.png`, `albedo_1024` | DPR 1 | no clouds layer, fog only |
 
 ## 8. Performance budget (hard limits – fail the milestone if exceeded)
+**19 Nov 2026 — Dean's desktop realism direction:** High quality targets a powerful graphics card. Its geometry, texture downloads and view distance may exceed the original mobile budgets below. Use the full available terrain resolution and continuous near/middle/far detail; retain Low/Mid for other devices. Do not claim hardware FPS from cloud software-renderer captures. Original factual, attribution and sensitive-location rules still apply.
+
 * **First meaningful render (title card with terrain):** ≤ **3 MB** transferred on mobile (JS ≤ 250 KB gz + `terrarium_504.png` 0.47 MB + `albedo_1024.jpg` 0.22 MB + 2 font files ≤ 80 KB + `content.json` gzip ≈ 20 KB), **≤ 5 MB on desktop**. Everything else (photos, 2048 albedo, 1008 terrarium) is lazy.
 * Photos: show **thumbs (≈ 30–70 KB) first**, load the 1600 px version only when the user opens the full-size viewer; convert to **AVIF/WebP** at build (`vite-imagetools` or `sharp`), keep JPEG fallback; `loading="lazy"`, explicit width/height, `decoding="async"`.
 * Total **initial** bytes on 3G (400 kbps) ≈ ≤ 60 s to interactive on low tier; show a loading screen with real progress and a "text-only list" button appearing after 6 s.

@@ -35,6 +35,7 @@ export class GroundCover {
   private boulderMesh!: THREE.InstancedMesh;
   private geos = new Map<CoverType, THREE.BufferGeometry>();
   private mats = new Map<CoverType, THREE.Material>();
+  private middle = new Map<CoverType, { geometry: THREE.BufferGeometry; material: THREE.Material; mesh?: THREE.InstancedMesh; capacity: number }>();
 
   constructor(private data: WalkData, private opts: CoverOpts) {
     const rock = groundTextures(opts.texSize);
@@ -175,10 +176,17 @@ export class GroundCover {
     const t0 = Math.floor((eye.x - R) / TILE), t1 = Math.floor((eye.x + R) / TILE);
     const u0 = Math.floor((eye.z - R) / TILE), u1 = Math.floor((eye.z + R) / TILE);
     const keep = new Set<string>();
-    let budget = 40;
+    // Populate the player's immediate surroundings first, including on the very first reveal.
+    // Row-order loading previously left an empty circle around the spawn while distant tiles filled.
+    const wanted: { i: number; j: number; distance: number }[] = [];
     for (let j = u0; j <= u1; j++) for (let i = t0; i <= t1; i++) {
       const cx = (i + 0.5) * TILE - eye.x, cz = (j + 0.5) * TILE - eye.z;
-      if (Math.hypot(cx, cz) > R + TILE) continue;
+      const distance = Math.hypot(cx, cz);
+      if (distance <= R + TILE) wanted.push({ i, j, distance });
+    }
+    wanted.sort((a, b) => a.distance - b.distance);
+    let budget = 40;
+    for (const { i, j } of wanted) {
       const key = `${i},${j}`;
       keep.add(key);
       let tile = this.tiles.get(key);
@@ -192,7 +200,11 @@ export class GroundCover {
     for (const k of this.tiles.keys()) if (!keep.has(k)) this.tiles.delete(k);
     const m = new THREE.Matrix4(), q = new THREE.Quaternion(), e = new THREE.Euler(), p = new THREE.Vector3(), sc = new THREE.Vector3(), c = new THREE.Color();
     for (const t of TYPES) {
-      const l = lists.get(t) ?? [];
+      const all = lists.get(t) ?? [];
+      const fallback = this.middle.get(t);
+      // A scanned fern has thousands of triangles. Preserve it within 22 m, then retain the
+      // original lightweight 3D plant instead of repeating full scans out to the cover horizon.
+      const l = fallback ? all.filter((it) => Math.hypot(it.x - eye.x, it.z - eye.z) < 22) : all;
       let mesh = this.meshes.get(t);
       if (!mesh || (this.caps.get(t) ?? 0) < l.length) {
         if (mesh) { this.group.remove(mesh); mesh.dispose(); }
@@ -230,6 +242,30 @@ export class GroundCover {
       mesh.count = n;
       mesh.instanceMatrix.needsUpdate = true;
       if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
+      if (fallback) {
+        const middle = all.filter((it) => Math.hypot(it.x - eye.x, it.z - eye.z) >= 22);
+        if (!fallback.mesh || fallback.capacity < middle.length) {
+          if (fallback.mesh) { this.group.remove(fallback.mesh); fallback.mesh.dispose(); }
+          fallback.capacity = Math.ceil(middle.length * 1.4) + 64;
+          const mid = new THREE.InstancedMesh(fallback.geometry, fallback.material, fallback.capacity);
+          mid.frustumCulled = false; mid.receiveShadow = this.opts.shadows;
+          mid.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+          fallback.mesh = mid; this.group.add(mid);
+        }
+        let count = 0;
+        for (const it of middle) {
+          const d = Math.hypot(it.x - eye.x, it.z - eye.z);
+          if (d > R * 0.56) continue;
+          const fade = 1 - THREE.MathUtils.smoothstep(d, R * 0.46, R * 0.56);
+          e.set(it.tilt, it.rot, it.tilt * 0.5); q.setFromEuler(e);
+          m.compose(p.set(it.x, it.y, it.z), q, sc.set(it.s, it.sy * fade, it.s));
+          fallback.mesh.setMatrixAt(count, m);
+          fallback.mesh.setColorAt(count++, c.setScalar(it.tint));
+        }
+        fallback.mesh.count = count;
+        fallback.mesh.instanceMatrix.needsUpdate = true;
+        if (fallback.mesh.instanceColor) fallback.mesh.instanceColor.needsUpdate = true;
+      }
     }
     // Boulders.
     const RB = this.opts.rockRadius;
@@ -262,6 +298,7 @@ export class GroundCover {
   useModels(m: ModelSet) {
     const swap = (t: CoverType, sm: ScanModel | undefined, wind: 'frond' | 'none', key: string) => {
       if (!sm) return;
+      this.middle.set(t, { geometry: this.geos.get(t)!, material: this.mats.get(t)!, capacity: 0 });
       const mat = wind === 'none' ? walkMaterial(sm.material, 'none', undefined, key) : walkMaterial(sm.material, wind, nearFade, key);
       this.geos.set(t, sm.geometry);
       this.mats.set(t, mat);
@@ -290,6 +327,18 @@ export class GroundCover {
   }
 
   reset() { this.tiles.clear(); this.boulders.clear(); this.last.set(1e9, 0, 1e9); }
+
+  useGrass(texture: THREE.Texture) {
+    for (const kind of ['grassGolden', 'grassGreen', 'grassTall'] as CoverType[]) {
+      const material = this.mats.get(kind) as THREE.MeshStandardMaterial;
+      material.map?.dispose(); material.map = texture; material.needsUpdate = true;
+      material.roughness = 0.88;
+    }
+  }
+
+  get stats() {
+    return { tiles: this.tiles.size, instances: [...this.meshes.values()].reduce((n, m) => n + m.count, 0), middleInstances: [...this.middle.values()].reduce((n, m) => n + (m.mesh?.count ?? 0), 0), boulders: this.boulderMesh.count };
+  }
 
   /** Boulders near a point (for picking). */
   bouldersNear(x: number, z: number, r: number) {

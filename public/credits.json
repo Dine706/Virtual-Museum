@@ -142,6 +142,41 @@
       "license": "Project reconstruction artwork",
       "url": "walk/art/palm.webp",
       "provenance": "scripts/blender/reference/world-art/manifest.json"
+    },
+    {
+      "name": "aerial-canopy",
+      "author": "Tech Guinée",
+      "license": "Project reconstruction artwork",
+      "url": "landscape/aerial-canopy.webp",
+      "provenance": "scripts/blender/reference/landscape-art/manifest.json"
+    },
+    {
+      "name": "ridge-surface",
+      "author": "Tech Guinée",
+      "license": "Project reconstruction artwork",
+      "url": "landscape/ridge-surface.webp",
+      "provenance": "scripts/blender/reference/landscape-art/manifest.json"
+    },
+    {
+      "name": "broadleaf-silhouette",
+      "author": "Tech Guinée",
+      "license": "Project reconstruction artwork",
+      "url": "landscape/broadleaf-silhouette.webp",
+      "provenance": "scripts/blender/reference/landscape-art/manifest.json"
+    },
+    {
+      "name": "mountain-arrival",
+      "author": "Tech Guinée",
+      "license": "Project reconstruction artwork",
+      "url": "landscape/mountain-arrival.webp",
+      "provenance": "scripts/blender/reference/landscape-art/manifest.json"
+    },
+    {
+      "name": "tussock-grass",
+      "author": "Tech Guinée",
+      "license": "Project reconstruction artwork",
+      "url": "landscape/tussock-grass.webp",
+      "provenance": "scripts/blender/reference/landscape-art/manifest.json"
     }
   ],
   "data": [

@@ -29,6 +29,8 @@ import { readSettings } from './settings';
 import { WalkMenu } from './menu';
 import { advanceWalker, type Walker } from './movement';
 import { AnimatedPlants } from './animatedPlants';
+import { loadLandscape } from '../scene/landscape';
+import { LandscapeForest } from '../scene/landscapeForest';
 
 export interface WalkContext {
   renderer: THREE.WebGLRenderer;
@@ -54,7 +56,7 @@ export interface WalkTour {
 export interface WalkHandle { exit(): void; tour: WalkTour; debug: Record<string, unknown> }
 
 const TIER_OPTS = {
-  high: { seg: 384, R: 1500, shell: [380, 560], range: 420, near: 80, variants: 3, imp: 512, shadows: 4096, cover: 90, spacing: 0.55, rock: 160, birds: 8, flies: 14, dpr: 1.5, tex: 512 },
+  high: { seg: 512, R: 2400, shell: [650, 950], range: 650, near: 110, variants: 3, imp: 512, shadows: 4096, cover: 120, spacing: 0.48, rock: 220, birds: 12, flies: 18, dpr: 2, tex: 1024 },
   mid: { seg: 224, R: 1300, shell: [240, 360], range: 260, near: 32, variants: 2, imp: 128, shadows: 1024, cover: 56, spacing: 0.75, rock: 110, birds: 6, flies: 10, dpr: 1.25, tex: 256 },
   low: { seg: 160, R: 1000, shell: [150, 240], range: 170, near: 20, variants: 2, imp: 128, shadows: 0, cover: 34, spacing: 1.0, rock: 70, birds: 4, flies: 6, dpr: 1, tex: 256 },
 } as const;
@@ -116,6 +118,12 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
   const near = new THREE.Scene();
   near.add(ground.mesh, forest.group, cover.group, water.mesh, fauna.group, village.group, ground.cloudNear, env.hemi, env.sun, env.sun.target);
   const animatedPlants = fx ? new AnimatedPlants() : null;
+  const landscapeMaps = quality === 'high' ? await loadLandscape(ctx.base, Math.min(16, renderer.capabilities.getMaxAnisotropy())) : null;
+  const distantForest = landscapeMaps ? new LandscapeForest(ctx.hf, ctx.lcTex, landscapeMaps.tree, {
+    atmosphere: 'walk', uniforms: shared, inner: 550, outer: 22000,
+  }) : null;
+  if (landscapeMaps) { ground.useLandscape(landscapeMaps); cover.useGrass(landscapeMaps.grass); }
+  if (distantForest) far.add(distantForest.mesh);
   if (animatedPlants) near.add(animatedPlants.group);
   const farCam = new THREE.PerspectiveCamera(62, 1, 30, 60000);
   const cam = new THREE.PerspectiveCamera(62, 1, 0.1, Math.max(2600, O.R * 1.8));
@@ -180,7 +188,7 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
   hud.setVeilText(`${t('walk.loading')} 80 %`);
   // Warm up: generate the nearest cells / tiles before revealing.
   const eye = new THREE.Vector3(pos.x, eyeY, pos.z);
-  for (let k = 0; k < 8; k++) { forest.update(eye, 200); await nextFrame(); }
+  for (let k = 0; k < 8; k++) { forest.update(eye, 200); cover.update(eye); await nextFrame(); }
   // Start in the most open spot within ~22 m (not inside a bush, a house or a stream, not against a trunk).
   function openSpot(x0: number, z0: number): [number, number] {
     let bestScore = Infinity, bx = x0, bz = z0;
@@ -403,7 +411,9 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
     if (placeT > 0.5) { placeT = 0; updatePlace(); }
     hud.setBearing(controls.yaw);
     const fog = fogFor(air, pos.y, fogTint);
-    env.update(cam, eye, fog, fogTint, dt);
+    // Clear weather preserves long views; the explicit mist preset still has dense habitat fog.
+    const visibility = quality === 'high' && env.time !== 'mist' ? 0.28 : 1;
+    env.update(cam, eye, fog * visibility, fogTint, dt);
     // Under a closed canopy the sun barely reaches the floor: lift the sky fill a little (eyes adapt).
     const closed = air === 'lowlandForest' || air === 'cloudForest' || air === 'gallery' ? 1 : 0;
     canopyFill += (closed - canopyFill) * (1 - Math.exp(-dt * 0.7));
@@ -424,7 +434,7 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
     if (!menu.open) { fpsT += elapsed; fpsN++; }
     if (fpsT > 3 && fpsChecks < 2) {
       const fps = fpsN / fpsT;
-      if (fps < 24 && dprScale > 0.6 && !navigator.webdriver) { dprScale *= 0.75; resize(); }
+      if (fps < 24 && dprScale > 0.6 && !navigator.webdriver && !params.has('tier') && settings.quality === 'auto') { dprScale *= 0.75; resize(); }
       fpsT = 0; fpsN = 0; fpsChecks++;
     }
   };
@@ -555,6 +565,8 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
     });
     disposeTree(near); disposeTree(far);
     forest.dispose();
+    ground.dispose();
+    if (landscapeMaps) for (const map of Object.values(landscapeMaps)) map.dispose();
     data.dispose();
     env.sun.shadow.map?.dispose();
     post?.dispose();
@@ -609,6 +621,8 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
       setTime(tm: WalkTime) { env.setTime(tm); applyTime(); },
       fx,
       get animation() { return animatedPlants?.stats ?? null; },
+      get landscape() { return { distantTrees: distantForest?.count ?? 0, detailedTreeRange: O.range, geometryRange: O.near, groundRadius: O.R, farTerrainSegments: O.seg >= 500 ? 700 : 300, horizon: distantForest ? 22000 : 0 }; },
+      get groundCover() { return cover.stats; },
       /** Test capture: render one real frame at the current viewport, then stop submitting GPU work. */
       freezeFrame() { capturePaused = false; return new Promise<void>((resolve) => { captureNext = resolve; }); },
       resumeFrames() { capturePaused = false; last = performance.now(); },

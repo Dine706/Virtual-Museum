@@ -1,4 +1,8 @@
-# Improve first-person controls and add generated world artwork with Blender animation
+# Improve High landscape rendering and first-person controls
+
+High walking scenery previously ended in a local tree ring followed by a smooth canopy shell. A shared landscape layer now textures the orbit mountain, walking shell and distant massif, while 455,889 generic instanced trees extend the forest silhouette to 22 km. High uses the full 1008-segment DEM grid, a 2.4 km local ground patch, a 650 m local forest and 110 m detailed-tree range. Generated native-resolution mountain, canopy, ridge, distant-tree and grass artwork improves the arrival and landscape; original source images, exact prompts and hashes are committed.
+
+High clear-weather fog is reduced to preserve distant scenery, terrain sunlight is normalised, and the explicit High choice retains its resolution. Ground vegetation warms nearest-first before reveal. Scanned forest plants transition to lighter 3D plants beyond 22 m. Low/Mid retain their lighter terrain and vegetation ranges. This is a desktop realism upgrade, not a claim of completed photorealism or measured gaming-GPU performance; the 30 m DEM and procedural plant shapes remain material visual limits.
 
 Walk mode gains jump/gravity, slope and step limits, rock collision, standard gamepad input, touch jump, a compass and a bilingual settings dialog. FOV, sensitivity, head bob and reduced motion update immediately; saved quality applies on the next walk entry. The High preset increases close foliage and terrain detail while Low/Mid retain their existing quality parameters.
 
@@ -22,4 +26,4 @@ The validation results and remaining visual limitations are recorded in the M1 e
 
 The low-tier forest still exposes procedural leaf clusters and bark. All fourteen High ground/bark roles use generated surface maps; broadleaf foliage and distant impostors use the generated canopy texture. Some ground-cover meshes still come from the existing CC0 library. Accurate Nimba hero plants remain M3; the sapling is deliberately a generic filler. No animal model is represented as complete. Some landscape illustrations are reused across related cards and are not exact surveyed viewpoints.
 
-No push or deployment is included. This local PR description is prepared for review; opening a remote PR requires pushing a branch.
+Dean requested a preview. The isolated `codex/nimba-preview-2026-11-19` branch deploys to Vercel previews; this draft remains unmerged and the production branch is unchanged. Use `?tier=high` on the preview to override an older saved quality preference. Vercel authentication is required for the preview domain.

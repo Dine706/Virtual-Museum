@@ -86,7 +86,7 @@ export const TERRAIN_MAP_GLSL = /* glsl */ `
   float kTile = smoothstep(-0.4, 0.4, vnoise(P / 11.0, 71));
   // Far away a repeating texture reads as fabric: fade each layer to its mean colour (top mip) with broad,
   // natural variation instead.
-  float farK = smoothstep(90.0, 420.0, length(vWalkView));
+  float farK = smoothstep(mix(90.0, 260.0, uLandscape), mix(420.0, 1400.0, uLandscape), length(vWalkView));
   float macro = 0.86 + 0.2 * vnoise(P / 47.0, 73) + 0.08 * vnoise(P / 13.0, 74);
   vec3 g = vec3(0.0);
   for (int i = 0; i < ${N}; i++) {
@@ -108,6 +108,10 @@ export const TERRAIN_MAP_GLSL = /* glsl */ `
   float lump = 0.5 + 0.5 * vnoise(P / 5.0, 91);
   vec3 crownCol = mix(vec3(0.045, 0.085, 0.03), vec3(0.16, 0.24, 0.07), lump * lump) * mix(vec3(1.0), vec3(0.9, 1.0, 1.08), cloudBelt);
   g = mix(g, crownCol, vShell);
+  if (uLandscape > 0.5) {
+    vec3 distant = landscapeSurface(g, P, forest, gSteep);
+    g = mix(g, distant, max(vShell, smoothstep(450.0, 1300.0, length(vWalkView)) * 0.65));
+  }
   diffuseColor.rgb *= g;
   gRough = 0.95 - gW[3] * 0.12 - gW[5] * 0.35 - gWet * 0.25 - gW[9] * 0.1;
 `;

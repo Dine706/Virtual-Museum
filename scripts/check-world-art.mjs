@@ -41,3 +41,14 @@ assert.ok(gltf.animations[0].channels.length >= 9);
 assert.ok(gltf.extensionsUsed.includes('EXT_meshopt_compression'));
 assert.ok(binary.length < 1024 * 1024, 'animated model stays below 1 MB');
 console.log('PASS 23 reconstructed cards, encoded images, provenance hashes, and compressed Blender animation');
+const landscape = JSON.parse(await fs.readFile('scripts/blender/reference/landscape-art/manifest.json', 'utf8'));
+assert.equal(landscape.length, 5);
+for (const asset of landscape) {
+  for (const [file, hash] of [[asset.source, asset.sourceSha256], [asset.file, asset.outputSha256]]) {
+    assert.equal(crypto.createHash('sha256').update(await fs.readFile(file)).digest('hex'), hash);
+  }
+  const meta = await sharp(asset.file).metadata();
+  assert.equal(meta.width, asset.width); assert.equal(meta.height, asset.height);
+  assert.ok(asset.prompt.length > 100);
+}
+console.log('PASS five native-resolution landscape assets, exact prompts and source/runtime hashes');

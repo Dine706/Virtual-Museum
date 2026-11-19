@@ -33,6 +33,8 @@ import { Pins } from './ui/pins';
 import type { Panel } from './ui/panel';
 import type { PhotoViewer } from './ui/viewer';
 import type { WalkHandle } from './walk';
+import { loadLandscape, useLandscape } from './scene/landscape';
+import { LandscapeForest } from './scene/landscapeForest';
 
 setLoadingText();
 applyStatic();
@@ -88,6 +90,16 @@ async function boot() {
   terrain.frustumCulled = false;
   mark('terrain-built');
   scene.add(createSky(atmo), terrain);
+  let landscapeForest: LandscapeForest | null = null;
+  if (tier.tier === 'high') {
+    const maps = await loadLandscape(BASE, Math.min(16, stage.renderer.capabilities.getMaxAnisotropy()));
+    // ShaderMaterial exposes a general uniform map; these names come from createTerrainMaterial.
+    useLandscape(terrainMat.uniforms as ReturnType<typeof import('./scene/landscape').landscapeUniforms>, maps);
+    landscapeForest = new LandscapeForest(hf, terrainMat.uniforms.uLand.value, maps.tree, {
+      atmosphere: 'orbit', uniforms: atmo.uniforms, inner: 0, outer: 60000,
+    });
+    scene.add(landscapeForest.mesh);
+  }
   const clouds = tier.clouds > 0 ? new Clouds(atmo, terrainMat.uniforms.uHeight.value, tier.clouds) : null;
   if (clouds) scene.add(clouds.group);
 
@@ -448,7 +460,7 @@ async function boot() {
       },
       frames() { return stage.frames; },
       quality() {
-        return { tier: stage.tier.tier, segments: builtSegments, dpr: stage.renderer.getPixelRatio(), watchdog: watchdog?.history ?? null, panelLoaded: !!panel };
+        return { tier: stage.tier.tier, segments: builtSegments, dpr: stage.renderer.getPixelRatio(), watchdog: watchdog?.history ?? null, panelLoaded: !!panel, landscape: terrainMat.uniforms.uLandscape.value, distantTrees: landscapeForest?.count ?? 0 };
       },
       target() { const [lon, lat] = xzToLonLat(controls.target.x, controls.target.z); return { lon, lat }; },
       async describe(lon: number, lat: number) {
@@ -473,6 +485,8 @@ async function boot() {
   let builtSegments = tier.segments;
   const setTier = (next: TierSpec) => {
     stage.tier = next;
+    if (landscapeForest) landscapeForest.mesh.visible = next.tier === 'high';
+    terrainMat.uniforms.uLandscape.value = next.tier === 'high' && landscapeForest ? 1 : 0;
     stage.resize(); // applies the new DPR cap
     if (next.segments !== builtSegments) {
       const old = terrain.geometry;

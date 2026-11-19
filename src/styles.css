@@ -111,6 +111,9 @@ button { font: inherit; color: inherit; }
   background: radial-gradient(ellipse at 50% 55%, rgba(15, 26, 11, .15), rgba(15, 26, 11, .62) 70%), linear-gradient(to top, rgba(15, 26, 11, .7), transparent 45%);
   transition: opacity .6s var(--ease); }
 .title-card.hidden { opacity: 0; pointer-events: none; }
+.title-card { isolation: isolate; }
+.title-landscape { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 58%; z-index: -2; }
+.title-card::after { content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; background: linear-gradient(180deg, rgba(8, 20, 17, .40), rgba(8, 20, 17, .12) 55%, rgba(8, 20, 17, .55)); }
 .title-card .inner { max-width: 640px; display: grid; justify-items: center; gap: 14px; }
 .title-card h1 { margin: 0; font: 600 clamp(2.5rem, 9vw, 4.5rem)/1.02 var(--font-display); letter-spacing: -.01em; text-shadow: 0 2px 24px rgba(0, 0, 0, .45); }
 .title-card .subtitle { margin: 0; font: 500 clamp(.95rem, 2.4vw, 1.125rem)/1.45 var(--font-ui); color: var(--cloud-50); max-width: 34ch; text-shadow: 0 1px 10px rgba(0, 0, 0, .6); }
@@ -511,5 +514,5 @@ body.touring .walk-veil p { visibility: hidden; }
 .walk-menu-disclosure { margin: 0; padding: 12px; background: var(--forest-950); border-radius: 10px; color: var(--mist-300); font: 400 .75rem/1.6 var(--font-ui); }
 .walk-menu footer { display: flex; justify-content: space-between; gap: 12px; }
 .walk-menu :focus-visible { outline: 3px solid var(--savanna-500); outline-offset: 3px; }
-@media (max-width: 900px) { .walk-compass { top: auto; bottom: calc(16px + var(--sab)); } }
+@media (max-width: 1100px) { .walk-compass { top: auto; bottom: calc(16px + var(--sab)); } }
 @media (max-width: 600px) { .walk-place { max-width: 52vw; } .walk-actions { gap: 4px; } .walk-menu header { padding: 22px 20px 16px; } .walk-menu-body { padding: 18px 20px; } .walk-hint { max-width: calc(100vw - 32px); white-space: normal; text-align: center; } }

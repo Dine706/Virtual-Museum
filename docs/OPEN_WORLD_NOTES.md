@@ -39,6 +39,18 @@
 
 ## Next milestones
 
+### Desktop landscape realism pass — 19 November 2026
+
+Dean prioritises a powerful desktop GPU and removes the High-tier asset-size cap. The implementation keeps the browser renderer and the real terrain shape, with three complementary distance scales:
+
+- Near: High detailed trees extend to 110 m, local forest to 650 m, ground mesh radius to 2.4 km, cover to 120 m. Vegetation tiles load nearest-first and warm before reveal; the previous row-order queue initially left the player's surroundings empty.
+- Middle/far: 455,889 generic broadleaf tree cutouts across mapped closed-canopy forest, in one instanced draw per view. They begin around 550 m in walking mode and extend to 22 km. This is procedural reconstruction, not a tree inventory. World-fixed positions, per-tree distance boundaries and shared atmospheric shading prevent an obvious local forest ring.
+- Whole mountain: High uses the full 1008-segment DEM grid, 32 terrain-shadow steps and generated canopy/ridge macro textures shared with the walking shell and far massif. The High custom terrain shader uses Lambert's 1/pi factor to match the physical sun intensity. Clear High walking weather reduces local fog density; the mist preset preserves dense fog.
+
+The opening screen uses a newly generated mountain establishing image; the interactive view still renders navigable terrain. Five original PNGs, exact prompts, native dimensions and SHA-256 hashes are retained under `scripts/blender/reference/landscape-art/`. Generated grass cutouts replace the High procedural grass maps. Scanned forest plants transition to lighter 3D geometry beyond 22 m. `node scripts/build_landscape_art.mjs` encodes the runtime WebPs at native resolution and updates the credit registry. Run it after `build_world_art.mjs` if rebuilding both asset sets. No image has been enlarged to claim additional source detail.
+
+Forced `?tier=high` and explicitly saved walk quality no longer suffer silent DPR reductions. Automatic quality retains adaptation. The High preview should use `?tier=high` to override older saved quality. Real GPU performance and VRAM use remain unmeasured in this CPU-rendered cloud.
+
 1. M2: continuous streamed walking routes and bounded caches, seamless hero-raster integration and lake validation.
 2. M3: sourced hero-plant references, headless Blender assets, LODs and photographic review.
 3. M4: animal sheets and reviewed references in the requested order. The approved generated-artwork workflow does not remove species-reference or sensitive-location requirements.

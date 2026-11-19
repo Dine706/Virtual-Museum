@@ -16,6 +16,8 @@
       .title-card::before { content: ''; position: absolute; inset: 0; z-index: -1; background: #0F1A0B; transition: opacity .9s ease; }
       .title-card:not(.loading)::before { opacity: 0; }
       .title-card .inner { max-width: 640px; display: grid; justify-items: center; gap: 14px; }
+      .title-card { isolation: isolate; }
+      .title-landscape { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 58%; z-index: -2; }
       #title-h1 { margin: 0; font: 600 clamp(2.5rem, 9vw, 4.5rem)/1.02 'Fraunces Variable', Fraunces, 'Iowan Old Style', Georgia, serif; letter-spacing: -.01em; }
       #title-sub { margin: 0; font-size: clamp(.95rem, 2.4vw, 1.125rem); line-height: 1.45; max-width: 34ch; }
       #loading { display: grid; justify-items: center; gap: 10px; margin-top: 18px; transition: opacity .5s ease; }
@@ -33,6 +35,7 @@
   </head>
   <body>
     <section id="title-card" class="title-card loading" aria-labelledby="title-h1">
+      <img class="title-landscape" src="./landscape/mountain-arrival.webp" alt="" aria-hidden="true" fetchpriority="high" />
       <div class="inner">
         <h1 id="title-h1" data-i18n="title.h1">Monts Nimba</h1>
         <p id="title-sub" class="subtitle" data-i18n="title.subtitle">Réserve naturelle intégrale · Patrimoine mondial de l'UNESCO depuis 1981</p>
