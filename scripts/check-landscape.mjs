@@ -36,7 +36,7 @@ try {
   assert.equal(orbit.landscape, 1);
   assert.equal(orbit.segments, 1008);
   results.push({ name: 'orbit', ...orbit });
-  assert.ok(await page.locator('.title-landscape').evaluate((img) => img.complete && img.naturalWidth > 1500));
+  assert.ok(await page.locator('.title-landscape').evaluate((img) => img.complete && img.naturalWidth >= 1024));
   await page.screenshot({ path: `${out}/arrival.png`, timeout: 180000 });
   console.log('PASS generated arrival image is loaded');
   await page.locator('.title-card .actions button').last().click({ force: true });

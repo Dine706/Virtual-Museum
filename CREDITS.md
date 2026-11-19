@@ -1,6 +1,8 @@
 # Monts Nimba — credits
 
-Landscape realism artwork by Tech Guinée: aerial-canopy, ridge-surface, broadleaf-silhouette, mountain-arrival and tussock-grass. Generated reconstruction assets with native-resolution sources, exact prompts and integrity hashes in `scripts/blender/reference/landscape-art/manifest.json`. The arrival image is an illustrative establishing view. Distant trees are generic environmental filler placed by mapped forest cover; their individual positions, heights and identities are reconstructed.
+Higgsfield generated the arrival view, aerial canopy and four wildlife reconstructions for this preview. Generation IDs and sources are recorded in the landscape manifest and photo credits.
+
+Landscape artwork: aerial-canopy, ridge-surface, broadleaf-silhouette, mountain-arrival and tussock-grass. Generated reconstruction assets with native-resolution sources, exact prompts and integrity hashes in `scripts/blender/reference/landscape-art/manifest.json`. The arrival image is an illustrative establishing view. Distant trees are generic environmental filler placed by mapped forest cover; their individual positions, heights and identities are reconstructed.
 
 Digital reconstruction by Tech Guinée. Images illustrate habitats and scenery; they are not documentary photographs or exact surveyed viewpoints. Original licensed photographs remain in assets/photos/ and public/photos/documentary-credits.json as references.
 
