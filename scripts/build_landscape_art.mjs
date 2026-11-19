@@ -16,7 +16,7 @@ for (const p of prompts) {
   records.push({ key: p.key, source, file: output, width: info.width, height: info.height,
     sourceSha256: crypto.createHash('sha256').update(input).digest('hex'),
     outputSha256: crypto.createHash('sha256').update(await fs.readFile(at(output))).digest('hex'),
-    method: 'OpenAI image generation', prompt: p.prompt,
+    method: p.method || 'OpenAI image generation', ...(p.jobId && { jobId: p.jobId, outputUrl: p.outputUrl }), prompt: p.prompt,
     reconstruction: 'Generic illustrative environment; not surveyed imagery or a species identification.' });
 }
 await fs.writeFile(at('scripts/blender/reference/landscape-art/manifest.json'), JSON.stringify(records, null, 2) + '\n');

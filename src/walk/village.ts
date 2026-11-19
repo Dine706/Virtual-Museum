@@ -210,6 +210,7 @@ export class Village {
     const mHut = mk(cyl, this.mats.hutWall, n((x) => x.round));
     const mCone = mk(cone, this.mats.thatch, n((x) => x.round));
     const mPorch = mk(new THREE.BoxGeometry(1, 0.04, 1).translate(0, 0, 0.5), this.mats.metal, n((x) => x.porch));
+    const trim = mk(box, this.mats.wood, n((x) => !x.round) * 9);
     const mPost = mk(post, this.mats.wood, n((x) => x.porch) * 3);
     const M = new THREE.Matrix4(), Q = new THREE.Quaternion(), P = new THREE.Vector3(), S = new THREE.Vector3(), Y = new THREE.Vector3(0, 1, 0);
     const put = (m: THREE.InstancedMesh, px: number, py: number, pz: number, rot: number, sx: number, sy: number, sz: number) => {
@@ -228,6 +229,16 @@ export class Village {
         put(h.rust < 0.6 ? mWallA : mWallB, b.x, h.base, b.z, rot, b.w, h.wallH, b.d);
         put(h.rust < 0.55 ? mRoofM : mRoofR, b.x, h.base + h.wallH, b.z, rot, b.w + 0.7, h.roofH, b.d + 0.7);
         put(mEnds, b.x, h.base + h.wallH, b.z, rot, b.w, h.roofH, b.d);
+        // Door jambs and header follow the painted opening; shutters flank both side windows.
+        const cos = Math.cos(b.a), sin = Math.sin(b.a);
+        const timber = (u: number, v: number, y: number, w: number, height: number, depth: number) =>
+          put(trim, b.x + cos*u - sin*v, h.base+y, b.z + sin*u + cos*v, rot, w, height, depth);
+        for (const side of [-1, 1]) {
+          timber(side*b.w*0.113, b.d/2, 0, 0.09, h.wallH*0.72, 0.17);
+          timber(0, side*(b.d/2+0.22), h.wallH-0.06, b.w+0.55, 0.14, 0.13);
+          for (const pos of [-0.25, 0.25]) timber(side*b.w/2, pos*b.d, h.wallH*0.44, 0.15, h.wallH*0.22, b.d*0.17);
+        }
+        timber(0, b.d/2, h.wallH*0.71, b.w*0.23+0.09, 0.11, 0.17);
         if (h.porch) {
           const c = Math.cos(b.a), s = Math.sin(b.a);
           const fx = b.x - s * (b.d / 2), fz = b.z + c * (b.d / 2); // front (+v) side

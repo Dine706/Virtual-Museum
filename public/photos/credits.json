@@ -864,5 +864,77 @@
       "tripoint"
     ],
     "reconstruction": true
+  },
+  {
+    "file": "photos/reconstruction-viviparous-toad.jpg",
+    "thumb": "photos/thumb/reconstruction-viviparous-toad.jpg",
+    "width": 508,
+    "height": 340,
+    "commons_title": "Toad in montane grass",
+    "source_url": "./credits.html",
+    "author": "Higgsfield",
+    "license": "Reconstitution numérique / Digital reconstruction",
+    "license_url": "./credits.html",
+    "attribution": "Higgsfield digital reconstruction. Job f83cb98e-3caa-44bc-b2a5-29510519d947.",
+    "alt_fr": "Crapaud dans la prairie montagnarde",
+    "alt_en": "Toad in montane grass",
+    "hotspots": [
+      "viviparous-toad"
+    ],
+    "reconstruction": true
+  },
+  {
+    "file": "photos/reconstruction-otter-shrew.jpg",
+    "thumb": "photos/thumb/reconstruction-otter-shrew.jpg",
+    "width": 508,
+    "height": 340,
+    "commons_title": "Otter shrew beside a forest stream",
+    "source_url": "./credits.html",
+    "author": "Higgsfield",
+    "license": "Reconstitution numérique / Digital reconstruction",
+    "license_url": "./credits.html",
+    "attribution": "Higgsfield digital reconstruction. Job f83cb98e-3caa-44bc-b2a5-29510519d947.",
+    "alt_fr": "Potamogale au bord d’un ruisseau forestier",
+    "alt_en": "Otter shrew beside a forest stream",
+    "hotspots": [
+      "otter-shrew"
+    ],
+    "reconstruction": true
+  },
+  {
+    "file": "photos/reconstruction-lamotte-bat.jpg",
+    "thumb": "photos/thumb/reconstruction-lamotte-bat.jpg",
+    "width": 508,
+    "height": 340,
+    "commons_title": "Bat resting in a rock crevice",
+    "source_url": "./credits.html",
+    "author": "Higgsfield",
+    "license": "Reconstitution numérique / Digital reconstruction",
+    "license_url": "./credits.html",
+    "attribution": "Higgsfield digital reconstruction. Job f83cb98e-3caa-44bc-b2a5-29510519d947.",
+    "alt_fr": "Chauve-souris dans une fissure rocheuse",
+    "alt_en": "Bat resting in a rock crevice",
+    "hotspots": [
+      "lamotte-bat"
+    ],
+    "reconstruction": true
+  },
+  {
+    "file": "photos/reconstruction-bossou-chimpanzees.jpg",
+    "thumb": "photos/thumb/reconstruction-bossou-chimpanzees.jpg",
+    "width": 508,
+    "height": 340,
+    "commons_title": "Chimpanzee cracking a palm nut",
+    "source_url": "./credits.html",
+    "author": "Higgsfield",
+    "license": "Reconstitution numérique / Digital reconstruction",
+    "license_url": "./credits.html",
+    "attribution": "Higgsfield digital reconstruction. Job f83cb98e-3caa-44bc-b2a5-29510519d947.",
+    "alt_fr": "Chimpanzé cassant une noix de palme",
+    "alt_en": "Chimpanzee cracking a palm nut",
+    "hotspots": [
+      "bossou-chimpanzees"
+    ],
+    "reconstruction": true
   }
 ]

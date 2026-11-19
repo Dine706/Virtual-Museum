@@ -72,6 +72,11 @@ def main():
     bpy.context.collection.objects.link(root)
     root['provenance'] = 'Tech Guinée — digital reconstruction; generic filler, not a species identification'
     stick('Trunk', (0, 0, 0), (0.035, 0, 2.4), 0.028, bark, root)
+    for i in range(5):
+        angle = i * 2.399963
+        dx, dy = math.cos(angle), math.sin(angle)
+        stick(f'Root flare {i}', (0, 0, 0.10), (dx*0.09, dy*0.09, 0.025), 0.023, bark, root)
+        stick(f'Root tip {i}', (dx*0.09, dy*0.09, 0.025), (dx*0.22, dy*0.22, -0.008), 0.011, bark, root)
     for i in range(9):
         angle = i * 2.399963
         pivot = bpy.data.objects.new(f'Branch pivot {i:02}', None)

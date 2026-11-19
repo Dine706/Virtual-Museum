@@ -32,7 +32,7 @@ vec3 landscapeSample(sampler2D tex, vec2 p, float scale) {
 }
 vec3 landscapeSurface(vec3 base, vec2 p, float canopy, float slope) {
   if (uLandscape < 0.5) return base;
-  vec3 crowns = landscapeSample(uCanopyMap, p, 115.0);
+  vec3 crowns = landscapeSample(uCanopyMap, p + 12.0 * sin(p.yx / 145.0), 210.0);
   vec3 ridge = mix(landscapeSample(uRidgeMap, p, 34.0), landscapeSample(uRidgeMap, p, 320.0), 0.40);
   vec3 cliff = landscapeSample(uCliffMap, p, 90.0);
   // Keep the mapped habitat and regional palette while bringing back visible natural structure.

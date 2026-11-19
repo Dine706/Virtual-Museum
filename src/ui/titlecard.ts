@@ -4,7 +4,7 @@
 import { applyStatic, onLang, setLang, suggestEnglish, t } from '../i18n';
 import { langToggle } from './lang';
 
-export function showTitleCard(opts: { onExplore: () => void; onSkip: () => void; onTour?: () => void; tourFirst?: boolean }): { close: () => void } {
+export function showTitleCard(opts: { onWalk: () => void; onExplore: () => void; onSkip: () => void; onTour?: () => void; tourFirst?: boolean }): { close: () => void } {
   let el = document.getElementById('title-card');
   if (!el) {
     el = document.createElement('section');
@@ -19,7 +19,8 @@ export function showTitleCard(opts: { onExplore: () => void; onSkip: () => void;
   const actions = document.createElement('div');
   actions.className = 'actions';
   actions.innerHTML = `
-    <button type="button" class="btn-primary" data-i18n="title.explore"></button>
+    <button type="button" class="btn-primary" data-i18n="title.walk"></button>
+    <button type="button" class="btn-ghost" data-i18n="title.explore"></button>
     <button type="button" class="btn-ghost tour-btn" data-i18n="tour.button"></button>
     <button type="button" class="btn-ghost" data-i18n="title.skip"></button>`;
   // Above the (fading) progress block: nothing already on screen moves when the buttons arrive (CLS).
@@ -37,9 +38,9 @@ export function showTitleCard(opts: { onExplore: () => void; onSkip: () => void;
   }
   applyStatic(card);
   requestAnimationFrame(() => card.classList.add('ready'));
-  const [explore, tourBtn, skip] = actions.querySelectorAll<HTMLButtonElement>('button');
+  const [walk, explore, tourBtn, skip] = actions.querySelectorAll<HTMLButtonElement>('button');
   if (!opts.onTour) tourBtn.remove();
-  (opts.tourFirst && opts.onTour ? tourBtn : explore).focus({ preventScroll: true });
+  (opts.tourFirst && opts.onTour ? tourBtn : walk).focus({ preventScroll: true });
 
   let closed = false;
   const close = () => {
@@ -48,6 +49,7 @@ export function showTitleCard(opts: { onExplore: () => void; onSkip: () => void;
     card.classList.add('hidden');
     setTimeout(() => card.remove(), 700);
   };
+  walk.addEventListener('click', () => { close(); opts.onWalk(); });
   explore.addEventListener('click', () => { close(); opts.onExplore(); });
   skip.addEventListener('click', () => { close(); opts.onSkip(); });
   tourBtn.addEventListener('click', () => { close(); opts.onTour?.(); });

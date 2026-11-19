@@ -629,6 +629,7 @@ async function boot() {
     window.addEventListener('keydown', titleInput);
     setTimeout(pauseDrift, 30000);
     showTitleCard({
+      onWalk: () => { endIntro(); void startWalk(...lonLatToXZ(-8.3958, 7.6397)); },
       onExplore: () => startFlyover(),
       onTour: () => void startTour(),
       tourFirst: location.hash === '#/tour',
