@@ -649,6 +649,7 @@ async function boot() {
       });
       useLandscape(terrainMat.uniforms as ReturnType<typeof import('./scene/landscape').landscapeUniforms>, maps);
       scene.add(landscapeForest.mesh);
+      maps.sky.dispose();
       maps.grass.dispose(); // Walk mode owns its own ground-cover textures.
       setTier(TIERS.high);
     }).catch((error) => console.warn('Optional landscape detail could not load.', error));

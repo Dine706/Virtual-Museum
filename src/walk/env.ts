@@ -98,6 +98,7 @@ export class WalkEnv {
   readonly hemi = new THREE.HemisphereLight('#ffffff', '#444444', 1);
   readonly sky: THREE.Mesh;
   readonly skyUniforms = {
+    uPhotoSky: { value: null as THREE.Texture | null }, uPhotoSkyStrength: { value: 0 },
     uSkyTop: { value: new THREE.Color() }, uSkyHorizon: { value: new THREE.Color() },
     uSunDir: { value: new THREE.Vector3() }, uSunCol: { value: new THREE.Color() },
     uCloud: { value: 0.5 }, uTime: shared.uTime,
@@ -127,7 +128,7 @@ export class WalkEnv {
       vertexShader: /* glsl */ `varying vec3 vDir; void main() { vDir = normalize(position); vec4 p = modelViewMatrix * vec4(position, 1.0); gl_Position = projectionMatrix * p; gl_Position.z = gl_Position.w * 0.99999; }`,
       fragmentShader: /* glsl */ `
         ${NOISE_GLSL}
-        uniform vec3 uSkyTop, uSkyHorizon, uSunDir, uSunCol; uniform float uCloud, uTime;
+        uniform sampler2D uPhotoSky; uniform float uPhotoSkyStrength; uniform vec3 uSkyTop, uSkyHorizon, uSunDir, uSunCol; uniform float uCloud, uTime;
         varying vec3 vDir;
         void main() {
           vec3 d = normalize(vDir);
@@ -143,7 +144,14 @@ export class WalkEnv {
             vec3 cc = mix(vec3(1.0), uSunCol, 0.35) * (0.85 + 0.25 * pow(s, 3.0));
             col = mix(col, cc, c * 0.85);
           }
-          col = mix(col, uSkyHorizon * 0.9, smoothstep(0.0, -0.15, d.y));
+          if (uPhotoSkyStrength > 0.0) {
+            float az = atan(d.x, -d.z) - atan(uSunDir.x, -uSunDir.z);
+            vec2 uv = vec2(fract(.59 + az / 6.2831853 + uTime * .000035), .5 + asin(clamp(d.y,-1.0,1.0)) / 3.14159265);
+            vec3 cloud = texture2D(uPhotoSky,uv).rgb;
+            cloud = mix(cloud, uSkyHorizon, .16 + .55 * (1.0-smoothstep(0.0,.28,d.y)));
+            col = mix(col, cloud, uPhotoSkyStrength * (1.0-smoothstep(.5,1.0,uCloud)) * smoothstep(-.02,.07,d.y));
+          }
+          col = mix(col, uSkyHorizon * 0.9, 1.0-smoothstep(-0.15,0.0,d.y));
           gl_FragColor = vec4(col, 1.0);
           #include <tonemapping_fragment>
           #include <colorspace_fragment>

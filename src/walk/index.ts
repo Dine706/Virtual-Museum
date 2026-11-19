@@ -140,6 +140,8 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
     void loadLandscape(ctx.base, Math.min(16, renderer.capabilities.getMaxAnisotropy())).then(maps => {
       if (exited) { for (const texture of Object.values(maps)) texture.dispose(); return; }
       landscapeMaps = maps;
+      env.skyUniforms.uPhotoSky.value = maps.sky;
+      env.skyUniforms.uPhotoSkyStrength.value = .96;
       ground.useLandscape(maps);
       cover.useGrass(maps.grass);
       distantForest = new LandscapeForest(ctx.hf, ctx.lcTex, maps.tree, {

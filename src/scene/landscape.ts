@@ -1,8 +1,9 @@
 // Shared, world-anchored surface detail for the orbit view, walking canopy shell and distant massif.
 // These maps illustrate habitat texture; the class map and DEM continue to determine its placement.
 import * as THREE from 'three';
+import { WORLD, WORLD_W, WORLD_D } from '../data/geo';
 
-export interface LandscapeMaps { canopy: THREE.Texture; ridge: THREE.Texture; rock: THREE.Texture; tree: THREE.Texture; grass: THREE.Texture }
+export interface LandscapeMaps { survey: THREE.Texture; sky: THREE.Texture; canopy: THREE.Texture; ridge: THREE.Texture; rock: THREE.Texture; tree: THREE.Texture; grass: THREE.Texture }
 export async function loadLandscape(base: string, anisotropy: number): Promise<LandscapeMaps> {
   const loader = new THREE.TextureLoader();
   const one = async (key: string) => {
@@ -12,13 +13,17 @@ export async function loadLandscape(base: string, anisotropy: number): Promise<L
     map.wrapS = map.wrapT = THREE.RepeatWrapping;
     return map;
   };
-  const [canopy, ridge, rock, tree, grass] = await Promise.all(['aerial-canopy', 'ridge-surface', 'rock', 'broadleaf-silhouette', 'tussock-grass'].map(one));
+  const [canopy, ridge, rock, tree, grass, survey, sky] = await Promise.all(['aerial-canopy', 'ridge-surface', 'rock', 'broadleaf-silhouette', 'tussock-grass', 'nimba-sentinel', 'cloud-sky'].map(one));
   tree.wrapS = tree.wrapT = THREE.ClampToEdgeWrapping;
   grass.wrapS = grass.wrapT = THREE.ClampToEdgeWrapping;
-  return { canopy, ridge, rock, tree, grass };
+  survey.wrapS = survey.wrapT = THREE.ClampToEdgeWrapping;
+  sky.wrapT = THREE.ClampToEdgeWrapping;
+  return { canopy, ridge, rock, tree, grass, survey, sky };
 }
 
 export const LANDSCAPE_GLSL = /* glsl */ `
+uniform sampler2D uSurvey;
+uniform vec4 uSurveyBounds;
 uniform sampler2D uCanopyMap;
 uniform sampler2D uRidgeMap;
 uniform sampler2D uCliffMap;
@@ -38,7 +43,14 @@ vec3 landscapeSurface(vec3 base, vec2 p, float canopy, float slope) {
   // Keep the mapped habitat and regional palette while bringing back visible natural structure.
   vec3 forest = crowns * vec3(0.86, 0.94, 0.82);
   vec3 ground = mix(ridge, cliff * vec3(0.82, 0.86, 0.90), smoothstep(0.25, 0.8, slope));
-  return mix(base, mix(ground, forest, smoothstep(0.40, 0.88, canopy)), uLandscape * 0.90);
+  vec2 uv = (p - uSurveyBounds.xy) / uSurveyBounds.zw;
+  vec3 satellite = texture2D(uSurvey, vec2(uv.x, 1.0-uv.y)).rgb;
+  vec3 habitat = mix(ground, forest, smoothstep(0.40, 0.88, canopy));
+  // The 10 m survey places ravines, outcrops and grass clearings. Subpixel crowns and
+  // blades come from the reconstructive material instead of resizing the satellite pixels.
+  float grain = dot(habitat, vec3(.24,.63,.13));
+  vec3 detailed = satellite * (1.22 + 1.8 * clamp(grain, 0.0, 0.46));
+  return mix(mix(base, habitat, 0.87), detailed, 0.78);
 }
 `;
 
@@ -47,11 +59,12 @@ export function landscapeUniforms() {
   const placeholder = new THREE.DataTexture(new Uint8Array([92, 104, 55, 255]), 1, 1);
   placeholder.colorSpace = THREE.SRGBColorSpace;
   placeholder.needsUpdate = true;
-  return { uCanopyMap: { value: placeholder as THREE.Texture }, uRidgeMap: { value: placeholder as THREE.Texture }, uCliffMap: { value: placeholder as THREE.Texture }, uLandscape: { value: 0 } };
+  return { uSurvey: { value: placeholder as THREE.Texture }, uSurveyBounds: { value: new THREE.Vector4(WORLD.minX, WORLD.minZ, WORLD_W, WORLD_D) }, uCanopyMap: { value: placeholder as THREE.Texture }, uRidgeMap: { value: placeholder as THREE.Texture }, uCliffMap: { value: placeholder as THREE.Texture }, uLandscape: { value: 0 } };
 }
 
 export function useLandscape(uniforms: ReturnType<typeof landscapeUniforms>, maps: LandscapeMaps) {
   if (uniforms.uLandscape.value === 0) uniforms.uCanopyMap.value.dispose();
+  uniforms.uSurvey.value = maps.survey;
   uniforms.uCanopyMap.value = maps.canopy;
   uniforms.uRidgeMap.value = maps.ridge;
   uniforms.uCliffMap.value = maps.rock;

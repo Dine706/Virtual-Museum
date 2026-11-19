@@ -184,6 +184,20 @@
       "license": "Project reconstruction artwork",
       "url": "walk/art/village/plaster.webp",
       "provenance": "Higgsfield job da8dca7c-cb86-4dfd-b981-88b14af3425a, four generated material swatches."
+    },
+    {
+      "name": "Monts Nimba surface imagery, 10 m",
+      "author": "European Union / Copernicus Sentinel-2",
+      "license": "Contains modified Copernicus Sentinel data 2024",
+      "url": "landscape/nimba-sentinel.webp",
+      "provenance": "S2A_29NNJ_20241215_0_L2A, 15 December 2024. True-colour tile reprojected to the DEM bounds, longitude −8.56 to −8.28, latitude 7.48 to 7.76. Earth Search Sentinel-2 L2A collection."
+    },
+    {
+      "name": "Cloud panorama — Kloofendal 48d Partly Cloudy (Pure Sky)",
+      "author": "Poly Haven",
+      "license": "CC0",
+      "url": "landscape/cloud-sky.webp",
+      "provenance": "https://polyhaven.com/a/kloofendal_48d_partly_cloudy_puresky — illustrative cloud lighting."
     }
   ],
   "data": [
