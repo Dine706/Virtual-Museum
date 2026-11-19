@@ -1,3 +1,4 @@
+import hornbillFlight from './hornbill-flight.json';
 // Animals recorded in GBIF in the Nimba window, drawn as simple procedural models (not photographs, not scans):
 // African pied hornbills crossing above the canopy, Guinea turacos flashing their red flight feathers between
 // crowns, sunbirds near shrubs, Acraea and swallowtail butterflies in clearings and along streams.
@@ -272,9 +273,11 @@ export class Fauna {
         const pitch = -Math.atan2(a.vel.y, Math.hypot(a.vel.x, a.vel.z)) * 0.6;
         a.obj.rotation.set(pitch, yaw, 0, 'YXZ');
       }
-      // hornbills alternate flapping and gliding
-      if (a.kind === 'hornbill') { a.glide = Math.sin(time * 0.6 + a.phase) > 0.3 ? 1 : 0; }
-      a.flap.value = a.glide ? Math.sin(time * 0.5) * 0.15 + 0.3 : time * a.rate + a.phase;
+      if (a.kind === 'hornbill') {
+        const frame = (time * 24 + a.phase * 7) % hornbillFlight.length;
+        const i = Math.floor(frame);
+        a.flap.value = THREE.MathUtils.lerp(hornbillFlight[i], hornbillFlight[(i + 1) % hornbillFlight.length], frame - i);
+      } else a.flap.value = time * a.rate + a.phase;
       if (a.pos.distanceTo(eye) > (a.kind === 'hornbill' ? 200 : bird ? 60 : 20)) this.place(a, eye, false);
     }
   }

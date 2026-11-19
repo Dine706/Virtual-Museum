@@ -29,7 +29,7 @@ import { readSettings } from './settings';
 import { WalkMenu } from './menu';
 import { advanceWalker, type Walker } from './movement';
 import { AnimatedPlants } from './animatedPlants';
-import { loadLandscape } from '../scene/landscape';
+import { loadLandscape, type LandscapeMaps } from '../scene/landscape';
 import { LandscapeForest } from '../scene/landscapeForest';
 
 export interface WalkContext {
@@ -118,12 +118,8 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
   const near = new THREE.Scene();
   near.add(ground.mesh, forest.group, cover.group, water.mesh, fauna.group, village.group, ground.cloudNear, env.hemi, env.sun, env.sun.target);
   const animatedPlants = fx ? new AnimatedPlants() : null;
-  const landscapeMaps = quality === 'high' ? await loadLandscape(ctx.base, Math.min(16, renderer.capabilities.getMaxAnisotropy())) : null;
-  const distantForest = landscapeMaps ? new LandscapeForest(ctx.hf, ctx.lcTex, landscapeMaps.tree, {
-    atmosphere: 'walk', uniforms: shared, inner: 550, outer: 22000,
-  }) : null;
-  if (landscapeMaps) { ground.useLandscape(landscapeMaps); cover.useGrass(landscapeMaps.grass); }
-  if (distantForest) far.add(distantForest.mesh);
+  let landscapeMaps: LandscapeMaps | null = null;
+  let distantForest: LandscapeForest | null = null;
   if (animatedPlants) near.add(animatedPlants.group);
   const farCam = new THREE.PerspectiveCamera(62, 1, 30, 60000);
   const cam = new THREE.PerspectiveCamera(62, 1, 0.1, Math.max(2600, O.R * 1.8));
@@ -132,6 +128,19 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
   let post: PostFX | null = null;
   let envRT: THREE.WebGLRenderTarget | null = null;
   let scansPending = fx ? 3 : 0;
+  if (quality === 'high') {
+    scansPending++;
+    void loadLandscape(ctx.base, Math.min(16, renderer.capabilities.getMaxAnisotropy())).then(maps => {
+      if (exited) { for (const texture of Object.values(maps)) texture.dispose(); return; }
+      landscapeMaps = maps;
+      ground.useLandscape(maps);
+      cover.useGrass(maps.grass);
+      distantForest = new LandscapeForest(ctx.hf, ctx.lcTex, maps.tree, {
+        atmosphere: 'walk', uniforms: shared, inner: 550, outer: 22000,
+      });
+      far.add(distantForest.mesh);
+    }).catch(e => console.warn('walk: optional landscape unavailable', e)).finally(() => { scansPending--; });
+  }
   if (fx) {
     post = new PostFX(renderer, cam, near);
     const aniso = Math.min(8, renderer.capabilities.getMaxAnisotropy());
