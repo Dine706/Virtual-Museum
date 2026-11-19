@@ -12,6 +12,7 @@ import type { Tier } from '../scene/tier';
 import { AREA, WalkData } from './data';
 import { WalkEnv, WALK_TIMES, shared, walkMaterial, type WalkTime } from './env';
 import { Ground } from './ground';
+import { CanopyBelt } from './canopyBelt';
 import { loadCrown } from './crownModels';
 import { loadHinterland } from './hinterland';
 import { Forest } from './forest';
@@ -129,6 +130,7 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
   near.add(ground.mesh, forest.group, cover.group, water.mesh, fauna.group, village.group, ground.cloudNear, env.hemi, env.sun, env.sun.target);
   const animatedPlants = fx ? new AnimatedPlants() : null;
   let landscapeMaps: LandscapeMaps | null = null;
+  let canopyBelt: CanopyBelt | null = null;
   let distantForest: LandscapeForest | null = null;
   if (animatedPlants) near.add(animatedPlants.group);
   const farCam = new THREE.PerspectiveCamera(62, 1, 30, 60000);
@@ -156,6 +158,8 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
       env.skyUniforms.uPhotoSky.value = maps.sky;
       env.skyUniforms.uPhotoSkyStrength.value = .96;
       ground.useLandscape(maps);
+      canopyBelt = new CanopyBelt(data, maps.canopy);
+      near.add(canopyBelt.group);
       cover.useGrass(maps.grass);
       distantForest = new LandscapeForest(ctx.hf, ctx.lcTex, maps.tree, {
         atmosphere: 'walk', uniforms: shared, inner: 550, outer: 22000,
@@ -382,7 +386,7 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
         (forwardX * controls.move.y + rightX * controls.move.x) * speed * dt,
         (forwardZ * controls.move.y + rightZ * controls.move.x) * speed * dt,
         dt, controls.consumeJump(), {
-          height: (x, z) => data.heightAt(x, z), min: ex.min + 20, max: ex.max - 20,
+          height: (x, z) => data.heightAt(x, z) + cover.deadfallHeight(x,z), min: ex.min + 20, max: ex.max - 20,
           collide(p) {
             collisionPos.set(p.x, p.y, p.z);
             forest.collide(collisionPos, 0.35); village.collide(collisionPos, 0.35);
@@ -433,6 +437,7 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
     cover.update(eye);
     water.update(eye);
     ground.update(eye);
+    canopyBelt?.update(eye);
     fauna.viewYaw = controls.yaw;
     if (eye.distanceTo(lastFauna) > 200) { fauna.populate(eye); lastFauna.copy(eye); }
     fauna.update(dt, eye, shared.uTime.value);
@@ -597,6 +602,7 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
     disposeTree(near); disposeTree(far);
     village.dispose();
     forest.dispose();
+    canopyBelt?.dispose();
     ground.dispose();
     if (landscapeMaps) for (const map of Object.values(landscapeMaps)) map.dispose();
     data.dispose();

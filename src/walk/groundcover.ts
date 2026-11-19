@@ -32,6 +32,8 @@ export class GroundCover {
   private boulders = new Map<string, Inst[]>();
   private last = new THREE.Vector3(1e9, 0, 1e9);
   private caps = new Map<CoverType, number>();
+  private logs?: THREE.InstancedMesh;
+  private nearbyLogs: { x: number; z: number; dx: number; dz: number; length: number; radius: number }[] = [];
   private boulderMesh!: THREE.InstancedMesh;
   private geos = new Map<CoverType, THREE.BufferGeometry>();
   private mats = new Map<CoverType, THREE.Material>();
@@ -160,7 +162,7 @@ export class GroundCover {
       const b = biomeAt(this.data, x, z);
       const ac = this.data.areaAt(x, z);
       const p = b.rock * 0.8 + (b.high > 0.5 ? 0.08 : 0.01) + (ac === AREA.rock || b.cls === 60 ? 0.5 : 0) + (ac === AREA.mine ? 0.12 : 0);
-      if (ac === AREA.water || b.cls === 80) continue;
+      if (ac === AREA.water || b.cls === 80 || this.data.buildingAt(x,z,3) || this.data.pathAt(x,z).dist < 2.5) continue;
       if (hash2(bi + k, bj, 33) > p) continue;
       const sz = 0.8 + Math.pow(hash2(bi, bj + k, 34), 2) * 4 * (0.5 + b.rock);
       out.push({ x, y: this.data.heightAt(x, z) - sz * 0.25, z, s: sz * (1 + hash2(k, bi, 35) * 0.6), sy: sz, rot: hash2(bj, k, 36) * 6.28, tilt: hash2(k, bj, 37) * 0.5, tint: 0.75 + hash2(bi, k, 38) * 0.4 });
@@ -284,17 +286,55 @@ export class GroundCover {
       for (const it of l) if (Math.hypot(it.x - eye.x, it.z - eye.z) < RB) all.push(it);
     }
     for (const k of this.boulders.keys()) if (!keepB.has(k)) this.boulders.delete(k);
-    if (all.length > 256) all.length = 256;
+    if (all.length > 256) {
+      all.sort((a,b) => Math.hypot(a.x-eye.x,a.z-eye.z)-Math.hypot(b.x-eye.x,b.z-eye.z));
+      all.length=256;
+    }
     all.forEach((it, n) => {
       e.set(it.tilt, it.rot, it.tilt * 0.5); q.setFromEuler(e);
       m.compose(p.set(it.x, it.y, it.z), q, sc.set(it.s, it.sy, it.s * 0.9));
       this.boulderMesh.setMatrixAt(n, m);
       this.boulderMesh.setColorAt(n, c.setScalar(it.tint));
     });
+    if (this.logs) this.placeDeadfall(eye);
     this.boulderMesh.count = all.length;
     this.boulderMesh.instanceMatrix.needsUpdate = true;
     if (this.boulderMesh.instanceColor) this.boulderMesh.instanceColor.needsUpdate = true;
     return true;
+  }
+
+  private placeDeadfall(eye: THREE.Vector3) {
+    const logs = this.logs!;
+    logs.count = 0;
+    this.nearbyLogs.length = 0;
+    const pose = new THREE.Object3D();
+    const cell = 11, cx=Math.floor(eye.x/cell), cz=Math.floor(eye.z/cell);
+    for(let j=cz-4;j<=cz+4;j++) for(let i=cx-4;i<=cx+4;i++) {
+      const x=(i+.1+.8*hash2(i,j,111))*cell, z=(j+.1+.8*hash2(i,j,112))*cell;
+      const a=this.data.attrAt(x,z), length=2.4+4.3*hash2(i,j,113);
+      if(a.canopy<6 || hash2(i,j,114)>0.32 || this.data.buildingAt(x,z,length/2) ||
+        this.data.pathAt(x,z).dist<length/2 || this.data.streamAt(x,z).dist<2) continue;
+      const angle=hash2(i,j,115)*Math.PI*2, dx=Math.cos(angle), dz=Math.sin(angle);
+      const y0=this.data.heightAt(x-dx*length*.4,z-dz*length*.4), y1=this.data.heightAt(x+dx*length*.4,z+dz*length*.4);
+      pose.position.set(x,(y1+y0)/2-.035,z);
+      pose.rotation.set(0,-angle,Math.atan2(y1-y0,length*.8),'YXZ');
+      pose.scale.setScalar(length);
+      pose.updateMatrix();
+      logs.setMatrixAt(logs.count++,pose.matrix);
+      if(Math.hypot(x-eye.x,z-eye.z)<9) this.nearbyLogs.push({x,z,dx,dz,length,radius:length*.049});
+    }
+    logs.instanceMatrix.needsUpdate=true;
+  }
+
+  deadfallHeight(x:number,z:number) {
+    let rise=0;
+    for(const log of this.nearbyLogs) {
+      const ax=x-log.x, az=z-log.z, along=ax*log.dx+az*log.dz;
+      if(Math.abs(along)>log.length*.45) continue;
+      const cross=ax*log.dz-az*log.dx;
+      rise=Math.max(rise,1.6*Math.sqrt(Math.max(0,log.radius**2-cross**2)));
+    }
+    return rise;
   }
 
   /** Scanned models replace the drawn fern, forest herb and boulders (high-quality look). */
@@ -313,6 +353,12 @@ export class GroundCover {
       }
       this.last.set(1e9, 0, 1e9);
     };
+    if (m.deadfall) {
+      this.logs=new THREE.InstancedMesh(m.deadfall.geometry,walkMaterial(m.deadfall.material),81);
+      this.logs.frustumCulled=false; this.logs.count=0;
+      this.logs.receiveShadow=this.logs.castShadow=this.opts.shadows;
+      this.group.add(this.logs);
+    }
     swap('fern', m.fern_02, 'frond', 'scan-fern');
     swap('herb', m.calathea_orbifolia_01, 'frond', 'scan-herb');
     if (m.rock_07) {

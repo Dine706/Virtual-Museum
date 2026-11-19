@@ -5,11 +5,11 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 
-export type ModelId = 'fern_02' | 'calathea_orbifolia_01' | 'moss_01' | 'rock_moss_set_01' | 'rock_07' | 'single_root';
+export type ModelId = 'fern_02' | 'calathea_orbifolia_01' | 'moss_01' | 'rock_moss_set_01' | 'rock_07' | 'single_root' | 'deadfall';
 export interface ScanModel { geometry: THREE.BufferGeometry; material: THREE.MeshStandardMaterial; size: THREE.Vector3 }
 export type ModelSet = Partial<Record<ModelId, ScanModel>>;
 
-const IDS: ModelId[] = ['fern_02', 'calathea_orbifolia_01', 'moss_01', 'rock_moss_set_01', 'rock_07', 'single_root'];
+const IDS: ModelId[] = ['fern_02', 'calathea_orbifolia_01', 'moss_01', 'rock_moss_set_01', 'rock_07', 'single_root', 'deadfall'];
 
 export function toFloat(g: THREE.BufferGeometry) {
   for (const name of Object.keys(g.attributes)) {

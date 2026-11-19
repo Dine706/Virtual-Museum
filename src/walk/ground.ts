@@ -50,7 +50,7 @@ float shellAt(vec2 p) {
   if (k <= 0.0) return 0.0;
   float c = attrAt(p).r * 255.0;
   // lumpy crowns rather than a flat sheet
-  return k * c * (0.85 + 0.25 * vnoise(p / 9.0, 61));
+  return k * c * (0.44 + 0.19 * vnoise(p / 9.0, 61));
 }
 float surf(vec2 p) { return groundHeight(p) + shellAt(p); }
 `;
