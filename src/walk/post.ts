@@ -33,7 +33,7 @@ export class PostFX {
     this.gtao.blendIntensity = 0.85;
     this.gtao.updateGtaoMaterial({ radius: 1.6, distanceExponent: 1.5, thickness: 2.5, scale: 1.1, samples: 12 });
     this.gtao.updatePdMaterial({ lumaPhi: 10, depthPhi: 2, normalPhi: 3, radius: 6, rings: 2, samples: 12 });
-    this.bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), 0.14, 0.4, 1.6);
+    this.bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), 0.10, 0.4, 1.6);
 
     this.raysMat = new THREE.ShaderMaterial({
       uniforms: { tColor: { value: null }, tDepth: { value: null }, uSun: { value: new THREE.Vector2() }, uAmt: { value: 0 } },
@@ -62,7 +62,7 @@ export class PostFX {
     this.finalMat = new THREE.ShaderMaterial({
       uniforms: {
         tColor: { value: null }, tRays: { value: null }, uTexel: { value: new THREE.Vector2() },
-        uSunCol: { value: new THREE.Color() }, uRays: { value: 0 }, uSharp: { value: 0.35 },
+        uSunCol: { value: new THREE.Color() }, uRays: { value: 0 }, uSharp: { value: 0.48 },
       },
       vertexShader: 'varying vec2 vUv; void main() { vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }',
       fragmentShader: /* glsl */ `

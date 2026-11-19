@@ -66,3 +66,7 @@ Per-record species dataset citations: worldpack/species/gbif_datasets.json. Per-
 The distant watersheds use Copernicus DEM GLO-30 tile N07 W009. The playable-area terrain and the sky-visibility bake use the same elevation survey. The two canopy models are Blender-authored CC0 broadleaf stand-ins. Their placement and dimensions follow the game's habitat and canopy data. [Copernicus DEM](https://registry.opendata.aws/copernicus-dem/) · [Island Tree 02](https://polyhaven.com/a/island_tree_02) · [Island Tree 03](https://polyhaven.com/a/island_tree_03)
 
 The fallen timber uses the CC0 [Dead Tree Trunk 02 scan](https://polyhaven.com/a/dead_tree_trunk_02). The High ground materials use photogrammetry, with the source and artist for each surface listed in [the texture credits](public/walk/tex/credits.json).
+
+### Regional understory
+
+The forest walk adds original Blender growth-form reconstructions of five plants in the local GBIF occurrence compilation. Illustrative patches follow canopy cover and elevation, and fern rosettes attach to tree trunks. The individual plant positions are reconstructed. [Aframomum chrysanthum](https://www.gbif.org/species/2758878) · [Marantochloa leucantha](https://www.gbif.org/species/2761169) · [Palisota barteri](https://www.gbif.org/species/2763803) · [Begonia quadrialata](https://www.gbif.org/species/7303227) · [Asplenium mannii](https://www.gbif.org/species/7417555)

@@ -630,6 +630,7 @@ async function boot() {
     setTimeout(pauseDrift, 30000);
     showTitleCard({
       // The mapped canopy opens onto a walkable grass saddle about 45 m southwest.
+      onForest: () => { endIntro(); void startWalk(2207,-5529,4.0); },
       onWalk: () => { endIntro(); void startWalk(6300, -6495, 3 * Math.PI / 4); },
       onExplore: () => startFlyover(),
       onTour: () => void startTour(),

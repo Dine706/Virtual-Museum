@@ -15,6 +15,8 @@ import { Ground } from './ground';
 import { CanopyBelt } from './canopyBelt';
 import { loadCrown } from './crownModels';
 import { loadHinterland } from './hinterland';
+import { RegionalFlora } from './regionalFlora';
+import { Lianas } from './lianas';
 import { Forest } from './forest';
 import { GroundCover } from './groundcover';
 import { Water } from './water';
@@ -139,6 +141,12 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
   let post: PostFX | null = null;
   let envRT: THREE.WebGLRenderTarget | null = null;
   let scansPending = fx ? 3 : 0;
+  const flora = new RegionalFlora(data, quality === 'high' ? 31 : quality === 'mid' ? 19 : 12);
+  const lianas = new Lianas();
+  near.add(flora.group,lianas.mesh);
+  scansPending++;
+  void flora.load(ctx.base, Math.min(12,renderer.capabilities.getMaxAnisotropy()))
+    .catch(e=>console.warn('walk: local flora unavailable',e)).finally(()=>scansPending--);
   if (quality === 'high') {
     scansPending += 3;
     void loadHinterland(ctx.base, env.sunDir).then(mesh => {
@@ -438,6 +446,8 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
     water.update(eye);
     ground.update(eye);
     canopyBelt?.update(eye);
+    flora.update(eye,forest.nearTrees);
+    lianas.update(eye,forest.nearTrees);
     fauna.viewYaw = controls.yaw;
     if (eye.distanceTo(lastFauna) > 200) { fauna.populate(eye); lastFauna.copy(eye); }
     fauna.update(dt, eye, shared.uTime.value);
@@ -567,6 +577,8 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
       }
       prev = tt;
     }
+    const plant = flora.pick(ray,best);
+    if (plant) { hud.showMarker(sx,sy); hud.showCard(plant); return; }
     if (!hit) return;
     hud.showMarker(sx, sy);
     if (navigator.vibrate && coarse) navigator.vibrate(8);
@@ -602,6 +614,7 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
     disposeTree(near); disposeTree(far);
     village.dispose();
     forest.dispose();
+    flora.dispose();
     canopyBelt?.dispose();
     ground.dispose();
     if (landscapeMaps) for (const map of Object.values(landscapeMaps)) map.dispose();
@@ -660,6 +673,7 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
       fx,
       get animation() { return animatedPlants?.stats ?? null; },
       get landscape() { return { distantTrees: distantForest?.count ?? 0, detailedTreeRange: O.range, geometryRange: O.near, groundRadius: O.R, farTerrainSegments: O.seg >= 500 ? 700 : 300, horizon: distantForest ? 22000 : 0 }; },
+      get localFlora() { return flora.counts; },
       get groundCover() { return cover.stats; },
       /** Test capture: render one real frame at the current viewport, then stop submitting GPU work. */
       freezeFrame() { capturePaused = false; return new Promise<void>((resolve) => { captureNext = resolve; }); },
