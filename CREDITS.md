@@ -60,3 +60,7 @@ Digital reconstruction by Tech Guinée. Images illustrate habitats and scenery; 
 - Single Root — Jenelle van Heerden — CC0 1.0. https://polyhaven.com/a/single_root
 
 Per-record species dataset citations: worldpack/species/gbif_datasets.json. Per-image documentary reference credits: public/photos/documentary-credits.json. Detailed generation records and prompts: scripts/blender/reference/world-art/manifest.json.
+
+### Rebuilt walking landscape
+
+The distant watersheds use Copernicus DEM GLO-30 tile N07 W009. The playable-area terrain and the sky-visibility bake use the same elevation survey. The two canopy models are Blender-authored CC0 broadleaf stand-ins. Their placement and dimensions follow the game's habitat and canopy data. [Copernicus DEM](https://registry.opendata.aws/copernicus-dem/) · [Island Tree 02](https://polyhaven.com/a/island_tree_02) · [Island Tree 03](https://polyhaven.com/a/island_tree_03)

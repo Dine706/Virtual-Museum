@@ -11,7 +11,7 @@ export type ModelSet = Partial<Record<ModelId, ScanModel>>;
 
 const IDS: ModelId[] = ['fern_02', 'calathea_orbifolia_01', 'moss_01', 'rock_moss_set_01', 'rock_07', 'single_root'];
 
-function toFloat(g: THREE.BufferGeometry) {
+export function toFloat(g: THREE.BufferGeometry) {
   for (const name of Object.keys(g.attributes)) {
     const a = g.getAttribute(name) as THREE.BufferAttribute;
     if (a.array instanceof Float32Array && !a.normalized) continue;

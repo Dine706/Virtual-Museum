@@ -3,7 +3,7 @@
 import * as THREE from 'three';
 import { WORLD, WORLD_W, WORLD_D } from '../data/geo';
 
-export interface LandscapeMaps { survey: THREE.Texture; sky: THREE.Texture; canopy: THREE.Texture; ridge: THREE.Texture; rock: THREE.Texture; tree: THREE.Texture; grass: THREE.Texture }
+export interface LandscapeMaps { relief: THREE.Texture; survey: THREE.Texture; sky: THREE.Texture; canopy: THREE.Texture; ridge: THREE.Texture; rock: THREE.Texture; tree: THREE.Texture; grass: THREE.Texture }
 export async function loadLandscape(base: string, anisotropy: number): Promise<LandscapeMaps> {
   const loader = new THREE.TextureLoader();
   const one = async (key: string) => {
@@ -18,11 +18,13 @@ export async function loadLandscape(base: string, anisotropy: number): Promise<L
   grass.wrapS = grass.wrapT = THREE.ClampToEdgeWrapping;
   survey.wrapS = survey.wrapT = THREE.ClampToEdgeWrapping;
   sky.wrapT = THREE.ClampToEdgeWrapping;
-  return { canopy, ridge, rock, tree, grass, survey, sky };
+  const relief = await loader.loadAsync(base + "landscape/ridge-relief.png");
+  return { relief, canopy, ridge, rock, tree, grass, survey, sky };
 }
 
 export const LANDSCAPE_GLSL = /* glsl */ `
 uniform sampler2D uSurvey;
+uniform sampler2D uRelief;
 uniform vec4 uSurveyBounds;
 uniform sampler2D uCanopyMap;
 uniform sampler2D uRidgeMap;
@@ -48,9 +50,15 @@ vec3 landscapeSurface(vec3 base, vec2 p, float canopy, float slope) {
   vec3 habitat = mix(ground, forest, smoothstep(0.40, 0.88, canopy));
   // The 10 m survey places ravines, outcrops and grass clearings. Subpixel crowns and
   // blades come from the reconstructive material instead of resizing the satellite pixels.
-  float grain = dot(habitat, vec3(.24,.63,.13));
-  vec3 detailed = satellite * (1.22 + 1.8 * clamp(grain, 0.0, 0.46));
-  return mix(mix(base, habitat, 0.87), detailed, 0.78);
+  vec3 relief = texture2D(uRelief, vec2(uv.x, 1.0-uv.y)).rgb;
+  float closure = smoothstep(.35,.85,canopy);
+  float crownLight = clamp(dot(crowns, vec3(.24,.63,.13)) * 7.8, .42, 1.85);
+  float grassLight = clamp(dot(ridge, vec3(.24,.63,.13)) * 8.0, .65, 1.65);
+  float incident = mix(grassLight, crownLight, closure);
+  float shelter = mix(.55,1.06,relief.g) * mix(.80,1.16,relief.b);
+  vec3 surface = mix(satellite*1.80, habitat, .22) * incident;
+  return surface * shelter;
+
 }
 `;
 
@@ -59,11 +67,12 @@ export function landscapeUniforms() {
   const placeholder = new THREE.DataTexture(new Uint8Array([92, 104, 55, 255]), 1, 1);
   placeholder.colorSpace = THREE.SRGBColorSpace;
   placeholder.needsUpdate = true;
-  return { uSurvey: { value: placeholder as THREE.Texture }, uSurveyBounds: { value: new THREE.Vector4(WORLD.minX, WORLD.minZ, WORLD_W, WORLD_D) }, uCanopyMap: { value: placeholder as THREE.Texture }, uRidgeMap: { value: placeholder as THREE.Texture }, uCliffMap: { value: placeholder as THREE.Texture }, uLandscape: { value: 0 } };
+  return { uRelief: { value: placeholder as THREE.Texture }, uSurvey: { value: placeholder as THREE.Texture }, uSurveyBounds: { value: new THREE.Vector4(WORLD.minX, WORLD.minZ, WORLD_W, WORLD_D) }, uCanopyMap: { value: placeholder as THREE.Texture }, uRidgeMap: { value: placeholder as THREE.Texture }, uCliffMap: { value: placeholder as THREE.Texture }, uLandscape: { value: 0 } };
 }
 
 export function useLandscape(uniforms: ReturnType<typeof landscapeUniforms>, maps: LandscapeMaps) {
   if (uniforms.uLandscape.value === 0) uniforms.uCanopyMap.value.dispose();
+  uniforms.uRelief.value = maps.relief;
   uniforms.uSurvey.value = maps.survey;
   uniforms.uCanopyMap.value = maps.canopy;
   uniforms.uRidgeMap.value = maps.ridge;

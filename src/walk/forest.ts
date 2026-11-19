@@ -5,6 +5,7 @@
 //   always looks the same.
 // Near trees are full geometry; distant ones are camera-facing impostors rendered from the same models.
 import * as THREE from 'three';
+import type { CrownPart } from './crownModels';
 import { hash2 } from './noise';
 import type { WalkData, Crown, ZoneInfo } from './data';
 import { biomeAt, type Biome } from './biome';
@@ -28,6 +29,7 @@ const VARIANTS = 3;
 
 interface Kind {
   geo: PlantGeo;
+  scanned?: CrownPart[];
   trunk?: THREE.InstancedMesh; leaves?: THREE.InstancedMesh; fronds?: THREE.InstancedMesh; moss?: THREE.InstancedMesh;
   imp: THREE.InstancedMesh;
   impW: number; // impostor half width (model units)
@@ -117,6 +119,14 @@ export class Forest {
     }
   }
 
+  installCrown(renderer: THREE.WebGLRenderer, parts: CrownPart[], variant: number) {
+    const kind: Kind = { geo: this.kinds.get('montane:0')!.geo, scanned: parts,
+      imp: null as unknown as THREE.InstancedMesh, impW: 0, capNear: 0, capFar: 0 };
+    this.kinds.set('crown:' + variant, kind);
+    this.makeImpostor(renderer, kind);
+    this.dirty = true;
+  }
+
   private mesh(geo: THREE.BufferGeometry, mat: THREE.Material, cap: number, cast: boolean) {
     const m = new THREE.InstancedMesh(geo, mat, cap);
     const depth = depthFor(mat);
@@ -135,11 +145,18 @@ export class Forest {
       const cap = Math.ceil(near * 1.5) + 16;
       for (const key of ['trunk', 'leaves', 'fronds', 'moss'] as const) { const m = kind[key]; if (m) { this.group.remove(m); m.dispose(); } }
       const g = kind.geo;
+      if (kind.scanned) {
+        const keys = ['trunk', 'leaves', 'fronds'] as const;
+        kind.scanned.forEach((part, index) => {
+          kind[keys[index]] = this.mesh(part.geometry, part.material, cap, true);
+        });
+      } else {
       const first = g.trunk ? this.mesh(g.trunk, this.barkMats.get(g.barkKind)!, cap, true) : undefined;
       kind.trunk = first;
       kind.leaves = g.leaves ? this.mesh(g.leaves, this.leafMats.get(g.leafKind!)!, cap, true) : undefined;
       kind.fronds = g.fronds ? this.mesh(g.fronds, this.frondMats.get(g.frondKind!)!, cap, true) : undefined;
       kind.moss = g.moss ? this.mesh(g.moss, this.mossMat!, cap, false) : undefined;
+      }
       // Share one instance buffer (and colour) across the parts of the same plant.
       const src = kind.trunk ?? kind.leaves ?? kind.fronds;
       if (src) {
@@ -167,7 +184,7 @@ export class Forest {
   private makeImpostor(renderer: THREE.WebGLRenderer, kind: Kind) {
     const g = kind.geo;
     const box = new THREE.Box3();
-    for (const geo of [g.trunk, g.leaves, g.fronds]) if (geo) { geo.computeBoundingBox(); box.union(geo.boundingBox!); }
+    for (const geo of (kind.scanned?.map(p => p.geometry) ?? [g.trunk, g.leaves, g.fronds])) if (geo) { geo.computeBoundingBox(); box.union(geo.boundingBox!); }
     const halfW = Math.max(Math.abs(box.min.x), Math.abs(box.max.x), Math.abs(box.min.z), Math.abs(box.max.z), 0.1) * 1.02;
     const top = Math.max(box.max.y, 0.2) * 1.02;
     kind.impW = halfW;
@@ -185,7 +202,7 @@ export class Forest {
       [g.fronds, g.frondKind ? this.frondMats.get(g.frondKind) : undefined], [g.moss, this.mossMat ?? undefined],
     ];
     const holder = new THREE.Group();
-    for (const [geo, mat] of parts) if (geo && mat) holder.add(new THREE.Mesh(geo, mat));
+    for (const [geo, mat] of (kind.scanned?.map(p => [p.geometry, p.material] as const) ?? parts)) if (geo && mat) holder.add(new THREE.Mesh(geo, mat));
     scene.add(holder);
     const cam = new THREE.OrthographicCamera(-halfW, halfW, top, 0, -10, 10);
     const prevTarget = renderer.getRenderTarget();
@@ -468,9 +485,12 @@ export class Forest {
         const d = Math.hypot(t.x - eye.x, t.z - eye.z);
         // ragged outer edge: each tree has its own cut-off in the last 15 % of the range (no visible circle)
         if (d > R * (0.85 + 0.15 * hash2(Math.floor(t.x * 7), Math.floor(t.z * 7), 5))) continue;
-        const k = `${t.type}:${t.variant}`;
+        const broadleaf = ['canopy', 'emergent', 'montane', 'savanna', 'regrowth', 'understory', 'protea'].includes(t.type);
+        const crownKey = 'crown:' + (t.variant % 2);
+        const scanned = broadleaf && this.kinds.has(crownKey);
+        const k = scanned ? crownKey : `${t.type}:${t.variant}`;
         // Tall trees stay detailed a little further (their crowns are big on screen).
-        const lim = NEAR * (t.h > 20 ? 1.35 : t.h < 4 ? 0.6 : 1);
+        const lim = scanned ? Math.min(31, 9 + t.h * 0.85) : NEAR * (t.h > 20 ? 1.35 : t.h < 4 ? 0.6 : 1);
         const target = d < lim ? near : far;
         let l = target.get(k);
         if (!l) target.set(k, (l = []));

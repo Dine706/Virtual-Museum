@@ -1,4 +1,4 @@
-import{S as e,l as t,u as n,y as r}from"./index-iwkLGlgM.js";var i=class{dlg;img;caption;counter;stageEl;photos=[];index=0;scale=1;tx=0;ty=0;pointers=new Map;pinchStart=null;lastTap=0;returnFocus=null;constructor(){this.dlg=document.createElement(`dialog`),this.dlg.className=`viewer`,this.dlg.innerHTML=`
+import{S as e,l as t,u as n,y as r}from"./index-BD6eZ_w2.js";var i=class{dlg;img;caption;counter;stageEl;photos=[];index=0;scale=1;tx=0;ty=0;pointers=new Map;pinchStart=null;lastTap=0;returnFocus=null;constructor(){this.dlg=document.createElement(`dialog`),this.dlg.className=`viewer`,this.dlg.innerHTML=`
       <div class="viewer-stage"><picture><img alt="" decoding="async" draggable="false" /></picture></div>
       <div class="viewer-bar">
         <button type="button" class="btn-icon v-prev">${t.chevronLeft}</button>

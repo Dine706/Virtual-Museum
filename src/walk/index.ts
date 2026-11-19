@@ -12,6 +12,8 @@ import type { Tier } from '../scene/tier';
 import { AREA, WalkData } from './data';
 import { WalkEnv, WALK_TIMES, shared, walkMaterial, type WalkTime } from './env';
 import { Ground } from './ground';
+import { loadCrown } from './crownModels';
+import { loadHinterland } from './hinterland';
 import { Forest } from './forest';
 import { GroundCover } from './groundcover';
 import { Water } from './water';
@@ -136,6 +138,17 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
   let envRT: THREE.WebGLRenderTarget | null = null;
   let scansPending = fx ? 3 : 0;
   if (quality === 'high') {
+    scansPending += 3;
+    void loadHinterland(ctx.base, env.sunDir).then(mesh => {
+      if (exited) { mesh.geometry.dispose(); mesh.material.dispose(); return; }
+      far.add(mesh);
+    }).catch(e => console.warn('walk: regional terrain unavailable', e)).finally(() => scansPending--);
+    for (const [variant, id] of ['02', '03'].entries()) {
+      void loadCrown(ctx.base, id).then(parts => {
+        if (exited) { for (const p of parts) { p.geometry.dispose(); p.material.dispose(); } return; }
+        forest.installCrown(renderer, parts, variant);
+      }).catch(e => console.warn('walk: broadleaf model unavailable', e)).finally(() => scansPending--);
+    }
     scansPending++;
     void loadLandscape(ctx.base, Math.min(16, renderer.capabilities.getMaxAnisotropy())).then(maps => {
       if (exited) { for (const texture of Object.values(maps)) texture.dispose(); return; }
@@ -286,7 +299,7 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
     }
     hud.setTime(t(`walk.time.${env.time}`));
     renderer.toneMappingExposure = env.exposure;
-    ground.setClouds(env.time === 'mist' ? 1300 : 1220, env.time === 'mist' ? 0.95 : env.time === 'morning' ? 0.55 : 0.2);
+    ground.setClouds(env.time === 'mist' ? 1300 : 1220, env.time === 'mist' ? 0.95 : env.time === 'morning' ? 0.12 : 0.05);
     forest.setImpostorLight(env.time === 'mist' ? 0.62 : env.time === 'noon' ? 0.95 : 0.85);
   }
 

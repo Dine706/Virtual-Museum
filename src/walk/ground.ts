@@ -132,7 +132,10 @@ export class Ground {
           base *= 0.75 + 0.35 * vnoise(vW.xz / 120.0, 5) + 0.15 * vnoise(vW.xz / 25.0, 6);
           vec3 N = normalize(vN);
           vec3 light = uSunC * max(dot(N, uSunDir), 0.0) * 0.9 + mix(uGrC, uSkyC, N.y * 0.5 + 0.5) * 0.6;
-          vec3 col = base * light;
+          vec2 surveyUV = (vW.xz - uWorld.xy) / uWorld.zw;
+          float horizon = texture2D(uRelief, vec2(surveyUV.x, 1.0-surveyUV.y)).r * 1.5708;
+          float mountainShade = smoothstep(horizon-.07,horizon+.07,asin(clamp(uSunDir.y,0.,1.)));
+          vec3 col = base * light * mix(1., .58+.42*mountainShade,uLandscape);
           float dist = length(vWalkView);
           vec3 dir = vWalkView / dist;
           float f = 1.0 - exp(-walkTau(dist, uFogDensity, uHaze));

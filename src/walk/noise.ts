@@ -23,7 +23,9 @@ export function vnoise(x: number, y: number, seed = 0): number {
 
 /** Ground micro-relief (metres) added to the 30 m DEM: hummocks, roots and ruts the DEM cannot see. */
 export function groundDetail(x: number, z: number, rough: number): number {
-  return vnoise(x / 41, z / 41, 1) * 1.6 * rough
+  const joint = Math.abs(Math.sin(x * .13 + z * .105 + .8 * vnoise(x / 14, z / 14, 24)));
+  const ledge = Math.min(1, joint * 2.0) * Math.max(0, rough - .68);
+  return ledge + vnoise(x / 41, z / 41, 1) * 1.6 * rough
     + vnoise(x / 13.7, z / 13.7, 2) * 0.45 * rough
     + vnoise(x / 4.3, z / 4.3, 3) * 0.12;
 }
@@ -56,7 +58,9 @@ float vnoise(vec2 p, int seed) {
   return (a + (b - a) * u + (c - a) * v + (a - b - c + d) * u * v) * 2.0 - 1.0;
 }
 float groundDetail(vec2 p, float rough) {
-  return vnoise(p / 41.0, 1) * 1.6 * rough + vnoise(p / 13.7, 2) * 0.45 * rough + vnoise(p / 4.3, 3) * 0.12;
+  float joint = abs(sin(dot(p,vec2(.13,.105))+.8*vnoise(p/14.,24)));
+  float ledge = min(1.,joint*2.) * max(0.,rough-.68);
+  return ledge + vnoise(p / 41.0, 1) * 1.6 * rough + vnoise(p / 13.7, 2) * 0.45 * rough + vnoise(p / 4.3, 3) * 0.12;
 }
 float fbm3(vec2 p, int seed) {
   return vnoise(p, seed) * 0.57 + vnoise(p * 2.03, seed + 7) * 0.29 + vnoise(p * 4.11, seed + 13) * 0.14;

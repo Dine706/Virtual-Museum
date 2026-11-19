@@ -110,7 +110,7 @@ export const TERRAIN_MAP_GLSL = /* glsl */ `
   g = mix(g, crownCol, vShell);
   if (uLandscape > 0.5) {
     vec3 distant = landscapeSurface(g, P, forest, gSteep);
-    g = mix(g, distant, max(vShell, smoothstep(450.0, 1300.0, length(vWalkView)) * 0.65));
+    g = mix(g, distant, max(vShell, smoothstep(65.0, 440.0, length(vWalkView)) * 0.98));
   }
   diffuseColor.rgb *= g;
   gRough = 0.95 - gW[3] * 0.12 - gW[5] * 0.35 - gWet * 0.25 - gW[9] * 0.1;
