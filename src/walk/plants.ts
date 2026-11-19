@@ -310,9 +310,9 @@ export function buildPlant(type: PlantType, seed: number): PlantGeo {
     }
     case 'treefern': {
       trunkR = 0.03;
-      const trunk = limb(new V(0, 0, 0), new V((r() - 0.5) * 0.2, 1, (r() - 0.5) * 0.2), 0.8, 8, 0.12, r);
+      const trunk = limb(new V(0, 0, 0), new V((r() - 0.5) * 0.2, 1, (r() - 0.5) * 0.2), 0.66, 8, 0.12, r);
       capped(b, trunk, taper(trunk.length, trunkR * 1.25, trunkR * 0.9), 7);
-      palmCrown(fr, r, trunk[trunk.length - 1], 15, 0.5, 0.16, 0.9, 0.11);
+      palmCrown(fr, r, trunk[trunk.length - 1], 23, 0.56, 0.17, 0.88, 0.13);
       crown = 0.42; leafKind = null; frondKind = 'fern'; barkKind = 'fern';
       break;
     }

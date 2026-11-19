@@ -147,7 +147,10 @@ export class WalkEnv {
           if (uPhotoSkyStrength > 0.0) {
             float az = atan(d.x, -d.z) - atan(uSunDir.x, -uSunDir.z);
             vec2 uv = vec2(fract(.59 + az / 6.2831853 + uTime * .000035), .5 + asin(clamp(d.y,-1.0,1.0)) / 3.14159265);
-            vec3 cloud = texture2D(uPhotoSky,uv).rgb;
+            // Longitude wraps at the panorama seam. Keep the texture footprint local on both sides.
+            vec2 gx = dFdx(uv), gy = dFdy(uv);
+            gx.x -= floor(gx.x+.5); gy.x -= floor(gy.x+.5);
+            vec3 cloud = textureGrad(uPhotoSky,uv,gx,gy).rgb;
             cloud = mix(cloud, uSkyHorizon, .16 + .55 * (1.0-smoothstep(0.0,.28,d.y)));
             col = mix(col, cloud, uPhotoSkyStrength * (1.0-smoothstep(.5,1.0,uCloud)) * smoothstep(-.02,.07,d.y));
           }

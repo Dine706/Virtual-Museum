@@ -264,6 +264,7 @@ export class Forest {
     set('mossy', p.barkGrey, 2, 3);
     set('lichen', p.barkGrey, 2, 3);
     set('palm', p.palm, 1, 2);
+    set('fern', p.bark, 2, 3);
   }
 
   /** Generated generic broadleaf texture; specialised palms/ferns/Protea keep their own silhouettes. */
