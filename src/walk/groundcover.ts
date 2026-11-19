@@ -4,7 +4,7 @@ import * as THREE from 'three';
 import { hash2, vnoise } from './noise';
 import type { WalkData } from './data';
 import { biomeAt } from './biome';
-import { buildCover, type CoverType } from './plants';
+import { buildCover, detailedTussock, type CoverType } from './plants';
 import { grassBlades, frond, bigLeaf, bark, groundTextures, singleLeaf } from './textures';
 import { trailK, AREA } from './data';
 import { depthFor } from './forest';
@@ -204,7 +204,8 @@ export class GroundCover {
       const fallback = this.middle.get(t);
       // A scanned fern has thousands of triangles. Preserve it within 22 m, then retain the
       // original lightweight 3D plant instead of repeating full scans out to the cover horizon.
-      const l = fallback ? all.filter((it) => Math.hypot(it.x - eye.x, it.z - eye.z) < 22) : all;
+      const nearLimit = t.startsWith('grass') ? 14 : 22;
+      const l = fallback ? all.filter((it) => Math.hypot(it.x - eye.x, it.z - eye.z) < nearLimit) : all;
       let mesh = this.meshes.get(t);
       if (!mesh || (this.caps.get(t) ?? 0) < l.length) {
         if (mesh) { this.group.remove(mesh); mesh.dispose(); }
@@ -243,7 +244,7 @@ export class GroundCover {
       mesh.instanceMatrix.needsUpdate = true;
       if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
       if (fallback) {
-        const middle = all.filter((it) => Math.hypot(it.x - eye.x, it.z - eye.z) >= 22);
+        const middle = all.filter((it) => Math.hypot(it.x - eye.x, it.z - eye.z) >= nearLimit);
         if (!fallback.mesh || fallback.capacity < middle.length) {
           if (fallback.mesh) { this.group.remove(fallback.mesh); fallback.mesh.dispose(); }
           fallback.capacity = Math.ceil(middle.length * 1.4) + 64;
@@ -255,8 +256,10 @@ export class GroundCover {
         let count = 0;
         for (const it of middle) {
           const d = Math.hypot(it.x - eye.x, it.z - eye.z);
-          if (d > R * 0.56) continue;
-          const fade = 1 - THREE.MathUtils.smoothstep(d, R * 0.46, R * 0.56);
+          const outer = t.startsWith('grass') ? R : R * .56;
+          if (d > outer) continue;
+          if (d > inner && hash2(Math.floor(it.x*13),Math.floor(it.z*13),9) > (inner/d)**2) continue;
+          const fade = 1 - THREE.MathUtils.smoothstep(d, outer*.82, outer);
           e.set(it.tilt, it.rot, it.tilt * 0.5); q.setFromEuler(e);
           m.compose(p.set(it.x, it.y, it.z), q, sc.set(it.s, it.sy * fade, it.s));
           fallback.mesh.setMatrixAt(count, m);
@@ -329,10 +332,20 @@ export class GroundCover {
   reset() { this.tiles.clear(); this.boulders.clear(); this.last.set(1e9, 0, 1e9); }
 
   useGrass(texture: THREE.Texture) {
-    for (const kind of ['grassGolden', 'grassGreen', 'grassTall'] as CoverType[]) {
+    for (const kind of ['grassGolden', 'grassGreen', 'grassTall'] as const) {
       const material = this.mats.get(kind) as THREE.MeshStandardMaterial;
       material.map?.dispose(); material.map = texture; material.needsUpdate = true;
       material.roughness = 0.88;
+      this.middle.set(kind, { geometry: this.geos.get(kind)!, material, capacity: 0 });
+      const geometry = detailedTussock(kind);
+      const blades = walkMaterial(new THREE.MeshStandardMaterial({
+        vertexColors: true, side: THREE.DoubleSide, roughness: .83,
+      }), 'grass', nearFade);
+      this.geos.set(kind, geometry);
+      this.mats.set(kind, blades);
+      const mesh = this.meshes.get(kind);
+      if (mesh) { mesh.geometry = geometry; mesh.material = blades; mesh.customDepthMaterial = undefined; }
+      this.last.set(1e9,0,1e9);
     }
   }
 
