@@ -1,4 +1,4 @@
-// A continuous forest silhouette across the massif. One instanced draw, with world-fixed positions,
+// A continuous forest silhouette across the massif. Spatially culled instanced draws, with world-fixed positions,
 // camera-facing tree cutouts, distance dithering and the same atmosphere as the terrain underneath.
 // Individual distant trees are reconstructed filler placed only in mapped closed-canopy forest.
 import * as THREE from 'three';
@@ -20,11 +20,16 @@ const random = (i: number, j: number, salt: number) => {
 };
 
 export class LandscapeForest {
-  readonly mesh: THREE.Mesh<THREE.InstancedBufferGeometry, THREE.ShaderMaterial>;
+  readonly mesh = new THREE.Group();
+  private material: THREE.ShaderMaterial;
   readonly count: number;
   constructor(hf: Heightfield, land: THREE.Texture, tree: THREE.Texture, opts: ForestOptions) {
     const image = land.image as { data: Uint8Array; width: number; height: number };
-    const centers: number[] = [], shapes: number[] = [];
+    const patches = new Map<number, { centers: number[]; shapes: number[]; bounds: THREE.Box3 }>();
+    const patchWidth = 2048;
+    const columns = Math.ceil(WORLD_W / patchWidth);
+    const point = new THREE.Vector3();
+    let count = 0;
     const spacing = opts.spacing ?? 38;
     for (let j = 0; j * spacing < WORLD_D; j++) for (let i = 0; i * spacing < WORLD_W; i++) {
       const x = WORLD.minX + (i + 0.15 + random(i, j, 1) * 0.7) * spacing;
@@ -36,19 +41,21 @@ export class LandscapeForest {
       const y = hf.heightAt(x, z);
       const montane = THREE.MathUtils.smoothstep(y, 900, 1500);
       const h = (23 + random(i, j, 4) * 16) * (1 - montane * 0.35);
+      const key = Math.floor((x - WORLD.minX) / patchWidth) + columns * Math.floor((z - WORLD.minZ) / patchWidth);
+      let patch = patches.get(key);
+      if (!patch) {
+        patch = { centers: [], shapes: [], bounds: new THREE.Box3() };
+        patches.set(key, patch);
+      }
+      const { centers, shapes } = patch;
+      const ground = (y - 1.5) * (opts.uniforms.uExag?.value ?? 1);
+      patch.bounds.expandByPoint(point.set(x - h, ground, z - h));
+      patch.bounds.expandByPoint(point.set(x + h, ground + h, z + h));
+      count++;
       centers.push(x, y - 1.5, z);
       shapes.push(h * (0.68 + random(i, j, 5) * 0.32), h, random(i, j, 6), random(i, j, 7));
     }
-    this.count = centers.length / 3;
-    const quad = new THREE.PlaneGeometry(1, 1);
-    const g = new THREE.InstancedBufferGeometry();
-    g.setIndex(quad.index!.clone());
-    g.setAttribute('position', quad.attributes.position.clone());
-    g.setAttribute('uv', quad.attributes.uv.clone());
-    g.setAttribute('aCenter', new THREE.InstancedBufferAttribute(new Float32Array(centers), 3));
-    g.setAttribute('aShape', new THREE.InstancedBufferAttribute(new Float32Array(shapes), 4));
-    g.instanceCount = this.count;
-    quad.dispose();
+    this.count = count;
     const orbit = opts.atmosphere === 'orbit';
     const material = new THREE.ShaderMaterial({
       uniforms: { ...opts.uniforms, uTree: { value: tree }, uInner: { value: opts.inner }, uOuter: { value: opts.outer } },
@@ -66,7 +73,8 @@ export class LandscapeForest {
           if (d < start || d > uOuter) { gl_Position = vec4(2.0, 2.0, 2.0, 1.0); return; }
           vec2 right = normalize(vec2(cameraPosition.z - center.z, center.x - cameraPosition.x) + vec2(0.0001));
           vec3 p = center + vec3(right.x, 0.0, right.y) * position.x * aShape.x;
-          p.y += (position.y + 0.5) * aShape.y;
+          float reveal = uInner > 0.0 ? smoothstep(start, start + 95.0, d) : 1.0;
+          p.y += ((position.y + 0.5) * reveal - (1.0 - reveal) * 0.15) * aShape.y;
           vW = p; vTint = 0.76 + aShape.w * 0.42;
           vUV = vec2(aShape.z > 0.5 ? 1.0 - uv.x : uv.x, uv.y);
           vec4 mv = viewMatrix * vec4(p, 1.0); vView = mv.xyz;
@@ -100,11 +108,27 @@ export class LandscapeForest {
         }`,
       side: THREE.DoubleSide,
     });
-    this.mesh = new THREE.Mesh(g, material);
-    this.mesh.frustumCulled = false;
-    this.mesh.renderOrder = 1;
+    this.material = material;
+    const quad = new THREE.PlaneGeometry(1, 1);
+    for (const { centers, shapes, bounds } of patches.values()) {
+      const g = new THREE.InstancedBufferGeometry();
+      g.setIndex(quad.index!.clone());
+      g.setAttribute('position', quad.attributes.position.clone());
+      g.setAttribute('uv', quad.attributes.uv.clone());
+      g.setAttribute('aCenter', new THREE.InstancedBufferAttribute(new Float32Array(centers), 3));
+      g.setAttribute('aShape', new THREE.InstancedBufferAttribute(new Float32Array(shapes), 4));
+      g.instanceCount = centers.length / 3;
+      g.boundingSphere = bounds.getBoundingSphere(new THREE.Sphere());
+      const mesh = new THREE.Mesh(g, material);
+      mesh.renderOrder = 1;
+      this.mesh.add(mesh);
+    }
+    quad.dispose();
   }
 
   // The caller owns the shared tree texture; this instance owns only its geometry and material.
-  dispose() { this.mesh.geometry.dispose(); this.mesh.material.dispose(); }
+  dispose() {
+    for (const patch of this.mesh.children) (patch as THREE.Mesh).geometry.dispose();
+    this.material.dispose();
+  }
 }

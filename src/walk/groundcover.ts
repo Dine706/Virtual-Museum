@@ -140,7 +140,7 @@ export class GroundCover {
       const tint = 0.8 + hash2(ti * 97 + i, tj * 97 + j, 4) * 0.35;
       let u = hash2(ti * 97 + i, tj * 97 + j, 5);
       const pick = (p: number) => { if (u < p) return true; u -= p; return false; };
-      if (pick(pGolden)) push('grassGolden', { x, y, z, s: 0.55 + h1 * 0.35, sy: 0.45 + h2 * 0.45, rot, tilt: 0, tint });
+      if (pick(pGolden)) push('grassGolden', { x, y, z, s: 0.38 + h1 * 0.67, sy: (0.26 + h2 * 0.65) * (0.65 + patch * 0.65), rot, tilt: (h1 - 0.5) * 0.36, tint: tint * (0.87 + patch * 0.24) });
       else if (pick(pTall)) push('grassTall', { x, y, z, s: 0.8 + h1 * 0.5, sy: 0.9 + h2 * 1.0, rot, tilt: 0, tint });
       else if (pick(pGreen)) push('grassGreen', { x, y, z, s: 0.5 + h1 * 0.3, sy: 0.25 + h2 * 0.35, rot, tilt: 0, tint });
       else if (pick(pFern)) push('fern', { x, y, z, s: 0.5 + h1 * 0.8, sy: 0.5 + h2 * 0.7, rot, tilt: 0, tint });
