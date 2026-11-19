@@ -100,6 +100,11 @@ async function decode(url: string): Promise<ImageData> {
 }
 
 export class WalkData {
+  wildlifeOpening?: {x:number;z:number;r:number};
+  inWildlifeOpening(x:number,z:number){
+    const o=this.wildlifeOpening;
+    return !!o && (x-o.x)**2+(z-o.z)**2<o.r**2;
+  }
   index!: WalkIndex;
   species!: SpeciesData;
   private tiles = new Map<string, Promise<Tile>>();

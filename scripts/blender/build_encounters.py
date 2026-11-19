@@ -20,7 +20,7 @@ def finish():
  bpy.ops.object.select_all(action='DESELECT')
  for o in parts:o.select_set(True)
  bpy.context.view_layer.objects.active=parts[0];bpy.ops.object.join()
- o=parts[0];bpy.context.scene.cursor.location=xyz(pivot)
+ o=parts[0];bpy.ops.object.transform_apply(location=False,rotation=True,scale=True);bpy.context.scene.cursor.location=xyz(pivot)
  bpy.ops.object.origin_set(type='ORIGIN_CURSOR');o.name=joint;groups.append(o);parts=[]
 def limb(name,p):
  global joint,pivot

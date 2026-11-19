@@ -40,6 +40,18 @@ function birdGeometry(kind: 'hornbill' | 'turaco' | 'sunbird'): THREE.BufferGeom
   const head = new THREE.SphereGeometry(0.15, 8, 6);
   head.translate(0, 0.08, 0.52);
   parts.push({ geo: head, color: C.head });
+  for(const side of [-1,1]){
+    const eye=new THREE.SphereGeometry(.032,10,7);eye.scale(.56,1,1);
+    eye.translate(side*.143,.111,.569);parts.push({geo:eye,color:'#251e18'});
+    const glint=new THREE.SphereGeometry(.008,6,4);glint.translate(side*.160,.12,.577);
+    parts.push({geo:glint,color:'#e2d9c4'});
+    const leg=new THREE.CylinderGeometry(.012,.016,.23,6);
+    leg.translate(side*.065,-.225,.014);parts.push({geo:leg,color:'#554e45'});
+    for(let i=-1;i<=1;i++){
+      const toe=new THREE.SphereGeometry(.026,6,4);toe.scale(.32,.32,2);toe.rotateY(i*.48);
+      toe.translate(side*.065+i*.018,-.337,.043);parts.push({geo:toe,color:'#645c50'});
+    }
+  }
   const billLen = kind === 'hornbill' ? 0.45 : kind === 'sunbird' ? 0.32 : 0.12;
   const bill = new THREE.ConeGeometry(kind === 'hornbill' ? 0.08 : 0.04, billLen, 6);
   bill.rotateX(Math.PI / 2 + (kind === 'sunbird' ? 0.25 : 0.12));
@@ -259,7 +271,7 @@ export class Fauna {
     const bird=['hornbill','turaco','sunbird'].includes(kind);
     const d=bird?4.0:1.35;
     const x=eye.x-Math.sin(this.viewYaw)*d,z=eye.z-Math.cos(this.viewYaw)*d;
-    a.pos.set(x,this.data.heightAt(x,z)+(bird?.22:.47),z);
+    a.pos.set(x,this.data.heightAt(x,z)+(bird?.34*a.size:.47),z);
     a.vel.set(0,0,0);a.obj.visible=true;a.obj.position.copy(a.pos);
     a.obj.rotation.y=this.viewYaw+.9; a.perched=true; this.featured=a;
     return a;

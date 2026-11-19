@@ -1,0 +1,1 @@
+export{t as loadCrown}from"./walk-BQAhxlAN.js";

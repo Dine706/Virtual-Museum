@@ -351,6 +351,7 @@ export class Forest {
     const zone = this.zoneOfCell(ci, cj);
     const crowns = this.crownCells.get(`${ci},${cj}`);
     const add = (type: PlantType, x: number, z: number, h: number, crownR: number, seed: number, measured: boolean) => {
+      if(this.data.inWildlifeOpening(x,z))return;
       const s = this.data.streamAt(x, z);
       if (s.dist < s.width * 1.3 && type !== 'raphia' && type !== 'treefern') return;
       // terrain type: no trees in water or on sand, sparse regrowth on old mine ground, crops only in fields,

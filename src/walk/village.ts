@@ -2,9 +2,7 @@
 // • houses stand on the real OpenStreetMap footprints (© OpenStreetMap contributors, ODbL); small square
 //   footprints become round wattle-and-daub huts with thatched cones, the rest rectangular earth-plastered
 //   houses with corrugated metal roofs (some rusty, some with a porch) – typical of the region, not surveyed;
-// • villagers (fictional, generic figures) do sourced everyday activities: pounding in a mortar, carrying
-//   loads or water, a child with firewood, a mother with a baby on her back, hoeing in fields, sitting and
-//   talking, children playing, walking along the real paths. No rites, no sacred places, no masks.
+// • fictional residents sit on stools facing each other in shaded front courtyards.
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import type { WalkData, Building } from './data';
@@ -169,7 +167,9 @@ export class Village {
   dispose() { this.disposed = true; }
 
   private buildHouses(eye: THREE.Vector3) {
-    for (const m of this.houseMeshes) { this.group.remove(m); (m as THREE.InstancedMesh).dispose?.(); }
+    const previousGeometry=new Set<THREE.BufferGeometry>();
+    for(const part of this.houseMeshes){const m=part as THREE.InstancedMesh;this.group.remove(m);previousGeometry.add(m.geometry);m.dispose();}
+    previousGeometry.forEach(g=>g.dispose());
     this.houseMeshes = [];
     this.houses.length = 0;
     const list = this.data.buildingsNear(eye.x, eye.z, 650);
@@ -247,7 +247,10 @@ export class Village {
         put(mHut, b.x, h.base, b.z, rot, r, h.wallH, r);
         put(mCone, b.x, h.base + h.wallH - 0.05, b.z, rot, r * 1.35, h.roofH, r * 1.35);
       } else {
-        put(h.rust < 0.6 ? mWallA : mWallB, b.x, h.base, b.z, rot, b.w, h.wallH, b.d);
+        const wall=h.rust<.6?mWallA:mWallB;
+        const tint=new THREE.Color().setHSL(.064+.021*h.rust,.10+.18*h.rust,.81+.13*h.rust);
+        wall.setColorAt(wall.count,tint);
+        put(wall, b.x, h.base, b.z, rot, b.w, h.wallH, b.d);
         put(h.rust < 0.55 ? mRoofM : mRoofR, b.x, h.base + h.wallH, b.z, rot, b.w + 0.7, h.roofH, b.d + 0.7);
         put(mEnds, b.x, h.base + h.wallH, b.z, rot, b.w, h.roofH, b.d);
         // Door jambs and header follow the painted opening; shutters flank both side windows.

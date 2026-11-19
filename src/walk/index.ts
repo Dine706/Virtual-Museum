@@ -100,6 +100,21 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
   data.updatePaths(ctx.start.x, ctx.start.z);
   await nextFrame();
 
+  if(ctx.start.subject && ctx.start.subject!=='village'){
+    let best=-Infinity,bx=ctx.start.x,bz=ctx.start.z;
+    for(let i=0;i<100;i++){
+      const r=Math.sqrt(i)*4,a=i*2.39996,x=ctx.start.x+Math.sin(a)*r,z=ctx.start.z+Math.cos(a)*r;
+      const water=data.streamAt(x,z);
+      if(data.buildingAt(x,z,3)||water.dist<water.width)continue;
+      const slope=Math.hypot(data.heightAt(x+1,z)-data.heightAt(x-1,z),data.heightAt(x,z+1)-data.heightAt(x,z-1))*.5;
+      let score=-r*.05-slope*8;
+      if(ctx.start.subject==='chimpanzee')score+=Math.min(18,data.attrAt(x,z).canopy)*.36;
+      if(ctx.start.subject==='otter-shrew')score-=Math.abs(water.dist-water.width-2)*.65;
+      if(score>best){best=score;bx=x;bz=z;}
+    }
+    ctx.start.x=bx;ctx.start.z=bz;
+    data.wildlifeOpening={x:bx,z:bz,r:ctx.start.subject==='chimpanzee'?7.1:4.8};
+  }
   // ---- scene ----
   const params = new URLSearchParams(location.search);
   const time0 = (WALK_TIMES as string[]).includes(params.get('walktime') ?? '') ? params.get('walktime') as WalkTime : 'morning';
@@ -275,7 +290,7 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
       if(house){x=house.x-Math.sin(house.a)*(house.d/2+7);z=house.z+Math.cos(house.a)*(house.d/2+7);}
       const spot=openSpot(x,z);x=spot[0];z=spot[1];
       if(house)controls.yaw=Math.atan2(x-house.x,z-house.z);
-    }else [x,z]=openSpot(x,z);
+    }else if(!data.wildlifeOpening)[x,z]=openSpot(x,z);
     const bx=x,bz=z;
     pos.set(bx, data.heightAt(bx, bz), bz);
     eyeY = pos.y + EYE;
@@ -296,6 +311,8 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
     const arrival=animal.enter(ctx.base,startEye,controls,forest.nearTrees).then(()=>{
       if(exited)return;
       encounter=animal; near.add(animal.group);
+      if(animal.support)near.add(animal.support);
+      if(animal.companion)near.add(animal.companion.group);
     }).catch(e=>console.warn('Encounter asset unavailable',e)).finally(()=>scansPending--);
     await Promise.race([arrival,new Promise(resolve=>setTimeout(resolve,4000))]);
   }else if(subject && subject!=='village'){

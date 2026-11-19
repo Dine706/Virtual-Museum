@@ -16,7 +16,8 @@ type State='watching'|'running'|'climbing'|'aloft'|'hopping'|'diving'|'flying'|'
 export class Encounter {
   readonly group=new THREE.Group();
   state:State='watching';
-  private anchor?:TreeInst;
+  private anchor?:Pick<TreeInst,'x'|'y'|'z'|'h'>;
+  companion?:Encounter;
   private timer=0;
   private end=new THREE.Vector3();
   private origin=new THREE.Vector3();
@@ -32,7 +33,7 @@ export class Encounter {
     });
     this.group.add(asset.scene);
     const ape=this.kind==='chimpanzee', bat=this.kind==='roundleaf-bat', toad=this.kind==='nimba-toad';
-    const radius=ape?7:bat?3.5:toad?.98:2.3;
+    const radius=ape?4.4:bat?3.5:toad?.98:2.3;
     if(toad)this.group.scale.setScalar(.37);
     let best=-Infinity;
     for(let i=0;i<48;i++){
@@ -46,18 +47,38 @@ export class Encounter {
       if(anchor)score-=Math.abs(Math.hypot(anchor.x-x,anchor.z-z)-6)*.22;
       if(score>best){best=score;this.anchor=anchor;this.group.position.set(x,h+(bat?1.85:.02),z);}
     }
+    if(ape){
+      if(!this.anchor || Math.hypot(this.anchor.x-this.group.position.x,this.anchor.z-this.group.position.z)>13){
+        const {loadCrown}=await import('./crownModels');
+        const tree=new THREE.Group(), height=10.5;
+        for(const part of await loadCrown(base,'02'))tree.add(new THREE.Mesh(part.geometry,part.material));
+        const away=this.group.position.clone().sub(eye);away.y=0;away.normalize();
+        const x=this.group.position.x+away.x*6,z=this.group.position.z+away.z*6,y=this.data.heightAt(x,z);
+        this.anchor={x,y,z,h:height};tree.position.set(x,y,z);tree.scale.setScalar(height);
+        this.support=tree;
+      }
+      const other=new Encounter(this.kind,this.data);
+      other.anchor=this.anchor;
+      const copy=asset.scene.clone(true);other.group.add(copy);other.group.scale.setScalar(.75);
+      copy.traverse(o=>{if(/^(arm|leg)/.test(o.name))other.limbs.push(o);});
+      const x=this.group.position.x+1.45*Math.cos(controls.yaw),z=this.group.position.z-1.45*Math.sin(controls.yaw);
+      other.group.position.set(x,this.data.heightAt(x,z)+.02,z);
+      other.origin.copy(other.group.position);other.group.rotation.y=controls.yaw+.8;this.companion=other;
+    }
     this.group.rotation.y=Math.atan2(eye.x-this.group.position.x,eye.z-this.group.position.z)+.3;
     this.origin.copy(this.group.position);
     facePoint(controls,eye,this.focus);
   }
+  support?:THREE.Group;
   get focus(){return this.group.position.clone().add(new THREE.Vector3(0,this.kind==='chimpanzee'?.68:this.kind==='otter-shrew'?.07:.02,0));}
   card():Card{return {title:t('walk.animal.'+this.kind),sci:names[this.kind],kicker:t('walk.encounter'),lines:[],note:t('walk.animalNote'),sources:[]};}
   update(dt:number,eye:THREE.Vector3){
+    this.companion?.update(dt,eye);
     if(!this.group.visible)return;
     const p=this.group.position,ape=this.kind==='chimpanzee',bat=this.kind==='roundleaf-bat',toad=this.kind==='nimba-toad';
     const planar=Math.hypot(p.x-eye.x,p.z-eye.z);
     this.timer+=dt;
-    if((this.state==='watching'||(this.state==='resting' && this.timer>1.5)) && planar<(ape?5.5:bat?2.6:toad?.68:1.65)){
+    if((this.state==='watching'||(this.state==='resting' && this.timer>1.5)) && planar<(ape?3.15:bat?2.6:toad?.68:1.65)){
       this.origin.copy(p); this.timer=0;
       const away=new THREE.Vector3(p.x-eye.x,0,p.z-eye.z).normalize();
       this.end.copy(p).addScaledVector(away,ape?9:bat?7:toad?.52:3.4);

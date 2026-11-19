@@ -72,7 +72,7 @@ export class RegionalFlora {
       for(let i=Math.floor((eye.x-radius)/step);i<=Math.ceil((eye.x+radius)/step);i++){
         const x=(i+hash2(i,j,104))*step,z=(j+hash2(i,j,105))*step;
         const distance=Math.hypot(x-eye.x,z-eye.z);
-        if(distance>radius) continue;
+        if(distance>radius || this.data.inWildlifeOpening(x,z)) continue;
         const a=this.data.attrAt(x,z);
         if(a.canopy<4 || a.cls===50 || a.cls===80 || this.data.areaAt(x,z)!==0 ||
           this.data.pathAt(x,z).dist<.6 || this.data.buildingAt(x,z,1) || trailK(x,z,1)>.3) continue;

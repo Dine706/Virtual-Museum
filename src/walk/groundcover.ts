@@ -88,12 +88,13 @@ export class GroundCover {
     for (let j = 0; j < n; j++) for (let i = 0; i < n; i++) {
       const h1 = hash2(ti * 97 + i, tj * 97 + j, 1), h2 = hash2(ti * 97 + i, tj * 97 + j, 2), h3 = hash2(ti * 97 + i, tj * 97 + j, 3);
       const x = ti * TILE + (i + h1) * step, z = tj * TILE + (j + h2) * step;
+      if(this.data.inWildlifeOpening(x,z))continue;
       const b = biomeAt(this.data, x, z);
       if (b.streamDist < b.streamWidth * 0.9) continue; // the water itself
       const pa = this.data.pathAt(x, z);
       const onPath = pa.dist < 0.15 ? 1 : 0;
       const trail = trailK(x, z, b.forest);
-      if (this.data.buildingAt(x, z, 0.4)) continue;
+      if (this.data.buildingAt(x, z, 2.2)) continue;
       const open = 1 - b.forest;
       const highGrass = b.grass * b.high + (b.cloud > 0.5 ? b.grass * 0.6 : 0);
       const lowGrass = b.grass * (1 - b.high) * (b.cloud > 0.5 ? 0.4 : 1);
@@ -159,6 +160,7 @@ export class GroundCover {
     const out: Inst[] = [];
     for (let k = 0; k < 6; k++) {
       const x = bi * 24 + hash2(bi, bj * 7 + k, 31) * 24, z = bj * 24 + hash2(bi * 7 + k, bj, 32) * 24;
+      if(this.data.inWildlifeOpening(x,z))continue;
       const b = biomeAt(this.data, x, z);
       const ac = this.data.areaAt(x, z);
       const p = b.rock * 0.8 + (b.high > 0.5 ? 0.08 : 0.01) + (ac === AREA.rock || b.cls === 60 ? 0.5 : 0) + (ac === AREA.mine ? 0.12 : 0);
