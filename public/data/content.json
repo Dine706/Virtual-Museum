@@ -1,1647 +1,1647 @@
 {
-  "meta": {
-    "title_fr": "Monts Nimba – un massif sous les nuages",
-    "title_en": "Mount Nimba – a massif above the clouds",
-    "intro_fr": "Le Nimba est une crête de 40 km à la frontière de la Guinée, de la Côte d'Ivoire et du Liberia. Réserve naturelle intégrale et site du patrimoine mondial de l'UNESCO depuis 1981, il abrite des prairies d'altitude, une forêt dense, une cinquantaine de sources et des espèces que l'on ne trouve nulle part ailleurs.",
-    "intro_en": "Nimba is a 40 km ridge on the border of Guinea, Côte d'Ivoire and Liberia. A strict nature reserve and UNESCO World Heritage Site since 1981, it shelters high-altitude grasslands, dense forest, about fifty springs and species found nowhere else.",
-    "stats": [
-      {
-        "value": "1 752 m",
-        "label_fr": "point culminant",
-        "label_en": "highest point"
-      },
-      {
-        "value": "1981",
-        "label_fr": "inscription UNESCO",
-        "label_en": "UNESCO inscription"
-      },
-      {
-        "value": "> 2 000",
-        "label_fr": "plantes vasculaires",
-        "label_en": "vascular plants"
-      },
-      {
-        "value": "≈ 50",
-        "label_fr": "sources",
-        "label_en": "springs"
-      },
-      {
-        "value": "3",
-        "label_fr": "pays",
-        "label_en": "countries"
-      }
-    ],
-    "modes": {
-      "nature": {
-        "fr": "Nature",
-        "en": "Nature"
-      },
-      "culture": {
-        "fr": "Culture",
-        "en": "Culture"
-      },
-      "conservation": {
-        "fr": "Conservation",
-        "en": "Conservation"
-      }
-    },
-    "categories": {
-      "peak": {
-        "fr": "Sommet",
-        "en": "Peak"
-      },
-      "habitat": {
-        "fr": "Habitat",
-        "en": "Habitat"
-      },
-      "species": {
-        "fr": "Espèce",
-        "en": "Species"
-      },
-      "culture": {
-        "fr": "Culture",
-        "en": "Culture"
-      },
-      "conservation": {
-        "fr": "Conservation",
-        "en": "Conservation"
-      },
-      "water": {
-        "fr": "Eau",
-        "en": "Water"
-      }
-    },
-    "bbox_wgs84": {
-      "west": -8.56,
-      "south": 7.48,
-      "east": -8.28,
-      "north": 7.76
-    },
-    "reserve_bounds": {
-      "guinea_wdpa_29067": {
-        "west": -8.5003,
-        "south": 7.5582,
-        "east": -8.3201,
-        "north": 7.72
-      },
-      "cote_d_ivoire_wdpa_1295": {
-        "west": -8.4697,
-        "south": 7.5307,
-        "east": -8.3804,
-        "north": 7.6278
-      }
-    },
-    "generated": "2026-11-15",
-    "note": "Every hotspot lists its sources and an 'uncertain' list. Show uncertain items as ranges or omit them; never invent numbers."
+ "meta": {
+  "title_fr": "Monts Nimba – un massif sous les nuages",
+  "title_en": "Mount Nimba – a massif above the clouds",
+  "intro_fr": "Le Nimba est une crête de 40 km à la frontière de la Guinée, de la Côte d'Ivoire et du Liberia. Réserve naturelle intégrale et site du patrimoine mondial de l'UNESCO depuis 1981, il abrite des prairies d'altitude, une forêt dense, une cinquantaine de sources et des espèces que l'on ne trouve nulle part ailleurs.",
+  "intro_en": "Nimba is a 40 km ridge on the border of Guinea, Côte d'Ivoire and Liberia. A strict nature reserve and UNESCO World Heritage Site since 1981, it shelters high-altitude grasslands, dense forest, about fifty springs and species found nowhere else.",
+  "stats": [
+   {
+    "value": "1 752 m",
+    "label_fr": "point culminant",
+    "label_en": "highest point"
+   },
+   {
+    "value": "1981",
+    "label_fr": "inscription UNESCO",
+    "label_en": "UNESCO inscription"
+   },
+   {
+    "value": "> 2 000",
+    "label_fr": "plantes vasculaires",
+    "label_en": "vascular plants"
+   },
+   {
+    "value": "≈ 50",
+    "label_fr": "sources",
+    "label_en": "springs"
+   },
+   {
+    "value": "3",
+    "label_fr": "pays",
+    "label_en": "countries"
+   }
+  ],
+  "modes": {
+   "nature": {
+    "fr": "Nature",
+    "en": "Nature"
+   },
+   "culture": {
+    "fr": "Culture",
+    "en": "Culture"
+   },
+   "conservation": {
+    "fr": "Conservation",
+    "en": "Conservation"
+   }
   },
-  "hotspots": [
+  "categories": {
+   "peak": {
+    "fr": "Sommet",
+    "en": "Peak"
+   },
+   "habitat": {
+    "fr": "Habitat",
+    "en": "Habitat"
+   },
+   "species": {
+    "fr": "Espèce",
+    "en": "Species"
+   },
+   "culture": {
+    "fr": "Culture",
+    "en": "Culture"
+   },
+   "conservation": {
+    "fr": "Conservation",
+    "en": "Conservation"
+   },
+   "water": {
+    "fr": "Eau",
+    "en": "Water"
+   }
+  },
+  "bbox_wgs84": {
+   "west": -8.56,
+   "south": 7.48,
+   "east": -8.28,
+   "north": 7.76
+  },
+  "reserve_bounds": {
+   "guinea_wdpa_29067": {
+    "west": -8.5003,
+    "south": 7.5582,
+    "east": -8.3201,
+    "north": 7.72
+   },
+   "cote_d_ivoire_wdpa_1295": {
+    "west": -8.4697,
+    "south": 7.5307,
+    "east": -8.3804,
+    "north": 7.6278
+   }
+  },
+  "generated": "2026-11-15",
+  "note": "Every hotspot lists its sources and an 'uncertain' list. Show uncertain items as ranges or omit them; never invent numbers."
+ },
+ "hotspots": [
+  {
+   "id": "richard-molard",
+   "category": "peak",
+   "modes": [
+    "nature"
+   ],
+   "lon": -8.4083,
+   "lat": 7.6219,
+   "elevation_m": 1752,
+   "elevation_source": "surveyed value per UNESCO/Wikipedia; DEM max 1,755 m (DSM)",
+   "location_precision": "exact",
+   "coord_confidence": "high",
+   "coord_source": "Wikidata 7.62259,-8.40806 snapped to the DEM maximum (≈40 m away)",
+   "title_fr": "Mont Richard-Molard – le toit de la Guinée",
+   "title_en": "Mount Richard-Molard – the roof of Guinea",
+   "short_fr": "Point culminant du massif : 1 752 m, à la frontière Guinée – Côte d'Ivoire, au-dessus d'une chaîne de prairies d'altitude.",
+   "short_en": "Highest point of the massif: 1,752 m on the Guinea–Côte d'Ivoire border, above a chain of high-altitude grasslands.",
+   "long_fr": "Le Mont Richard-Molard (1 752 m) domine la chaîne des monts Nimba, une crête étroite orientée sud-ouest – nord-est, d'environ 40 km, qui surgit brutalement au-dessus de plaines ondulées. C'est le plus haut sommet de Guinée comme de Côte d'Ivoire. Le sommet est couvert de savane montagnarde et de pelouses d'altitude ; les nuages le coiffent une grande partie de l'année et la température nocturne peut descendre sous 10 °C. Le versant sud est plus humide, le versant nord subit l'harmattan sec venu du Sahara.",
+   "long_en": "Mount Richard-Molard (1,752 m) crowns the Nimba range, a narrow south-west to north-east ridge about 40 km long that rises abruptly above a rolling landscape. It is the highest peak of both Guinea and Côte d'Ivoire. The summit is covered by montane savanna and high-altitude turf; clouds cap it for much of the year and night temperatures can fall below 10 °C. The southern slopes are moister, while the northern ones are touched by the dry Harmattan wind from the Sahara.",
+   "facts": [
     {
-      "id": "richard-molard",
-      "category": "peak",
-      "modes": [
-        "nature"
-      ],
-      "lon": -8.4083,
-      "lat": 7.6219,
-      "elevation_m": 1752,
-      "elevation_source": "surveyed value per UNESCO/Wikipedia; DEM max 1,755 m (DSM)",
-      "location_precision": "exact",
-      "coord_confidence": "high",
-      "coord_source": "Wikidata 7.62259,-8.40806 snapped to the DEM maximum (≈40 m away)",
-      "title_fr": "Mont Richard-Molard – le toit de la Guinée",
-      "title_en": "Mount Richard-Molard – the roof of Guinea",
-      "short_fr": "Point culminant du massif : 1 752 m, à la frontière Guinée – Côte d'Ivoire, au-dessus d'une chaîne de prairies d'altitude.",
-      "short_en": "Highest point of the massif: 1,752 m on the Guinea–Côte d'Ivoire border, above a chain of high-altitude grasslands.",
-      "long_fr": "Le Mont Richard-Molard (1 752 m) domine la chaîne des monts Nimba, une crête étroite orientée sud-ouest – nord-est, d'environ 40 km, qui surgit brutalement au-dessus de plaines ondulées. C'est le plus haut sommet de Guinée comme de Côte d'Ivoire. Le sommet est couvert de savane montagnarde et de pelouses d'altitude ; les nuages le coiffent une grande partie de l'année et la température nocturne peut descendre sous 10 °C. Le versant sud est plus humide, le versant nord subit l'harmattan sec venu du Sahara.",
-      "long_en": "Mount Richard-Molard (1,752 m) crowns the Nimba range, a narrow south-west to north-east ridge about 40 km long that rises abruptly above a rolling landscape. It is the highest peak of both Guinea and Côte d'Ivoire. The summit is covered by montane savanna and high-altitude turf; clouds cap it for much of the year and night temperatures can fall below 10 °C. The southern slopes are moister, while the northern ones are touched by the dry Harmattan wind from the Sahara.",
-      "facts": [
-        {
-          "label_fr": "Altitude",
-          "label_en": "Elevation",
-          "value_fr": "1 752 m (valeur officielle) – 1 755 m dans le MNS Copernicus",
-          "value_en": "1,752 m (official value) – 1,755 m in the Copernicus DEM"
-        },
-        {
-          "label_fr": "Frontière",
-          "label_en": "Border",
-          "value_fr": "Guinée / Côte d'Ivoire",
-          "value_en": "Guinea / Côte d'Ivoire"
-        },
-        {
-          "label_fr": "Longueur de la chaîne",
-          "label_en": "Range length",
-          "value_fr": "≈ 40 km (UNESCO/Wikipédia) ; ≈ 50 km (Liste indicative)",
-          "value_en": "≈ 40 km (UNESCO/Wikipedia); ≈ 50 km (Tentative List)"
-        }
-      ],
-      "sources": [
-        {
-          "label": "UNESCO World Heritage Centre – property page (Brief synthesis, Integrity)",
-          "url": "https://whc.unesco.org/en/list/155"
-        },
-        {
-          "label": "Wikipedia – Mount Nimba Strict Nature Reserve",
-          "url": "https://en.wikipedia.org/wiki/Mount_Nimba_Strict_Nature_Reserve"
-        },
-        {
-          "label": "Wikidata coordinates (query saved in data/src/wikidata_box_query.json)",
-          "url": "https://www.wikidata.org/wiki/Q924276"
-        },
-        {
-          "label": "Copernicus DEM GLO-30",
-          "url": "https://dataspace.copernicus.eu/explore-data/data-collections/copernicus-contributing-missions/collections-description/COP-DEM"
-        }
-      ],
-      "uncertain": [
-        "Range length differs between sources (≈40 km vs ≈50 km).",
-        "The Copernicus DEM is a surface model that includes vegetation, so 1,755 m is not a survey height."
-      ],
-      "photos": [
-        "reconstruction-summit"
-      ],
-      "camera": {
-        "distance_m": 3200,
-        "azimuth_deg": 200,
-        "elevation_deg": 28
-      },
-      "order": 1,
-      "dem_m": 1753.2,
-      "elevation_unit": "m"
+     "label_fr": "Altitude",
+     "label_en": "Elevation",
+     "value_fr": "1 752 m (valeur officielle) – 1 755 m dans le MNS Copernicus",
+     "value_en": "1,752 m (official value) – 1,755 m in the Copernicus DEM"
     },
     {
-      "id": "grands-rochers",
-      "category": "peak",
-      "modes": [
-        "nature"
-      ],
-      "lon": -8.3797,
-      "lat": 7.6567,
-      "elevation_m": 1694,
-      "elevation_source": "Wikipedia (1,694 m); DEM max 1,681 m",
-      "location_precision": "approximate",
-      "coord_confidence": "medium",
-      "coord_source": "Wikidata gives a point for the 'Grands Rochers' range at 7.65,-8.38333; marker snapped to the DEM maximum within 800 m",
-      "title_fr": "Les Grands Rochers",
-      "title_en": "The Grands Rochers (Great Rocks)",
-      "short_fr": "Crête rocheuse du centre-nord de la chaîne, citée à environ 1 694 m.",
-      "short_en": "Rocky crest in the north-central part of the range, cited at about 1,694 m.",
-      "long_fr": "Les Grands Rochers forment l'un des principaux ensembles de sommets du versant guinéen. Wikipédia cite 1 694 m ; le modèle Copernicus donne 1 681 m au point le plus haut voisin. Ce secteur appartient à la partie guinéenne de la réserve, où se trouvent aussi les monts Sempéré, Tô, Pierre Richaud et Leclerc. La précision de ce repère est moyenne : la position exacte du sommet nommé n'est pas confirmée par une source cartographique officielle.",
-      "long_en": "The Grands Rochers are one of the main summit groups on the Guinean side. Wikipedia cites 1,694 m; the Copernicus model gives 1,681 m at the nearest high point. The area lies in the Guinean part of the reserve, together with Mont Sempéré, Mont Tô, Mont Pierre Richaud and Mont Leclerc. The accuracy of this marker is medium: no official map confirms the exact position of the named summit.",
-      "facts": [
-        {
-          "label_fr": "Altitude citée",
-          "label_en": "Quoted elevation",
-          "value_fr": "1 694 m (Wikipédia)",
-          "value_en": "1,694 m (Wikipedia)"
-        },
-        {
-          "label_fr": "Autres sommets guinéens",
-          "label_en": "Other Guinean peaks",
-          "value_fr": "Sempéré 1 682 m, Tô 1 675 m, Pierre Richaud 1 670 m, Leclerc 1 577 m (Wikipédia)",
-          "value_en": "Sempéré 1,682 m, Tô 1,675 m, Pierre Richaud 1,670 m, Leclerc 1,577 m (Wikipedia)"
-        }
-      ],
-      "sources": [
-        {
-          "label": "Wikipedia – Mount Nimba Strict Nature Reserve",
-          "url": "https://en.wikipedia.org/wiki/Mount_Nimba_Strict_Nature_Reserve"
-        },
-        {
-          "label": "Wikidata coordinates (query saved in data/src/wikidata_box_query.json)",
-          "url": "https://www.wikidata.org/wiki/Q924276"
-        },
-        {
-          "label": "Copernicus DEM GLO-30",
-          "url": "https://dataspace.copernicus.eu/explore-data/data-collections/copernicus-contributing-missions/collections-description/COP-DEM"
-        }
-      ],
-      "uncertain": [
-        "Peak heights differ by source (Tentative List: Sempéré 1,650 m, Pierre Richard 1,611 m, Leclerc 1,568 m).",
-        "Marker position is DEM-snapped and approximate."
-      ],
-      "photos": [
-        "reconstruction-ridge"
-      ],
-      "camera": {
-        "distance_m": 2800,
-        "azimuth_deg": 160,
-        "elevation_deg": 25
-      },
-      "order": 2,
-      "dem_m": 1679.0,
-      "elevation_unit": "m"
+     "label_fr": "Frontière",
+     "label_en": "Border",
+     "value_fr": "Guinée / Côte d'Ivoire",
+     "value_en": "Guinea / Côte d'Ivoire"
     },
     {
-      "id": "pierre-richaud",
-      "category": "peak",
-      "modes": [
-        "nature",
-        "conservation"
-      ],
-      "lon": -8.3636,
-      "lat": 7.6739,
-      "elevation_m": 1670,
-      "elevation_source": "Wikipedia (1,670 m); Tentative List 1,611 m; DEM 1,610 m",
-      "location_precision": "exact",
-      "coord_confidence": "medium",
-      "coord_source": "Wikidata 7.6742,-8.3642, snapped to DEM maximum",
-      "title_fr": "Mont Pierre Richaud – aux portes de l'enclave minière",
-      "title_en": "Mont Pierre Richaud – next to the mining enclave",
-      "short_fr": "Sommet du nord-est de la chaîne, voisin de l'enclave où se concentre l'enjeu minier.",
-      "short_en": "North-eastern summit, close to the enclave where the mining issue is concentrated.",
-      "long_fr": "Le Mont Pierre Richaud marque l'extrémité nord-est des hauts reliefs. Sa hauteur varie selon les sources : 1 670 m (Wikipédia), 1 611 m (Liste indicative de la Guinée) et environ 1 610 m dans le modèle Copernicus. Il se trouve à proximité de l'enclave minière guinéenne, adjacente mais extérieure au bien du patrimoine mondial, où des permis d'exploration de minerai de fer ont été délivrés.",
-      "long_en": "Mont Pierre Richaud marks the north-eastern end of the high ground. Its height depends on the source: 1,670 m (Wikipedia), 1,611 m (Guinea's Tentative List) and about 1,610 m in the Copernicus model. It lies close to the Guinean mining enclave, adjacent to but outside the World Heritage property, where iron-ore exploration permits have been issued.",
-      "facts": [
-        {
-          "label_fr": "Hauteur selon la source",
-          "label_en": "Height by source",
-          "value_fr": "1 670 / 1 611 / ≈1 610 m",
-          "value_en": "1,670 / 1,611 / ≈1,610 m"
-        },
-        {
-          "label_fr": "Statut",
-          "label_en": "Status",
-          "value_fr": "Hors du périmètre WDPA ; à proximité de l'enclave",
-          "value_en": "Outside the WDPA polygon; near the enclave"
-        }
-      ],
-      "sources": [
-        {
-          "label": "Wikipedia – Mount Nimba Strict Nature Reserve",
-          "url": "https://en.wikipedia.org/wiki/Mount_Nimba_Strict_Nature_Reserve"
-        },
-        {
-          "label": "UNESCO Tentative List – Paysage culturel des monts Nimba (Guinea, 2001)",
-          "url": "https://whc.unesco.org/fr/listesindicatives/1522/"
-        },
-        {
-          "label": "UNESCO World Heritage Centre – property page (Brief synthesis, Integrity)",
-          "url": "https://whc.unesco.org/en/list/155"
-        },
-        {
-          "label": "Wikidata coordinates (query saved in data/src/wikidata_box_query.json)",
-          "url": "https://www.wikidata.org/wiki/Q924276"
-        }
-      ],
-      "uncertain": [
-        "Three different heights are published; show a range, not a single value."
-      ],
-      "photos": [
-        "reconstruction-ridge"
-      ],
-      "camera": {
-        "distance_m": 2600,
-        "azimuth_deg": 230,
-        "elevation_deg": 25
-      },
-      "order": 3,
-      "dem_m": 1608.9,
-      "elevation_unit": "m"
-    },
-    {
-      "id": "montane-grassland",
-      "category": "habitat",
-      "modes": [
-        "nature"
-      ],
-      "lon": -8.3958,
-      "lat": 7.6397,
-      "elevation_m": 1660,
-      "elevation_source": "dem",
-      "location_precision": "area",
-      "coord_confidence": "medium",
-      "coord_source": "Illustrative point on the summit ridge inside the WDPA polygon (grassland covers the whole ridge)",
-      "title_fr": "Les prairies d'altitude",
-      "title_en": "The high-altitude grasslands",
-      "short_fr": "Sur plus de 15 km, les sommets sont couverts de savane montagnarde : un habitat rare, refuge d'espèces uniques.",
-      "short_en": "Over more than 15 km the summits are covered by montane savanna: a rare habitat and refuge for unique species.",
-      "long_fr": "Au-dessus de la forêt, les sommets de la chaîne s'étendent sur plus de 15 km couverts de savane montagnarde. La transition se fait par un fourré à Protea avant la prairie, qui apparaît entre environ 1 200 et 1 400 m et monte jusqu'aux plus hautes crêtes. C'est l'habitat du crapaud vivipare du Nimba et d'espèces de plantes endémiques comme Asplenium schnellii, Osbeckia porteresii et Blaeria nimbana. Pour la liste indicative de la Guinée, la pureté des prairies d'altitude et leurs formes arrondies évoquent la féminité du Nimba.",
-      "long_en": "Above the forest the summits stretch for more than 15 km under montane savanna. The transition passes through Protea bushland before the grassland proper, which begins at roughly 1,200–1,400 m and rises to the highest crests. It is the habitat of the Nimba viviparous toad and of endemic plants such as Asplenium schnellii, Osbeckia porteresii and Blaeria nimbana. In Guinea's Tentative List the purity of the high grasslands and their rounded shapes are said to evoke the femininity of 'Nimba'.",
-      "facts": [
-        {
-          "label_fr": "Étendue",
-          "label_en": "Extent",
-          "value_fr": "> 15 km de crêtes",
-          "value_en": "> 15 km of ridgeline"
-        },
-        {
-          "label_fr": "Début de la prairie",
-          "label_en": "Grassland starts",
-          "value_fr": "≈ 1 200–1 400 m",
-          "value_en": "≈ 1,200–1,400 m"
-        },
-        {
-          "label_fr": "Plantes endémiques",
-          "label_en": "Endemic plants",
-          "value_fr": "Asplenium schnellii, Osbeckia porteresii, Blaeria nimbana",
-          "value_en": "Asplenium schnellii, Osbeckia porteresii, Blaeria nimbana"
-        }
-      ],
-      "sources": [
-        {
-          "label": "UNESCO World Heritage Centre – property page (Brief synthesis, Integrity)",
-          "url": "https://whc.unesco.org/en/list/155"
-        },
-        {
-          "label": "Wikipedia – Mount Nimba Strict Nature Reserve",
-          "url": "https://en.wikipedia.org/wiki/Mount_Nimba_Strict_Nature_Reserve"
-        },
-        {
-          "label": "UNESCO Tentative List – Paysage culturel des monts Nimba (Guinea, 2001)",
-          "url": "https://whc.unesco.org/fr/listesindicatives/1522/"
-        }
-      ],
-      "uncertain": [
-        "Lower limit of the grassland (1,200 vs 1,400 m) is given as a range by Wikipedia."
-      ],
-      "photos": [
-        "reconstruction-summit"
-      ],
-      "camera": {
-        "distance_m": 1800,
-        "azimuth_deg": 120,
-        "elevation_deg": 22
-      },
-      "order": 4,
-      "dem_m": 1660.3,
-      "elevation_unit": "m"
-    },
-    {
-      "id": "cloud-forest",
-      "category": "habitat",
-      "modes": [
-        "nature"
-      ],
-      "lon": -8.4,
-      "lat": 7.67,
-      "elevation_m": 1120,
-      "elevation_source": "dem",
-      "location_precision": "area",
-      "coord_confidence": "low",
-      "coord_source": "Illustrative point on a ~1,100 m slope inside the WDPA polygon (cloud forest is a belt, not a point)",
-      "title_fr": "La forêt de nuages",
-      "title_en": "The cloud forest",
-      "short_fr": "Au-dessus de 900 m, la brume s'accroche presque toute l'année : forêt moussue, épiphytes et fougères arborescentes.",
-      "short_en": "Above 900 m the mist lingers almost all year: mossy forest, epiphytes and tree ferns.",
-      "long_fr": "Entre environ 600 m et 1 200–1 400 m s'étend la forêt montagnarde guinéenne. À partir de 900 m, là où la montagne est couverte de nuages presque toute l'année, apparaît la forêt moussue, qui comprend la forêt à Parinari excelsa, la forêt sommitale et, dans les vallées humides, des forêts de fougères arborescentes. L'UNESCO souligne une forêt montagnarde riche en épiphytes. Plus de 2 000 plantes vasculaires ont été recensées sur le massif.",
-      "long_en": "Between about 600 m and 1,200–1,400 m lies the Guinean montane forest. From 900 m, where the mountain is covered by cloud almost all year, mossy forest appears: Parinari excelsa forest, summit forest and, in wet valleys, tree-fern forest. UNESCO highlights a montane forest rich in epiphytes. More than 2,000 vascular plant species have been recorded on the massif.",
-      "facts": [
-        {
-          "label_fr": "Brume",
-          "label_en": "Cloud belt",
-          "value_fr": "dès ≈ 900 m",
-          "value_en": "from ≈ 900 m"
-        },
-        {
-          "label_fr": "Plantes vasculaires",
-          "label_en": "Vascular plants",
-          "value_fr": "> 2 000",
-          "value_en": "> 2,000"
-        },
-        {
-          "label_fr": "Température",
-          "label_en": "Temperature",
-          "value_fr": "jour 24–33 °C ; nuit parfois < 10 °C",
-          "value_en": "day 24–33 °C; night sometimes < 10 °C"
-        }
-      ],
-      "sources": [
-        {
-          "label": "UNESCO World Heritage Centre – property page (Brief synthesis, Integrity)",
-          "url": "https://whc.unesco.org/en/list/155"
-        },
-        {
-          "label": "Wikipedia – Mount Nimba Strict Nature Reserve",
-          "url": "https://en.wikipedia.org/wiki/Mount_Nimba_Strict_Nature_Reserve"
-        }
-      ],
-      "uncertain": [
-        "Altitude bands differ between UNESCO (dense forest up to 1,000 m) and Wikipedia (montane forest 600–1,200/1,400 m)."
-      ],
-      "photos": [
-        "reconstruction-cloudforest"
-      ],
-      "camera": {
-        "distance_m": 1500,
-        "azimuth_deg": 250,
-        "elevation_deg": 20
-      },
-      "order": 5,
-      "dem_m": 1117.8,
-      "elevation_unit": "m"
-    },
-    {
-      "id": "lowland-forest",
-      "category": "habitat",
-      "modes": [
-        "nature"
-      ],
-      "lon": -8.44,
-      "lat": 7.675,
-      "elevation_m": 580,
-      "elevation_source": "dem",
-      "location_precision": "area",
-      "coord_confidence": "low",
-      "coord_source": "Illustrative point in the lowland foothills inside the WDPA polygon",
-      "title_fr": "Forêts de piémont et forêts-galeries",
-      "title_en": "Foothill forest and gallery forests",
-      "short_fr": "Jusqu'à 600 m, forêt semi-décidue dense ; dans la savane, des rubans de forêt le long des cours d'eau.",
-      "short_en": "Up to 600 m, dense semi-deciduous forest; in the savanna, ribbons of forest along the streams.",
-      "long_fr": "Le piémont est couvert de forêt guinéenne de basse altitude : une forêt haute semi-décidue avec canopée et strate émergente, où l'on compte 40 à 70 espèces d'arbres par hectare. Autour de la montagne, la savane est entrecoupée de forêts-galeries et d'îlots de forêt fermée. Ces forêts relient le massif à l'eau et servent de corridors pour la faune. L'UNESCO précise que les forêts naturelles des pentes ont été peu endommagées, alors que la faune a subi un braconnage très intense.",
-      "long_en": "The foothills are covered by Western Guinean lowland forest: tall semi-deciduous forest with a main canopy and an emergent layer, with 40–70 tree species per hectare. Around the mountain the savanna is broken by gallery forests and islands of closed forest. These forests tie the massif to its water and serve as wildlife corridors. UNESCO notes that the natural forests of the slopes have suffered little damage, while wildlife has been subject to very intense poaching.",
-      "facts": [
-        {
-          "label_fr": "Altitude",
-          "label_en": "Elevation",
-          "value_fr": "< 600 m (Wikipédia) ; jusqu'à 1 000 m (UNESCO)",
-          "value_en": "< 600 m (Wikipedia); up to 1,000 m (UNESCO)"
-        },
-        {
-          "label_fr": "Arbres par hectare",
-          "label_en": "Trees per hectare",
-          "value_fr": "40–70 espèces",
-          "value_en": "40–70 species"
-        }
-      ],
-      "sources": [
-        {
-          "label": "UNESCO World Heritage Centre – property page (Brief synthesis, Integrity)",
-          "url": "https://whc.unesco.org/en/list/155"
-        },
-        {
-          "label": "Wikipedia – Mount Nimba Strict Nature Reserve",
-          "url": "https://en.wikipedia.org/wiki/Mount_Nimba_Strict_Nature_Reserve"
-        }
-      ],
-      "uncertain": [
-        "Marker is illustrative; forests occur around the entire base."
-      ],
-      "photos": [
-        "reconstruction-lowland"
-      ],
-      "camera": {
-        "distance_m": 1600,
-        "azimuth_deg": 300,
-        "elevation_deg": 20
-      },
-      "order": 6,
-      "dem_m": 575.9,
-      "elevation_unit": "m"
-    },
-    {
-      "id": "savanna-fire",
-      "category": "habitat",
-      "modes": [
-        "nature",
-        "conservation"
-      ],
-      "lon": -8.34,
-      "lat": 7.71,
-      "elevation_m": 540,
-      "elevation_source": "dem",
-      "location_precision": "area",
-      "coord_confidence": "low",
-      "coord_source": "Illustrative point on lowland savanna at the north-eastern edge",
-      "title_fr": "La savane et les feux de brousse",
-      "title_en": "Savanna and bushfires",
-      "short_fr": "Autour du massif, la savane est exploitée par les villages ; les feux défrichant les champs menacent la réserve.",
-      "short_en": "Savanna surrounds the massif and is farmed by villages; fires used to clear land threaten the reserve.",
-      "long_fr": "La montagne est isolée des autres reliefs de la Guinée forestière par la savane. La population voisine a besoin de terres pour l'agriculture et l'élevage, ce qui renforce le défrichement traditionnel par le feu ; ces feux d'origine humaine surviennent régulièrement dans l'aire protégée et constituent un défi administratif important, selon l'UNESCO. En 2026, le Comité du patrimoine mondial a noté avec satisfaction les progrès dans le maintien du couvert végétal et le suivi des feux de brousse.",
-      "long_en": "The mountain is isolated from the other relief of Forest Guinea by savanna. Neighbouring communities need land for farming and livestock, which has strengthened traditional clearing by fire; these human-caused fires occur regularly in the protected area and are an important administrative challenge, according to UNESCO. In 2026 the World Heritage Committee noted with appreciation progress in maintaining vegetation cover and monitoring bushfires.",
-      "facts": [
-        {
-          "label_fr": "Menace",
-          "label_en": "Pressure",
-          "value_fr": "Défrichement par le feu",
-          "value_en": "Clearing by fire"
-        },
-        {
-          "label_fr": "Décision 2026",
-          "label_en": "2026 decision",
-          "value_fr": "Progrès notés sur couvert végétal et suivi des feux",
-          "value_en": "Progress noted on vegetation cover and fire monitoring"
-        }
-      ],
-      "sources": [
-        {
-          "label": "UNESCO World Heritage Centre – property page (Brief synthesis, Integrity)",
-          "url": "https://whc.unesco.org/en/list/155"
-        },
-        {
-          "label": "UNESCO Decision 48 COM 7A.46 (2026)",
-          "url": "https://whc.unesco.org/en/decisions/9042/"
-        },
-        {
-          "label": "Wikipedia – Mount Nimba Strict Nature Reserve",
-          "url": "https://en.wikipedia.org/wiki/Mount_Nimba_Strict_Nature_Reserve"
-        }
-      ],
-      "uncertain": [],
-      "photos": [
-        "reconstruction-savanna"
-      ],
-      "camera": {
-        "distance_m": 2200,
-        "azimuth_deg": 90,
-        "elevation_deg": 20
-      },
-      "order": 7,
-      "dem_m": 536.4,
-      "elevation_unit": "m"
-    },
-    {
-      "id": "cavally",
-      "category": "water",
-      "modes": [
-        "nature"
-      ],
-      "lon": -8.4419,
-      "lat": 7.7153,
-      "elevation_m": 520,
-      "elevation_source": "dem",
-      "location_precision": "approximate",
-      "coord_confidence": "low",
-      "coord_source": "Wikidata point for the 'Diougou' watercourse (7.7153,-8.4419; Diougou is a local name of the Cavally) used as a symbolic headwater marker north of the massif",
-      "title_fr": "Le château d'eau : les sources du Cavally",
-      "title_en": "The water tower: sources of the Cavally",
-      "short_fr": "Une cinquantaine de sources font du Nimba un véritable château d'eau pour la région.",
-      "short_en": "About fifty springs make Nimba a true water tower for the region.",
-      "long_fr": "L'UNESCO décrit le Nimba comme un véritable « château d'eau » d'une cinquantaine de sources entre la Côte d'Ivoire et la Guinée. Wikipédia cite les sources du Cavally et du Cestos (et du Sassandra, information à vérifier) parmi elles. Le Cavally (aussi appelé Cavalla ou Diougou) prend sa source au nord du Mont Nimba, en Guinée, et forme plus en aval les deux tiers sud de la frontière entre la Côte d'Ivoire et le Liberia. Le massif appartient en outre à une écorégion d'eau douce distincte, riche en espèces aquatiques endémiques.",
-      "long_en": "UNESCO describes Nimba as a true 'water tower' with about fifty springs between Côte d'Ivoire and Guinea. Wikipedia lists the origins of the Cavally and Cestos rivers (and the Sassandra, which needs checking) among them. The Cavally (also called Cavalla or Diougou) rises north of Mont Nimba in Guinea and further downstream forms the southern two-thirds of the Côte d'Ivoire–Liberia border. The range is also part of a distinct freshwater ecoregion with many endemic aquatic species.",
-      "facts": [
-        {
-          "label_fr": "Sources",
-          "label_en": "Springs",
-          "value_fr": "≈ 50",
-          "value_en": "≈ 50"
-        },
-        {
-          "label_fr": "Rivières citées",
-          "label_en": "Rivers cited",
-          "value_fr": "Cavally, Cestos (Sassandra : à vérifier)",
-          "value_en": "Cavally, Cestos (Sassandra: to verify)"
-        }
-      ],
-      "sources": [
-        {
-          "label": "UNESCO World Heritage Centre – property page (Brief synthesis, Integrity)",
-          "url": "https://whc.unesco.org/en/list/155"
-        },
-        {
-          "label": "Wikipedia – Mount Nimba Strict Nature Reserve",
-          "url": "https://en.wikipedia.org/wiki/Mount_Nimba_Strict_Nature_Reserve"
-        },
-        {
-          "label": "Wikipedia – Cavalla River",
-          "url": "https://en.wikipedia.org/wiki/Cavally_River"
-        },
-        {
-          "label": "Wikidata coordinates (query saved in data/src/wikidata_box_query.json)",
-          "url": "https://www.wikidata.org/wiki/Q924276"
-        }
-      ],
-      "uncertain": [
-        "The Sassandra claim comes from Wikipedia only and is doubtful.",
-        "The marker is symbolic: individual springs are not mapped in the kit."
-      ],
-      "photos": [
-        "reconstruction-stream"
-      ],
-      "camera": {
-        "distance_m": 2000,
-        "azimuth_deg": 60,
-        "elevation_deg": 25
-      },
-      "order": 8,
-      "dem_m": 518.4,
-      "elevation_unit": "m"
-    },
-    {
-      "id": "viviparous-toad",
-      "category": "species",
-      "modes": [
-        "nature",
-        "conservation"
-      ],
-      "lon": -8.388,
-      "lat": 7.6486,
-      "elevation_m": 1550,
-      "elevation_source": "dem",
-      "location_precision": "area",
-      "coord_confidence": "low",
-      "coord_source": "Deliberately generalised: grassland slope inside the strict reserve (exact sites not published)",
-      "title_fr": "Le crapaud vivipare du Nimba",
-      "title_en": "The Nimba viviparous toad",
-      "short_fr": "Un petit crapaud qui met au monde des petits vivants : en danger critique, il ne vit que dans les prairies du Nimba.",
-      "short_en": "A small toad that gives birth to live young: critically endangered, found only in Nimba's grasslands.",
-      "long_fr": "Nimbaphrynoides occidentalis est un crapaud qui donne naissance à des crapelets entièrement formés, après une gestation d'environ neuf mois. Il vit uniquement dans les prairies d'altitude du Nimba, entre 1 200 et 1 680 m environ, en Guinée, en Côte d'Ivoire et au Liberia. L'UICN le classe En danger critique (évaluation de 2012). Ses menaces : l'agriculture, les mines et les feux. En 2026, le Comité du patrimoine mondial s'est dit encouragé par les résultats du suivi écologique de l'espèce.",
-      "long_en": "Nimbaphrynoides occidentalis gives birth to fully formed toadlets after a gestation of about nine months. It lives only in Nimba's high-altitude grasslands, roughly 1,200–1,680 m, in Guinea, Côte d'Ivoire and Liberia. The IUCN lists it as Critically Endangered (2012 assessment). Threats include farming, mining and fire. In 2026 the World Heritage Committee was encouraged by the ecological monitoring results for the species.",
-      "facts": [
-        {
-          "label_fr": "Statut UICN",
-          "label_en": "IUCN status",
-          "value_fr": "En danger critique (CR), évalué en 2012",
-          "value_en": "Critically Endangered (CR), assessed 2012"
-        },
-        {
-          "label_fr": "Altitude",
-          "label_en": "Elevation",
-          "value_fr": "1 200–1 680 m",
-          "value_en": "1,200–1,680 m"
-        },
-        {
-          "label_fr": "Gestation",
-          "label_en": "Gestation",
-          "value_fr": "≈ 9 mois",
-          "value_en": "≈ 9 months"
-        },
-        {
-          "label_fr": "Tendance",
-          "label_en": "Trend",
-          "value_fr": "Stable mais population très fragmentée",
-          "value_en": "Stable but severely fragmented"
-        }
-      ],
-      "sources": [
-        {
-          "label": "IUCN Red List – Nimbaphrynoides occidentalis",
-          "url": "https://www.iucnredlist.org/species/16793075/16793120"
-        },
-        {
-          "label": "Sandberger-Loua et al. 2017 – review of reproductive biology of N. occidentalis",
-          "url": "https://zse.pensoft.net/article/10489"
-        },
-        {
-          "label": "UNESCO Decision 48 COM 7A.46 (2026)",
-          "url": "https://whc.unesco.org/en/decisions/9042/"
-        },
-        {
-          "label": "UNESCO World Heritage Centre – property page (Brief synthesis, Integrity)",
-          "url": "https://whc.unesco.org/en/list/155"
-        }
-      ],
-      "uncertain": [
-        "The IUCN assessment is from 2012 and marked 'needs updating'.",
-        "Gestation length (≈9 months) is from a secondary summary of Sandberger-Loua et al. 2017; confirm before publishing."
-      ],
-      "photos": [
-        "reconstruction-viviparous-toad"
-      ],
-      "camera": {
-        "distance_m": 1200,
-        "azimuth_deg": 140,
-        "elevation_deg": 25
-      },
-      "order": 9,
-      "dem_m": 1548.1,
-      "elevation_unit": "m"
-    },
-    {
-      "id": "otter-shrew",
-      "category": "species",
-      "modes": [
-        "nature",
-        "conservation"
-      ],
-      "lon": -8.44,
-      "lat": 7.655,
-      "elevation_m": 630,
-      "elevation_source": "dem",
-      "location_precision": "area",
-      "coord_confidence": "low",
-      "coord_source": "Deliberately generalised: forested stream zone inside the reserve",
-      "title_fr": "La micropotamogale du Nimba",
-      "title_en": "The Nimba otter shrew",
-      "short_fr": "Petit insectivore semi-aquatique, présent dans les cours d'eau forestiers du massif.",
-      "short_en": "A small semi-aquatic insectivore of the massif's forest streams.",
-      "long_fr": "Micropotamogale lamottei, appelée musaraigne-loutre ou micropotamogale du Nimba, est un petit insectivore semi-aquatique cité par l'UNESCO parmi les espèces endémiques menacées du site. Elle est classée Vulnérable par l'UICN (évaluation de décembre 2017), à cause de la réduction de son habitat, notamment sous l'effet de l'exploitation du minerai de fer. Une publication dans Oryx plaide pour son reclassement dans une catégorie de menace supérieure.",
-      "long_en": "Micropotamogale lamottei, the Nimba otter shrew, is a small semi-aquatic insectivore that UNESCO lists among the site's threatened endemic species. The IUCN lists it as Vulnerable (assessed December 2017) because its habitat is shrinking, notably due to iron-ore mining. A paper in Oryx argues for its uplisting to a higher threat category.",
-      "facts": [
-        {
-          "label_fr": "Statut UICN",
-          "label_en": "IUCN status",
-          "value_fr": "Vulnérable (VU), évalué en déc. 2017",
-          "value_en": "Vulnerable (VU), assessed Dec 2017"
-        },
-        {
-          "label_fr": "Mode de vie",
-          "label_en": "Lifestyle",
-          "value_fr": "Semi-aquatique, insectivore",
-          "value_en": "Semi-aquatic, insectivore"
-        }
-      ],
-      "sources": [
-        {
-          "label": "IUCN Red List – Micropotamogale lamottei",
-          "url": "https://www.iucnredlist.org/species/13393/111940150"
-        },
-        {
-          "label": "UNESCO World Heritage Centre – property page (Brief synthesis, Integrity)",
-          "url": "https://whc.unesco.org/en/list/155"
-        },
-        {
-          "label": "Oryx – Uplisting a threatened small mammal: the Nimba otter-shrew",
-          "url": "https://www.cambridge.org/core/journals/oryx/article/uplisting-a-threatened-small-mammal-the-nimba-ottershrew-of-west-africa/7A0AABB8662607FCBB5C06B323B8F948"
-        }
-      ],
-      "uncertain": [
-        "Status may have changed since 2017; recheck the Red List before launch.",
-        "No openly licensed photo found: use an illustration or a silhouette, never a stock photo of another species."
-      ],
-      "photos": [
-        "reconstruction-otter-shrew"
-      ],
-      "camera": {
-        "distance_m": 1400,
-        "azimuth_deg": 280,
-        "elevation_deg": 22
-      },
-      "order": 10,
-      "dem_m": 628.0,
-      "elevation_unit": "m"
-    },
-    {
-      "id": "lamotte-bat",
-      "category": "species",
-      "modes": [
-        "nature",
-        "conservation"
-      ],
-      "lon": -8.377,
-      "lat": 7.664,
-      "elevation_m": 1540,
-      "elevation_source": "dem",
-      "location_precision": "area",
-      "coord_confidence": "low",
-      "coord_source": "Deliberately generalised near the Guinean mining area (roost sites are not published)",
-      "title_fr": "La rhinolophe de Lamotte (Hipposideros lamottei)",
-      "title_en": "Lamotte's roundleaf bat",
-      "short_fr": "Une chauve-souris en danger critique, connue seulement du versant guinéen du Nimba.",
-      "short_en": "A critically endangered bat known only from the Guinean side of Nimba.",
-      "long_fr": "Hipposideros lamottei est classée En danger critique par l'UICN (évaluation de 2019) et n'est connue que de la Guinée, dans le massif du Nimba ; sa population diminue. Ses gîtes connus se trouvent dans d'anciennes galeries minières de la zone d'exploitation, ce qui illustre le conflit entre extraction et biodiversité. Pour protéger l'espèce, les sites ne sont volontairement pas localisés avec précision.",
-      "long_en": "Hipposideros lamottei is listed as Critically Endangered by the IUCN (2019 assessment) and is known only from Guinea, on the Nimba massif; its population is decreasing. Its known roosts are in old mine tunnels in the mining area, which illustrates the conflict between extraction and biodiversity. To protect the species the sites are deliberately not mapped precisely.",
-      "facts": [
-        {
-          "label_fr": "Statut UICN",
-          "label_en": "IUCN status",
-          "value_fr": "En danger critique (CR), évalué en 2019",
-          "value_en": "Critically Endangered (CR), assessed 2019"
-        },
-        {
-          "label_fr": "Tendance",
-          "label_en": "Trend",
-          "value_fr": "En déclin",
-          "value_en": "Decreasing"
-        },
-        {
-          "label_fr": "Plage d'altitude",
-          "label_en": "Elevation range",
-          "value_fr": "500–1 450 m",
-          "value_en": "500–1,450 m"
-        }
-      ],
-      "sources": [
-        {
-          "label": "IUCN Red List – Hipposideros lamottei",
-          "url": "https://www.iucnredlist.org/species/10141/22091938"
-        },
-        {
-          "label": "Bat Conservation International – Lamotte's roundleaf bat",
-          "url": "https://digital.batcon.org/issue/volume-42-issue-3/lamottes-roundleaf-bat/"
-        },
-        {
-          "label": "Wikipedia – Mount Nimba Strict Nature Reserve",
-          "url": "https://en.wikipedia.org/wiki/Mount_Nimba_Strict_Nature_Reserve"
-        }
-      ],
-      "uncertain": [
-        "The number of roost tunnels (reported as four in secondary sources) is not confirmed; do not display it.",
-        "Wikipedia says 'recorded from only one mining site'; sources differ."
-      ],
-      "photos": [
-        "reconstruction-lamotte-bat"
-      ],
-      "camera": {
-        "distance_m": 1500,
-        "azimuth_deg": 220,
-        "elevation_deg": 25
-      },
-      "order": 11,
-      "dem_m": 1541.5,
-      "elevation_unit": "m"
-    },
-    {
-      "id": "bossou-chimpanzees",
-      "category": "species",
-      "modes": [
-        "nature",
-        "culture"
-      ],
-      "lon": -8.50537,
-      "lat": 7.64875,
-      "elevation_m": 540,
-      "elevation_source": "dem",
-      "location_precision": "exact",
-      "coord_confidence": "high",
-      "coord_source": "Wikidata 'Bossou Hills / Chimpanzé de Bossou' 7.64875,-8.50537 (the hill forest is a publicly known site)",
-      "title_fr": "Les chimpanzés de Bossou et leurs outils",
-      "title_en": "The Bossou chimpanzees and their tools",
-      "short_fr": "Une petite communauté de chimpanzés casse des noix de palme avec un marteau et une enclume de pierre.",
-      "short_en": "A small chimpanzee community cracks oil-palm nuts with a stone hammer and anvil.",
-      "long_fr": "Les chimpanzés de Bossou sont célèbres pour casser les noix du palmier à huile (Elaeis guineensis) avec un marteau et une enclume de pierre, l'un des comportements d'utilisation d'outils les plus sophistiqués observés chez les chimpanzés sauvages. La communauté vit dans une forêt de collines isolée, à quelques kilomètres du massif, et est suivie par l'Université de Kyoto depuis 1976. Elle ne compte plus que sept individus (3 mâles, 4 femelles) depuis mars 2017 ; aucune femelle n'a rejoint le groupe depuis quatre décennies. Pour les habitants, qui parlent surtout le mano, ces chimpanzés bénéficient d'une protection traditionnelle fondée sur un lien de parenté, selon la Liste indicative de la Guinée.",
-      "long_en": "The Bossou chimpanzees are famous for cracking oil-palm nuts (Elaeis guineensis) with a stone hammer and anvil, among the most sophisticated tool-use behaviours seen in wild chimpanzees. The community lives in an isolated hill forest a few kilometres from the massif and has been studied by Kyoto University since 1976. It has been reduced to seven individuals (3 males, 4 females) since March 2017; no female has joined the group in four decades. According to Guinea's Tentative List, local people, who mostly speak Mano, protect these chimpanzees through a traditional kinship-based relationship.",
-      "facts": [
-        {
-          "label_fr": "Individus (mars 2017)",
-          "label_en": "Individuals (March 2017)",
-          "value_fr": "7 (3 mâles, 4 femelles)",
-          "value_en": "7 (3 males, 4 females)"
-        },
-        {
-          "label_fr": "Suivi scientifique",
-          "label_en": "Research",
-          "value_fr": "Université de Kyoto depuis 1976",
-          "value_en": "Kyoto University since 1976"
-        },
-        {
-          "label_fr": "Comportement",
-          "label_en": "Behaviour",
-          "value_fr": "Casse de noix de palme à l'aide de pierres",
-          "value_en": "Cracks oil-palm nuts with stones"
-        }
-      ],
-      "sources": [
-        {
-          "label": "Green Corridor Project – Chimpanzees of Bossou and Nimba (Kyoto Univ. / IREB)",
-          "url": "https://www.greencorridor.info/"
-        },
-        {
-          "label": "UNESCO Tentative List – Paysage culturel des monts Nimba (Guinea, 2001)",
-          "url": "https://whc.unesco.org/fr/listesindicatives/1522/"
-        },
-        {
-          "label": "Wikipedia – Bossou",
-          "url": "https://en.wikipedia.org/wiki/Bossou"
-        },
-        {
-          "label": "Primate Research 20(1): flu-like epidemic 2003 and Green Corridor",
-          "url": "https://www.jstage.jst.go.jp/article/psj/20/1/20_1_45/_article/-char/en"
-        },
-        {
-          "label": "UNESCO Decision 48 COM 7A.46 (2026)",
-          "url": "https://whc.unesco.org/en/decisions/9042/"
-        },
-        {
-          "label": "IUCN Ape Atlas – Bossou",
-          "url": "https://www.apesatlas.iucnapesportal.org/index.php/Bossou"
-        }
-      ],
-      "uncertain": [
-        "The count of seven is from the project site as of 2017; ask IREB / Kyoto University for the current number before publishing.",
-        "Nut-cracking takes place in Bossou, outside the strict reserve boundary.",
-        "A 2024 incident (see CLAUDE.md sensitivity notes) means tone matters: do not present chimpanzees as 'tame' or 'approachable'."
-      ],
-      "photos": [
-        "reconstruction-bossou-chimpanzees"
-      ],
-      "camera": {
-        "distance_m": 1500,
-        "azimuth_deg": 90,
-        "elevation_deg": 28
-      },
-      "order": 12,
-      "dem_m": 543.6,
-      "elevation_unit": "m"
-    },
-    {
-      "id": "ireb-bossou",
-      "category": "culture",
-      "modes": [
-        "culture",
-        "conservation"
-      ],
-      "lon": -8.50299,
-      "lat": 7.64446,
-      "elevation_m": 560,
-      "elevation_source": "dem",
-      "location_precision": "exact",
-      "coord_confidence": "high",
-      "coord_source": "Wikimedia Commons geotag of the IREB building photo",
-      "title_fr": "L'IREB – la recherche à Bossou",
-      "title_en": "IREB – research at Bossou",
-      "short_fr": "L'Institut de recherche environnementale de Bossou accueille la recherche sur les chimpanzés et le Nimba.",
-      "short_en": "The Institut de Recherche Environnementale de Bossou hosts research on the chimpanzees and on Nimba.",
-      "long_fr": "L'Institut de recherche environnementale de Bossou (IREB) est la base de la recherche sur les chimpanzés de Bossou ; il soutient, avec l'Université de Kyoto, des actions de conservation dont le projet Corridor vert. Il reçoit des chercheurs et sert de point de contact avec les villages voisins. Le bâtiment et son panneau d'entrée figurent sur les photographies de la galerie.",
-      "long_en": "The Institut de Recherche Environnementale de Bossou (IREB) is the base for research on the Bossou chimpanzees; together with Kyoto University it supports conservation actions including the Green Corridor project. It hosts researchers and serves as a contact point with neighbouring villages. The building and its entrance sign appear in the photo gallery.",
-      "facts": [
-        {
-          "label_fr": "Lieu",
-          "label_en": "Place",
-          "value_fr": "Bossou, préfecture de Lola",
-          "value_en": "Bossou, Lola Prefecture"
-        },
-        {
-          "label_fr": "Partenaire",
-          "label_en": "Partner",
-          "value_fr": "Université de Kyoto (Institut de primatologie)",
-          "value_en": "Kyoto University (Primate Research Institute)"
-        }
-      ],
-      "sources": [
-        {
-          "label": "Green Corridor Project – Chimpanzees of Bossou and Nimba (Kyoto Univ. / IREB)",
-          "url": "https://www.greencorridor.info/"
-        },
-        {
-          "label": "Wikipedia – Bossou",
-          "url": "https://en.wikipedia.org/wiki/Bossou"
-        }
-      ],
-      "uncertain": [
-        "Founding year and current staffing of IREB were not verified.",
-        "The research centre was damaged by residents in September 2024 (Wikipedia/press); verify the current status before showing this hotspot to the public."
-      ],
-      "photos": [
-        "reconstruction-village"
-      ],
-      "camera": {
-        "distance_m": 900,
-        "azimuth_deg": 70,
-        "elevation_deg": 30
-      },
-      "order": 13,
-      "dem_m": 557.0,
-      "elevation_unit": "m"
-    },
-    {
-      "id": "green-corridor",
-      "category": "conservation",
-      "modes": [
-        "conservation",
-        "nature"
-      ],
-      "lon": -8.487,
-      "lat": 7.637,
-      "elevation_m": 550,
-      "elevation_source": "dem",
-      "location_precision": "approximate",
-      "coord_confidence": "low",
-      "coord_source": "Approximate midpoint between the Bossou hills and the foot of the massif (the corridor is a 4 km strip; no polygon found)",
-      "title_fr": "Le Corridor vert Bossou – Nimba",
-      "title_en": "The Bossou–Nimba Green Corridor",
-      "short_fr": "Une bande de savane de 4 km replantée pour relier la forêt de Bossou au massif.",
-      "short_en": "A 4 km strip of savanna being replanted to link the Bossou forest to the massif.",
-      "long_fr": "Lancé en janvier 1997 par le professeur Matsuzawa et ses collègues, le projet Corridor vert vise à relier la forêt isolée de Bossou aux forêts du Nimba en plantant des arbres sur une bande de savane de 300 m de large et 4 km de long. Le but est de rétablir un flux de migration entre la communauté de Bossou et les populations de chimpanzés voisines. Les photographies de la galerie montrent des pépinières et des plantations de restauration.",
-      "long_en": "Launched in January 1997 by Professor Matsuzawa and colleagues, the Green Corridor project aims to connect the isolated Bossou forest to the Nimba forests by planting trees along a savanna strip 300 m wide and 4 km long. The goal is to restore migration between the Bossou community and neighbouring chimpanzee populations. The gallery photographs show nurseries and restoration plantings.",
-      "facts": [
-        {
-          "label_fr": "Lancement",
-          "label_en": "Launched",
-          "value_fr": "Janvier 1997",
-          "value_en": "January 1997"
-        },
-        {
-          "label_fr": "Dimensions",
-          "label_en": "Size",
-          "value_fr": "300 m × 4 km",
-          "value_en": "300 m × 4 km"
-        }
-      ],
-      "sources": [
-        {
-          "label": "Green Corridor Project – Chimpanzees of Bossou and Nimba (Kyoto Univ. / IREB)",
-          "url": "https://www.greencorridor.info/"
-        },
-        {
-          "label": "Primate Research 20(1): flu-like epidemic 2003 and Green Corridor",
-          "url": "https://www.jstage.jst.go.jp/article/psj/20/1/20_1_45/_article/-char/en"
-        }
-      ],
-      "uncertain": [
-        "Marker position is approximate; the corridor shape is not mapped.",
-        "Current planting progress was not verified."
-      ],
-      "photos": [
-        "reconstruction-lowland"
-      ],
-      "camera": {
-        "distance_m": 2000,
-        "azimuth_deg": 60,
-        "elevation_deg": 30
-      },
-      "order": 14,
-      "dem_m": 547.8,
-      "elevation_unit": "m"
-    },
-    {
-      "id": "cultural-landscape",
-      "category": "culture",
-      "modes": [
-        "culture"
-      ],
-      "lon": -8.4629,
-      "lat": 7.6311,
-      "elevation_m": 570,
-      "elevation_source": "dem",
-      "location_precision": "area",
-      "coord_confidence": "medium",
-      "coord_source": "Village of Séringbara (OSM Nominatim 7.6311076,-8.4629177) used as anchor for the cultural landscape; individual sacred sites are deliberately NOT mapped",
-      "title_fr": "Le paysage culturel du Nimba",
-      "title_en": "The Nimba cultural landscape",
-      "short_fr": "Villages, ponts de lianes, mare sacrée aux silures et statuette de fécondité : le Nimba est aussi un paysage vivant.",
-      "short_en": "Villages, liana bridges, a sacred catfish pond and a fertility statuette: Nimba is also a living landscape.",
-      "long_fr": "En 2001, la Guinée a inscrit sur sa Liste indicative le « Paysage culturel des monts Nimba ». Elle décrit une zone de transition qui abrite la plupart des villages et des curiosités remarquables : ponts naturels, ponts de lianes sur les cours d'eau, une mare sacrée aux silures où la pêche est interdite et une grotte. Le nom de Nimba est associé à la célèbre statuette de la fécondité, et les hautes prairies ont une influence décisive sur les affaires importantes de la communauté. Les habitants sont notamment des Mano (Manon), Toma et Kono vivant de l'agriculture, de la pêche et de la cueillette. Les sites sacrés ne sont pas localisés dans la démo, par respect des communautés.",
-      "long_en": "In 2001 Guinea placed the 'Nimba Mountains Cultural Landscape' on its Tentative List. It describes a transition zone holding most of the villages and its remarkable features: natural bridges, liana bridges over rivers, a sacred catfish pond where fishing is forbidden, and a cave. The name Nimba is linked to the famous fertility statuette, and the high grasslands are said to hold decisive influence over important community affairs. The people include the Mano (Manon), Toma and Kono, living from farming, fishing and gathering. Sacred sites are not located in the demo, out of respect for the communities.",
-      "facts": [
-        {
-          "label_fr": "Liste indicative",
-          "label_en": "Tentative List",
-          "value_fr": "Soumise le 29/03/2001, critères (ii) et (vi)",
-          "value_en": "Submitted 29 March 2001, criteria (ii) and (vi)"
-        },
-        {
-          "label_fr": "Éléments cités",
-          "label_en": "Elements cited",
-          "value_fr": "Ponts de lianes, mare sacrée aux silures, ponts naturels, grotte",
-          "value_en": "Liana bridges, sacred catfish pond, natural bridges, cave"
-        }
-      ],
-      "sources": [
-        {
-          "label": "UNESCO Tentative List – Paysage culturel des monts Nimba (Guinea, 2001)",
-          "url": "https://whc.unesco.org/fr/listesindicatives/1522/"
-        },
-        {
-          "label": "OpenStreetMap Nominatim (ODbL)",
-          "url": "https://nominatim.openstreetmap.org/"
-        }
-      ],
-      "uncertain": [
-        "The Tentative List text is an OCR scan with errors, and its coordinates are garbled (they point to 10°W, Liberia/Guinea Forest region, not Nimba) – never use them.",
-        "Ethnic groups (Mano/Manon, Toma, Kono) come from secondary sources; consult local partners before stating them in the app.",
-        "Consult communities before showing or naming any sacred site."
-      ],
-      "photos": [
-        "reconstruction-village"
-      ],
-      "camera": {
-        "distance_m": 1800,
-        "azimuth_deg": 40,
-        "elevation_deg": 28
-      },
-      "order": 15,
-      "dem_m": 568.8,
-      "elevation_unit": "m"
-    },
-    {
-      "id": "cegens-gbakore",
-      "category": "conservation",
-      "modes": [
-        "conservation"
-      ],
-      "lon": -8.4059,
-      "lat": 7.7241,
-      "elevation_m": 490,
-      "elevation_source": "dem",
-      "location_precision": "approximate",
-      "coord_confidence": "medium",
-      "coord_source": "Village of Gbakoré (OSM Nominatim 7.7241019,-8.4058834); the CEGENS base is reported there but its exact point was not found",
-      "title_fr": "Gbakoré – la base de gestion de la réserve",
-      "title_en": "Gbakoré – the reserve's management base",
-      "short_fr": "Le CEGENS, qui administre la partie guinéenne, a sa base de terrain à Gbakoré.",
-      "short_en": "CEGENS, which manages the Guinean part, has its field base at Gbakoré.",
-      "long_fr": "Côté guinéen, la réserve est administrée par le Centre de gestion de l'environnement des monts Nimba et Simandou (CEGENS), établissement public placé sous l'autorité du ministère de l'Environnement. Selon la presse guinéenne (2024), sa base se trouve à Gbakoré, dans la préfecture de Lola. Wikipédia indique qu'un centre de gestion était en construction avec la Fondation des Parcs guinéenne, approuvé par le gouvernement et le CEGENS en 2016.",
-      "long_en": "On the Guinean side the reserve is administered by the Centre de Gestion de l'Environnement des Monts Nimba et Simandou (CEGENS), a public body under the Ministry of Environment. According to the Guinean press (2024), its base is at Gbakoré in Lola Prefecture. Wikipedia reports a management centre under construction with the Guinean Parks Foundation, approved by the government and CEGENS in 2016.",
-      "facts": [
-        {
-          "label_fr": "Gestionnaire",
-          "label_en": "Manager",
-          "value_fr": "CEGENS (Guinée)",
-          "value_en": "CEGENS (Guinea)"
-        },
-        {
-          "label_fr": "Côté ivoirien",
-          "label_en": "Ivorian side",
-          "value_fr": "OIPR et Fondation des Parcs et Réserves (FPRCI)",
-          "value_en": "OIPR and the Foundation for Parks and Reserves (FPRCI)"
-        }
-      ],
-      "sources": [
-        {
-          "label": "UNESCO World Heritage Centre – property page (Brief synthesis, Integrity)",
-          "url": "https://whc.unesco.org/en/list/155"
-        },
-        {
-          "label": "Guineenews 14 May 2024 – CEGENS at Gbakoré",
-          "url": "https://guineenews.org/2024/05/14/lola-gbakore-le-directeur-du-centre-de-gestion-environnementale-des-monts-nimba-et-simandou-decrit-la-situation-du-site-et-lobjectif-de-cegens/"
-        },
-        {
-          "label": "Wikipedia – Mount Nimba Strict Nature Reserve",
-          "url": "https://en.wikipedia.org/wiki/Mount_Nimba_Strict_Nature_Reserve"
-        },
-        {
-          "label": "OpenStreetMap Nominatim (ODbL)",
-          "url": "https://nominatim.openstreetmap.org/"
-        }
-      ],
-      "uncertain": [
-        "Exact coordinates of the CEGENS buildings were not found; the marker is the village centre.",
-        "Earlier drafts assumed the station was at Séringbara; sources point to Gbakoré."
-      ],
-      "photos": [
-        "reconstruction-village"
-      ],
-      "camera": {
-        "distance_m": 1500,
-        "azimuth_deg": 150,
-        "elevation_deg": 28
-      },
-      "order": 16,
-      "dem_m": 491.6,
-      "elevation_unit": "m"
-    },
-    {
-      "id": "nzo",
-      "category": "culture",
-      "modes": [
-        "culture"
-      ],
-      "lon": -8.3142,
-      "lat": 7.6794,
-      "elevation_m": 450,
-      "elevation_source": "dem",
-      "location_precision": "exact",
-      "coord_confidence": "high",
-      "coord_source": "Wikidata / OSM Nominatim 7.6794,-8.3137",
-      "title_fr": "N'Zo – la porte est",
-      "title_en": "N'Zo – the eastern gateway",
-      "short_fr": "Chef-lieu de sous-préfecture à l'est du massif, parmi les villes citées comme les plus proches de la réserve.",
-      "short_en": "Sub-prefecture town east of the massif, one of the towns named as nearest to the reserve.",
-      "long_fr": "N'Zo (N'Zoo) est une sous-préfecture de la préfecture de Lola, à l'est de la partie guinéenne de la réserve, à environ 450 m d'altitude. Wikipédia cite Yekepa (Liberia), Bossou et N'Zoo comme les villes les plus proches de la réserve. Les villages riverains vivent surtout de l'agriculture, de la pêche et de la cueillette.",
-      "long_en": "N'Zo (N'Zoo) is a sub-prefecture of Lola Prefecture, east of the Guinean part of the reserve at about 450 m elevation. Wikipedia names Yekepa (Liberia), Bossou and N'Zoo as the nearest towns to the reserve. Riverside villages mostly live from farming, fishing and gathering.",
-      "facts": [
-        {
-          "label_fr": "Statut",
-          "label_en": "Status",
-          "value_fr": "Sous-préfecture de Lola",
-          "value_en": "Sub-prefecture of Lola"
-        }
-      ],
-      "sources": [
-        {
-          "label": "Wikipedia – Mount Nimba Strict Nature Reserve",
-          "url": "https://en.wikipedia.org/wiki/Mount_Nimba_Strict_Nature_Reserve"
-        },
-        {
-          "label": "Wikidata coordinates (query saved in data/src/wikidata_box_query.json)",
-          "url": "https://www.wikidata.org/wiki/Q924276"
-        },
-        {
-          "label": "UNESCO Decision 48 COM 7A.46 (2026)",
-          "url": "https://whc.unesco.org/en/decisions/9042/"
-        }
-      ],
-      "uncertain": [
-        "Population and local facts for N'Zo were not sourced."
-      ],
-      "photos": [
-        "reconstruction-village"
-      ],
-      "camera": {
-        "distance_m": 2000,
-        "azimuth_deg": 80,
-        "elevation_deg": 30
-      },
-      "order": 17,
-      "dem_m": 452.5,
-      "elevation_unit": "m"
-    },
-    {
-      "id": "yeale",
-      "category": "culture",
-      "modes": [
-        "culture",
-        "conservation"
-      ],
-      "lon": -8.4222,
-      "lat": 7.5279,
-      "elevation_m": 370,
-      "elevation_source": "dem",
-      "location_precision": "exact",
-      "coord_confidence": "high",
-      "coord_source": "OSM Nominatim 7.5278570,-8.4221620 (Yéalé, Tonkpi, Côte d'Ivoire)",
-      "title_fr": "Yéalé – le versant ivoirien",
-      "title_en": "Yéalé – the Ivorian side",
-      "short_fr": "Village riverain de la réserve en Côte d'Ivoire, au bout d'une longue piste depuis Danané.",
-      "short_en": "Village bordering the reserve in Côte d'Ivoire, at the end of a long track from Danané.",
-      "long_fr": "Yéalé est un village riverain de la Réserve naturelle intégrale du Mont Nimba, dans le département de Danané. Le plan d'aménagement et de gestion ivoirien décrit un accès depuis Danané par une piste d'environ 50 km, reprofilée en 2019 mais très dégradée par les pluies. La partie ivoirienne du bien couvre 5 000 ha ; elle est gérée par l'Office ivoirien des parcs et réserves (OIPR), et une zone tampon d'environ 24 707 ha a été désignée en 2026.",
-      "long_en": "Yéalé is a village bordering the Mount Nimba Strict Nature Reserve in the Danané department. The Ivorian management plan describes access from Danané by a track of about 50 km, regraded in 2019 but badly degraded by rains. The Ivorian part of the property covers 5,000 ha and is managed by the Office Ivoirien des Parcs et Réserves (OIPR); a buffer zone of about 24,707 ha was designated in 2026.",
-      "facts": [
-        {
-          "label_fr": "Partie ivoirienne",
-          "label_en": "Ivorian part",
-          "value_fr": "5 000 ha (UNESCO) ; 50,9 km² (WDPA)",
-          "value_en": "5,000 ha (UNESCO); 50.9 km² (WDPA)"
-        },
-        {
-          "label_fr": "Zone tampon",
-          "label_en": "Buffer zone",
-          "value_fr": "≈ 24 707 ha (désignée, demande de modification mineure à déposer avant le 1er fév. 2027)",
-          "value_en": "≈ 24,707 ha (designated; minor boundary modification request due 1 Feb 2027)"
-        }
-      ],
-      "sources": [
-        {
-          "label": "PAPFor – consolidated management plan, Ivorian component (PAG Nimba, 2022)",
-          "url": "https://www.papfor.org/IMG/pdf/pag_nimba_consolide_apres_atelier_du_30_mai_au_1er_juin_2022_23_06_2022_dzo.pdf"
-        },
-        {
-          "label": "OIPR – Réserve naturelle intégrale du Mont Nimba",
-          "url": "https://oipr-ci.org/reserve-naturelle-integrale-du-mont-nimba/"
-        },
-        {
-          "label": "UNESCO Decision 48 COM 7A.46 (2026)",
-          "url": "https://whc.unesco.org/en/decisions/9042/"
-        },
-        {
-          "label": "UNESCO World Heritage Centre – property page (Brief synthesis, Integrity)",
-          "url": "https://whc.unesco.org/en/list/155"
-        }
-      ],
-      "uncertain": [
-        "Track condition is from a 2022 plan and may have changed."
-      ],
-      "photos": [
-        "reconstruction-village"
-      ],
-      "camera": {
-        "distance_m": 2200,
-        "azimuth_deg": 200,
-        "elevation_deg": 28
-      },
-      "order": 18,
-      "dem_m": 370.9,
-      "elevation_unit": "m"
-    },
-    {
-      "id": "yekepa-lamco",
-      "category": "conservation",
-      "modes": [
-        "conservation",
-        "culture"
-      ],
-      "lon": -8.5419,
-      "lat": 7.5753,
-      "elevation_m": 510,
-      "elevation_source": "dem",
-      "location_precision": "exact",
-      "coord_confidence": "medium",
-      "coord_source": "OSM Nominatim 7.5753094,-8.5419387 (Yekepa, Nimba County); Wikidata gives 7.5833,-8.5333",
-      "title_fr": "Yekepa et l'héritage de la mine LAMCO (Liberia)",
-      "title_en": "Yekepa and the LAMCO mining legacy (Liberia)",
-      "short_fr": "Du côté libérien, une mine de fer exploitée de 1963 à 1989 a dégradé une partie du massif.",
-      "short_en": "On the Liberian side an iron-ore mine worked from 1963 to 1989 degraded part of the massif.",
-      "long_fr": "Côté libérien, la ville de Yekepa a été bâtie pour la mine de fer LAMCO, exploitée de 1963 à 1989 et à l'origine d'une dégradation importante de la Réserve naturelle de l'Est Nimba (créée en 2003, environ 11 553 ha). L'UNESCO précise que la partie libérienne du massif est très dégradée par d'anciennes activités minières et ne fait pas partie du bien inscrit. Cet exemple sert de contre-modèle pour le versant guinéen. La photo d'archive de 1976 montre la mine à ciel ouvert.",
-      "long_en": "On the Liberian side the town of Yekepa was built for the LAMCO iron-ore mine, worked from 1963 to 1989, which caused serious degradation within what became East Nimba Nature Reserve (established 2003, about 11,553 ha). UNESCO states that the Liberian part of the massif is greatly degraded by former mining and is not part of the inscribed property. It serves as a cautionary example for the Guinean side. The 1976 archive photo shows the open-pit mine.",
-      "facts": [
-        {
-          "label_fr": "Exploitation LAMCO",
-          "label_en": "LAMCO operation",
-          "value_fr": "1963–1989",
-          "value_en": "1963–1989"
-        },
-        {
-          "label_fr": "Réserve de l'Est Nimba",
-          "label_en": "East Nimba Nature Reserve",
-          "value_fr": "Créée en 2003 ; ≈ 11 553 ha",
-          "value_en": "Established 2003; ≈ 11,553 ha"
-        }
-      ],
-      "sources": [
-        {
-          "label": "East Nimba Nature Reserve management plan 2014 (PAPFor)",
-          "url": "https://papfor.org/IMG/pdf/ennr_mgt_plan_2014_-_final.pdf"
-        },
-        {
-          "label": "Fauna & Flora – East Nimba Nature Reserve",
-          "url": "https://www.fauna-flora.org/projects/implementing-effective-management-east-nimba-nature-reserve/"
-        },
-        {
-          "label": "UNESCO World Heritage Centre – property page (Brief synthesis, Integrity)",
-          "url": "https://whc.unesco.org/en/list/155"
-        },
-        {
-          "label": "Wikimedia Commons archive photo (CC BY-SA 4.0)",
-          "url": "https://commons.wikimedia.org/wiki/File:ASC_Leiden_-_F._van_der_Kraaij_Collection_-_13_-_001_-_LAMCO_J.V._A_landscape_with_open_pit_mining_for_iron_ore._Excavators_and_lorries_-_Yekepa,_Nimba_county,_Liberia_-_1976.jpg"
-        }
-      ],
-      "uncertain": [
-        "Area of East Nimba Nature Reserve comes from a management plan summary; check the exact figure."
-      ],
-      "photos": [
-        "reconstruction-lamco"
-      ],
-      "camera": {
-        "distance_m": 2400,
-        "azimuth_deg": 320,
-        "elevation_deg": 28
-      },
-      "order": 19,
-      "dem_m": 505.1,
-      "elevation_unit": "m"
-    },
-    {
-      "id": "mining-enclave",
-      "category": "conservation",
-      "modes": [
-        "conservation"
-      ],
-      "lon": -8.3743,
-      "lat": 7.67,
-      "elevation_m": 1310,
-      "elevation_source": "dem",
-      "location_precision": "approximate",
-      "coord_confidence": "medium",
-      "coord_source": "Centroid of OSM polygon 'Mine de Nimba' (way 307934062, ≈269 ha); only ≈2% of it overlaps the WDPA reserve polygon, consistent with an enclave adjacent to the property",
-      "title_fr": "L'enclave minière guinéenne",
-      "title_en": "The Guinean mining enclave",
-      "short_fr": "Un enclave de minerai de fer, adjacente au bien, au cœur des préoccupations du Comité du patrimoine mondial.",
-      "short_en": "An iron-ore enclave adjacent to the property, at the heart of the World Heritage Committee's concerns.",
-      "long_fr": "Du côté guinéen, un enclave où des activités minières ont eu lieu jouxte directement le bien : l'UNESCO estime qu'il reste douteux que son exploitation puisse se faire sans affecter l'intégrité du site. En 2026, le Comité a exprimé sa vive préoccupation après la délivrance d'un permis environnemental à la SMFG pour l'exploration dans l'enclave, sur la base d'une étude d'impact limitée à la phase 1. Il y voit des impacts majeurs et potentiellement irréversibles : fragmentation des corridors écologiques, perte d'habitats d'altitude rares et risques pour des espèces endémiques. Il demande à la Guinée de ne délivrer aucun permis d'exploitation tant que l'évaluation complète n'est pas fournie.",
-      "long_en": "On the Guinean side an enclave where mining has taken place lies directly adjacent to the property: UNESCO says it remains questionable whether it can be worked without affecting the site's integrity. In 2026 the Committee expressed deep concern after an environmental permit was issued to SMFG for exploration in the enclave on the basis of an impact assessment limited to phase 1. It identifies major, potentially irreversible impacts: fragmentation of ecological corridors, loss of rare high-altitude habitats and risks to endemic species. It asks Guinea not to issue any operating permit until the full assessment is delivered.",
-      "facts": [
-        {
-          "label_fr": "Statut",
-          "label_en": "Status",
-          "value_fr": "Hors du bien, adjacent",
-          "value_en": "Outside the property, adjacent"
-        },
-        {
-          "label_fr": "Opérateur cité",
-          "label_en": "Operator named",
-          "value_fr": "SMFG (Société des Mines de Fer de Guinée)",
-          "value_en": "SMFG (Société des Mines de Fer de Guinée)"
-        },
-        {
-          "label_fr": "Surface (OSM)",
-          "label_en": "Area (OSM)",
-          "value_fr": "≈ 269 ha (polygone OSM, approximatif)",
-          "value_en": "≈ 269 ha (OSM polygon, approximate)"
-        }
-      ],
-      "sources": [
-        {
-          "label": "UNESCO Decision 48 COM 7A.46 (2026)",
-          "url": "https://whc.unesco.org/en/decisions/9042/"
-        },
-        {
-          "label": "UNESCO World Heritage Centre – property page (Brief synthesis, Integrity)",
-          "url": "https://whc.unesco.org/en/list/155"
-        },
-        {
-          "label": "OpenStreetMap way 307934062 'Mine de Nimba' (ODbL)",
-          "url": "https://www.openstreetmap.org/way/307934062"
-        },
-        {
-          "label": "UNESCO Tentative List – Paysage culturel des monts Nimba (Guinea, 2001)",
-          "url": "https://whc.unesco.org/fr/listesindicatives/1522/"
-        }
-      ],
-      "uncertain": [
-        "No official boundary of the enclave was found; the OSM polygon is a volunteer approximation, show it as 'approximate'.",
-        "The Tentative List says the original reserve area was reduced by 1,550 ha (OCR text) – unverified.",
-        "Other permits (Nimba North/West, Equatorial Resources Ltd; Nimba Development Company project) are mentioned in the 2026 decision but not mapped."
-      ],
-      "photos": [
-        "reconstruction-ridge"
-      ],
-      "camera": {
-        "distance_m": 2600,
-        "azimuth_deg": 210,
-        "elevation_deg": 32
-      },
-      "order": 20,
-      "dem_m": 1310.7,
-      "elevation_unit": "m"
-    },
-    {
-      "id": "tripoint",
-      "category": "conservation",
-      "modes": [
-        "conservation",
-        "nature"
-      ],
-      "lon": -8.47222,
-      "lat": 7.55556,
-      "elevation_m": 1230,
-      "elevation_source": "dem",
-      "location_precision": "exact",
-      "coord_confidence": "medium",
-      "coord_source": "Wikidata tripoint Côte d'Ivoire–Guinea–Liberia 7.55556,-8.47222",
-      "title_fr": "Trois pays, une montagne",
-      "title_en": "Three countries, one mountain",
-      "short_fr": "La chaîne chevauche la Guinée, la Côte d'Ivoire et le Liberia ; seuls les deux premiers pays forment le bien UNESCO.",
-      "short_en": "The range straddles Guinea, Côte d'Ivoire and Liberia; only the first two form the UNESCO property.",
-      "long_fr": "Le Nimba se situe à la frontière tripartite de la Guinée, de la Côte d'Ivoire et du Liberia, loin de leurs capitales. Le bien du patrimoine mondial couvre la quasi-totalité du massif côté guinéen et ivoirien (12 540 ha et 5 000 ha) ; la partie libérienne, très dégradée par d'anciennes mines, est protégée à part par la Réserve de l'Est Nimba. En 2026, le Comité a salué les progrès de la coopération et de la gestion transfrontalières, mais a demandé un rapport conjoint des deux États avant le 1er février 2027.",
-      "long_en": "Nimba lies on the tri-border of Guinea, Côte d'Ivoire and Liberia, far from their capitals. The World Heritage property covers nearly all of the massif on the Guinean and Ivorian sides (12,540 ha and 5,000 ha); the Liberian part, heavily degraded by former mines, is protected separately as East Nimba Nature Reserve. In 2026 the Committee welcomed progress in transboundary cooperation and management but asked the two States for a joint report by 1 February 2027.",
-      "facts": [
-        {
-          "label_fr": "Guinée",
-          "label_en": "Guinea",
-          "value_fr": "12 540 ha",
-          "value_en": "12,540 ha"
-        },
-        {
-          "label_fr": "Côte d'Ivoire",
-          "label_en": "Côte d'Ivoire",
-          "value_fr": "5 000 ha",
-          "value_en": "5,000 ha"
-        },
-        {
-          "label_fr": "Prochain rapport",
-          "label_en": "Next report",
-          "value_fr": "1er février 2027",
-          "value_en": "1 February 2027"
-        }
-      ],
-      "sources": [
-        {
-          "label": "UNESCO World Heritage Centre – property page (Brief synthesis, Integrity)",
-          "url": "https://whc.unesco.org/en/list/155"
-        },
-        {
-          "label": "UNESCO Decision 48 COM 7A.46 (2026)",
-          "url": "https://whc.unesco.org/en/decisions/9042/"
-        },
-        {
-          "label": "Wikipedia – Mount Nimba Strict Nature Reserve",
-          "url": "https://en.wikipedia.org/wiki/Mount_Nimba_Strict_Nature_Reserve"
-        },
-        {
-          "label": "Wikidata coordinates (query saved in data/src/wikidata_box_query.json)",
-          "url": "https://www.wikidata.org/wiki/Q924276"
-        }
-      ],
-      "uncertain": [
-        "Tripoint position is a published coordinate; real border lines in the kit (geoBoundaries) are approximate and do not match each other exactly.",
-        "Total area differs: 17,540 ha in the UNESCO text vs 17,632.62 ha in the property field; WDPA GIS gives 135.5 + 51.0 km²."
-      ],
-      "photos": [
-        "reconstruction-ridge"
-      ],
-      "camera": {
-        "distance_m": 3200,
-        "azimuth_deg": 30,
-        "elevation_deg": 30
-      },
-      "order": 21,
-      "dem_m": 1229.2,
-      "elevation_unit": "m"
-    },
-    {
-      "id": "unesco-inscription",
-      "category": "conservation",
-      "modes": [
-        "conservation"
-      ],
-      "lon": -8.391,
-      "lat": 7.6032,
-      "elevation_m": 790,
-      "elevation_source": "dem",
-      "location_precision": "approximate",
-      "coord_confidence": "high",
-      "coord_source": "UNESCO property coordinate N7°36'11.45\" W8°23'27.49\"",
-      "title_fr": "Site du patrimoine mondial depuis 1981",
-      "title_en": "A World Heritage Site since 1981",
-      "short_fr": "Inscrite en 1981 (Guinée) et étendue en 1982 (Côte d'Ivoire) au titre des critères ix et x.",
-      "short_en": "Inscribed in 1981 (Guinea) and extended in 1982 (Côte d'Ivoire) under criteria ix and x.",
-      "long_fr": "La Réserve naturelle intégrale du Mont Nimba est inscrite au patrimoine mondial depuis 1981 ; ses limites ont été modifiées en 1982 pour inclure la partie ivoirienne. Elle répond aux critères (ix) – processus écologiques : une montagne isolée au-dessus de plaines, avec un climat sub-équatorial montagnard – et (x) – biodiversité : plus de 2 000 plantes vasculaires, plus de 2 500 invertébrés et de nombreux vertébrés endémiques. Elle bénéficie d'un statut de protection stricte depuis 1944, a été déclarée réserve de la biosphère en 1980 (partie guinéenne) et est inscrite aussi sur la liste des biens en péril depuis 1992.",
-      "long_en": "The Mount Nimba Strict Nature Reserve has been a World Heritage Site since 1981; its boundaries were modified in 1982 to include the Ivorian part. It meets criterion (ix) – ecological processes: an isolated mountain rising above plains with a sub-equatorial montane climate – and criterion (x) – biodiversity: more than 2,000 vascular plants, more than 2,500 invertebrates and many endemic vertebrates. It has had strict protection since 1944, was declared a Biosphere Reserve in 1980 (Guinean part) and has also been on the List in Danger since 1992.",
-      "facts": [
-        {
-          "label_fr": "Inscription",
-          "label_en": "Inscription",
-          "value_fr": "1981 (extension 1982)",
-          "value_en": "1981 (extension 1982)"
-        },
-        {
-          "label_fr": "Critères",
-          "label_en": "Criteria",
-          "value_fr": "(ix), (x)",
-          "value_en": "(ix), (x)"
-        },
-        {
-          "label_fr": "Protection stricte depuis",
-          "label_en": "Strict protection since",
-          "value_fr": "1944",
-          "value_en": "1944"
-        },
-        {
-          "label_fr": "Vertébrés (UNESCO)",
-          "label_en": "Vertebrates (UNESCO)",
-          "value_fr": "> 317 espèces, dont 107 mammifères",
-          "value_en": "> 317 species, incl. 107 mammals"
-        }
-      ],
-      "sources": [
-        {
-          "label": "UNESCO World Heritage Centre – property page (Brief synthesis, Integrity)",
-          "url": "https://whc.unesco.org/en/list/155"
-        },
-        {
-          "label": "Wikipedia – Mount Nimba Strict Nature Reserve",
-          "url": "https://en.wikipedia.org/wiki/Mount_Nimba_Strict_Nature_Reserve"
-        },
-        {
-          "label": "UNESCO Tentative List – Paysage culturel des monts Nimba (Guinea, 2001)",
-          "url": "https://whc.unesco.org/fr/listesindicatives/1522/"
-        }
-      ],
-      "uncertain": [
-        "Wikipedia gives 680 vertebrate / 132 mammal species, UNESCO says 317 / 107: use the UNESCO figures and say 'more than'.",
-        "Property area: 17,540 ha in text vs 17,632.62 ha in the UNESCO property field."
-      ],
-      "photos": [
-        "reconstruction-summit"
-      ],
-      "camera": {
-        "distance_m": 4500,
-        "azimuth_deg": 190,
-        "elevation_deg": 35
-      },
-      "order": 22,
-      "dem_m": 791.1,
-      "elevation_unit": "m"
-    },
-    {
-      "id": "danger-list",
-      "category": "conservation",
-      "modes": [
-        "conservation"
-      ],
-      "lon": -8.4231,
-      "lat": 7.6447,
-      "elevation_m": 740,
-      "elevation_source": "dem",
-      "location_precision": "symbolic",
-      "coord_confidence": "n/a",
-      "coord_source": "Symbolic anchor on the central ridge (this hotspot describes the whole property, not a place)",
-      "title_fr": "Sur la liste du patrimoine en péril – décision 48 COM 7A.46",
-      "title_en": "On the Danger List – decision 48 COM 7A.46",
-      "short_fr": "En 2026, à sa 48e session (Busan), le Comité a décidé de maintenir le Nimba sur la liste des biens en péril, en saluant des progrès réels.",
-      "short_en": "In 2026, at its 48th session (Busan), the Committee decided to keep Nimba on the List in Danger, while welcoming real progress.",
-      "long_fr": "Inscrit sur la liste du patrimoine mondial en péril depuis 1992, le Nimba y a été maintenu en 2026 par la décision 48 COM 7A.46. Le Comité salue des progrès sur la coopération transfrontalière, le soutien aux communautés, le couvert végétal et le suivi des feux, ainsi que des résultats encourageants du suivi du crapaud vivipare, du chimpanzé d'Afrique de l'Ouest et de la micropotamogale. Il reste préoccupé par les retards concernant l'impact des projets miniers, le protocole de suivi écologique harmonisé et le système de suivi conjoint. Le plan intégré de développement et d'aménagement 2026–2035 est finalisé. Un rapport conjoint est attendu avant le 1er février 2027 pour la 49e session.",
-      "long_en": "On the List of World Heritage in Danger since 1992, Nimba was kept there in 2026 by decision 48 COM 7A.46. The Committee welcomes progress in transboundary cooperation, support for local communities, vegetation cover and bushfire monitoring, plus encouraging monitoring results for the viviparous toad, the West African chimpanzee and the Nimba otter shrew. It remains concerned by delays on the impact of mining projects, the harmonised ecological monitoring protocol and the joint monitoring system. The integrated development and management plan 2026–2035 has been finalised. A joint report is due by 1 February 2027 for the 49th session.",
-      "facts": [
-        {
-          "label_fr": "Sur la liste en péril",
-          "label_en": "On the Danger List",
-          "value_fr": "depuis 1992",
-          "value_en": "since 1992"
-        },
-        {
-          "label_fr": "Décision",
-          "label_en": "Decision",
-          "value_fr": "48 COM 7A.46 (Busan, 2026)",
-          "value_en": "48 COM 7A.46 (Busan, 2026)"
-        },
-        {
-          "label_fr": "Prochaine échéance",
-          "label_en": "Next deadline",
-          "value_fr": "Rapport conjoint avant le 1er fév. 2027",
-          "value_en": "Joint report by 1 Feb 2027"
-        },
-        {
-          "label_fr": "Plan intégré",
-          "label_en": "Integrated plan",
-          "value_fr": "PDAIG 2026–2035",
-          "value_en": "PDAIG 2026–2035"
-        }
-      ],
-      "sources": [
-        {
-          "label": "UNESCO Decision 48 COM 7A.46 (2026)",
-          "url": "https://whc.unesco.org/en/decisions/9042/"
-        },
-        {
-          "label": "UNESCO World Heritage Centre – property page (Brief synthesis, Integrity)",
-          "url": "https://whc.unesco.org/en/list/155"
-        }
-      ],
-      "uncertain": [
-        "Wikipedia notes iron-ore exploration began in 1992 in the montane zone; the UNESCO page itself only gives the 1992 inscription year."
-      ],
-      "photos": [
-        "reconstruction-cloudforest"
-      ],
-      "camera": {
-        "distance_m": 4500,
-        "azimuth_deg": 170,
-        "elevation_deg": 38
-      },
-      "order": 23,
-      "dem_m": 741.4,
-      "elevation_unit": "m"
+     "label_fr": "Longueur de la chaîne",
+     "label_en": "Range length",
+     "value_fr": "≈ 40 km (UNESCO/Wikipédia) ; ≈ 50 km (Liste indicative)",
+     "value_en": "≈ 40 km (UNESCO/Wikipedia); ≈ 50 km (Tentative List)"
     }
-  ]
+   ],
+   "sources": [
+    {
+     "label": "UNESCO World Heritage Centre – property page (Brief synthesis, Integrity)",
+     "url": "https://whc.unesco.org/en/list/155"
+    },
+    {
+     "label": "Wikipedia – Mount Nimba Strict Nature Reserve",
+     "url": "https://en.wikipedia.org/wiki/Mount_Nimba_Strict_Nature_Reserve"
+    },
+    {
+     "label": "Wikidata coordinates (query saved in data/src/wikidata_box_query.json)",
+     "url": "https://www.wikidata.org/wiki/Q924276"
+    },
+    {
+     "label": "Copernicus DEM GLO-30",
+     "url": "https://dataspace.copernicus.eu/explore-data/data-collections/copernicus-contributing-missions/collections-description/COP-DEM"
+    }
+   ],
+   "uncertain": [
+    "Range length differs between sources (≈40 km vs ≈50 km).",
+    "The Copernicus DEM is a surface model that includes vegetation, so 1,755 m is not a survey height."
+   ],
+   "photos": [
+    "reconstruction-summit"
+   ],
+   "camera": {
+    "distance_m": 3200,
+    "azimuth_deg": 200,
+    "elevation_deg": 28
+   },
+   "order": 1,
+   "dem_m": 1753.2,
+   "elevation_unit": "m"
+  },
+  {
+   "id": "grands-rochers",
+   "category": "peak",
+   "modes": [
+    "nature"
+   ],
+   "lon": -8.3797,
+   "lat": 7.6567,
+   "elevation_m": 1694,
+   "elevation_source": "Wikipedia (1,694 m); DEM max 1,681 m",
+   "location_precision": "approximate",
+   "coord_confidence": "medium",
+   "coord_source": "Wikidata gives a point for the 'Grands Rochers' range at 7.65,-8.38333; marker snapped to the DEM maximum within 800 m",
+   "title_fr": "Les Grands Rochers",
+   "title_en": "The Grands Rochers (Great Rocks)",
+   "short_fr": "Crête rocheuse du centre-nord de la chaîne, citée à environ 1 694 m.",
+   "short_en": "Rocky crest in the north-central part of the range, cited at about 1,694 m.",
+   "long_fr": "Les Grands Rochers forment l'un des principaux ensembles de sommets du versant guinéen. Wikipédia cite 1 694 m ; le modèle Copernicus donne 1 681 m au point le plus haut voisin. Ce secteur appartient à la partie guinéenne de la réserve, où se trouvent aussi les monts Sempéré, Tô, Pierre Richaud et Leclerc. La précision de ce repère est moyenne : la position exacte du sommet nommé n'est pas confirmée par une source cartographique officielle.",
+   "long_en": "The Grands Rochers are one of the main summit groups on the Guinean side. Wikipedia cites 1,694 m; the Copernicus model gives 1,681 m at the nearest high point. The area lies in the Guinean part of the reserve, together with Mont Sempéré, Mont Tô, Mont Pierre Richaud and Mont Leclerc. The accuracy of this marker is medium: no official map confirms the exact position of the named summit.",
+   "facts": [
+    {
+     "label_fr": "Altitude citée",
+     "label_en": "Quoted elevation",
+     "value_fr": "1 694 m (Wikipédia)",
+     "value_en": "1,694 m (Wikipedia)"
+    },
+    {
+     "label_fr": "Autres sommets guinéens",
+     "label_en": "Other Guinean peaks",
+     "value_fr": "Sempéré 1 682 m, Tô 1 675 m, Pierre Richaud 1 670 m, Leclerc 1 577 m (Wikipédia)",
+     "value_en": "Sempéré 1,682 m, Tô 1,675 m, Pierre Richaud 1,670 m, Leclerc 1,577 m (Wikipedia)"
+    }
+   ],
+   "sources": [
+    {
+     "label": "Wikipedia – Mount Nimba Strict Nature Reserve",
+     "url": "https://en.wikipedia.org/wiki/Mount_Nimba_Strict_Nature_Reserve"
+    },
+    {
+     "label": "Wikidata coordinates (query saved in data/src/wikidata_box_query.json)",
+     "url": "https://www.wikidata.org/wiki/Q924276"
+    },
+    {
+     "label": "Copernicus DEM GLO-30",
+     "url": "https://dataspace.copernicus.eu/explore-data/data-collections/copernicus-contributing-missions/collections-description/COP-DEM"
+    }
+   ],
+   "uncertain": [
+    "Peak heights differ by source (Tentative List: Sempéré 1,650 m, Pierre Richard 1,611 m, Leclerc 1,568 m).",
+    "Marker position is DEM-snapped and approximate."
+   ],
+   "photos": [
+    "reconstruction-ridge"
+   ],
+   "camera": {
+    "distance_m": 2800,
+    "azimuth_deg": 160,
+    "elevation_deg": 25
+   },
+   "order": 2,
+   "dem_m": 1679.0,
+   "elevation_unit": "m"
+  },
+  {
+   "id": "pierre-richaud",
+   "category": "peak",
+   "modes": [
+    "nature",
+    "conservation"
+   ],
+   "lon": -8.3636,
+   "lat": 7.6739,
+   "elevation_m": 1670,
+   "elevation_source": "Wikipedia (1,670 m); Tentative List 1,611 m; DEM 1,610 m",
+   "location_precision": "exact",
+   "coord_confidence": "medium",
+   "coord_source": "Wikidata 7.6742,-8.3642, snapped to DEM maximum",
+   "title_fr": "Mont Pierre Richaud – aux portes de l'enclave minière",
+   "title_en": "Mont Pierre Richaud – next to the mining enclave",
+   "short_fr": "Sommet du nord-est de la chaîne, voisin de l'enclave où se concentre l'enjeu minier.",
+   "short_en": "North-eastern summit, close to the enclave where the mining issue is concentrated.",
+   "long_fr": "Le Mont Pierre Richaud marque l'extrémité nord-est des hauts reliefs. Sa hauteur varie selon les sources : 1 670 m (Wikipédia), 1 611 m (Liste indicative de la Guinée) et environ 1 610 m dans le modèle Copernicus. Il se trouve à proximité de l'enclave minière guinéenne, adjacente mais extérieure au bien du patrimoine mondial, où des permis d'exploration de minerai de fer ont été délivrés.",
+   "long_en": "Mont Pierre Richaud marks the north-eastern end of the high ground. Its height depends on the source: 1,670 m (Wikipedia), 1,611 m (Guinea's Tentative List) and about 1,610 m in the Copernicus model. It lies close to the Guinean mining enclave, adjacent to but outside the World Heritage property, where iron-ore exploration permits have been issued.",
+   "facts": [
+    {
+     "label_fr": "Hauteur selon la source",
+     "label_en": "Height by source",
+     "value_fr": "1 670 / 1 611 / ≈1 610 m",
+     "value_en": "1,670 / 1,611 / ≈1,610 m"
+    },
+    {
+     "label_fr": "Statut",
+     "label_en": "Status",
+     "value_fr": "Hors du périmètre WDPA ; à proximité de l'enclave",
+     "value_en": "Outside the WDPA polygon; near the enclave"
+    }
+   ],
+   "sources": [
+    {
+     "label": "Wikipedia – Mount Nimba Strict Nature Reserve",
+     "url": "https://en.wikipedia.org/wiki/Mount_Nimba_Strict_Nature_Reserve"
+    },
+    {
+     "label": "UNESCO Tentative List – Paysage culturel des monts Nimba (Guinea, 2001)",
+     "url": "https://whc.unesco.org/fr/listesindicatives/1522/"
+    },
+    {
+     "label": "UNESCO World Heritage Centre – property page (Brief synthesis, Integrity)",
+     "url": "https://whc.unesco.org/en/list/155"
+    },
+    {
+     "label": "Wikidata coordinates (query saved in data/src/wikidata_box_query.json)",
+     "url": "https://www.wikidata.org/wiki/Q924276"
+    }
+   ],
+   "uncertain": [
+    "Three different heights are published; show a range, not a single value."
+   ],
+   "photos": [
+    "reconstruction-ridge"
+   ],
+   "camera": {
+    "distance_m": 2600,
+    "azimuth_deg": 230,
+    "elevation_deg": 25
+   },
+   "order": 3,
+   "dem_m": 1608.9,
+   "elevation_unit": "m"
+  },
+  {
+   "id": "montane-grassland",
+   "category": "habitat",
+   "modes": [
+    "nature"
+   ],
+   "lon": -8.3958,
+   "lat": 7.6397,
+   "elevation_m": 1660,
+   "elevation_source": "dem",
+   "location_precision": "area",
+   "coord_confidence": "medium",
+   "coord_source": "Illustrative point on the summit ridge inside the WDPA polygon (grassland covers the whole ridge)",
+   "title_fr": "Les prairies d'altitude",
+   "title_en": "The high-altitude grasslands",
+   "short_fr": "Sur plus de 15 km, les sommets sont couverts de savane montagnarde : un habitat rare, refuge d'espèces uniques.",
+   "short_en": "Over more than 15 km the summits are covered by montane savanna: a rare habitat and refuge for unique species.",
+   "long_fr": "Au-dessus de la forêt, les sommets de la chaîne s'étendent sur plus de 15 km couverts de savane montagnarde. La transition se fait par un fourré à Protea avant la prairie, qui apparaît entre environ 1 200 et 1 400 m et monte jusqu'aux plus hautes crêtes. C'est l'habitat du crapaud vivipare du Nimba et d'espèces de plantes endémiques comme Asplenium schnellii, Osbeckia porteresii et Blaeria nimbana. Pour la liste indicative de la Guinée, la pureté des prairies d'altitude et leurs formes arrondies évoquent la féminité du Nimba.",
+   "long_en": "Above the forest the summits stretch for more than 15 km under montane savanna. The transition passes through Protea bushland before the grassland proper, which begins at roughly 1,200–1,400 m and rises to the highest crests. It is the habitat of the Nimba viviparous toad and of endemic plants such as Asplenium schnellii, Osbeckia porteresii and Blaeria nimbana. In Guinea's Tentative List the purity of the high grasslands and their rounded shapes are said to evoke the femininity of 'Nimba'.",
+   "facts": [
+    {
+     "label_fr": "Étendue",
+     "label_en": "Extent",
+     "value_fr": "> 15 km de crêtes",
+     "value_en": "> 15 km of ridgeline"
+    },
+    {
+     "label_fr": "Début de la prairie",
+     "label_en": "Grassland starts",
+     "value_fr": "≈ 1 200–1 400 m",
+     "value_en": "≈ 1,200–1,400 m"
+    },
+    {
+     "label_fr": "Plantes endémiques",
+     "label_en": "Endemic plants",
+     "value_fr": "Asplenium schnellii, Osbeckia porteresii, Blaeria nimbana",
+     "value_en": "Asplenium schnellii, Osbeckia porteresii, Blaeria nimbana"
+    }
+   ],
+   "sources": [
+    {
+     "label": "UNESCO World Heritage Centre – property page (Brief synthesis, Integrity)",
+     "url": "https://whc.unesco.org/en/list/155"
+    },
+    {
+     "label": "Wikipedia – Mount Nimba Strict Nature Reserve",
+     "url": "https://en.wikipedia.org/wiki/Mount_Nimba_Strict_Nature_Reserve"
+    },
+    {
+     "label": "UNESCO Tentative List – Paysage culturel des monts Nimba (Guinea, 2001)",
+     "url": "https://whc.unesco.org/fr/listesindicatives/1522/"
+    }
+   ],
+   "uncertain": [
+    "Lower limit of the grassland (1,200 vs 1,400 m) is given as a range by Wikipedia."
+   ],
+   "photos": [
+    "reconstruction-summit"
+   ],
+   "camera": {
+    "distance_m": 1800,
+    "azimuth_deg": 120,
+    "elevation_deg": 22
+   },
+   "order": 4,
+   "dem_m": 1660.3,
+   "elevation_unit": "m"
+  },
+  {
+   "id": "cloud-forest",
+   "category": "habitat",
+   "modes": [
+    "nature"
+   ],
+   "lon": -8.4,
+   "lat": 7.67,
+   "elevation_m": 1120,
+   "elevation_source": "dem",
+   "location_precision": "area",
+   "coord_confidence": "low",
+   "coord_source": "Illustrative point on a ~1,100 m slope inside the WDPA polygon (cloud forest is a belt, not a point)",
+   "title_fr": "La forêt de nuages",
+   "title_en": "The cloud forest",
+   "short_fr": "Au-dessus de 900 m, la brume s'accroche presque toute l'année : forêt moussue, épiphytes et fougères arborescentes.",
+   "short_en": "Above 900 m the mist lingers almost all year: mossy forest, epiphytes and tree ferns.",
+   "long_fr": "Entre environ 600 m et 1 200–1 400 m s'étend la forêt montagnarde guinéenne. À partir de 900 m, là où la montagne est couverte de nuages presque toute l'année, apparaît la forêt moussue, qui comprend la forêt à Parinari excelsa, la forêt sommitale et, dans les vallées humides, des forêts de fougères arborescentes. L'UNESCO souligne une forêt montagnarde riche en épiphytes. Plus de 2 000 plantes vasculaires ont été recensées sur le massif.",
+   "long_en": "Between about 600 m and 1,200–1,400 m lies the Guinean montane forest. From 900 m, where the mountain is covered by cloud almost all year, mossy forest appears: Parinari excelsa forest, summit forest and, in wet valleys, tree-fern forest. UNESCO highlights a montane forest rich in epiphytes. More than 2,000 vascular plant species have been recorded on the massif.",
+   "facts": [
+    {
+     "label_fr": "Brume",
+     "label_en": "Cloud belt",
+     "value_fr": "dès ≈ 900 m",
+     "value_en": "from ≈ 900 m"
+    },
+    {
+     "label_fr": "Plantes vasculaires",
+     "label_en": "Vascular plants",
+     "value_fr": "> 2 000",
+     "value_en": "> 2,000"
+    },
+    {
+     "label_fr": "Température",
+     "label_en": "Temperature",
+     "value_fr": "jour 24–33 °C ; nuit parfois < 10 °C",
+     "value_en": "day 24–33 °C; night sometimes < 10 °C"
+    }
+   ],
+   "sources": [
+    {
+     "label": "UNESCO World Heritage Centre – property page (Brief synthesis, Integrity)",
+     "url": "https://whc.unesco.org/en/list/155"
+    },
+    {
+     "label": "Wikipedia – Mount Nimba Strict Nature Reserve",
+     "url": "https://en.wikipedia.org/wiki/Mount_Nimba_Strict_Nature_Reserve"
+    }
+   ],
+   "uncertain": [
+    "Altitude bands differ between UNESCO (dense forest up to 1,000 m) and Wikipedia (montane forest 600–1,200/1,400 m)."
+   ],
+   "photos": [
+    "reconstruction-cloudforest"
+   ],
+   "camera": {
+    "distance_m": 1500,
+    "azimuth_deg": 250,
+    "elevation_deg": 20
+   },
+   "order": 5,
+   "dem_m": 1117.8,
+   "elevation_unit": "m"
+  },
+  {
+   "id": "lowland-forest",
+   "category": "habitat",
+   "modes": [
+    "nature"
+   ],
+   "lon": -8.44,
+   "lat": 7.675,
+   "elevation_m": 580,
+   "elevation_source": "dem",
+   "location_precision": "area",
+   "coord_confidence": "low",
+   "coord_source": "Illustrative point in the lowland foothills inside the WDPA polygon",
+   "title_fr": "Forêts de piémont et forêts-galeries",
+   "title_en": "Foothill forest and gallery forests",
+   "short_fr": "Jusqu'à 600 m, forêt semi-décidue dense ; dans la savane, des rubans de forêt le long des cours d'eau.",
+   "short_en": "Up to 600 m, dense semi-deciduous forest; in the savanna, ribbons of forest along the streams.",
+   "long_fr": "Le piémont est couvert de forêt guinéenne de basse altitude : une forêt haute semi-décidue avec canopée et strate émergente, où l'on compte 40 à 70 espèces d'arbres par hectare. Autour de la montagne, la savane est entrecoupée de forêts-galeries et d'îlots de forêt fermée. Ces forêts relient le massif à l'eau et servent de corridors pour la faune. L'UNESCO précise que les forêts naturelles des pentes ont été peu endommagées, alors que la faune a subi un braconnage très intense.",
+   "long_en": "The foothills are covered by Western Guinean lowland forest: tall semi-deciduous forest with a main canopy and an emergent layer, with 40–70 tree species per hectare. Around the mountain the savanna is broken by gallery forests and islands of closed forest. These forests tie the massif to its water and serve as wildlife corridors. UNESCO notes that the natural forests of the slopes have suffered little damage, while wildlife has been subject to very intense poaching.",
+   "facts": [
+    {
+     "label_fr": "Altitude",
+     "label_en": "Elevation",
+     "value_fr": "< 600 m (Wikipédia) ; jusqu'à 1 000 m (UNESCO)",
+     "value_en": "< 600 m (Wikipedia); up to 1,000 m (UNESCO)"
+    },
+    {
+     "label_fr": "Arbres par hectare",
+     "label_en": "Trees per hectare",
+     "value_fr": "40–70 espèces",
+     "value_en": "40–70 species"
+    }
+   ],
+   "sources": [
+    {
+     "label": "UNESCO World Heritage Centre – property page (Brief synthesis, Integrity)",
+     "url": "https://whc.unesco.org/en/list/155"
+    },
+    {
+     "label": "Wikipedia – Mount Nimba Strict Nature Reserve",
+     "url": "https://en.wikipedia.org/wiki/Mount_Nimba_Strict_Nature_Reserve"
+    }
+   ],
+   "uncertain": [
+    "Marker is illustrative; forests occur around the entire base."
+   ],
+   "photos": [
+    "reconstruction-lowland"
+   ],
+   "camera": {
+    "distance_m": 1600,
+    "azimuth_deg": 300,
+    "elevation_deg": 20
+   },
+   "order": 6,
+   "dem_m": 575.9,
+   "elevation_unit": "m"
+  },
+  {
+   "id": "savanna-fire",
+   "category": "habitat",
+   "modes": [
+    "nature",
+    "conservation"
+   ],
+   "lon": -8.34,
+   "lat": 7.71,
+   "elevation_m": 540,
+   "elevation_source": "dem",
+   "location_precision": "area",
+   "coord_confidence": "low",
+   "coord_source": "Illustrative point on lowland savanna at the north-eastern edge",
+   "title_fr": "La savane et les feux de brousse",
+   "title_en": "Savanna and bushfires",
+   "short_fr": "Autour du massif, la savane est exploitée par les villages ; les feux défrichant les champs menacent la réserve.",
+   "short_en": "Savanna surrounds the massif and is farmed by villages; fires used to clear land threaten the reserve.",
+   "long_fr": "La montagne est isolée des autres reliefs de la Guinée forestière par la savane. La population voisine a besoin de terres pour l'agriculture et l'élevage, ce qui renforce le défrichement traditionnel par le feu ; ces feux d'origine humaine surviennent régulièrement dans l'aire protégée et constituent un défi administratif important, selon l'UNESCO. En 2026, le Comité du patrimoine mondial a noté avec satisfaction les progrès dans le maintien du couvert végétal et le suivi des feux de brousse.",
+   "long_en": "The mountain is isolated from the other relief of Forest Guinea by savanna. Neighbouring communities need land for farming and livestock, which has strengthened traditional clearing by fire; these human-caused fires occur regularly in the protected area and are an important administrative challenge, according to UNESCO. In 2026 the World Heritage Committee noted with appreciation progress in maintaining vegetation cover and monitoring bushfires.",
+   "facts": [
+    {
+     "label_fr": "Menace",
+     "label_en": "Pressure",
+     "value_fr": "Défrichement par le feu",
+     "value_en": "Clearing by fire"
+    },
+    {
+     "label_fr": "Décision 2026",
+     "label_en": "2026 decision",
+     "value_fr": "Progrès notés sur couvert végétal et suivi des feux",
+     "value_en": "Progress noted on vegetation cover and fire monitoring"
+    }
+   ],
+   "sources": [
+    {
+     "label": "UNESCO World Heritage Centre – property page (Brief synthesis, Integrity)",
+     "url": "https://whc.unesco.org/en/list/155"
+    },
+    {
+     "label": "UNESCO Decision 48 COM 7A.46 (2026)",
+     "url": "https://whc.unesco.org/en/decisions/9042/"
+    },
+    {
+     "label": "Wikipedia – Mount Nimba Strict Nature Reserve",
+     "url": "https://en.wikipedia.org/wiki/Mount_Nimba_Strict_Nature_Reserve"
+    }
+   ],
+   "uncertain": [],
+   "photos": [
+    "reconstruction-savanna"
+   ],
+   "camera": {
+    "distance_m": 2200,
+    "azimuth_deg": 90,
+    "elevation_deg": 20
+   },
+   "order": 7,
+   "dem_m": 536.4,
+   "elevation_unit": "m"
+  },
+  {
+   "id": "cavally",
+   "category": "water",
+   "modes": [
+    "nature"
+   ],
+   "lon": -8.4419,
+   "lat": 7.7153,
+   "elevation_m": 520,
+   "elevation_source": "dem",
+   "location_precision": "approximate",
+   "coord_confidence": "low",
+   "coord_source": "Wikidata point for the 'Diougou' watercourse (7.7153,-8.4419; Diougou is a local name of the Cavally) used as a symbolic headwater marker north of the massif",
+   "title_fr": "Le château d'eau : les sources du Cavally",
+   "title_en": "The water tower: sources of the Cavally",
+   "short_fr": "Une cinquantaine de sources font du Nimba un véritable château d'eau pour la région.",
+   "short_en": "About fifty springs make Nimba a true water tower for the region.",
+   "long_fr": "L'UNESCO décrit le Nimba comme un véritable « château d'eau » d'une cinquantaine de sources entre la Côte d'Ivoire et la Guinée. Wikipédia cite les sources du Cavally et du Cestos (et du Sassandra, information à vérifier) parmi elles. Le Cavally (aussi appelé Cavalla ou Diougou) prend sa source au nord du Mont Nimba, en Guinée, et forme plus en aval les deux tiers sud de la frontière entre la Côte d'Ivoire et le Liberia. Le massif appartient en outre à une écorégion d'eau douce distincte, riche en espèces aquatiques endémiques.",
+   "long_en": "UNESCO describes Nimba as a true 'water tower' with about fifty springs between Côte d'Ivoire and Guinea. Wikipedia lists the origins of the Cavally and Cestos rivers (and the Sassandra, which needs checking) among them. The Cavally (also called Cavalla or Diougou) rises north of Mont Nimba in Guinea and further downstream forms the southern two-thirds of the Côte d'Ivoire–Liberia border. The range is also part of a distinct freshwater ecoregion with many endemic aquatic species.",
+   "facts": [
+    {
+     "label_fr": "Sources",
+     "label_en": "Springs",
+     "value_fr": "≈ 50",
+     "value_en": "≈ 50"
+    },
+    {
+     "label_fr": "Rivières citées",
+     "label_en": "Rivers cited",
+     "value_fr": "Cavally, Cestos (Sassandra : à vérifier)",
+     "value_en": "Cavally, Cestos (Sassandra: to verify)"
+    }
+   ],
+   "sources": [
+    {
+     "label": "UNESCO World Heritage Centre – property page (Brief synthesis, Integrity)",
+     "url": "https://whc.unesco.org/en/list/155"
+    },
+    {
+     "label": "Wikipedia – Mount Nimba Strict Nature Reserve",
+     "url": "https://en.wikipedia.org/wiki/Mount_Nimba_Strict_Nature_Reserve"
+    },
+    {
+     "label": "Wikipedia – Cavalla River",
+     "url": "https://en.wikipedia.org/wiki/Cavally_River"
+    },
+    {
+     "label": "Wikidata coordinates (query saved in data/src/wikidata_box_query.json)",
+     "url": "https://www.wikidata.org/wiki/Q924276"
+    }
+   ],
+   "uncertain": [
+    "The Sassandra claim comes from Wikipedia only and is doubtful.",
+    "The marker is symbolic: individual springs are not mapped in the kit."
+   ],
+   "photos": [
+    "reconstruction-stream"
+   ],
+   "camera": {
+    "distance_m": 2000,
+    "azimuth_deg": 60,
+    "elevation_deg": 25
+   },
+   "order": 8,
+   "dem_m": 518.4,
+   "elevation_unit": "m"
+  },
+  {
+   "id": "viviparous-toad",
+   "category": "species",
+   "modes": [
+    "nature",
+    "conservation"
+   ],
+   "lon": -8.388,
+   "lat": 7.6486,
+   "elevation_m": 1550,
+   "elevation_source": "dem",
+   "location_precision": "area",
+   "coord_confidence": "low",
+   "coord_source": "Deliberately generalised: grassland slope inside the strict reserve (exact sites not published)",
+   "title_fr": "Le crapaud vivipare du Nimba",
+   "title_en": "The Nimba viviparous toad",
+   "short_fr": "Un petit crapaud qui met au monde des petits vivants : en danger critique, il ne vit que dans les prairies du Nimba.",
+   "short_en": "A small toad that gives birth to live young: critically endangered, found only in Nimba's grasslands.",
+   "long_fr": "Nimbaphrynoides occidentalis est un crapaud qui donne naissance à des crapelets entièrement formés, après une gestation d'environ neuf mois. Il vit uniquement dans les prairies d'altitude du Nimba, entre 1 200 et 1 680 m environ, en Guinée, en Côte d'Ivoire et au Liberia. L'UICN le classe En danger critique (évaluation de 2012). Ses menaces : l'agriculture, les mines et les feux. En 2026, le Comité du patrimoine mondial s'est dit encouragé par les résultats du suivi écologique de l'espèce.",
+   "long_en": "Nimbaphrynoides occidentalis gives birth to fully formed toadlets after a gestation of about nine months. It lives only in Nimba's high-altitude grasslands, roughly 1,200–1,680 m, in Guinea, Côte d'Ivoire and Liberia. The IUCN lists it as Critically Endangered (2012 assessment). Threats include farming, mining and fire. In 2026 the World Heritage Committee was encouraged by the ecological monitoring results for the species.",
+   "facts": [
+    {
+     "label_fr": "Statut UICN",
+     "label_en": "IUCN status",
+     "value_fr": "En danger critique (CR), évalué en 2012",
+     "value_en": "Critically Endangered (CR), assessed 2012"
+    },
+    {
+     "label_fr": "Altitude",
+     "label_en": "Elevation",
+     "value_fr": "1 200–1 680 m",
+     "value_en": "1,200–1,680 m"
+    },
+    {
+     "label_fr": "Gestation",
+     "label_en": "Gestation",
+     "value_fr": "≈ 9 mois",
+     "value_en": "≈ 9 months"
+    },
+    {
+     "label_fr": "Tendance",
+     "label_en": "Trend",
+     "value_fr": "Stable mais population très fragmentée",
+     "value_en": "Stable but severely fragmented"
+    }
+   ],
+   "sources": [
+    {
+     "label": "IUCN Red List – Nimbaphrynoides occidentalis",
+     "url": "https://www.iucnredlist.org/species/16793075/16793120"
+    },
+    {
+     "label": "Sandberger-Loua et al. 2017 – review of reproductive biology of N. occidentalis",
+     "url": "https://zse.pensoft.net/article/10489"
+    },
+    {
+     "label": "UNESCO Decision 48 COM 7A.46 (2026)",
+     "url": "https://whc.unesco.org/en/decisions/9042/"
+    },
+    {
+     "label": "UNESCO World Heritage Centre – property page (Brief synthesis, Integrity)",
+     "url": "https://whc.unesco.org/en/list/155"
+    }
+   ],
+   "uncertain": [
+    "The IUCN assessment is from 2012 and marked 'needs updating'.",
+    "Gestation length (≈9 months) is from a secondary summary of Sandberger-Loua et al. 2017; confirm before publishing."
+   ],
+   "photos": [
+    "reconstruction-viviparous-toad"
+   ],
+   "camera": {
+    "distance_m": 1200,
+    "azimuth_deg": 140,
+    "elevation_deg": 25
+   },
+   "order": 9,
+   "dem_m": 1548.1,
+   "elevation_unit": "m"
+  },
+  {
+   "id": "otter-shrew",
+   "category": "species",
+   "modes": [
+    "nature",
+    "conservation"
+   ],
+   "lon": -8.44,
+   "lat": 7.655,
+   "elevation_m": 630,
+   "elevation_source": "dem",
+   "location_precision": "area",
+   "coord_confidence": "low",
+   "coord_source": "Deliberately generalised: forested stream zone inside the reserve",
+   "title_fr": "La micropotamogale du Nimba",
+   "title_en": "The Nimba otter shrew",
+   "short_fr": "Petit insectivore semi-aquatique, présent dans les cours d'eau forestiers du massif.",
+   "short_en": "A small semi-aquatic insectivore of the massif's forest streams.",
+   "long_fr": "Micropotamogale lamottei, appelée musaraigne-loutre ou micropotamogale du Nimba, est un petit insectivore semi-aquatique cité par l'UNESCO parmi les espèces endémiques menacées du site. Elle est classée Vulnérable par l'UICN (évaluation de décembre 2017), à cause de la réduction de son habitat, notamment sous l'effet de l'exploitation du minerai de fer. Une publication dans Oryx plaide pour son reclassement dans une catégorie de menace supérieure.",
+   "long_en": "Micropotamogale lamottei, the Nimba otter shrew, is a small semi-aquatic insectivore that UNESCO lists among the site's threatened endemic species. The IUCN lists it as Vulnerable (assessed December 2017) because its habitat is shrinking, notably due to iron-ore mining. A paper in Oryx argues for its uplisting to a higher threat category.",
+   "facts": [
+    {
+     "label_fr": "Statut UICN",
+     "label_en": "IUCN status",
+     "value_fr": "Vulnérable (VU), évalué en déc. 2017",
+     "value_en": "Vulnerable (VU), assessed Dec 2017"
+    },
+    {
+     "label_fr": "Mode de vie",
+     "label_en": "Lifestyle",
+     "value_fr": "Semi-aquatique, insectivore",
+     "value_en": "Semi-aquatic, insectivore"
+    }
+   ],
+   "sources": [
+    {
+     "label": "IUCN Red List – Micropotamogale lamottei",
+     "url": "https://www.iucnredlist.org/species/13393/111940150"
+    },
+    {
+     "label": "UNESCO World Heritage Centre – property page (Brief synthesis, Integrity)",
+     "url": "https://whc.unesco.org/en/list/155"
+    },
+    {
+     "label": "Oryx – Uplisting a threatened small mammal: the Nimba otter-shrew",
+     "url": "https://www.cambridge.org/core/journals/oryx/article/uplisting-a-threatened-small-mammal-the-nimba-ottershrew-of-west-africa/7A0AABB8662607FCBB5C06B323B8F948"
+    }
+   ],
+   "uncertain": [
+    "Status may have changed since 2017; recheck the Red List before launch.",
+    "No openly licensed photo found: use an illustration or a silhouette, never a stock photo of another species."
+   ],
+   "photos": [
+    "reconstruction-otter-shrew"
+   ],
+   "camera": {
+    "distance_m": 1400,
+    "azimuth_deg": 280,
+    "elevation_deg": 22
+   },
+   "order": 10,
+   "dem_m": 628.0,
+   "elevation_unit": "m"
+  },
+  {
+   "id": "lamotte-bat",
+   "category": "species",
+   "modes": [
+    "nature",
+    "conservation"
+   ],
+   "lon": -8.377,
+   "lat": 7.664,
+   "elevation_m": 1540,
+   "elevation_source": "dem",
+   "location_precision": "area",
+   "coord_confidence": "low",
+   "coord_source": "Deliberately generalised near the Guinean mining area (roost sites are not published)",
+   "title_fr": "La rhinolophe de Lamotte (Hipposideros lamottei)",
+   "title_en": "Lamotte's roundleaf bat",
+   "short_fr": "Une chauve-souris en danger critique, connue seulement du versant guinéen du Nimba.",
+   "short_en": "A critically endangered bat known only from the Guinean side of Nimba.",
+   "long_fr": "Hipposideros lamottei est classée En danger critique par l'UICN (évaluation de 2019) et n'est connue que de la Guinée, dans le massif du Nimba ; sa population diminue. Ses gîtes connus se trouvent dans d'anciennes galeries minières de la zone d'exploitation, ce qui illustre le conflit entre extraction et biodiversité. Pour protéger l'espèce, les sites ne sont volontairement pas localisés avec précision.",
+   "long_en": "Hipposideros lamottei is listed as Critically Endangered by the IUCN (2019 assessment) and is known only from Guinea, on the Nimba massif; its population is decreasing. Its known roosts are in old mine tunnels in the mining area, which illustrates the conflict between extraction and biodiversity. To protect the species the sites are deliberately not mapped precisely.",
+   "facts": [
+    {
+     "label_fr": "Statut UICN",
+     "label_en": "IUCN status",
+     "value_fr": "En danger critique (CR), évalué en 2019",
+     "value_en": "Critically Endangered (CR), assessed 2019"
+    },
+    {
+     "label_fr": "Tendance",
+     "label_en": "Trend",
+     "value_fr": "En déclin",
+     "value_en": "Decreasing"
+    },
+    {
+     "label_fr": "Plage d'altitude",
+     "label_en": "Elevation range",
+     "value_fr": "500–1 450 m",
+     "value_en": "500–1,450 m"
+    }
+   ],
+   "sources": [
+    {
+     "label": "IUCN Red List – Hipposideros lamottei",
+     "url": "https://www.iucnredlist.org/species/10141/22091938"
+    },
+    {
+     "label": "Bat Conservation International – Lamotte's roundleaf bat",
+     "url": "https://digital.batcon.org/issue/volume-42-issue-3/lamottes-roundleaf-bat/"
+    },
+    {
+     "label": "Wikipedia – Mount Nimba Strict Nature Reserve",
+     "url": "https://en.wikipedia.org/wiki/Mount_Nimba_Strict_Nature_Reserve"
+    }
+   ],
+   "uncertain": [
+    "The number of roost tunnels (reported as four in secondary sources) is not confirmed; do not display it.",
+    "Wikipedia says 'recorded from only one mining site'; sources differ."
+   ],
+   "photos": [
+    "reconstruction-lamotte-bat"
+   ],
+   "camera": {
+    "distance_m": 1500,
+    "azimuth_deg": 220,
+    "elevation_deg": 25
+   },
+   "order": 11,
+   "dem_m": 1541.5,
+   "elevation_unit": "m"
+  },
+  {
+   "id": "bossou-chimpanzees",
+   "category": "species",
+   "modes": [
+    "nature",
+    "culture"
+   ],
+   "lon": -8.50537,
+   "lat": 7.64875,
+   "elevation_m": 540,
+   "elevation_source": "dem",
+   "location_precision": "exact",
+   "coord_confidence": "high",
+   "coord_source": "Wikidata 'Bossou Hills / Chimpanzé de Bossou' 7.64875,-8.50537 (the hill forest is a publicly known site)",
+   "title_fr": "Les chimpanzés de Bossou et leurs outils",
+   "title_en": "The Bossou chimpanzees and their tools",
+   "short_fr": "Une petite communauté de chimpanzés casse des noix de palme avec un marteau et une enclume de pierre.",
+   "short_en": "A small chimpanzee community cracks oil-palm nuts with a stone hammer and anvil.",
+   "long_fr": "Les chimpanzés de Bossou sont célèbres pour casser les noix du palmier à huile (Elaeis guineensis) avec un marteau et une enclume de pierre, l'un des comportements d'utilisation d'outils les plus sophistiqués observés chez les chimpanzés sauvages. La communauté vit dans une forêt de collines isolée, à quelques kilomètres du massif, et est suivie par l'Université de Kyoto depuis 1976. Elle ne compte plus que sept individus (3 mâles, 4 femelles) depuis mars 2017 ; aucune femelle n'a rejoint le groupe depuis quatre décennies. Pour les habitants, qui parlent surtout le mano, ces chimpanzés bénéficient d'une protection traditionnelle fondée sur un lien de parenté, selon la Liste indicative de la Guinée.",
+   "long_en": "The Bossou chimpanzees are famous for cracking oil-palm nuts (Elaeis guineensis) with a stone hammer and anvil, among the most sophisticated tool-use behaviours seen in wild chimpanzees. The community lives in an isolated hill forest a few kilometres from the massif and has been studied by Kyoto University since 1976. It has been reduced to seven individuals (3 males, 4 females) since March 2017; no female has joined the group in four decades. According to Guinea's Tentative List, local people, who mostly speak Mano, protect these chimpanzees through a traditional kinship-based relationship.",
+   "facts": [
+    {
+     "label_fr": "Individus (mars 2017)",
+     "label_en": "Individuals (March 2017)",
+     "value_fr": "7 (3 mâles, 4 femelles)",
+     "value_en": "7 (3 males, 4 females)"
+    },
+    {
+     "label_fr": "Suivi scientifique",
+     "label_en": "Research",
+     "value_fr": "Université de Kyoto depuis 1976",
+     "value_en": "Kyoto University since 1976"
+    },
+    {
+     "label_fr": "Comportement",
+     "label_en": "Behaviour",
+     "value_fr": "Casse de noix de palme à l'aide de pierres",
+     "value_en": "Cracks oil-palm nuts with stones"
+    }
+   ],
+   "sources": [
+    {
+     "label": "Green Corridor Project – Chimpanzees of Bossou and Nimba (Kyoto Univ. / IREB)",
+     "url": "https://www.greencorridor.info/"
+    },
+    {
+     "label": "UNESCO Tentative List – Paysage culturel des monts Nimba (Guinea, 2001)",
+     "url": "https://whc.unesco.org/fr/listesindicatives/1522/"
+    },
+    {
+     "label": "Wikipedia – Bossou",
+     "url": "https://en.wikipedia.org/wiki/Bossou"
+    },
+    {
+     "label": "Primate Research 20(1): flu-like epidemic 2003 and Green Corridor",
+     "url": "https://www.jstage.jst.go.jp/article/psj/20/1/20_1_45/_article/-char/en"
+    },
+    {
+     "label": "UNESCO Decision 48 COM 7A.46 (2026)",
+     "url": "https://whc.unesco.org/en/decisions/9042/"
+    },
+    {
+     "label": "IUCN Ape Atlas – Bossou",
+     "url": "https://www.apesatlas.iucnapesportal.org/index.php/Bossou"
+    }
+   ],
+   "uncertain": [
+    "The count of seven is from the project site as of 2017; ask IREB / Kyoto University for the current number before publishing.",
+    "Nut-cracking takes place in Bossou, outside the strict reserve boundary.",
+    "A 2024 incident (see CLAUDE.md sensitivity notes) means tone matters: do not present chimpanzees as 'tame' or 'approachable'."
+   ],
+   "photos": [
+    "reconstruction-bossou-chimpanzees"
+   ],
+   "camera": {
+    "distance_m": 1500,
+    "azimuth_deg": 90,
+    "elevation_deg": 28
+   },
+   "order": 12,
+   "dem_m": 543.6,
+   "elevation_unit": "m"
+  },
+  {
+   "id": "ireb-bossou",
+   "category": "culture",
+   "modes": [
+    "culture",
+    "conservation"
+   ],
+   "lon": -8.50299,
+   "lat": 7.64446,
+   "elevation_m": 560,
+   "elevation_source": "dem",
+   "location_precision": "exact",
+   "coord_confidence": "high",
+   "coord_source": "Wikimedia Commons geotag of the IREB building photo",
+   "title_fr": "L'IREB – la recherche à Bossou",
+   "title_en": "IREB – research at Bossou",
+   "short_fr": "L'Institut de recherche environnementale de Bossou accueille la recherche sur les chimpanzés et le Nimba.",
+   "short_en": "The Institut de Recherche Environnementale de Bossou hosts research on the chimpanzees and on Nimba.",
+   "long_fr": "L'Institut de recherche environnementale de Bossou (IREB) est la base de la recherche sur les chimpanzés de Bossou ; il soutient, avec l'Université de Kyoto, des actions de conservation dont le projet Corridor vert. Il reçoit des chercheurs et sert de point de contact avec les villages voisins. Le bâtiment et son panneau d'entrée figurent sur les photographies de la galerie.",
+   "long_en": "The Institut de Recherche Environnementale de Bossou (IREB) is the base for research on the Bossou chimpanzees; together with Kyoto University it supports conservation actions including the Green Corridor project. It hosts researchers and serves as a contact point with neighbouring villages. The building and its entrance sign appear in the photo gallery.",
+   "facts": [
+    {
+     "label_fr": "Lieu",
+     "label_en": "Place",
+     "value_fr": "Bossou, préfecture de Lola",
+     "value_en": "Bossou, Lola Prefecture"
+    },
+    {
+     "label_fr": "Partenaire",
+     "label_en": "Partner",
+     "value_fr": "Université de Kyoto (Institut de primatologie)",
+     "value_en": "Kyoto University (Primate Research Institute)"
+    }
+   ],
+   "sources": [
+    {
+     "label": "Green Corridor Project – Chimpanzees of Bossou and Nimba (Kyoto Univ. / IREB)",
+     "url": "https://www.greencorridor.info/"
+    },
+    {
+     "label": "Wikipedia – Bossou",
+     "url": "https://en.wikipedia.org/wiki/Bossou"
+    }
+   ],
+   "uncertain": [
+    "Founding year and current staffing of IREB were not verified.",
+    "The research centre was damaged by residents in September 2024 (Wikipedia/press); verify the current status before showing this hotspot to the public."
+   ],
+   "photos": [
+    "reconstruction-village"
+   ],
+   "camera": {
+    "distance_m": 900,
+    "azimuth_deg": 70,
+    "elevation_deg": 30
+   },
+   "order": 13,
+   "dem_m": 557.0,
+   "elevation_unit": "m"
+  },
+  {
+   "id": "green-corridor",
+   "category": "conservation",
+   "modes": [
+    "conservation",
+    "nature"
+   ],
+   "lon": -8.487,
+   "lat": 7.637,
+   "elevation_m": 550,
+   "elevation_source": "dem",
+   "location_precision": "approximate",
+   "coord_confidence": "low",
+   "coord_source": "Approximate midpoint between the Bossou hills and the foot of the massif (the corridor is a 4 km strip; no polygon found)",
+   "title_fr": "Le Corridor vert Bossou – Nimba",
+   "title_en": "The Bossou–Nimba Green Corridor",
+   "short_fr": "Une bande de savane de 4 km replantée pour relier la forêt de Bossou au massif.",
+   "short_en": "A 4 km strip of savanna being replanted to link the Bossou forest to the massif.",
+   "long_fr": "Lancé en janvier 1997 par le professeur Matsuzawa et ses collègues, le projet Corridor vert vise à relier la forêt isolée de Bossou aux forêts du Nimba en plantant des arbres sur une bande de savane de 300 m de large et 4 km de long. Le but est de rétablir un flux de migration entre la communauté de Bossou et les populations de chimpanzés voisines. Les photographies de la galerie montrent des pépinières et des plantations de restauration.",
+   "long_en": "Launched in January 1997 by Professor Matsuzawa and colleagues, the Green Corridor project aims to connect the isolated Bossou forest to the Nimba forests by planting trees along a savanna strip 300 m wide and 4 km long. The goal is to restore migration between the Bossou community and neighbouring chimpanzee populations. The gallery photographs show nurseries and restoration plantings.",
+   "facts": [
+    {
+     "label_fr": "Lancement",
+     "label_en": "Launched",
+     "value_fr": "Janvier 1997",
+     "value_en": "January 1997"
+    },
+    {
+     "label_fr": "Dimensions",
+     "label_en": "Size",
+     "value_fr": "300 m × 4 km",
+     "value_en": "300 m × 4 km"
+    }
+   ],
+   "sources": [
+    {
+     "label": "Green Corridor Project – Chimpanzees of Bossou and Nimba (Kyoto Univ. / IREB)",
+     "url": "https://www.greencorridor.info/"
+    },
+    {
+     "label": "Primate Research 20(1): flu-like epidemic 2003 and Green Corridor",
+     "url": "https://www.jstage.jst.go.jp/article/psj/20/1/20_1_45/_article/-char/en"
+    }
+   ],
+   "uncertain": [
+    "Marker position is approximate; the corridor shape is not mapped.",
+    "Current planting progress was not verified."
+   ],
+   "photos": [
+    "reconstruction-lowland"
+   ],
+   "camera": {
+    "distance_m": 2000,
+    "azimuth_deg": 60,
+    "elevation_deg": 30
+   },
+   "order": 14,
+   "dem_m": 547.8,
+   "elevation_unit": "m"
+  },
+  {
+   "id": "cultural-landscape",
+   "category": "culture",
+   "modes": [
+    "culture"
+   ],
+   "lon": -8.4629,
+   "lat": 7.6311,
+   "elevation_m": 570,
+   "elevation_source": "dem",
+   "location_precision": "area",
+   "coord_confidence": "medium",
+   "coord_source": "Village of Séringbara (OSM Nominatim 7.6311076,-8.4629177) used as anchor for the cultural landscape; individual sacred sites are deliberately NOT mapped",
+   "title_fr": "Le paysage culturel du Nimba",
+   "title_en": "The Nimba cultural landscape",
+   "short_fr": "Villages, ponts de lianes, mare sacrée aux silures et statuette de fécondité : le Nimba est aussi un paysage vivant.",
+   "short_en": "Villages, liana bridges, a sacred catfish pond and a fertility statuette: Nimba is also a living landscape.",
+   "long_fr": "En 2001, la Guinée a inscrit sur sa Liste indicative le « Paysage culturel des monts Nimba ». Elle décrit une zone de transition qui abrite la plupart des villages et des curiosités remarquables : ponts naturels, ponts de lianes sur les cours d'eau, une mare sacrée aux silures où la pêche est interdite et une grotte. Le nom de Nimba est associé à la célèbre statuette de la fécondité, et les hautes prairies ont une influence décisive sur les affaires importantes de la communauté. Les habitants sont notamment des Mano (Manon), Toma et Kono vivant de l'agriculture, de la pêche et de la cueillette. Les sites sacrés ne sont pas localisés dans la démo, par respect des communautés.",
+   "long_en": "In 2001 Guinea placed the 'Nimba Mountains Cultural Landscape' on its Tentative List. It describes a transition zone holding most of the villages and its remarkable features: natural bridges, liana bridges over rivers, a sacred catfish pond where fishing is forbidden, and a cave. The name Nimba is linked to the famous fertility statuette, and the high grasslands are said to hold decisive influence over important community affairs. The people include the Mano (Manon), Toma and Kono, living from farming, fishing and gathering. Sacred sites are not located in the demo, out of respect for the communities.",
+   "facts": [
+    {
+     "label_fr": "Liste indicative",
+     "label_en": "Tentative List",
+     "value_fr": "Soumise le 29/03/2001, critères (ii) et (vi)",
+     "value_en": "Submitted 29 March 2001, criteria (ii) and (vi)"
+    },
+    {
+     "label_fr": "Éléments cités",
+     "label_en": "Elements cited",
+     "value_fr": "Ponts de lianes, mare sacrée aux silures, ponts naturels, grotte",
+     "value_en": "Liana bridges, sacred catfish pond, natural bridges, cave"
+    }
+   ],
+   "sources": [
+    {
+     "label": "UNESCO Tentative List – Paysage culturel des monts Nimba (Guinea, 2001)",
+     "url": "https://whc.unesco.org/fr/listesindicatives/1522/"
+    },
+    {
+     "label": "OpenStreetMap Nominatim (ODbL)",
+     "url": "https://nominatim.openstreetmap.org/"
+    }
+   ],
+   "uncertain": [
+    "The Tentative List text is an OCR scan with errors, and its coordinates are garbled (they point to 10°W, Liberia/Guinea Forest region, not Nimba) – never use them.",
+    "Ethnic groups (Mano/Manon, Toma, Kono) come from secondary sources; consult local partners before stating them in the app.",
+    "Consult communities before showing or naming any sacred site."
+   ],
+   "photos": [
+    "reconstruction-village"
+   ],
+   "camera": {
+    "distance_m": 1800,
+    "azimuth_deg": 40,
+    "elevation_deg": 28
+   },
+   "order": 15,
+   "dem_m": 568.8,
+   "elevation_unit": "m"
+  },
+  {
+   "id": "cegens-gbakore",
+   "category": "conservation",
+   "modes": [
+    "conservation"
+   ],
+   "lon": -8.4059,
+   "lat": 7.7241,
+   "elevation_m": 490,
+   "elevation_source": "dem",
+   "location_precision": "approximate",
+   "coord_confidence": "medium",
+   "coord_source": "Village of Gbakoré (OSM Nominatim 7.7241019,-8.4058834); the CEGENS base is reported there but its exact point was not found",
+   "title_fr": "Gbakoré – la base de gestion de la réserve",
+   "title_en": "Gbakoré – the reserve's management base",
+   "short_fr": "Le CEGENS, qui administre la partie guinéenne, a sa base de terrain à Gbakoré.",
+   "short_en": "CEGENS, which manages the Guinean part, has its field base at Gbakoré.",
+   "long_fr": "Côté guinéen, la réserve est administrée par le Centre de gestion de l'environnement des monts Nimba et Simandou (CEGENS), établissement public placé sous l'autorité du ministère de l'Environnement. Selon la presse guinéenne (2024), sa base se trouve à Gbakoré, dans la préfecture de Lola. Wikipédia indique qu'un centre de gestion était en construction avec la Fondation des Parcs guinéenne, approuvé par le gouvernement et le CEGENS en 2016.",
+   "long_en": "On the Guinean side the reserve is administered by the Centre de Gestion de l'Environnement des Monts Nimba et Simandou (CEGENS), a public body under the Ministry of Environment. According to the Guinean press (2024), its base is at Gbakoré in Lola Prefecture. Wikipedia reports a management centre under construction with the Guinean Parks Foundation, approved by the government and CEGENS in 2016.",
+   "facts": [
+    {
+     "label_fr": "Gestionnaire",
+     "label_en": "Manager",
+     "value_fr": "CEGENS (Guinée)",
+     "value_en": "CEGENS (Guinea)"
+    },
+    {
+     "label_fr": "Côté ivoirien",
+     "label_en": "Ivorian side",
+     "value_fr": "OIPR et Fondation des Parcs et Réserves (FPRCI)",
+     "value_en": "OIPR and the Foundation for Parks and Reserves (FPRCI)"
+    }
+   ],
+   "sources": [
+    {
+     "label": "UNESCO World Heritage Centre – property page (Brief synthesis, Integrity)",
+     "url": "https://whc.unesco.org/en/list/155"
+    },
+    {
+     "label": "Guineenews 14 May 2024 – CEGENS at Gbakoré",
+     "url": "https://guineenews.org/2024/05/14/lola-gbakore-le-directeur-du-centre-de-gestion-environnementale-des-monts-nimba-et-simandou-decrit-la-situation-du-site-et-lobjectif-de-cegens/"
+    },
+    {
+     "label": "Wikipedia – Mount Nimba Strict Nature Reserve",
+     "url": "https://en.wikipedia.org/wiki/Mount_Nimba_Strict_Nature_Reserve"
+    },
+    {
+     "label": "OpenStreetMap Nominatim (ODbL)",
+     "url": "https://nominatim.openstreetmap.org/"
+    }
+   ],
+   "uncertain": [
+    "Exact coordinates of the CEGENS buildings were not found; the marker is the village centre.",
+    "Earlier drafts assumed the station was at Séringbara; sources point to Gbakoré."
+   ],
+   "photos": [
+    "reconstruction-village"
+   ],
+   "camera": {
+    "distance_m": 1500,
+    "azimuth_deg": 150,
+    "elevation_deg": 28
+   },
+   "order": 16,
+   "dem_m": 491.6,
+   "elevation_unit": "m"
+  },
+  {
+   "id": "nzo",
+   "category": "culture",
+   "modes": [
+    "culture"
+   ],
+   "lon": -8.3142,
+   "lat": 7.6794,
+   "elevation_m": 450,
+   "elevation_source": "dem",
+   "location_precision": "exact",
+   "coord_confidence": "high",
+   "coord_source": "Wikidata / OSM Nominatim 7.6794,-8.3137",
+   "title_fr": "N'Zo – la porte est",
+   "title_en": "N'Zo – the eastern gateway",
+   "short_fr": "Chef-lieu de sous-préfecture à l'est du massif, parmi les villes citées comme les plus proches de la réserve.",
+   "short_en": "Sub-prefecture town east of the massif, one of the towns named as nearest to the reserve.",
+   "long_fr": "N'Zo (N'Zoo) est une sous-préfecture de la préfecture de Lola, à l'est de la partie guinéenne de la réserve, à environ 450 m d'altitude. Wikipédia cite Yekepa (Liberia), Bossou et N'Zoo comme les villes les plus proches de la réserve. Les villages riverains vivent surtout de l'agriculture, de la pêche et de la cueillette.",
+   "long_en": "N'Zo (N'Zoo) is a sub-prefecture of Lola Prefecture, east of the Guinean part of the reserve at about 450 m elevation. Wikipedia names Yekepa (Liberia), Bossou and N'Zoo as the nearest towns to the reserve. Riverside villages mostly live from farming, fishing and gathering.",
+   "facts": [
+    {
+     "label_fr": "Statut",
+     "label_en": "Status",
+     "value_fr": "Sous-préfecture de Lola",
+     "value_en": "Sub-prefecture of Lola"
+    }
+   ],
+   "sources": [
+    {
+     "label": "Wikipedia – Mount Nimba Strict Nature Reserve",
+     "url": "https://en.wikipedia.org/wiki/Mount_Nimba_Strict_Nature_Reserve"
+    },
+    {
+     "label": "Wikidata coordinates (query saved in data/src/wikidata_box_query.json)",
+     "url": "https://www.wikidata.org/wiki/Q924276"
+    },
+    {
+     "label": "UNESCO Decision 48 COM 7A.46 (2026)",
+     "url": "https://whc.unesco.org/en/decisions/9042/"
+    }
+   ],
+   "uncertain": [
+    "Population and local facts for N'Zo were not sourced."
+   ],
+   "photos": [
+    "reconstruction-village"
+   ],
+   "camera": {
+    "distance_m": 2000,
+    "azimuth_deg": 80,
+    "elevation_deg": 30
+   },
+   "order": 17,
+   "dem_m": 452.5,
+   "elevation_unit": "m"
+  },
+  {
+   "id": "yeale",
+   "category": "culture",
+   "modes": [
+    "culture",
+    "conservation"
+   ],
+   "lon": -8.4222,
+   "lat": 7.5279,
+   "elevation_m": 370,
+   "elevation_source": "dem",
+   "location_precision": "exact",
+   "coord_confidence": "high",
+   "coord_source": "OSM Nominatim 7.5278570,-8.4221620 (Yéalé, Tonkpi, Côte d'Ivoire)",
+   "title_fr": "Yéalé – le versant ivoirien",
+   "title_en": "Yéalé – the Ivorian side",
+   "short_fr": "Village riverain de la réserve en Côte d'Ivoire, au bout d'une longue piste depuis Danané.",
+   "short_en": "Village bordering the reserve in Côte d'Ivoire, at the end of a long track from Danané.",
+   "long_fr": "Yéalé est un village riverain de la Réserve naturelle intégrale du Mont Nimba, dans le département de Danané. Le plan d'aménagement et de gestion ivoirien décrit un accès depuis Danané par une piste d'environ 50 km, reprofilée en 2019 mais très dégradée par les pluies. La partie ivoirienne du bien couvre 5 000 ha ; elle est gérée par l'Office ivoirien des parcs et réserves (OIPR), et une zone tampon d'environ 24 707 ha a été désignée en 2026.",
+   "long_en": "Yéalé is a village bordering the Mount Nimba Strict Nature Reserve in the Danané department. The Ivorian management plan describes access from Danané by a track of about 50 km, regraded in 2019 but badly degraded by rains. The Ivorian part of the property covers 5,000 ha and is managed by the Office Ivoirien des Parcs et Réserves (OIPR); a buffer zone of about 24,707 ha was designated in 2026.",
+   "facts": [
+    {
+     "label_fr": "Partie ivoirienne",
+     "label_en": "Ivorian part",
+     "value_fr": "5 000 ha (UNESCO) ; 50,9 km² (WDPA)",
+     "value_en": "5,000 ha (UNESCO); 50.9 km² (WDPA)"
+    },
+    {
+     "label_fr": "Zone tampon",
+     "label_en": "Buffer zone",
+     "value_fr": "≈ 24 707 ha (désignée, demande de modification mineure à déposer avant le 1er fév. 2027)",
+     "value_en": "≈ 24,707 ha (designated; minor boundary modification request due 1 Feb 2027)"
+    }
+   ],
+   "sources": [
+    {
+     "label": "PAPFor – consolidated management plan, Ivorian component (PAG Nimba, 2022)",
+     "url": "https://www.papfor.org/IMG/pdf/pag_nimba_consolide_apres_atelier_du_30_mai_au_1er_juin_2022_23_06_2022_dzo.pdf"
+    },
+    {
+     "label": "OIPR – Réserve naturelle intégrale du Mont Nimba",
+     "url": "https://oipr-ci.org/reserve-naturelle-integrale-du-mont-nimba/"
+    },
+    {
+     "label": "UNESCO Decision 48 COM 7A.46 (2026)",
+     "url": "https://whc.unesco.org/en/decisions/9042/"
+    },
+    {
+     "label": "UNESCO World Heritage Centre – property page (Brief synthesis, Integrity)",
+     "url": "https://whc.unesco.org/en/list/155"
+    }
+   ],
+   "uncertain": [
+    "Track condition is from a 2022 plan and may have changed."
+   ],
+   "photos": [
+    "reconstruction-village"
+   ],
+   "camera": {
+    "distance_m": 2200,
+    "azimuth_deg": 200,
+    "elevation_deg": 28
+   },
+   "order": 18,
+   "dem_m": 370.9,
+   "elevation_unit": "m"
+  },
+  {
+   "id": "yekepa-lamco",
+   "category": "conservation",
+   "modes": [
+    "conservation",
+    "culture"
+   ],
+   "lon": -8.5419,
+   "lat": 7.5753,
+   "elevation_m": 510,
+   "elevation_source": "dem",
+   "location_precision": "exact",
+   "coord_confidence": "medium",
+   "coord_source": "OSM Nominatim 7.5753094,-8.5419387 (Yekepa, Nimba County); Wikidata gives 7.5833,-8.5333",
+   "title_fr": "Yekepa et l'héritage de la mine LAMCO (Liberia)",
+   "title_en": "Yekepa and the LAMCO mining legacy (Liberia)",
+   "short_fr": "Du côté libérien, une mine de fer exploitée de 1963 à 1989 a dégradé une partie du massif.",
+   "short_en": "On the Liberian side an iron-ore mine worked from 1963 to 1989 degraded part of the massif.",
+   "long_fr": "Côté libérien, la ville de Yekepa a été bâtie pour la mine de fer LAMCO, exploitée de 1963 à 1989 et à l'origine d'une dégradation importante de la Réserve naturelle de l'Est Nimba (créée en 2003, environ 11 553 ha). L'UNESCO précise que la partie libérienne du massif est très dégradée par d'anciennes activités minières et ne fait pas partie du bien inscrit. Cet exemple sert de contre-modèle pour le versant guinéen. La photo d'archive de 1976 montre la mine à ciel ouvert.",
+   "long_en": "On the Liberian side the town of Yekepa was built for the LAMCO iron-ore mine, worked from 1963 to 1989, which caused serious degradation within what became East Nimba Nature Reserve (established 2003, about 11,553 ha). UNESCO states that the Liberian part of the massif is greatly degraded by former mining and is not part of the inscribed property. It serves as a cautionary example for the Guinean side. The 1976 archive photo shows the open-pit mine.",
+   "facts": [
+    {
+     "label_fr": "Exploitation LAMCO",
+     "label_en": "LAMCO operation",
+     "value_fr": "1963–1989",
+     "value_en": "1963–1989"
+    },
+    {
+     "label_fr": "Réserve de l'Est Nimba",
+     "label_en": "East Nimba Nature Reserve",
+     "value_fr": "Créée en 2003 ; ≈ 11 553 ha",
+     "value_en": "Established 2003; ≈ 11,553 ha"
+    }
+   ],
+   "sources": [
+    {
+     "label": "East Nimba Nature Reserve management plan 2014 (PAPFor)",
+     "url": "https://papfor.org/IMG/pdf/ennr_mgt_plan_2014_-_final.pdf"
+    },
+    {
+     "label": "Fauna & Flora – East Nimba Nature Reserve",
+     "url": "https://www.fauna-flora.org/projects/implementing-effective-management-east-nimba-nature-reserve/"
+    },
+    {
+     "label": "UNESCO World Heritage Centre – property page (Brief synthesis, Integrity)",
+     "url": "https://whc.unesco.org/en/list/155"
+    },
+    {
+     "label": "Wikimedia Commons archive photo (CC BY-SA 4.0)",
+     "url": "https://commons.wikimedia.org/wiki/File:ASC_Leiden_-_F._van_der_Kraaij_Collection_-_13_-_001_-_LAMCO_J.V._A_landscape_with_open_pit_mining_for_iron_ore._Excavators_and_lorries_-_Yekepa,_Nimba_county,_Liberia_-_1976.jpg"
+    }
+   ],
+   "uncertain": [
+    "Area of East Nimba Nature Reserve comes from a management plan summary; check the exact figure."
+   ],
+   "photos": [
+    "reconstruction-lamco"
+   ],
+   "camera": {
+    "distance_m": 2400,
+    "azimuth_deg": 320,
+    "elevation_deg": 28
+   },
+   "order": 19,
+   "dem_m": 505.1,
+   "elevation_unit": "m"
+  },
+  {
+   "id": "mining-enclave",
+   "category": "conservation",
+   "modes": [
+    "conservation"
+   ],
+   "lon": -8.3743,
+   "lat": 7.67,
+   "elevation_m": 1310,
+   "elevation_source": "dem",
+   "location_precision": "approximate",
+   "coord_confidence": "medium",
+   "coord_source": "Centroid of OSM polygon 'Mine de Nimba' (way 307934062, ≈269 ha); only ≈2% of it overlaps the WDPA reserve polygon, consistent with an enclave adjacent to the property",
+   "title_fr": "L'enclave minière guinéenne",
+   "title_en": "The Guinean mining enclave",
+   "short_fr": "Un enclave de minerai de fer, adjacente au bien, au cœur des préoccupations du Comité du patrimoine mondial.",
+   "short_en": "An iron-ore enclave adjacent to the property, at the heart of the World Heritage Committee's concerns.",
+   "long_fr": "Du côté guinéen, un enclave où des activités minières ont eu lieu jouxte directement le bien : l'UNESCO estime qu'il reste douteux que son exploitation puisse se faire sans affecter l'intégrité du site. En 2026, le Comité a exprimé sa vive préoccupation après la délivrance d'un permis environnemental à la SMFG pour l'exploration dans l'enclave, sur la base d'une étude d'impact limitée à la phase 1. Il y voit des impacts majeurs et potentiellement irréversibles : fragmentation des corridors écologiques, perte d'habitats d'altitude rares et risques pour des espèces endémiques. Il demande à la Guinée de ne délivrer aucun permis d'exploitation tant que l'évaluation complète n'est pas fournie.",
+   "long_en": "On the Guinean side an enclave where mining has taken place lies directly adjacent to the property: UNESCO says it remains questionable whether it can be worked without affecting the site's integrity. In 2026 the Committee expressed deep concern after an environmental permit was issued to SMFG for exploration in the enclave on the basis of an impact assessment limited to phase 1. It identifies major, potentially irreversible impacts: fragmentation of ecological corridors, loss of rare high-altitude habitats and risks to endemic species. It asks Guinea not to issue any operating permit until the full assessment is delivered.",
+   "facts": [
+    {
+     "label_fr": "Statut",
+     "label_en": "Status",
+     "value_fr": "Hors du bien, adjacent",
+     "value_en": "Outside the property, adjacent"
+    },
+    {
+     "label_fr": "Opérateur cité",
+     "label_en": "Operator named",
+     "value_fr": "SMFG (Société des Mines de Fer de Guinée)",
+     "value_en": "SMFG (Société des Mines de Fer de Guinée)"
+    },
+    {
+     "label_fr": "Surface (OSM)",
+     "label_en": "Area (OSM)",
+     "value_fr": "≈ 269 ha (polygone OSM, approximatif)",
+     "value_en": "≈ 269 ha (OSM polygon, approximate)"
+    }
+   ],
+   "sources": [
+    {
+     "label": "UNESCO Decision 48 COM 7A.46 (2026)",
+     "url": "https://whc.unesco.org/en/decisions/9042/"
+    },
+    {
+     "label": "UNESCO World Heritage Centre – property page (Brief synthesis, Integrity)",
+     "url": "https://whc.unesco.org/en/list/155"
+    },
+    {
+     "label": "OpenStreetMap way 307934062 'Mine de Nimba' (ODbL)",
+     "url": "https://www.openstreetmap.org/way/307934062"
+    },
+    {
+     "label": "UNESCO Tentative List – Paysage culturel des monts Nimba (Guinea, 2001)",
+     "url": "https://whc.unesco.org/fr/listesindicatives/1522/"
+    }
+   ],
+   "uncertain": [
+    "No official boundary of the enclave was found; the OSM polygon is a volunteer approximation, show it as 'approximate'.",
+    "The Tentative List says the original reserve area was reduced by 1,550 ha (OCR text) – unverified.",
+    "Other permits (Nimba North/West, Equatorial Resources Ltd; Nimba Development Company project) are mentioned in the 2026 decision but not mapped."
+   ],
+   "photos": [
+    "reconstruction-ridge"
+   ],
+   "camera": {
+    "distance_m": 2600,
+    "azimuth_deg": 210,
+    "elevation_deg": 32
+   },
+   "order": 20,
+   "dem_m": 1310.7,
+   "elevation_unit": "m"
+  },
+  {
+   "id": "tripoint",
+   "category": "conservation",
+   "modes": [
+    "conservation",
+    "nature"
+   ],
+   "lon": -8.47222,
+   "lat": 7.55556,
+   "elevation_m": 1230,
+   "elevation_source": "dem",
+   "location_precision": "exact",
+   "coord_confidence": "medium",
+   "coord_source": "Wikidata tripoint Côte d'Ivoire–Guinea–Liberia 7.55556,-8.47222",
+   "title_fr": "Trois pays, une montagne",
+   "title_en": "Three countries, one mountain",
+   "short_fr": "La chaîne chevauche la Guinée, la Côte d'Ivoire et le Liberia ; seuls les deux premiers pays forment le bien UNESCO.",
+   "short_en": "The range straddles Guinea, Côte d'Ivoire and Liberia; only the first two form the UNESCO property.",
+   "long_fr": "Le Nimba se situe à la frontière tripartite de la Guinée, de la Côte d'Ivoire et du Liberia, loin de leurs capitales. Le bien du patrimoine mondial couvre la quasi-totalité du massif côté guinéen et ivoirien (12 540 ha et 5 000 ha) ; la partie libérienne, très dégradée par d'anciennes mines, est protégée à part par la Réserve de l'Est Nimba. En 2026, le Comité a salué les progrès de la coopération et de la gestion transfrontalières, mais a demandé un rapport conjoint des deux États avant le 1er février 2027.",
+   "long_en": "Nimba lies on the tri-border of Guinea, Côte d'Ivoire and Liberia, far from their capitals. The World Heritage property covers nearly all of the massif on the Guinean and Ivorian sides (12,540 ha and 5,000 ha); the Liberian part, heavily degraded by former mines, is protected separately as East Nimba Nature Reserve. In 2026 the Committee welcomed progress in transboundary cooperation and management but asked the two States for a joint report by 1 February 2027.",
+   "facts": [
+    {
+     "label_fr": "Guinée",
+     "label_en": "Guinea",
+     "value_fr": "12 540 ha",
+     "value_en": "12,540 ha"
+    },
+    {
+     "label_fr": "Côte d'Ivoire",
+     "label_en": "Côte d'Ivoire",
+     "value_fr": "5 000 ha",
+     "value_en": "5,000 ha"
+    },
+    {
+     "label_fr": "Prochain rapport",
+     "label_en": "Next report",
+     "value_fr": "1er février 2027",
+     "value_en": "1 February 2027"
+    }
+   ],
+   "sources": [
+    {
+     "label": "UNESCO World Heritage Centre – property page (Brief synthesis, Integrity)",
+     "url": "https://whc.unesco.org/en/list/155"
+    },
+    {
+     "label": "UNESCO Decision 48 COM 7A.46 (2026)",
+     "url": "https://whc.unesco.org/en/decisions/9042/"
+    },
+    {
+     "label": "Wikipedia – Mount Nimba Strict Nature Reserve",
+     "url": "https://en.wikipedia.org/wiki/Mount_Nimba_Strict_Nature_Reserve"
+    },
+    {
+     "label": "Wikidata coordinates (query saved in data/src/wikidata_box_query.json)",
+     "url": "https://www.wikidata.org/wiki/Q924276"
+    }
+   ],
+   "uncertain": [
+    "Tripoint position is a published coordinate; real border lines in the kit (geoBoundaries) are approximate and do not match each other exactly.",
+    "Total area differs: 17,540 ha in the UNESCO text vs 17,632.62 ha in the property field; WDPA GIS gives 135.5 + 51.0 km²."
+   ],
+   "photos": [
+    "reconstruction-ridge"
+   ],
+   "camera": {
+    "distance_m": 3200,
+    "azimuth_deg": 30,
+    "elevation_deg": 30
+   },
+   "order": 21,
+   "dem_m": 1229.2,
+   "elevation_unit": "m"
+  },
+  {
+   "id": "unesco-inscription",
+   "category": "conservation",
+   "modes": [
+    "conservation"
+   ],
+   "lon": -8.391,
+   "lat": 7.6032,
+   "elevation_m": 790,
+   "elevation_source": "dem",
+   "location_precision": "approximate",
+   "coord_confidence": "high",
+   "coord_source": "UNESCO property coordinate N7°36'11.45\" W8°23'27.49\"",
+   "title_fr": "Site du patrimoine mondial depuis 1981",
+   "title_en": "A World Heritage Site since 1981",
+   "short_fr": "Inscrite en 1981 (Guinée) et étendue en 1982 (Côte d'Ivoire) au titre des critères ix et x.",
+   "short_en": "Inscribed in 1981 (Guinea) and extended in 1982 (Côte d'Ivoire) under criteria ix and x.",
+   "long_fr": "La Réserve naturelle intégrale du Mont Nimba est inscrite au patrimoine mondial depuis 1981 ; ses limites ont été modifiées en 1982 pour inclure la partie ivoirienne. Elle répond aux critères (ix) – processus écologiques : une montagne isolée au-dessus de plaines, avec un climat sub-équatorial montagnard – et (x) – biodiversité : plus de 2 000 plantes vasculaires, plus de 2 500 invertébrés et de nombreux vertébrés endémiques. Elle bénéficie d'un statut de protection stricte depuis 1944, a été déclarée réserve de la biosphère en 1980 (partie guinéenne) et est inscrite aussi sur la liste des biens en péril depuis 1992.",
+   "long_en": "The Mount Nimba Strict Nature Reserve has been a World Heritage Site since 1981; its boundaries were modified in 1982 to include the Ivorian part. It meets criterion (ix) – ecological processes: an isolated mountain rising above plains with a sub-equatorial montane climate – and criterion (x) – biodiversity: more than 2,000 vascular plants, more than 2,500 invertebrates and many endemic vertebrates. It has had strict protection since 1944, was declared a Biosphere Reserve in 1980 (Guinean part) and has also been on the List in Danger since 1992.",
+   "facts": [
+    {
+     "label_fr": "Inscription",
+     "label_en": "Inscription",
+     "value_fr": "1981 (extension 1982)",
+     "value_en": "1981 (extension 1982)"
+    },
+    {
+     "label_fr": "Critères",
+     "label_en": "Criteria",
+     "value_fr": "(ix), (x)",
+     "value_en": "(ix), (x)"
+    },
+    {
+     "label_fr": "Protection stricte depuis",
+     "label_en": "Strict protection since",
+     "value_fr": "1944",
+     "value_en": "1944"
+    },
+    {
+     "label_fr": "Vertébrés (UNESCO)",
+     "label_en": "Vertebrates (UNESCO)",
+     "value_fr": "> 317 espèces, dont 107 mammifères",
+     "value_en": "> 317 species, incl. 107 mammals"
+    }
+   ],
+   "sources": [
+    {
+     "label": "UNESCO World Heritage Centre – property page (Brief synthesis, Integrity)",
+     "url": "https://whc.unesco.org/en/list/155"
+    },
+    {
+     "label": "Wikipedia – Mount Nimba Strict Nature Reserve",
+     "url": "https://en.wikipedia.org/wiki/Mount_Nimba_Strict_Nature_Reserve"
+    },
+    {
+     "label": "UNESCO Tentative List – Paysage culturel des monts Nimba (Guinea, 2001)",
+     "url": "https://whc.unesco.org/fr/listesindicatives/1522/"
+    }
+   ],
+   "uncertain": [
+    "Wikipedia gives 680 vertebrate / 132 mammal species, UNESCO says 317 / 107: use the UNESCO figures and say 'more than'.",
+    "Property area: 17,540 ha in text vs 17,632.62 ha in the UNESCO property field."
+   ],
+   "photos": [
+    "reconstruction-summit"
+   ],
+   "camera": {
+    "distance_m": 4500,
+    "azimuth_deg": 190,
+    "elevation_deg": 35
+   },
+   "order": 22,
+   "dem_m": 791.1,
+   "elevation_unit": "m"
+  },
+  {
+   "id": "danger-list",
+   "category": "conservation",
+   "modes": [
+    "conservation"
+   ],
+   "lon": -8.4231,
+   "lat": 7.6447,
+   "elevation_m": 740,
+   "elevation_source": "dem",
+   "location_precision": "symbolic",
+   "coord_confidence": "n/a",
+   "coord_source": "Symbolic anchor on the central ridge (this hotspot describes the whole property, not a place)",
+   "title_fr": "Sur la liste du patrimoine en péril – décision 48 COM 7A.46",
+   "title_en": "On the Danger List – decision 48 COM 7A.46",
+   "short_fr": "En 2026, à sa 48e session (Busan), le Comité a décidé de maintenir le Nimba sur la liste des biens en péril, en saluant des progrès réels.",
+   "short_en": "In 2026, at its 48th session (Busan), the Committee decided to keep Nimba on the List in Danger, while welcoming real progress.",
+   "long_fr": "Inscrit sur la liste du patrimoine mondial en péril depuis 1992, le Nimba y a été maintenu en 2026 par la décision 48 COM 7A.46. Le Comité salue des progrès sur la coopération transfrontalière, le soutien aux communautés, le couvert végétal et le suivi des feux, ainsi que des résultats encourageants du suivi du crapaud vivipare, du chimpanzé d'Afrique de l'Ouest et de la micropotamogale. Il reste préoccupé par les retards concernant l'impact des projets miniers, le protocole de suivi écologique harmonisé et le système de suivi conjoint. Le plan intégré de développement et d'aménagement 2026–2035 est finalisé. Un rapport conjoint est attendu avant le 1er février 2027 pour la 49e session.",
+   "long_en": "On the List of World Heritage in Danger since 1992, Nimba was kept there in 2026 by decision 48 COM 7A.46. The Committee welcomes progress in transboundary cooperation, support for local communities, vegetation cover and bushfire monitoring, plus encouraging monitoring results for the viviparous toad, the West African chimpanzee and the Nimba otter shrew. It remains concerned by delays on the impact of mining projects, the harmonised ecological monitoring protocol and the joint monitoring system. The integrated development and management plan 2026–2035 has been finalised. A joint report is due by 1 February 2027 for the 49th session.",
+   "facts": [
+    {
+     "label_fr": "Sur la liste en péril",
+     "label_en": "On the Danger List",
+     "value_fr": "depuis 1992",
+     "value_en": "since 1992"
+    },
+    {
+     "label_fr": "Décision",
+     "label_en": "Decision",
+     "value_fr": "48 COM 7A.46 (Busan, 2026)",
+     "value_en": "48 COM 7A.46 (Busan, 2026)"
+    },
+    {
+     "label_fr": "Prochaine échéance",
+     "label_en": "Next deadline",
+     "value_fr": "Rapport conjoint avant le 1er fév. 2027",
+     "value_en": "Joint report by 1 Feb 2027"
+    },
+    {
+     "label_fr": "Plan intégré",
+     "label_en": "Integrated plan",
+     "value_fr": "PDAIG 2026–2035",
+     "value_en": "PDAIG 2026–2035"
+    }
+   ],
+   "sources": [
+    {
+     "label": "UNESCO Decision 48 COM 7A.46 (2026)",
+     "url": "https://whc.unesco.org/en/decisions/9042/"
+    },
+    {
+     "label": "UNESCO World Heritage Centre – property page (Brief synthesis, Integrity)",
+     "url": "https://whc.unesco.org/en/list/155"
+    }
+   ],
+   "uncertain": [
+    "Wikipedia notes iron-ore exploration began in 1992 in the montane zone; the UNESCO page itself only gives the 1992 inscription year."
+   ],
+   "photos": [
+    "reconstruction-cloudforest"
+   ],
+   "camera": {
+    "distance_m": 4500,
+    "azimuth_deg": 170,
+    "elevation_deg": 38
+   },
+   "order": 23,
+   "dem_m": 741.4,
+   "elevation_unit": "m"
+  }
+ ]
 }

@@ -99,13 +99,21 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
   // High-quality look: generated textures, sky light, AO, bloom, light shafts, sharpening (?fx=1/0 forces).
   const fxParam = params.get('fx');
   const fx = fxParam === '1' || (fxParam !== '0' && quality === 'high');
+  let foliage: THREE.Texture | undefined;
+  let exited = false;
+  let forestReady = false;
+  if (fx) void new THREE.TextureLoader().loadAsync(`${ctx.base}walk/art/canopy.webp`).then(texture => {
+    if (exited) { texture.dispose(); return; }
+    foliage = texture;
+    if (forestReady) forest.useFoliage(texture);
+  }).catch(e => console.warn('walk: optional foliage unavailable', e));
   const env = new WalkEnv(time0, fx ? Math.max(O.shadows, 4096) : O.shadows);
   const ground = new Ground(data, ctx.hf, ctx.lcTex, { segments: O.seg, radius: O.R, shellStart: O.shell[0], shellEnd: O.shell[1], shadows: O.shadows > 0 }, env.sunDir, { hemiSky: env.hemi.color, hemiGround: env.hemi.groundColor, sun: env.sun.color });
   hud.setVeilText(`${t('walk.loading')} 30 %`);
   await nextFrame();
   const forest = new Forest(data, { range: O.range, near: O.near, variants: O.variants, impostorRes: O.imp, shadows: O.shadows > 0 });
-  const foliage = fx ? await new THREE.TextureLoader().loadAsync(`${ctx.base}walk/art/canopy.webp`) : undefined;
   forest.init(renderer, foliage);
+  forestReady = true;
   hud.setVeilText(`${t('walk.loading')} 60 %`);
   await nextFrame();
   const cover = new GroundCover(data, { radius: O.cover, spacing: O.spacing, shadows: O.shadows > 0, rockRadius: O.rock, texSize: O.tex, msaa: !!renderer.getContext().getContextAttributes()?.antialias });
@@ -124,7 +132,6 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
   const farCam = new THREE.PerspectiveCamera(62, 1, 30, 60000);
   const cam = new THREE.PerspectiveCamera(62, 1, 0.1, Math.max(2600, O.R * 1.8));
 
-  let exited = false;
   let post: PostFX | null = null;
   let envRT: THREE.WebGLRenderTarget | null = null;
   let scansPending = fx ? 3 : 0;
