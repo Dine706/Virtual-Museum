@@ -18,10 +18,20 @@ try {
   page.on('pageerror', (e) => errors.push(e.message));
   page.on('console', (m) => { if (['error', 'warning'].includes(m.type())) errors.push(m.text()); });
   page.on('response', (r) => { if (r.status() >= 400) missing.push(`${r.status()} ${r.url()}`); });
-  await page.goto(`${base}?debug=1&tier=high`);
+  // Simulate a stalled optional texture. The title must still become interactive.
+  let releaseTexture;
+  const textureGate = new Promise((resolve) => { releaseTexture = resolve; });
+  await page.route('**/landscape/aerial-canopy.webp', async (route) => {
+    await textureGate;
+    await route.continue();
+  });
+  await page.goto(`${base}?debug=1&tier=high`, { waitUntil: 'domcontentloaded' });
   await page.waitForSelector('body[data-ready="1"]');
   await page.waitForSelector('.title-card.ready');
+  assert.equal(await page.evaluate(() => window.__nimba.quality().landscape), 0);
+  releaseTexture();
   await page.addStyleTag({ content: '.fps { display: none !important; }' });
+  await page.waitForFunction(() => window.__nimba.quality().landscape === 1);
   const orbit = await page.evaluate(() => window.__nimba.quality());
   assert.equal(orbit.landscape, 1);
   assert.equal(orbit.segments, 1008);

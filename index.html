@@ -43,13 +43,22 @@
           <svg viewBox="0 0 240 66" aria-hidden="true"><path class="ridge2" d="M0.0 33.3 L2.5 33.6 L5.1 33.8 L7.6 33.3 L10.1 33.6 L12.6 31.2 L15.2 25.0 L17.7 23.5 L20.2 22.7 L22.7 21.0 L25.3 12.8 L27.8 12.5 L30.3 13.0 L32.8 12.7 L35.4 12.8 L37.9 12.7 L40.4 12.2 L42.9 12.6 L45.5 14.3 L48.0 12.9 L50.5 12.0 L53.1 23.3 L55.6 23.2 L58.1 23.1 L60.6 13.9 L63.2 12.9 L65.7 23.0 L68.2 13.3 L70.7 13.2 L73.3 12.9 L75.8 13.4 L78.3 19.8 L80.8 20.3 L83.4 20.4 L85.9 21.3 L88.4 21.9 L90.9 20.4 L93.5 20.4 L96.0 20.6 L98.5 12.7 L101.1 13.1 L103.6 12.4 L106.1 12.8 L108.6 12.5 L111.2 12.6 L113.7 11.7 L116.2 12.1 L118.7 12.0 L121.3 10.1 L123.8 2.4 L126.3 0.8 L128.8 0.9 L131.4 0.7 L133.9 2.2 L136.4 2.3 L138.9 2.4 L141.5 2.9 L144.0 3.6 L146.5 3.8 L149.1 2.4 L151.6 2.2 L154.1 1.9 L156.6 2.5 L159.2 2.2 L161.7 2.4 L164.2 2.4 L166.7 2.2 L169.3 2.3 L171.8 11.3 L174.3 21.9 L176.8 31.5 L179.4 33.0 L181.9 33.5 L184.4 33.5 L186.9 33.5 L189.5 42.0 L192.0 43.4 L194.5 43.5 L197.1 43.5 L199.6 43.5 L202.1 43.5 L204.6 44.1 L207.2 43.5 L209.7 43.6 L212.2 43.8 L214.7 44.1 L217.3 43.8 L219.8 44.1 L222.3 43.7 L224.8 44.2 L227.4 44.2 L229.9 44.0 L232.4 43.8 L234.9 43.8 L237.5 44.0 L240.0 41.9" /><path class="ridge" d="M0.0 33.3 L2.5 33.6 L5.1 33.8 L7.6 33.3 L10.1 33.6 L12.6 31.2 L15.2 25.0 L17.7 23.5 L20.2 22.7 L22.7 21.0 L25.3 12.8 L27.8 12.5 L30.3 13.0 L32.8 12.7 L35.4 12.8 L37.9 12.7 L40.4 12.2 L42.9 12.6 L45.5 14.3 L48.0 12.9 L50.5 12.0 L53.1 23.3 L55.6 23.2 L58.1 23.1 L60.6 13.9 L63.2 12.9 L65.7 23.0 L68.2 13.3 L70.7 13.2 L73.3 12.9 L75.8 13.4 L78.3 19.8 L80.8 20.3 L83.4 20.4 L85.9 21.3 L88.4 21.9 L90.9 20.4 L93.5 20.4 L96.0 20.6 L98.5 12.7 L101.1 13.1 L103.6 12.4 L106.1 12.8 L108.6 12.5 L111.2 12.6 L113.7 11.7 L116.2 12.1 L118.7 12.0 L121.3 10.1 L123.8 2.4 L126.3 0.8 L128.8 0.9 L131.4 0.7 L133.9 2.2 L136.4 2.3 L138.9 2.4 L141.5 2.9 L144.0 3.6 L146.5 3.8 L149.1 2.4 L151.6 2.2 L154.1 1.9 L156.6 2.5 L159.2 2.2 L161.7 2.4 L164.2 2.4 L166.7 2.2 L169.3 2.3 L171.8 11.3 L174.3 21.9 L176.8 31.5 L179.4 33.0 L181.9 33.5 L184.4 33.5 L186.9 33.5 L189.5 42.0 L192.0 43.4 L194.5 43.5 L197.1 43.5 L199.6 43.5 L202.1 43.5 L204.6 44.1 L207.2 43.5 L209.7 43.6 L212.2 43.8 L214.7 44.1 L217.3 43.8 L219.8 44.1 L222.3 43.7 L224.8 44.2 L227.4 44.2 L229.9 44.0 L232.4 43.8 L234.9 43.8 L237.5 44.0 L240.0 41.9" /></svg>
           <div><span id="loading-text">Chargement du massif…</span> <span id="loading-pct">0&nbsp;%</span></div>
           <div class="bar"><i id="loading-bar"></i></div>
+          <a id="loading-retry" hidden href="?tier=low" style="color:inherit;padding:12px">Ouvrir en qualité basse</a>
         </div>
       </div>
     </section>
     <script>
+      // Also works when the module download or GPU startup stalls.
+      const retryLink = document.getElementById('loading-retry');
+      const lighter = new URL(location.href);
+      lighter.searchParams.set('tier', 'low');
+      lighter.searchParams.delete('fx');
+      retryLink.href = lighter.href;
+      setTimeout(() => { retryLink.hidden = false; }, 8000);
       // Show the title in the visitor's saved language before the app bundle arrives.
       try {
         if (localStorage.getItem('nimba.lang') === 'en') {
+          retryLink.textContent = 'Open in low quality';
           document.documentElement.lang = 'en';
           document.getElementById('title-h1').textContent = 'Mount Nimba';
           document.getElementById('title-sub').textContent = 'Strict Nature Reserve · UNESCO World Heritage Site since 1981';

@@ -31,6 +31,7 @@ vec3 landscapeSample(sampler2D tex, vec2 p, float scale) {
   return a * 0.72 + b * 0.28;
 }
 vec3 landscapeSurface(vec3 base, vec2 p, float canopy, float slope) {
+  if (uLandscape < 0.5) return base;
   vec3 crowns = landscapeSample(uCanopyMap, p, 115.0);
   vec3 ridge = mix(landscapeSample(uRidgeMap, p, 34.0), landscapeSample(uRidgeMap, p, 320.0), 0.40);
   vec3 cliff = landscapeSample(uCliffMap, p, 90.0);

@@ -84,22 +84,14 @@ async function boot() {
   const syncExposure = () => { stage.renderer.toneMappingExposure = atmo.exposure; };
   atmo.subscribe(syncExposure);
   syncExposure();
-  const geom = buildTerrainGeometry(hf, tier.segments, exag);
-  const terrainMat = createTerrainMaterial(atmo, hf, lc.toTexture(), tier.shadowSteps);
+  const initialDetail = tier.tier === 'high' ? TIERS.mid : tier;
+  const geom = buildTerrainGeometry(hf, initialDetail.segments, exag);
+  const terrainMat = createTerrainMaterial(atmo, hf, lc.toTexture(), initialDetail.shadowSteps);
   const terrain = new THREE.Mesh(geom, terrainMat);
   terrain.frustumCulled = false;
   mark('terrain-built');
   scene.add(createSky(atmo), terrain);
   let landscapeForest: LandscapeForest | null = null;
-  if (tier.tier === 'high') {
-    const maps = await loadLandscape(BASE, Math.min(16, stage.renderer.capabilities.getMaxAnisotropy()));
-    // ShaderMaterial exposes a general uniform map; these names come from createTerrainMaterial.
-    useLandscape(terrainMat.uniforms as ReturnType<typeof import('./scene/landscape').landscapeUniforms>, maps);
-    landscapeForest = new LandscapeForest(hf, terrainMat.uniforms.uLand.value, maps.tree, {
-      atmosphere: 'orbit', uniforms: atmo.uniforms, inner: 0, outer: 60000,
-    });
-    scene.add(landscapeForest.mesh);
-  }
   const clouds = tier.clouds > 0 ? new Clouds(atmo, terrainMat.uniforms.uHeight.value, tier.clouds) : null;
   if (clouds) scene.add(clouds.group);
 
@@ -482,12 +474,12 @@ async function boot() {
   // ---- Quality tiers at runtime + FPS watchdog (M8, CLAUDE.md §7) ----
   // Step order high → mid → low: fewer terrain segments, lower DPR cap, fewer cloud layers, fewer/no shadow steps.
   const ORDER: Tier[] = ['high', 'mid', 'low'];
-  let builtSegments = tier.segments;
+  let builtSegments = initialDetail.segments;
   const setTier = (next: TierSpec) => {
     stage.tier = next;
     if (landscapeForest) landscapeForest.mesh.visible = next.tier === 'high';
     terrainMat.uniforms.uLandscape.value = next.tier === 'high' && landscapeForest ? 1 : 0;
-    stage.resize(); // applies the new DPR cap
+    if (!stage.suspended) stage.resize(); // walk mode owns the renderer until exit
     if (next.segments !== builtSegments) {
       const old = terrain.geometry;
       terrain.geometry = buildTerrainGeometry(hf, next.segments, exag);
@@ -525,14 +517,8 @@ async function boot() {
     });
   }
 
-  // Compile every shader before the first frame. With KHR_parallel_shader_compile (most browsers) this
-  // happens off the main thread, so the page stays responsive while the GPU builds the programs. Without it
-  // (some GPUs, SwiftShader) the first render compiles them, as before.
+  // Render the playable terrain first. Optional High detail can arrive independently.
   mark('scene-ready');
-  if (stage.renderer.extensions.has('KHR_parallel_shader_compile')) {
-    try { await stage.renderer.compileAsync(scene, camera); } catch { /* compiled on first render instead */ }
-  }
-  mark('compiled');
   stage.start();
   // Ready once the first frame is on screen.
   await new Promise<void>((r) => requestAnimationFrame(() => requestAnimationFrame(() => r())));
@@ -648,6 +634,22 @@ async function boot() {
       tourFirst: location.hash === '#/tour',
       onSkip: () => { flyTo(homePose(), reducedMotion ? 0 : 1200); endIntro(); },
     });
+  }
+
+  if (stage.tier.tier === 'high') {
+    void loadLandscape(BASE, Math.min(16, stage.renderer.capabilities.getMaxAnisotropy())).then((maps) => {
+      if (stage.tier.tier !== 'high') {
+        for (const texture of Object.values(maps)) texture.dispose();
+        return;
+      }
+      landscapeForest = new LandscapeForest(hf, terrainMat.uniforms.uLand.value, maps.tree, {
+        atmosphere: 'orbit', uniforms: atmo.uniforms, inner: 0, outer: 60000,
+      });
+      useLandscape(terrainMat.uniforms as ReturnType<typeof import('./scene/landscape').landscapeUniforms>, maps);
+      scene.add(landscapeForest.mesh);
+      maps.grass.dispose(); // Walk mode owns its own ground-cover textures.
+      setTier(TIERS.high);
+    }).catch((error) => console.warn('Optional landscape detail could not load.', error));
   }
 
   if (flags.debug) {
