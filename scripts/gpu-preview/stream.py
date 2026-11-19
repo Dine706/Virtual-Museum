@@ -41,6 +41,8 @@ async def play(request):
                 await context.route('**/*', restrict_game)
                 page = await context.new_page()
                 await page.goto(URL,wait_until='domcontentloaded')
+                await page.wait_for_selector('[data-i18n="title.walk"]')
+                await page.locator('.title-landscape').evaluate('img=>img.decode().catch(()=>{})')
                 if 'External Content' in await page.title():
                     await page.get_by_text('Open the page',exact=True).click()
                 cdp = await context.new_cdp_session(page)
@@ -77,6 +79,9 @@ async def play(request):
                         if kind=='pointerdown': await page.mouse.down()
                         if kind in ('pointerup','pointercancel'): await page.mouse.up()
             finally:
+                if context.pages:
+                    print('Game session ended:', await context.pages[0].evaluate(
+                        "()=>({walking:document.body.classList.contains('walking'),location:location.hash})"), flush=True)
                 await context.close()
     except (TimeoutError,ValueError,KeyError,ConnectionError):
         await ws.close()
