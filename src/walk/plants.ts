@@ -310,9 +310,9 @@ export function buildPlant(type: PlantType, seed: number): PlantGeo {
     }
     case 'treefern': {
       trunkR = 0.03;
-      const trunk = limb(new V(0, 0, 0), new V((r() - 0.5) * 0.2, 1, (r() - 0.5) * 0.2), 0.8, 8, 0.12, r);
+      const trunk = limb(new V(0, 0, 0), new V((r() - 0.5) * 0.2, 1, (r() - 0.5) * 0.2), 0.66, 8, 0.12, r);
       capped(b, trunk, taper(trunk.length, trunkR * 1.25, trunkR * 0.9), 7);
-      palmCrown(fr, r, trunk[trunk.length - 1], 15, 0.5, 0.16, 0.9, 0.11);
+      palmCrown(fr, r, trunk[trunk.length - 1], 23, 0.56, 0.17, 0.88, 0.13);
       crown = 0.42; leafKind = null; frondKind = 'fern'; barkKind = 'fern';
       break;
     }
@@ -396,6 +396,34 @@ export function buildPlant(type: PlantType, seed: number): PlantGeo {
 // ---------------------------------------------------------------- ground cover
 
 export type CoverType = 'grassGreen' | 'grassGolden' | 'grassTall' | 'fern' | 'herb' | 'stick' | 'stone' | 'sapling';
+
+/** Individual arching blades for the area at the walker's feet. */
+export function detailedTussock(kind: 'grassGolden' | 'grassGreen' | 'grassTall') {
+  const random = rng(kind === 'grassGolden' ? 317 : kind === 'grassGreen' ? 426 : 538);
+  const b = new Builder();
+  const base = new THREE.Color(kind === 'grassGolden' ? '#655c36' : '#39472a');
+  const living = new THREE.Color(kind === 'grassGolden' ? '#a2a061' : '#839459');
+  const dry = new THREE.Color('#c5ad7a');
+  for (let blade = 0; blade < 55; blade++) {
+    const theta = random() * Math.PI * 2, spread = Math.sqrt(random()) * .40;
+    const dx = Math.cos(theta), dz = Math.sin(theta);
+    const root = new V(dx * spread, -.025, dz * spread);
+    const height = .26 + random() * (.96 - spread);
+    const bend = .08 + spread * .8 + random() * .20;
+    const width = .009 + random() * .012;
+    const tip = living.clone().lerp(dry, random() ** 2);
+    const first = b.col.length;
+    b.strip([root,root.clone().add(new V(dx*bend*.2,height*.55,dz*bend*.2)),
+      root.clone().add(new V(dx*bend*.65,height,dz*bend*.65)),
+      root.clone().add(new V(dx*bend,height*(.78+random()*.24),dz*bend))],
+      [width*.48,width,width*.57,.0006],new V(-dz,0,dx),1,new V(0,1,0));
+    for (let j=first;j<b.col.length;j+=3) {
+      const col=base.clone().lerp(tip, Math.min(1, .12 + ((j-first)/3 >> 1)*.33));
+      b.col[j]=col.r; b.col[j+1]=col.g; b.col[j+2]=col.b;
+    }
+  }
+  return b.build();
+}
 
 /** Ground-cover clump, height 1. */
 export function buildCover(type: CoverType, seed: number): THREE.BufferGeometry {

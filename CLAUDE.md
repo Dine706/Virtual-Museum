@@ -87,6 +87,8 @@ Detect once (`navigator.deviceMemory`, `hardwareConcurrency`, `matchMedia('(poin
 | Low | ≤ 2 GB RAM or < 28 fps | 160² mesh, `terrarium_504.png`, `albedo_1024` | DPR 1 | no clouds layer, fog only |
 
 ## 8. Performance budget (hard limits – fail the milestone if exceeded)
+**19 Nov 2026 — Dean's desktop realism direction:** High quality targets a powerful graphics card. Its geometry, texture downloads and view distance may exceed the original mobile budgets below. Use the full available terrain resolution and continuous near/middle/far detail; retain Low/Mid for other devices. Do not claim hardware FPS from cloud software-renderer captures. Original factual, attribution and sensitive-location rules still apply.
+
 * **First meaningful render (title card with terrain):** ≤ **3 MB** transferred on mobile (JS ≤ 250 KB gz + `terrarium_504.png` 0.47 MB + `albedo_1024.jpg` 0.22 MB + 2 font files ≤ 80 KB + `content.json` gzip ≈ 20 KB), **≤ 5 MB on desktop**. Everything else (photos, 2048 albedo, 1008 terrarium) is lazy.
 * Photos: show **thumbs (≈ 30–70 KB) first**, load the 1600 px version only when the user opens the full-size viewer; convert to **AVIF/WebP** at build (`vite-imagetools` or `sharp`), keep JPEG fallback; `loading="lazy"`, explicit width/height, `decoding="async"`.
 * Total **initial** bytes on 3G (400 kbps) ≈ ≤ 60 s to interactive on low tier; show a loading screen with real progress and a "text-only list" button appearing after 6 s.
@@ -107,7 +109,7 @@ Hotspots with `photos: []` (otter shrew, bat, N'Zo, Yéalé) show a tasteful ill
 3. **Sacred sites and cultural practices:** only what the cited UNESCO Tentative List says; do not map sacred sites; consult communities before adding detail.
 4. **Chimpanzees:** write with respect and caution – do not present them as tame/approachable. (Context: in September 2024 residents ransacked the Bossou research centre after a chimpanzee reportedly killed a child; the IREB hotspot says "verify current status". Keep the tone factual; don't add tourism "visit the chimps" calls to action.)
 5. **Mining:** report the UNESCO Committee's words (decision 48 COM 7A.46, 2026) neutrally; no accusations against companies beyond what the decision states. The enclave polygon is labelled approximate.
-6. **Always show attribution** for photos and data (§12). **No fake logos, no stock photos, no AI-generated "photos" of Nimba.** If an image is missing, use a neutral colour block with the hotspot's category icon.
+6. **Always show attribution** for photos, assets, sounds and data (§12). **No fake logos or stock photos passed off as Nimba.** Dean permits generated modelling references, textures, image-to-3D inputs and reconstructed card imagery for the open world. Keep prompts, source references and generation provenance in the asset records. Public card captions use **“Reconstitution numérique / Digital reconstruction”**, without an “AI” badge; never present a generated image as a documentary photograph of Nimba or as proof of an exact location, animal or building. Retain the original licensed photographs as references. The About screen distinguishes measured/model-derived data from reconstructed detail (`worldpack/REPORT.md`). Generated animal references still require sourced species sheets and comparison with real photos. These permissions do not change any other content rule.
 7. Dates/units: FR uses `1 752 m` (narrow no-break space), EN `1,752 m`; use `Intl.NumberFormat`.
 
 ## 11. Accessibility

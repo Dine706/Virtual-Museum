@@ -13,6 +13,7 @@ import { photoLayers, type PhotoSet } from './photo';
 import { TERRAIN_FRAG_GLSL, TERRAIN_MAP_GLSL, TERRAIN_NORMAL_GLSL } from './terrainShader';
 import type { Heightfield } from '../scene/heightfield';
 import { WORLD, WORLD_W, WORLD_D } from '../data/geo';
+import { LANDSCAPE_GLSL, landscapeUniforms, useLandscape, type LandscapeMaps } from '../scene/landscape';
 
 export interface GroundOpts { segments: number; radius: number; shellStart: number; shellEnd: number; shadows: boolean }
 
@@ -49,7 +50,7 @@ float shellAt(vec2 p) {
   if (k <= 0.0) return 0.0;
   float c = attrAt(p).r * 255.0;
   // lumpy crowns rather than a flat sheet
-  return k * c * (0.85 + 0.25 * vnoise(p / 9.0, 61));
+  return k * c * (0.44 + 0.19 * vnoise(p / 9.0, 61));
 }
 float surf(vec2 p) { return groundHeight(p) + shellAt(p); }
 `;
@@ -65,6 +66,7 @@ export class Ground {
   private snap: number;
   private texU: { uDiff: { value: THREE.DataArrayTexture }; uNorm: { value: THREE.DataArrayTexture } };
   private soilTint = { value: new THREE.Vector3(1, 1, 1) };
+  private landscape = landscapeUniforms();
 
   constructor(data: WalkData, hf: Heightfield, lcTex: THREE.Texture, private opts: GroundOpts, sunDir: THREE.Vector3, sky: { hemiSky: THREE.Color; hemiGround: THREE.Color; sun: THREE.Color }) {
     const layers = drawnLayers(opts.segments >= 300 ? 512 : 256);
@@ -72,7 +74,7 @@ export class Ground {
     this.texU = { uDiff: { value: layers.diff }, uNorm: { value: layers.nor } };
     this.snap = 2 * opts.radius * 0.055 / opts.segments * 2; // a couple of centre cells
     const mat = walkMaterial(new THREE.MeshStandardMaterial({ roughness: 0.95, metalness: 0 }), 'none', (s) => {
-      Object.assign(s.uniforms, data.uniforms, { uCam: this.uCam, uShell: this.uShell, uSoilTint: this.soilTint }, this.texU);
+      Object.assign(s.uniforms, data.uniforms, { uCam: this.uCam, uShell: this.uShell, uSoilTint: this.soilTint }, this.texU, this.landscape);
       s.vertexShader = s.vertexShader
         .replace('#include <common>', `#include <common>\n${NOISE_GLSL}\n${DATA_GLSL}\n${SURF_GLSL}\nvarying vec3 vWP; varying vec3 vNW; varying float vShell;`)
         .replace('#include <beginnormal_vertex>', /* glsl */ `
@@ -85,7 +87,7 @@ export class Ground {
           vShell = smoothstep(uShell.x, uShell.y, dc) * smoothstep(2.0, 8.0, attrAt(gp).r * 255.0);`)
         .replace('#include <begin_vertex>', `vec3 transformed = vec3(position.x, gh, position.z);\nvWP = vec3(gp.x, gh, gp.y);`);
       s.fragmentShader = s.fragmentShader
-        .replace('#include <common>', `#include <common>\n${NOISE_GLSL}\n${DATA_GLSL}\n${TERRAIN_FRAG_GLSL}`)
+        .replace('#include <common>', `#include <common>\n${NOISE_GLSL}\n${DATA_GLSL}\n${LANDSCAPE_GLSL}\n${TERRAIN_FRAG_GLSL}`)
         .replace('#include <map_fragment>', TERRAIN_MAP_GLSL)
         .replace('#include <roughnessmap_fragment>', 'float roughnessFactor = gRough;')
         .replace('#include <normal_fragment_maps>', TERRAIN_NORMAL_GLSL);
@@ -96,7 +98,7 @@ export class Ground {
     this.mesh.renderOrder = -1;
 
     // ---- far backdrop (whole massif, Copernicus DSM at true scale) ----
-    const n = 300;
+    const n = opts.segments >= 500 ? 700 : 300;
     const fg = new THREE.PlaneGeometry(WORLD_W, WORLD_D, n, n);
     fg.rotateX(-Math.PI / 2);
     fg.translate(WORLD.minX + WORLD_W / 2, 0, WORLD.minZ + WORLD_D / 2);
@@ -105,6 +107,7 @@ export class Ground {
     fg.computeVertexNormals();
     const farU = {
       ...shared, uLc: { value: lcTex }, uHole: this.cloudUniforms.uHole, uCam: this.uCam,
+      ...this.landscape,
       uSunDir: { value: sunDir }, uSunC: { value: sky.sun }, uSkyC: { value: sky.hemiSky }, uGrC: { value: sky.hemiGround },
       uWorld: { value: new THREE.Vector4(WORLD.minX, WORLD.minZ, WORLD_W, WORLD_D) },
     };
@@ -120,14 +123,19 @@ export class Ground {
         uniform vec3 uFogColor; uniform float uFogDensity; uniform float uHaze; uniform vec3 uSunView; uniform vec3 uSunColor;
         varying vec3 vWalkView; varying vec3 vN; varying vec3 vW;
         ${FOG_TAU_GLSL}
+        ${LANDSCAPE_GLSL}
         void main() {
           float d = length(vW.xz - uCam.xz);
           if (d < uHole - 60.0 * whash(ivec2(gl_FragCoord.xy), 3)) discard;
-          vec3 base = texture(uLc, (vW.xz - uWorld.xy) / uWorld.zw).rgb;
+          vec4 land = texture(uLc, (vW.xz - uWorld.xy) / uWorld.zw);
+          vec3 base = landscapeSurface(land.rgb, vW.xz, land.a, 1.0 - vN.y);
           base *= 0.75 + 0.35 * vnoise(vW.xz / 120.0, 5) + 0.15 * vnoise(vW.xz / 25.0, 6);
           vec3 N = normalize(vN);
           vec3 light = uSunC * max(dot(N, uSunDir), 0.0) * 0.9 + mix(uGrC, uSkyC, N.y * 0.5 + 0.5) * 0.6;
-          vec3 col = base * light;
+          vec2 surveyUV = (vW.xz - uWorld.xy) / uWorld.zw;
+          float horizon = texture2D(uRelief, vec2(surveyUV.x, 1.0-surveyUV.y)).r * 1.5708;
+          float mountainShade = smoothstep(horizon-.07,horizon+.07,asin(clamp(uSunDir.y,0.,1.)));
+          vec3 col = base * light * mix(1., .58+.42*mountainShade,uLandscape);
           float dist = length(vWalkView);
           vec3 dir = vWalkView / dist;
           float f = 1.0 - exp(-walkTau(dist, uFogDensity, uHaze));
@@ -187,7 +195,7 @@ export class Ground {
     this.uCam.value.copy(eye);
   }
 
-  /** Swap the drawn ground layers for scanned ones (high-quality look). */
+  /** Swap the drawn ground layers for generated surface textures (high-quality look). */
   usePhotos(p: PhotoSet, anisotropy: number) {
     const { diff, nor } = photoLayers(p, anisotropy);
     this.texU.uDiff.value.dispose(); this.texU.uNorm.value.dispose();
@@ -201,4 +209,12 @@ export class Ground {
   }
 
   get radius() { return this.opts.radius; }
+
+  useLandscape(maps: LandscapeMaps) { useLandscape(this.landscape, maps); }
+
+  dispose() {
+    this.texU.uDiff.value.dispose(); this.texU.uNorm.value.dispose();
+    // Landscape maps are shared by this walk's near and far passes, and owned by enterWalk.
+    if (!this.landscape.uLandscape.value) this.landscape.uCanopyMap.value.dispose();
+  }
 }

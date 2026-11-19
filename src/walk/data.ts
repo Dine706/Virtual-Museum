@@ -88,7 +88,9 @@ const SMAX = 25.5;          // metres: stream distance saturates here
 interface Tile { h: Float32Array; a: Uint8Array; s: Uint8Array }
 
 async function decode(url: string): Promise<ImageData> {
-  const blob = await (await fetch(url)).blob();
+  const response = await fetch(url);
+  if (!response.ok) throw new Error(`Walk tile unavailable (${response.status})`);
+  const blob = await response.blob();
   const bmp = await createImageBitmap(blob, { colorSpaceConversion: 'none', premultiplyAlpha: 'none' });
   const c = new OffscreenCanvas(bmp.width, bmp.height);
   const g = c.getContext('2d', { willReadFrequently: true })!;
@@ -98,6 +100,11 @@ async function decode(url: string): Promise<ImageData> {
 }
 
 export class WalkData {
+  wildlifeOpening?: {x:number;z:number;r:number};
+  inWildlifeOpening(x:number,z:number){
+    const o=this.wildlifeOpening;
+    return !!o && (x-o.x)**2+(z-o.z)**2<o.r**2;
+  }
   index!: WalkIndex;
   species!: SpeciesData;
   private tiles = new Map<string, Promise<Tile>>();
@@ -182,7 +189,7 @@ export class WalkData {
           aa[k * 3] = a.data[k * 4]; aa[k * 3 + 1] = a.data[k * 4 + 1]; aa[k * 3 + 2] = a.data[k * 4 + 2];
         }
         return { h: hh, a: aa, s: ss };
-      });
+      }).catch((error: unknown) => { this.tiles.delete(key); throw error; });
       this.tiles.set(key, t);
     }
     return t;
@@ -230,6 +237,9 @@ export class WalkData {
     this.uniforms.uWin.value.set(x0, z0, step, WIN);
     this.heightTex.needsUpdate = true;
     this.attrTex.needsUpdate = true;
+    // Keep the current window plus a small margin; exploring must not retain every visited tile.
+    const active = new Set(got.map(([i, j]) => `${i}_${j}`));
+    for (const key of this.tiles.keys()) if (this.tiles.size > 25 && !active.has(key)) this.tiles.delete(key);
   }
 
   /** True when (x, z) is far enough from the window centre that it should be reloaded. */
@@ -265,7 +275,7 @@ export class WalkData {
       const b = g(ix, iz + 1, ch) + (g(ix + 1, iz + 1, ch) - g(ix, iz + 1, ch)) * tx;
       return a + (b - a) * tz;
     };
-    const cls = g(Math.round(fx), Math.round(fz), 1) || g(ix, iz, 1);
+    const cls = g(Math.min(WIN - 1, Math.max(0, Math.round(fx))), Math.min(WIN - 1, Math.max(0, Math.round(fz))), 1) || g(ix, iz, 1);
     return { canopy: bl(0), cls, rock: bl(2) / 255, streamMask: bl(3) / 255 };
   }
 
@@ -530,6 +540,11 @@ export class WalkData {
       return a + (b - a) * tz;
     };
     return { dist: bl(0) * 0.05, half: bl(1) * 0.05 };
+  }
+
+  dispose() {
+    for (const texture of [this.heightTex, this.attrTex, this.streamTex, this.pathTex, this.areaTex]) texture.dispose();
+    this.tiles.clear(); this.osmTiles.clear(); this.osmLoaded.clear(); this.bGrid.clear(); this.crowns.clear();
   }
 
   /** Uniforms for the GLSL mirror (shared objects; values follow the window). */

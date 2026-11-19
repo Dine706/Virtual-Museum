@@ -8,7 +8,7 @@ import { createRequire } from 'node:module';
 let pw;
 try { pw = await import('playwright'); } catch { pw = createRequire(import.meta.url)('playwright'); }
 const BASE = process.env.BASE_URL || 'http://localhost:5173/';
-const browser = await pw.chromium.launch({ args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
+const browser = await pw.chromium.launch({ executablePath: process.env.BROWSER_PATH, args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
 const failures = [];
 const check = (ok, msg) => { console.log(ok ? 'ok  ' : 'FAIL', msg); if (!ok) failures.push(msg); };
 
@@ -83,7 +83,19 @@ for (const [name, opts] of [
   await page.evaluate(() => window.__nimba.view(-8.42, 7.62, 14000, 215, 45));
   await page.waitForTimeout(300);
   const p = await page.evaluate(() => window.__nimba.project(-8.45, 7.66));
-  if (name === 'phone') { await page.touchscreen.tap(p.x, p.y + 3); await page.waitForTimeout(80); await page.touchscreen.tap(p.x, p.y + 3); }
+  if (name === 'phone') {
+    // Send one timed physical gesture. Sequential round trips can exceed the double-tap interval
+    // when a software-rendered frame occupies the main thread between the two taps.
+    const cdp = await ctx.newCDPSession(page), start = Date.now() / 1000;
+    const events = [
+      { type: 'touchStart', touchPoints: [{ x: p.x, y: p.y + 3 }], timestamp: start },
+      { type: 'touchEnd', touchPoints: [], timestamp: start + 0.04 },
+      { type: 'touchStart', touchPoints: [{ x: p.x, y: p.y + 3 }], timestamp: start + 0.12 },
+      { type: 'touchEnd', touchPoints: [], timestamp: start + 0.16 },
+    ];
+    await Promise.all(events.map((event) => cdp.send('Input.dispatchTouchEvent', event)));
+    await cdp.detach();
+  }
   else await page.mouse.dblclick(p.x, p.y + 3);
   await page.waitForTimeout(800);
   const tgt = await page.evaluate(() => window.__nimba.target());

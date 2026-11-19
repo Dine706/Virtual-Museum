@@ -13,7 +13,7 @@ export interface TierSpec {
 }
 
 export const TIERS: Record<Tier, TierSpec> = {
-  high: { tier: 'high', segments: 504, terrarium: 'terrarium.png', terrariumBytes: 2024075, dprCap: 2, shadowSteps: 24, clouds: 3, antialias: true },
+  high: { tier: 'high', segments: 1008, terrarium: 'terrarium.png', terrariumBytes: 2024075, dprCap: 2, shadowSteps: 32, clouds: 3, antialias: true },
   mid: { tier: 'mid', segments: 256, terrarium: 'terrarium_504.png', terrariumBytes: 531402, dprCap: 1.5, shadowSteps: 12, clouds: 2, antialias: true },
   low: { tier: 'low', segments: 160, terrarium: 'terrarium_504.png', terrariumBytes: 531402, dprCap: 1, shadowSteps: 0, clouds: 0, antialias: false },
 };

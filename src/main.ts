@@ -33,6 +33,8 @@ import { Pins } from './ui/pins';
 import type { Panel } from './ui/panel';
 import type { PhotoViewer } from './ui/viewer';
 import type { WalkHandle } from './walk';
+import { loadLandscape, useLandscape } from './scene/landscape';
+import { LandscapeForest } from './scene/landscapeForest';
 
 setLoadingText();
 applyStatic();
@@ -82,12 +84,14 @@ async function boot() {
   const syncExposure = () => { stage.renderer.toneMappingExposure = atmo.exposure; };
   atmo.subscribe(syncExposure);
   syncExposure();
-  const geom = buildTerrainGeometry(hf, tier.segments, exag);
-  const terrainMat = createTerrainMaterial(atmo, hf, lc.toTexture(), tier.shadowSteps);
+  const initialDetail = tier.tier === 'high' ? TIERS.mid : tier;
+  const geom = buildTerrainGeometry(hf, initialDetail.segments, exag);
+  const terrainMat = createTerrainMaterial(atmo, hf, lc.toTexture(), initialDetail.shadowSteps);
   const terrain = new THREE.Mesh(geom, terrainMat);
   terrain.frustumCulled = false;
   mark('terrain-built');
   scene.add(createSky(atmo), terrain);
+  let landscapeForest: LandscapeForest | null = null;
   const clouds = tier.clouds > 0 ? new Clouds(atmo, terrainMat.uniforms.uHeight.value, tier.clouds) : null;
   if (clouds) scene.add(clouds.group);
 
@@ -167,13 +171,14 @@ async function boot() {
   let lastTap: { x: number; y: number; t: number } | null = null;
   canvas.addEventListener('pointerdown', (e) => {
     if (!e.isPrimary) { down = null; return; }
-    down = { x: e.clientX, y: e.clientY, t: performance.now(), id: e.pointerId };
+    down = { x: e.clientX, y: e.clientY, t: e.timeStamp, id: e.pointerId };
   });
   canvas.addEventListener('pointerup', async (e) => {
     const d = down;
     down = null;
-    if (!d || d.id !== e.pointerId || Math.hypot(e.clientX - d.x, e.clientY - d.y) > 8 || performance.now() - d.t > 450) return;
-    const now = performance.now();
+    if (!d || d.id !== e.pointerId || Math.hypot(e.clientX - d.x, e.clientY - d.y) > 8 || e.timeStamp - d.t > 450) return;
+    // Measure the gesture, not the time spent waiting behind a busy render on the main thread.
+    const now = e.timeStamp;
     const isDouble = !!lastTap && now - lastTap.t < 330 && Math.hypot(e.clientX - lastTap.x, e.clientY - lastTap.y) < 30;
     lastTap = isDouble ? null : { x: e.clientX, y: e.clientY, t: now };
     const p = pickGround(e.clientX, e.clientY, canvas, camera, hf, exag);
@@ -247,12 +252,12 @@ async function boot() {
       onClose: () => selectHotspot(null, true),
       onNavigate: (id) => selectHotspot(id, true),
       onShowOnMap: (id) => { const h = content.hotspots.find((x) => x.id === id); if (h) flyTo(hotspotPose(h)); },
-      onWalk: (id) => {
+      onWalk: (id, subject) => {
         const h = content.hotspots.find((x) => x.id === id);
         if (!h) return;
         // Markers of threatened species are already generalised in content.json (CLAUDE.md §10.2).
         const [x, z] = lonLatToXZ(h.lon, h.lat);
-        void startWalk(x, z);
+        void startWalk(x,z,undefined,subject??(['nzo','yeale','cegens-gbakore','ireb-bossou','yekepa-lamco','cultural-landscape'].includes(id)?'village':undefined));
       },
       onObscure: (right, bottom) => stage.setViewInset(right, bottom, reducedMotion),
     }, flags.debug);
@@ -332,13 +337,13 @@ async function boot() {
   // ---- Walk mode (first-person, lazy-loaded) ----
   let walking: WalkHandle | null = null;
   let walkStarting = false;
-  async function startWalk(x: number, z: number) {
+  async function startWalk(x: number, z: number, heading?: number, subject?:string) {
     if (walking || walkStarting) return;
     walkStarting = true;
     readout.hide();
     if (selected) selectHotspot(null, true);
     const fwd = new THREE.Vector3().subVectors(controls.target, camera.position);
-    const yaw = Math.atan2(-fwd.x, -fwd.z);
+    const yaw = heading ?? Math.atan2(-fwd.x, -fwd.z);
     stage.suspend(true);
     document.body.classList.add('walking');
     try {
@@ -346,7 +351,7 @@ async function boot() {
       let lastHash = 0;
       walking = await enterWalk({
         renderer: stage.renderer, hf, lcTex: terrainMat.uniforms.uLand.value as THREE.Texture, content, base: BASE,
-        tier: stage.tier.tier, start: { x, z, yaw }, reducedMotion,
+        tier: stage.tier.tier, start: { x, z, yaw, subject }, reducedMotion,
         onExit: () => {
           walking = null;
           document.body.classList.remove('walking');
@@ -447,7 +452,7 @@ async function boot() {
       },
       frames() { return stage.frames; },
       quality() {
-        return { tier: stage.tier.tier, segments: builtSegments, dpr: stage.renderer.getPixelRatio(), watchdog: watchdog?.history ?? null, panelLoaded: !!panel };
+        return { tier: stage.tier.tier, segments: builtSegments, dpr: stage.renderer.getPixelRatio(), watchdog: watchdog?.history ?? null, panelLoaded: !!panel, landscape: terrainMat.uniforms.uLandscape.value, distantTrees: landscapeForest?.count ?? 0 };
       },
       target() { const [lon, lat] = xzToLonLat(controls.target.x, controls.target.z); return { lon, lat }; },
       async describe(lon: number, lat: number) {
@@ -469,10 +474,12 @@ async function boot() {
   // ---- Quality tiers at runtime + FPS watchdog (M8, CLAUDE.md §7) ----
   // Step order high → mid → low: fewer terrain segments, lower DPR cap, fewer cloud layers, fewer/no shadow steps.
   const ORDER: Tier[] = ['high', 'mid', 'low'];
-  let builtSegments = tier.segments;
+  let builtSegments = initialDetail.segments;
   const setTier = (next: TierSpec) => {
     stage.tier = next;
-    stage.resize(); // applies the new DPR cap
+    if (landscapeForest) landscapeForest.mesh.visible = next.tier === 'high';
+    terrainMat.uniforms.uLandscape.value = next.tier === 'high' && landscapeForest ? 1 : 0;
+    if (!stage.suspended) stage.resize(); // walk mode owns the renderer until exit
     if (next.segments !== builtSegments) {
       const old = terrain.geometry;
       terrain.geometry = buildTerrainGeometry(hf, next.segments, exag);
@@ -510,14 +517,8 @@ async function boot() {
     });
   }
 
-  // Compile every shader before the first frame. With KHR_parallel_shader_compile (most browsers) this
-  // happens off the main thread, so the page stays responsive while the GPU builds the programs. Without it
-  // (some GPUs, SwiftShader) the first render compiles them, as before.
+  // Render the playable terrain first. Optional High detail can arrive independently.
   mark('scene-ready');
-  if (stage.renderer.extensions.has('KHR_parallel_shader_compile')) {
-    try { await stage.renderer.compileAsync(scene, camera); } catch { /* compiled on first render instead */ }
-  }
-  mark('compiled');
   stage.start();
   // Ready once the first frame is on screen.
   await new Promise<void>((r) => requestAnimationFrame(() => requestAnimationFrame(() => r())));
@@ -628,11 +629,31 @@ async function boot() {
     window.addEventListener('keydown', titleInput);
     setTimeout(pauseDrift, 30000);
     showTitleCard({
+      // The mapped canopy opens onto a walkable grass saddle about 45 m southwest.
+      onForest: () => { endIntro(); void startWalk(2207,-5529,5.6); },
+      onWalk: () => { endIntro(); void startWalk(6300, -6495, 3 * Math.PI / 4); },
       onExplore: () => startFlyover(),
       onTour: () => void startTour(),
       tourFirst: location.hash === '#/tour',
       onSkip: () => { flyTo(homePose(), reducedMotion ? 0 : 1200); endIntro(); },
     });
+  }
+
+  if (stage.tier.tier === 'high') {
+    void loadLandscape(BASE, Math.min(16, stage.renderer.capabilities.getMaxAnisotropy())).then((maps) => {
+      if (stage.tier.tier !== 'high') {
+        for (const texture of Object.values(maps)) texture.dispose();
+        return;
+      }
+      landscapeForest = new LandscapeForest(hf, terrainMat.uniforms.uLand.value, maps.tree, {
+        atmosphere: 'orbit', uniforms: atmo.uniforms, inner: 0, outer: 60000,
+      });
+      useLandscape(terrainMat.uniforms as ReturnType<typeof import('./scene/landscape').landscapeUniforms>, maps);
+      scene.add(landscapeForest.mesh);
+      maps.sky.dispose();
+      maps.grass.dispose(); // Walk mode owns its own ground-cover textures.
+      setTier(TIERS.high);
+    }).catch((error) => console.warn('Optional landscape detail could not load.', error));
   }
 
   if (flags.debug) {

@@ -1,0 +1,14 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Monts Nimba</title>
+<style>*{box-sizing:border-box}html,body{margin:0;height:100%;background:#101911;color:#faf6e8;font:16px system-ui}body{display:grid;place-items:center}canvas{width:min(100vw,160vh);height:auto;touch-action:none;outline:none}#status{position:fixed;bottom:1rem;background:#183225eb;padding:.5rem 1rem;border-radius:2rem}#status:empty{display:none}</style>
+<canvas width="1280" height="800" tabindex="0" aria-label="Monts Nimba game. Use arrow keys to walk and turn, or drag to look."></canvas><output id="status">Connecting to the mountain…</output>
+<script>
+const canvas=document.querySelector('canvas'),ctx=canvas.getContext('2d'),statusLine=document.querySelector('#status');
+const key=location.hash.slice(1); const ws=new WebSocket('wss://'+location.host+'/play'); ws.binaryType='blob';
+const send=m=>{if(ws.readyState===1)ws.send(JSON.stringify(m))};
+ws.onopen=()=>send({key});ws.onclose=()=>statusLine.textContent='Session closed. Reload to reconnect.';
+ws.onmessage=async e=>{if(typeof e.data==='string'){statusLine.textContent=e.data;return}const frame=await createImageBitmap(e.data);ctx.drawImage(frame,0,0,canvas.width,canvas.height);frame.close();statusLine.textContent='';send({type:'ack'})};
+const keys=new Set(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','KeyW','KeyA','KeyS','KeyD','Space','ShiftLeft','Escape','KeyE']);
+for(const type of ['keydown','keyup'])addEventListener(type,e=>{if(keys.has(e.code)){e.preventDefault();if(!e.repeat)send({type,code:e.code})}});
+addEventListener('blur',()=>send({type:'reset'}));
+for(const type of ['pointerdown','pointerup','pointermove','pointercancel'])canvas.addEventListener(type,e=>{if(type==='pointerdown'){canvas.focus();canvas.setPointerCapture(e.pointerId)}const b=canvas.getBoundingClientRect();send({type,x:(e.clientX-b.left)/b.width,y:(e.clientY-b.top)/b.height})});
+</script></html>

@@ -1,3 +1,4 @@
+import hornbillFlight from './hornbill-flight.json';
 // Animals recorded in GBIF in the Nimba window, drawn as simple procedural models (not photographs, not scans):
 // African pied hornbills crossing above the canopy, Guinea turacos flashing their red flight feathers between
 // crowns, sunbirds near shrubs, Acraea and swallowtail butterflies in clearings and along streams.
@@ -16,7 +17,7 @@ export interface Agent {
   obj: THREE.Object3D;
   flap: { value: number };
   pos: THREE.Vector3; vel: THREE.Vector3; target: THREE.Vector3;
-  speed: number; height: number; size: number; phase: number; rate: number; glide: number;
+  speed: number; height: number; size: number; phase: number; rate: number; glide: number; perched?:boolean; fleeing?:number;
 }
 
 interface Part { geo: THREE.BufferGeometry; color: string }
@@ -39,6 +40,18 @@ function birdGeometry(kind: 'hornbill' | 'turaco' | 'sunbird'): THREE.BufferGeom
   const head = new THREE.SphereGeometry(0.15, 8, 6);
   head.translate(0, 0.08, 0.52);
   parts.push({ geo: head, color: C.head });
+  for(const side of [-1,1]){
+    const eye=new THREE.SphereGeometry(.032,10,7);eye.scale(.56,1,1);
+    eye.translate(side*.143,.111,.569);parts.push({geo:eye,color:'#251e18'});
+    const glint=new THREE.SphereGeometry(.008,6,4);glint.translate(side*.160,.12,.577);
+    parts.push({geo:glint,color:'#e2d9c4'});
+    const leg=new THREE.CylinderGeometry(.012,.016,.23,6);
+    leg.translate(side*.065,-.225,.014);parts.push({geo:leg,color:'#554e45'});
+    for(let i=-1;i<=1;i++){
+      const toe=new THREE.SphereGeometry(.026,6,4);toe.scale(.32,.32,2);toe.rotateY(i*.48);
+      toe.translate(side*.065+i*.018,-.337,.043);parts.push({geo:toe,color:'#645c50'});
+    }
+  }
   const billLen = kind === 'hornbill' ? 0.45 : kind === 'sunbird' ? 0.32 : 0.12;
   const bill = new THREE.ConeGeometry(kind === 'hornbill' ? 0.08 : 0.04, billLen, 6);
   bill.rotateX(Math.PI / 2 + (kind === 'sunbird' ? 0.25 : 0.12));
@@ -64,12 +77,13 @@ function birdGeometry(kind: 'hornbill' | 'turaco' | 'sunbird'): THREE.BufferGeom
   const wing = (side: number) => {
     const g = new THREE.BufferGeometry();
     const p: number[] = [], w: number[] = [], c: number[] = [];
-    const segs = 4;
+    const segs = 16;
     for (let i = 0; i <= segs; i++) {
       const t = i / segs;
       const x = side * (0.12 + t * span);
-      const chord = 0.45 * (1 - t * 0.55);
-      p.push(x, 0.04, 0.18, x, 0.04, 0.18 - chord);
+      const chord = .45 * Math.pow(Math.max(.001,1-t*t),.54) * (i%2 && t>.56?.78:1);
+      const lead=.18-.19*t*t;
+      p.push(x,.04+.07*Math.sin(t*Math.PI),lead,x,.025,lead-chord);
       w.push(t, t);
       const col = new THREE.Color(t > 0.62 ? C.tip : C.wing);
       c.push(col.r, col.g, col.b, col.r, col.g, col.b);
@@ -141,13 +155,15 @@ function flapMaterial(base: THREE.MeshStandardMaterial, flap: { value: number },
            { float a = sin(uFlap) * ${amp.toFixed(2)} * aWing; float x = transformed.x; transformed.x = x * cos(a); transformed.y += abs(x) * sin(a); }`
         : `#include <begin_vertex>
            { float a = sin(uFlap) * ${amp.toFixed(2)}; float x = transformed.x; float k = aWing;
-             transformed.y += abs(x) * sin(a * k) * 0.9; transformed.x = x * mix(1.0, cos(a), k); }`);
+             if(uFlap < -7.0){transformed.z -= abs(x)*.55*k;transformed.x *= 1.-.83*k;transformed.y += .04*k;} else
+             transformed.y += abs(x) * sin(a * k) * 0.9; transformed.x *= mix(1.0, cos(a), k); }`);
   }, `flap:${amp}:${butterfly}`);
 }
 
 export class Fauna {
   readonly group = new THREE.Group();
   readonly agents: Agent[] = [];
+  private featured?:Agent;
   private r = rng(4242);
   /** Walker's view direction (yaw, radians): new animals favour what the walker is looking at. */
   viewYaw = 0;
@@ -236,7 +252,7 @@ export class Fauna {
   /** Populate for the walker's surroundings (called when the walker arrives / moves far). */
   populate(eye: THREE.Vector3) {
     for (const a of this.agents) { this.group.remove(a.obj); ((a.obj as THREE.Mesh).material as THREE.Material).dispose(); }
-    this.agents.length = 0;
+    this.agents.length = 0; this.featured=undefined;
     const b = biomeAt(this.data, eye.x, eye.z);
     const nb = this.counts.birds, nf = this.counts.butterflies;
     const kinds: AnimalKind[] = [];
@@ -250,14 +266,35 @@ export class Fauna {
     for (const k of kinds) this.spawn(k, eye);
   }
 
+  observe(kind:AnimalKind,eye:THREE.Vector3) {
+    const a=this.agents.find(v=>v.kind===kind)??this.spawn(kind,eye);
+    const bird=['hornbill','turaco','sunbird'].includes(kind);
+    const d=bird?4.0:1.35;
+    const x=eye.x-Math.sin(this.viewYaw)*d,z=eye.z-Math.cos(this.viewYaw)*d;
+    a.pos.set(x,this.data.heightAt(x,z)+(bird?.34*a.size:.47),z);
+    a.vel.set(0,0,0);a.obj.visible=true;a.obj.position.copy(a.pos);
+    a.obj.rotation.y=this.viewYaw+.9; a.perched=true; this.featured=a;
+    return a;
+  }
+  get encounterStatus(){const a=this.featured;return a?{kind:a.kind,state:a.perched?'watching':a.fleeing?'flying':'foraging',pos:a.pos.clone(),focus:a.pos.clone()}:null;}
   update(dt: number, eye: THREE.Vector3, time: number) {
     const dir = new THREE.Vector3();
     for (const a of this.agents) {
       if (!a.obj.visible) { if (this.r() < 0.05) this.place(a, eye, false); continue; }
       const bird = a.kind === 'hornbill' || a.kind === 'turaco' || a.kind === 'sunbird';
+      const distance=Math.hypot(eye.x-a.pos.x,eye.z-a.pos.z);
+      if(a.perched && distance>(bird?2.85:.92)){a.flap.value=bird?-8:time*.9;continue;}
+      if((!a.fleeing || a.fleeing<=0) && distance<(bird?2.85:.92) && Math.abs(a.pos.y-eye.y)<4){
+        dir.set(a.pos.x-eye.x,0,a.pos.z-eye.z).normalize();
+        const range=bird?9:2.7;
+        a.target.copy(a.pos).addScaledVector(dir,range);
+        a.target.y=Math.max(a.pos.y+(bird?2.6:.62),this.data.heightAt(a.target.x,a.target.z)+1.1);
+        a.perched=false;a.fleeing=bird?2.2:1.6;
+      }
+      a.fleeing=Math.max(0,(a.fleeing??0)-dt);
       dir.subVectors(a.target, a.pos);
       const dist = dir.length();
-      if (dist < (bird ? 3 : 0.6)) this.newTarget(a, eye);
+      if (!a.fleeing && dist < (bird ? 3 : 0.6)) this.newTarget(a, eye);
       dir.normalize();
       // butterflies: erratic; birds: smooth turns
       if (!bird) { dir.x += Math.sin(time * 3.1 + a.phase) * 0.9; dir.y += Math.sin(time * 5.3 + a.phase * 2) * 0.8; dir.z += Math.cos(time * 2.7 + a.phase) * 0.9; dir.normalize(); }
@@ -272,9 +309,11 @@ export class Fauna {
         const pitch = -Math.atan2(a.vel.y, Math.hypot(a.vel.x, a.vel.z)) * 0.6;
         a.obj.rotation.set(pitch, yaw, 0, 'YXZ');
       }
-      // hornbills alternate flapping and gliding
-      if (a.kind === 'hornbill') { a.glide = Math.sin(time * 0.6 + a.phase) > 0.3 ? 1 : 0; }
-      a.flap.value = a.glide ? Math.sin(time * 0.5) * 0.15 + 0.3 : time * a.rate + a.phase;
+      if (a.kind === 'hornbill') {
+        const frame = (time * 24 + a.phase * 7) % hornbillFlight.length;
+        const i = Math.floor(frame);
+        a.flap.value = THREE.MathUtils.lerp(hornbillFlight[i], hornbillFlight[(i + 1) % hornbillFlight.length], frame - i);
+      } else a.flap.value = time * a.rate + a.phase;
       if (a.pos.distanceTo(eye) > (a.kind === 'hornbill' ? 200 : bird ? 60 : 20)) this.place(a, eye, false);
     }
   }

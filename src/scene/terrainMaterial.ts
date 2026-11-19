@@ -5,6 +5,7 @@ import * as THREE from 'three';
 import type { Heightfield } from './heightfield';
 import type { Atmosphere } from './atmosphere';
 import { ATMO_UNIFORMS, NOISE, SKY_FN } from './glsl';
+import { LANDSCAPE_GLSL, landscapeUniforms } from './landscape';
 
 export function heightTexture(hf: Heightfield): THREE.DataTexture {
   const n = hf.size;
@@ -43,6 +44,7 @@ uniform float uModeSat;     // Conservation mode: slightly muted terrain so over
 varying vec3 vWorld;
 ${NOISE}
 ${SKY_FN}
+${LANDSCAPE_GLSL}
 
 float H(vec2 uv) { return texture2D(uHeight, uv).r; }
 
@@ -106,6 +108,16 @@ void main() {
   // Steep slopes and ridge crests show rock (≈ > 38° on the true surface).
   float rock = smoothstep(0.17, 0.32, trueSlope + (meso - 0.5) * 0.12) * (1.0 - canopy * 0.65);
   base = mix(base, uRock * (0.8 + 0.4 * micro), clamp(rock, 0.0, 1.0));
+  base = landscapeSurface(base, w, canopy, rock);
+
+  // Crown-scale shading survives kilometre-long views, where individual leaf cards are sub-pixel.
+  if (uLandscape > 0.5) {
+    float cl = dot(landscapeSample(uCanopyMap, w - vec2(2.0, 0.0), 115.0), vec3(0.333));
+    float cr = dot(landscapeSample(uCanopyMap, w + vec2(2.0, 0.0), 115.0), vec3(0.333));
+    float cu = dot(landscapeSample(uCanopyMap, w - vec2(0.0, 2.0), 115.0), vec3(0.333));
+    float cd = dot(landscapeSample(uCanopyMap, w + vec2(0.0, 2.0), 115.0), vec3(0.333));
+    n = normalize(n + vec3(cl - cr, 0.0, cu - cd) * canopy * 1.8 * detail);
+  }
 
   // Micro relief: perturb the normal with noise gradients so close views are not glassy.
   float e = 22.0;
@@ -127,7 +139,8 @@ void main() {
   float sh = terrainShadow(vWorld + n * 15.0);
   vec3 amb = mix(uAmbientGround, uAmbientSky, n.y * 0.5 + 0.5);
   float ao = mix(0.75, 1.0, smoothstep(0.0, 0.6, n.y));          // cheap cavity darkening on steep faces
-  vec3 col = base * (amb * ao + uSunColor * ndl * sh);
+  // Physical sun intensities require Lambert's 1/pi; otherwise the surface maps wash out.
+  vec3 col = base * (amb * ao + uSunColor * ndl * sh * mix(1.0, 0.3183099, uLandscape));
   // Soft forward-scatter rim when the sun is low (golden hour).
   col += base * uSunColor * 0.12 * pow(1.0 - max(dot(n, normalize(cameraPosition - vWorld)), 0.0), 3.0) * (1.0 - uSunDir.y);
 
@@ -160,6 +173,7 @@ export function createTerrainMaterial(atmo: Atmosphere, hf: Heightfield, landTex
   return new THREE.ShaderMaterial({
     uniforms: {
       ...atmo.uniforms,
+      ...landscapeUniforms(),
       uHeight: { value: hTex },
       uLand: { value: landTex },
       uTexel: { value: new THREE.Vector2(1 / hf.size, 1 / hf.size) },

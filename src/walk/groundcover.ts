@@ -4,7 +4,7 @@ import * as THREE from 'three';
 import { hash2, vnoise } from './noise';
 import type { WalkData } from './data';
 import { biomeAt } from './biome';
-import { buildCover, type CoverType } from './plants';
+import { buildCover, detailedTussock, type CoverType } from './plants';
 import { grassBlades, frond, bigLeaf, bark, groundTextures, singleLeaf } from './textures';
 import { trailK, AREA } from './data';
 import { depthFor } from './forest';
@@ -32,9 +32,12 @@ export class GroundCover {
   private boulders = new Map<string, Inst[]>();
   private last = new THREE.Vector3(1e9, 0, 1e9);
   private caps = new Map<CoverType, number>();
+  private logs?: THREE.InstancedMesh;
+  private nearbyLogs: { x: number; z: number; dx: number; dz: number; length: number; radius: number }[] = [];
   private boulderMesh!: THREE.InstancedMesh;
   private geos = new Map<CoverType, THREE.BufferGeometry>();
   private mats = new Map<CoverType, THREE.Material>();
+  private middle = new Map<CoverType, { geometry: THREE.BufferGeometry; material: THREE.Material; mesh?: THREE.InstancedMesh; capacity: number }>();
 
   constructor(private data: WalkData, private opts: CoverOpts) {
     const rock = groundTextures(opts.texSize);
@@ -85,12 +88,13 @@ export class GroundCover {
     for (let j = 0; j < n; j++) for (let i = 0; i < n; i++) {
       const h1 = hash2(ti * 97 + i, tj * 97 + j, 1), h2 = hash2(ti * 97 + i, tj * 97 + j, 2), h3 = hash2(ti * 97 + i, tj * 97 + j, 3);
       const x = ti * TILE + (i + h1) * step, z = tj * TILE + (j + h2) * step;
+      if(this.data.inWildlifeOpening(x,z))continue;
       const b = biomeAt(this.data, x, z);
       if (b.streamDist < b.streamWidth * 0.9) continue; // the water itself
       const pa = this.data.pathAt(x, z);
       const onPath = pa.dist < 0.15 ? 1 : 0;
       const trail = trailK(x, z, b.forest);
-      if (this.data.buildingAt(x, z, 0.4)) continue;
+      if (this.data.buildingAt(x, z, 2.2)) continue;
       const open = 1 - b.forest;
       const highGrass = b.grass * b.high + (b.cloud > 0.5 ? b.grass * 0.6 : 0);
       const lowGrass = b.grass * (1 - b.high) * (b.cloud > 0.5 ? 0.4 : 1);
@@ -139,7 +143,7 @@ export class GroundCover {
       const tint = 0.8 + hash2(ti * 97 + i, tj * 97 + j, 4) * 0.35;
       let u = hash2(ti * 97 + i, tj * 97 + j, 5);
       const pick = (p: number) => { if (u < p) return true; u -= p; return false; };
-      if (pick(pGolden)) push('grassGolden', { x, y, z, s: 0.55 + h1 * 0.35, sy: 0.45 + h2 * 0.45, rot, tilt: 0, tint });
+      if (pick(pGolden)) push('grassGolden', { x, y, z, s: 0.38 + h1 * 0.67, sy: (0.26 + h2 * 0.65) * (0.65 + patch * 0.65), rot, tilt: (h1 - 0.5) * 0.36, tint: tint * (0.87 + patch * 0.24) });
       else if (pick(pTall)) push('grassTall', { x, y, z, s: 0.8 + h1 * 0.5, sy: 0.9 + h2 * 1.0, rot, tilt: 0, tint });
       else if (pick(pGreen)) push('grassGreen', { x, y, z, s: 0.5 + h1 * 0.3, sy: 0.25 + h2 * 0.35, rot, tilt: 0, tint });
       else if (pick(pFern)) push('fern', { x, y, z, s: 0.5 + h1 * 0.8, sy: 0.5 + h2 * 0.7, rot, tilt: 0, tint });
@@ -156,10 +160,11 @@ export class GroundCover {
     const out: Inst[] = [];
     for (let k = 0; k < 6; k++) {
       const x = bi * 24 + hash2(bi, bj * 7 + k, 31) * 24, z = bj * 24 + hash2(bi * 7 + k, bj, 32) * 24;
+      if(this.data.inWildlifeOpening(x,z))continue;
       const b = biomeAt(this.data, x, z);
       const ac = this.data.areaAt(x, z);
       const p = b.rock * 0.8 + (b.high > 0.5 ? 0.08 : 0.01) + (ac === AREA.rock || b.cls === 60 ? 0.5 : 0) + (ac === AREA.mine ? 0.12 : 0);
-      if (ac === AREA.water || b.cls === 80) continue;
+      if (ac === AREA.water || b.cls === 80 || this.data.buildingAt(x,z,3) || this.data.pathAt(x,z).dist < 2.5) continue;
       if (hash2(bi + k, bj, 33) > p) continue;
       const sz = 0.8 + Math.pow(hash2(bi, bj + k, 34), 2) * 4 * (0.5 + b.rock);
       out.push({ x, y: this.data.heightAt(x, z) - sz * 0.25, z, s: sz * (1 + hash2(k, bi, 35) * 0.6), sy: sz, rot: hash2(bj, k, 36) * 6.28, tilt: hash2(k, bj, 37) * 0.5, tint: 0.75 + hash2(bi, k, 38) * 0.4 });
@@ -175,10 +180,17 @@ export class GroundCover {
     const t0 = Math.floor((eye.x - R) / TILE), t1 = Math.floor((eye.x + R) / TILE);
     const u0 = Math.floor((eye.z - R) / TILE), u1 = Math.floor((eye.z + R) / TILE);
     const keep = new Set<string>();
-    let budget = 40;
+    // Populate the player's immediate surroundings first, including on the very first reveal.
+    // Row-order loading previously left an empty circle around the spawn while distant tiles filled.
+    const wanted: { i: number; j: number; distance: number }[] = [];
     for (let j = u0; j <= u1; j++) for (let i = t0; i <= t1; i++) {
       const cx = (i + 0.5) * TILE - eye.x, cz = (j + 0.5) * TILE - eye.z;
-      if (Math.hypot(cx, cz) > R + TILE) continue;
+      const distance = Math.hypot(cx, cz);
+      if (distance <= R + TILE) wanted.push({ i, j, distance });
+    }
+    wanted.sort((a, b) => a.distance - b.distance);
+    let budget = 40;
+    for (const { i, j } of wanted) {
       const key = `${i},${j}`;
       keep.add(key);
       let tile = this.tiles.get(key);
@@ -192,7 +204,12 @@ export class GroundCover {
     for (const k of this.tiles.keys()) if (!keep.has(k)) this.tiles.delete(k);
     const m = new THREE.Matrix4(), q = new THREE.Quaternion(), e = new THREE.Euler(), p = new THREE.Vector3(), sc = new THREE.Vector3(), c = new THREE.Color();
     for (const t of TYPES) {
-      const l = lists.get(t) ?? [];
+      const all = lists.get(t) ?? [];
+      const fallback = this.middle.get(t);
+      // A scanned fern has thousands of triangles. Preserve it within 22 m, then retain the
+      // original lightweight 3D plant instead of repeating full scans out to the cover horizon.
+      const nearLimit = t.startsWith('grass') ? 14 : 22;
+      const l = fallback ? all.filter((it) => Math.hypot(it.x - eye.x, it.z - eye.z) < nearLimit) : all;
       let mesh = this.meshes.get(t);
       if (!mesh || (this.caps.get(t) ?? 0) < l.length) {
         if (mesh) { this.group.remove(mesh); mesh.dispose(); }
@@ -230,6 +247,32 @@ export class GroundCover {
       mesh.count = n;
       mesh.instanceMatrix.needsUpdate = true;
       if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
+      if (fallback) {
+        const middle = all.filter((it) => Math.hypot(it.x - eye.x, it.z - eye.z) >= nearLimit);
+        if (!fallback.mesh || fallback.capacity < middle.length) {
+          if (fallback.mesh) { this.group.remove(fallback.mesh); fallback.mesh.dispose(); }
+          fallback.capacity = Math.ceil(middle.length * 1.4) + 64;
+          const mid = new THREE.InstancedMesh(fallback.geometry, fallback.material, fallback.capacity);
+          mid.frustumCulled = false; mid.receiveShadow = this.opts.shadows;
+          mid.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+          fallback.mesh = mid; this.group.add(mid);
+        }
+        let count = 0;
+        for (const it of middle) {
+          const d = Math.hypot(it.x - eye.x, it.z - eye.z);
+          const outer = t.startsWith('grass') ? R : R * .56;
+          if (d > outer) continue;
+          if (d > inner && hash2(Math.floor(it.x*13),Math.floor(it.z*13),9) > (inner/d)**2) continue;
+          const fade = 1 - THREE.MathUtils.smoothstep(d, outer*.82, outer);
+          e.set(it.tilt, it.rot, it.tilt * 0.5); q.setFromEuler(e);
+          m.compose(p.set(it.x, it.y, it.z), q, sc.set(it.s, it.sy * fade, it.s));
+          fallback.mesh.setMatrixAt(count, m);
+          fallback.mesh.setColorAt(count++, c.setScalar(it.tint));
+        }
+        fallback.mesh.count = count;
+        fallback.mesh.instanceMatrix.needsUpdate = true;
+        if (fallback.mesh.instanceColor) fallback.mesh.instanceColor.needsUpdate = true;
+      }
     }
     // Boulders.
     const RB = this.opts.rockRadius;
@@ -245,23 +288,62 @@ export class GroundCover {
       for (const it of l) if (Math.hypot(it.x - eye.x, it.z - eye.z) < RB) all.push(it);
     }
     for (const k of this.boulders.keys()) if (!keepB.has(k)) this.boulders.delete(k);
-    if (all.length > 256) all.length = 256;
+    if (all.length > 256) {
+      all.sort((a,b) => Math.hypot(a.x-eye.x,a.z-eye.z)-Math.hypot(b.x-eye.x,b.z-eye.z));
+      all.length=256;
+    }
     all.forEach((it, n) => {
       e.set(it.tilt, it.rot, it.tilt * 0.5); q.setFromEuler(e);
       m.compose(p.set(it.x, it.y, it.z), q, sc.set(it.s, it.sy, it.s * 0.9));
       this.boulderMesh.setMatrixAt(n, m);
       this.boulderMesh.setColorAt(n, c.setScalar(it.tint));
     });
+    if (this.logs) this.placeDeadfall(eye);
     this.boulderMesh.count = all.length;
     this.boulderMesh.instanceMatrix.needsUpdate = true;
     if (this.boulderMesh.instanceColor) this.boulderMesh.instanceColor.needsUpdate = true;
     return true;
   }
 
+  private placeDeadfall(eye: THREE.Vector3) {
+    const logs = this.logs!;
+    logs.count = 0;
+    this.nearbyLogs.length = 0;
+    const pose = new THREE.Object3D();
+    const cell = 11, cx=Math.floor(eye.x/cell), cz=Math.floor(eye.z/cell);
+    for(let j=cz-4;j<=cz+4;j++) for(let i=cx-4;i<=cx+4;i++) {
+      const x=(i+.1+.8*hash2(i,j,111))*cell, z=(j+.1+.8*hash2(i,j,112))*cell;
+      const a=this.data.attrAt(x,z), length=2.4+4.3*hash2(i,j,113);
+      if(a.canopy<6 || hash2(i,j,114)>0.32 || this.data.buildingAt(x,z,length/2) ||
+        this.data.pathAt(x,z).dist<length/2 || this.data.streamAt(x,z).dist<2) continue;
+      const angle=hash2(i,j,115)*Math.PI*2, dx=Math.cos(angle), dz=Math.sin(angle);
+      const y0=this.data.heightAt(x-dx*length*.4,z-dz*length*.4), y1=this.data.heightAt(x+dx*length*.4,z+dz*length*.4);
+      pose.position.set(x,(y1+y0)/2-.035,z);
+      pose.rotation.set(0,-angle,Math.atan2(y1-y0,length*.8),'YXZ');
+      pose.scale.setScalar(length);
+      pose.updateMatrix();
+      logs.setMatrixAt(logs.count++,pose.matrix);
+      if(Math.hypot(x-eye.x,z-eye.z)<9) this.nearbyLogs.push({x,z,dx,dz,length,radius:length*.049});
+    }
+    logs.instanceMatrix.needsUpdate=true;
+  }
+
+  deadfallHeight(x:number,z:number) {
+    let rise=0;
+    for(const log of this.nearbyLogs) {
+      const ax=x-log.x, az=z-log.z, along=ax*log.dx+az*log.dz;
+      if(Math.abs(along)>log.length*.45) continue;
+      const cross=ax*log.dz-az*log.dx;
+      rise=Math.max(rise,1.6*Math.sqrt(Math.max(0,log.radius**2-cross**2)));
+    }
+    return rise;
+  }
+
   /** Scanned models replace the drawn fern, forest herb and boulders (high-quality look). */
   useModels(m: ModelSet) {
     const swap = (t: CoverType, sm: ScanModel | undefined, wind: 'frond' | 'none', key: string) => {
       if (!sm) return;
+      this.middle.set(t, { geometry: this.geos.get(t)!, material: this.mats.get(t)!, capacity: 0 });
       const mat = wind === 'none' ? walkMaterial(sm.material, 'none', undefined, key) : walkMaterial(sm.material, wind, nearFade, key);
       this.geos.set(t, sm.geometry);
       this.mats.set(t, mat);
@@ -273,6 +355,12 @@ export class GroundCover {
       }
       this.last.set(1e9, 0, 1e9);
     };
+    if (m.deadfall) {
+      this.logs=new THREE.InstancedMesh(m.deadfall.geometry,walkMaterial(m.deadfall.material),81);
+      this.logs.frustumCulled=false; this.logs.count=0;
+      this.logs.receiveShadow=this.logs.castShadow=this.opts.shadows;
+      this.group.add(this.logs);
+    }
     swap('fern', m.fern_02, 'frond', 'scan-fern');
     swap('herb', m.calathea_orbifolia_01, 'frond', 'scan-herb');
     if (m.rock_07) {
@@ -290,6 +378,28 @@ export class GroundCover {
   }
 
   reset() { this.tiles.clear(); this.boulders.clear(); this.last.set(1e9, 0, 1e9); }
+
+  useGrass(texture: THREE.Texture) {
+    for (const kind of ['grassGolden', 'grassGreen', 'grassTall'] as const) {
+      const material = this.mats.get(kind) as THREE.MeshStandardMaterial;
+      material.map?.dispose(); material.map = texture; material.needsUpdate = true;
+      material.roughness = 0.88;
+      this.middle.set(kind, { geometry: this.geos.get(kind)!, material, capacity: 0 });
+      const geometry = detailedTussock(kind);
+      const blades = walkMaterial(new THREE.MeshStandardMaterial({
+        vertexColors: true, side: THREE.DoubleSide, roughness: .83,
+      }), 'grass', nearFade);
+      this.geos.set(kind, geometry);
+      this.mats.set(kind, blades);
+      const mesh = this.meshes.get(kind);
+      if (mesh) { mesh.geometry = geometry; mesh.material = blades; mesh.customDepthMaterial = undefined; }
+      this.last.set(1e9,0,1e9);
+    }
+  }
+
+  get stats() {
+    return { tiles: this.tiles.size, instances: [...this.meshes.values()].reduce((n, m) => n + m.count, 0), middleInstances: [...this.middle.values()].reduce((n, m) => n + (m.mesh?.count ?? 0), 0), boulders: this.boulderMesh.count };
+  }
 
   /** Boulders near a point (for picking). */
   bouldersNear(x: number, z: number, r: number) {

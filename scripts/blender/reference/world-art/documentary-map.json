@@ -1,0 +1,79 @@
+{
+  "richard-molard": [
+    "peak-cloudcap",
+    "hero-massif"
+  ],
+  "grands-rochers": [
+    "peak-strata"
+  ],
+  "pierre-richaud": [
+    "valley-view"
+  ],
+  "montane-grassland": [
+    "montane-grassland",
+    "grassland-valley",
+    "grassland-above-forest",
+    "protea-bushland"
+  ],
+  "cloud-forest": [
+    "cloud-forest"
+  ],
+  "lowland-forest": [
+    "forest-canopy",
+    "rainforest-stream"
+  ],
+  "savanna-fire": [
+    "savanna",
+    "reserve-edge-ridge"
+  ],
+  "cavally": [
+    "forest-stream",
+    "rainforest-stream"
+  ],
+  "viviparous-toad": [
+    "toad-gestating-female",
+    "toad-amplexus",
+    "toad-young-female"
+  ],
+  "otter-shrew": [],
+  "lamotte-bat": [],
+  "bossou-chimpanzees": [
+    "chimp-bossou-1",
+    "chimp-bossou-2",
+    "chimp-nimba-lowland",
+    "oil-palm-fruit"
+  ],
+  "ireb-bossou": [
+    "ireb-building",
+    "ireb-sign"
+  ],
+  "green-corridor": [
+    "corridor-planting",
+    "corridor-seedlings"
+  ],
+  "cultural-landscape": [
+    "bossou-village",
+    "bossou-market"
+  ],
+  "cegens-gbakore": [
+    "reserve-edge-ridge"
+  ],
+  "nzo": [],
+  "yeale": [],
+  "yekepa-lamco": [
+    "lamco-mine-1976"
+  ],
+  "mining-enclave": [
+    "liberia-pit-road"
+  ],
+  "tripoint": [
+    "liberia-side-summit"
+  ],
+  "unesco-inscription": [
+    "hero-massif",
+    "biosphere-sign"
+  ],
+  "danger-list": [
+    "peak-green"
+  ]
+}

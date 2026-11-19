@@ -469,3 +469,87 @@ vertical "curtains" along the shore), mines are red iron-ore spoil with patchy r
 are blurred so surfaces blend across outlines; ground textures use box projection (no smearing on pit walls);
 the camera steps to the nearest dry, gentle ground. Bug: the far massif mesh, only 6 m under the fine patch,
 bridged the pit with its coarse triangles and covered the camera (black render) – now sunk 300 m there.
+
+## Open world M1 — controls, generated artwork and Blender animation
+
+**Result:** a working first-person development build with generated imagery, improved controls and a real
+Blender-exported vegetation animation. This is the first implementation milestone plus Dean's requested
+artwork replacement; the full M2–M8 world, hero plants, animals, weather and exploration roadmap is unfinished.
+
+* All 23 cards now use eight generated habitat/scenery illustrations. JPEG, WebP and AVIF versions and small
+  thumbnails are committed. Some related cards share an illustration. Captions say “Reconstitution numérique /
+  Digital reconstruction” in the chosen language, without an “AI” badge. These are illustrative viewpoints,
+  not surveyed scenes. Species cards show habitats rather than unverified generated animal anatomy.
+* Eleven material/reference images supply generic foliage and all fourteen High ground/bark roles. Nine
+  opaque surfaces have subtle derived normal maps. These are generated surface textures, not physical scans.
+  High impostors are baked from the generated canopy texture too, keeping nearby/distant foliage consistent.
+  Low/Mid retain their lightweight procedural rendering; existing CC0 cover meshes remain available.
+* Original documentary photos, licences and card associations are retained. A structural comparison with
+  source commit `cba3f1b4a1d216b3387ec9594d2041209aca5ffb` confirms all card facts, sources and generalised
+  locations are unchanged. Only the card-image associations changed.
+* `scripts/blender/reference/world-art/manifest.json` records all 19 source images, prompts and SHA-256 hashes.
+  Raw PNGs stay in `/workspace/generated_images`; compact runtime outputs are in Git. `CREDITS.md`,
+  `public/credits.json`, the bilingual credits page and walk-settings credits record attribution.
+* Blender 5.3 / Python 3.13 builds a generic sapling with mesh geometry, generated leaf/bark textures and a
+  looping branch animation. The meshopt/WebP GLB is about 555 KB, with one clip and nine animated branches.
+  High walk mode loads it lazily and plays it through AnimationMixer; reduced motion freezes it. It is a
+  generic filler, not a species identification. A 512×512, 48-frame, 24 fps, two-second review video was rendered
+  from Blender's timeline and encoded separately from production assets.
+* First-person controls add jump/gravity, ground snapping on walkable descents, slope/step limits, boulder
+  collision, standard gamepad input and touch jump. Settings persist validated FOV, sensitivity, head bob,
+  reduced motion and quality. The dialog pauses movement and stops redundant world rendering. Language
+  changes immediately; quality applies on the next walk entry. A compass shows the player's bearing.
+* Tile failures can be retried instead of poisoning the cache. The height-tile cache is bounded, and exit
+  releases the path/area textures, off-screen impostor framebuffers, custom depth materials and animation resources.
+* Input tests found two issues: small downhill steps could momentarily prevent jumping, and map gestures
+  measured handler execution time rather than event timestamps. Both are corrected. The old Skip test selected
+  the Tour button because both shared `.btn-ghost`; it now selects the actual Skip action.
+
+**Validation:**
+
+| Check | Outcome |
+|---|---|
+| Frozen dependency install, Node 22 production build, TypeScript | Pass |
+| Movement physics | 8 checks pass, including slope, jump, landing, edge fall, collision substeps and frame-rate independence |
+| Generated artwork | 23 cards, image variants, source hashes, normal-map dimensions and compressed glTF animation pass |
+| Panels | All 23 cards in FR/EN, phone and desktop pass |
+| Picking and double-tap | Pass; timed touch input tests the gesture independently of automation round-trip delays |
+| Flyover | Pass after correcting the Skip selector; clearance, skip paths, reduced motion and deep links checked |
+| Tour, phone walk flow, desktop/touch/gamepad controls and settings | Pass |
+| Card imagery, full-size viewer and bilingual credits | Pass, with no console errors |
+| Fixed High/phone captures | Pass, with no console errors; High capture is 1920×1080, phone viewport 390×664 |
+| Download budgets, throttled networks, watchdog and idle rendering | Pass |
+| Overlay mode appearance and labels | Pass |
+| Overlay transition deadline of 300 ms | **Fails two timing assertions on SwiftShader**, also reproduced in the original source baseline |
+
+Initial load measured **908 KB mobile / 2,366 KB desktop**, with **193 KB gzipped JS**. The title became ready
+in **20.6 s at 400 kbps** and **6.3 s on Slow 4G**. High/phone capture diagnostics recorded about 135/58 MiB JS
+heap; this excludes native allocations and GPU memory. No GPU-memory budget or real-device FPS claim is made.
+
+The current overlay timings were 665 / 278 / 312 ms (Conservation / Culture / Nature); the original source
+measured 713 / 216 / 394 ms under the same software renderer. The colour/label assertions pass in both.
+The 300 ms failures are recorded, not disabled. Real GPU timing remains a separate validation requirement.
+
+The cloud has a four-core CPU quota and no exposed NVIDIA GPU. Full-resolution High captures use a smaller
+warm-up viewport, render a genuine final frame at 1920×1080, then freeze submissions for capture. Timing logs
+include warm-up and are diagnostics, not hardware benchmarks. The low-tier canopy and some silhouettes still
+look procedural; species-specific hero modelling remains M3. No animated animal or completed weather system
+is represented as delivered.
+
+Reusable `install_script` and `start_skill` were saved in the environment draft after exercising the install,
+Blender import/export, build and startup workflow. Draft persistence does not publish the environment or deploy
+the application. Local commits only; no push or deployment has been performed.
+
+## Desktop landscape realism — 19 November 2026
+
+Dean prioritised a powerful graphics card, removed the High asset-size constraint and requested realistic scenery at the horizon and on arrival. The High implementation now uses the full 1008-segment DEM grid, 32 terrain-shadow steps, 455,889 reconstructed distant tree instances, a 22 km forest horizon, a 2.4 km local ground patch and wider local vegetation ranges. Shared generated canopy/ridge/rock material detail connects the orbit view, local canopy shell and far massif. Clear-weather High fog is thinner; Mist remains dense. Explicit quality choices retain their DPR.
+
+Five newly generated images supply the mountain arrival, canopy surface, ridge surface, distant broadleaf silhouette and grass cutout. Runtime files keep native source dimensions and total about 4 MB; raw PNGs, prompts and source/runtime SHA-256 hashes are committed under `scripts/blender/reference/landscape-art/`. No enlarged source-resolution claim, documentary viewpoint or species-identification claim is made. Credits retain generation provenance without an AI badge in the interface.
+
+The first visual pass exposed empty vegetation around spawn: the old cover queue filled distant rows first. The queue now fills nearest-first and warms before reveal. Full scanned plants transition to lighter 3D plants outside 22 m, preserving understorey depth without multiplying full scan geometry across the expanded cover radius. Ground array textures are explicitly disposed on walk exit. The compass moves below the scene controls at narrower desktop widths.
+
+Validation: production build and typecheck pass; the eight physics checks pass; all 23 reconstructed cards, previous artwork and Blender animation checks pass; five new landscape images pass native-size and source/runtime-hash checks. High arrival, orbit, ridge and forest browser checks pass with zero collected errors or failed requests. Captures are in `/workspace/artifacts/nimba-realism/`. The ridge capture contains 77,498 near-cover instances; the forest capture contains 11,056 near-cover and 19,390 middle-cover instances. The forest had 1,717 detailed trees plus 26,701 local impostors, in addition to the distant massif layer.
+
+All captures use Chromium/ANGLE/SwiftShader on the cloud CPU, not a gaming graphics card. GPU FPS and VRAM are unverified. The 30 m source DEM, generic distant trees, procedural foreground plants and cloud rendering still limit realism. Some surfaces remain visibly synthetic; neither the generated arrival image nor software screenshots establish photographic realism for the interactive world. Earlier overlay timing failures on this renderer remain documented above; no new timing claim is made here.
+
+The additional summit-to-valley horizon capture passed with no errors or missing assets (`/workspace/artifacts/nimba-realism/horizon/`). Keyboard/gamepad and touch regression checks both passed: walking, jump/landing, settings, language, pause, disposal and return to the map. The final production build also passed under the Vercel-pinned Node 22.23.5 runtime. The Higgsfield connection was tagged by Dean but exposed no callable tools or skills in this session; no Higgsfield asset or animation is claimed.

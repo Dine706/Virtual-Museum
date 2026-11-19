@@ -86,7 +86,7 @@ export class PhotoViewer {
     credit.href = p.source_url;
     credit.target = '_blank';
     credit.rel = 'noopener';
-    credit.textContent = `© ${p.author} · ${p.license}`;
+    credit.textContent = `© ${p.author} · ${p.reconstruction ? t('image.reconstruction') : p.license}`;
     this.caption.append(altEl, document.createTextNode(' — '), credit);
     this.counter.textContent = t('panel.photoN', { n: String(this.index + 1), total: String(n) });
     (this.dlg.querySelector('.viewer-bar') as HTMLElement).hidden = n < 2;

@@ -10,7 +10,7 @@ const BASE = process.env.BASE_URL || 'http://localhost:5173/';
 const content = JSON.parse(fs.readFileSync('public/data/content.json', 'utf8'));
 const credits = JSON.parse(fs.readFileSync('public/photos/credits.json', 'utf8'));
 const creditIds = new Set(credits.map((c) => c.file.split('/').pop().replace(/\.jpg$/, '')));
-const browser = await pw.chromium.launch({ args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
+const browser = await pw.chromium.launch({ executablePath: process.env.BROWSER_PATH, args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
 const failures = [];
 const fail = (m) => { failures.push(m); console.log('FAIL', m); };
 
@@ -85,7 +85,10 @@ for (const [name, opts] of [
   await page.click('.tools .btn-icon:nth-child(2)'); // reset view: all pins back on screen
   await page.waitForTimeout(500);
   const pin = page.locator('.pin[data-id="richard-molard"] button');
+  // Reset is an animated camera move; the summit can still be off-screen after 500 ms on software GL.
+  await pin.waitFor({ state: 'visible' });
   await pin.focus();
+  await page.waitForFunction(() => document.activeElement?.closest('.pin')?.dataset.id === 'richard-molard');
   await page.keyboard.press('Enter');
   await page.waitForFunction(() => location.hash === '#/h/richard-molard', null, { timeout: 15000 }).catch(() => fail(`[${name}] Enter on a pin did not open it`));
   await page.keyboard.press('Escape');

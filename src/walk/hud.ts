@@ -1,5 +1,5 @@
 // Walk-mode overlay: place chip, light and exit buttons, hint, crosshair, loading veil and the info card.
-import { t } from '../i18n';
+import { onLang, t } from '../i18n';
 import { icons } from '../ui/icons';
 
 export interface CardLink { label: string; url: string }
@@ -25,6 +25,9 @@ export class Hud {
   onCardClose: () => void = () => {};
   onPano: () => void = () => {};
   private panoBtn: HTMLButtonElement;
+  private unsubscribe: () => void;
+  private hintTimer: ReturnType<typeof setTimeout>;
+  onMenu: (button: HTMLButtonElement) => void = () => {};
 
   constructor(coarse: boolean) {
     this.root = document.createElement('div');
@@ -33,11 +36,13 @@ export class Hud {
       <div class="walk-top">
         <div class="walk-place" aria-live="polite"></div>
         <div class="walk-actions">
+          <button type="button" class="walk-btn walk-options" aria-haspopup="dialog"></button>
           <button type="button" class="walk-btn walk-pano" hidden></button>
           <button type="button" class="walk-btn walk-time"></button>
           <button type="button" class="walk-btn walk-exit"></button>
         </div>
       </div>
+      <div class="walk-compass" aria-label="${esc(t('walk.compass'))}"><span class="walk-compass-needle" aria-hidden="true">↑</span><span class="walk-bearing"></span></div>
       <div class="walk-cross" aria-hidden="true"></div>
       <div class="walk-marker" aria-hidden="true" hidden></div>
       <div class="walk-hint"></div>
@@ -52,15 +57,24 @@ export class Hud {
     this.marker = this.root.querySelector('.walk-marker')!;
     this.timeBtn = this.root.querySelector('.walk-time')!;
     const exit = this.root.querySelector<HTMLButtonElement>('.walk-exit')!;
-    exit.innerHTML = `${icons.close}<span>${esc(t('walk.exit'))}</span>`;
-    exit.setAttribute('aria-label', t('walk.exitLabel'));
     exit.addEventListener('click', () => this.onExit());
     this.timeBtn.addEventListener('click', () => this.onTime());
     this.panoBtn = this.root.querySelector('.walk-pano')!;
-    this.panoBtn.innerHTML = `<span class="pano-dot" aria-hidden="true">360°</span><span>${esc(t('pano.button'))}</span>`;
     this.panoBtn.addEventListener('click', () => this.onPano());
-    this.hint.textContent = t(coarse ? 'walk.hint.touch' : 'walk.hint.desktop');
-    setTimeout(() => this.hint.classList.add('fade'), 9000);
+    const options = this.root.querySelector<HTMLButtonElement>('.walk-options')!;
+    options.addEventListener('click', () => this.onMenu(options));
+    const labels = () => {
+      exit.innerHTML = `${icons.close}<span>${esc(t('walk.exit'))}</span>`;
+      exit.setAttribute('aria-label', t('walk.exitLabel'));
+      options.innerHTML = `${icons.list}<span>${esc(t('walk.menu.button'))}</span>`;
+      options.setAttribute('aria-label', t('walk.menu.title'));
+      this.panoBtn.innerHTML = `<span class="pano-dot" aria-hidden="true">360°</span><span>${esc(t('pano.button'))}</span>`;
+      this.panoBtn.setAttribute('aria-label', t('pano.button'));
+      this.hint.textContent = t(coarse ? 'walk.hint.touch' : 'walk.hint.desktop');
+      this.root.querySelector('.walk-compass')!.setAttribute('aria-label', t('walk.compass'));
+    };
+    labels(); this.unsubscribe = onLang(labels);
+    this.hintTimer = setTimeout(() => this.hint.classList.add('fade'), 9000);
   }
 
   setTime(label: string) {
@@ -74,6 +88,13 @@ export class Hud {
 
   /** Offer the photo-real 360° view when one was rendered near here. */
   setPano(on: boolean) { this.panoBtn.hidden = !on; }
+
+  setBearing(yaw: number) {
+    const degrees = ((-yaw * 180 / Math.PI) % 360 + 360) % 360;
+    const points = t('walk.compass.points').split(',');
+    this.root.querySelector('.walk-bearing')!.textContent = `${points[Math.round(degrees / 45) % 8]} · ${Math.round(degrees) % 360}°`;
+    (this.root.querySelector('.walk-compass-needle') as HTMLElement).style.rotate = `${-degrees}deg`;
+  }
 
   veilOn(text = t('walk.loading')) { this.veilText.textContent = text; this.veil.classList.remove('off'); }
   veilOff() { this.veil.classList.add('off'); }
@@ -116,5 +137,5 @@ export class Hud {
     this.onCardClose();
   }
 
-  dispose() { this.root.remove(); }
+  dispose() { this.unsubscribe(); clearTimeout(this.hintTimer); this.root.remove(); }
 }

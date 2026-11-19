@@ -1,0 +1,67 @@
+[
+  {
+    "key": "aerial-canopy",
+    "source": "scripts/blender/reference/landscape-art/aerial-canopy.png",
+    "file": "public/landscape/aerial-canopy.webp",
+    "width": 1024,
+    "height": 1024,
+    "sourceSha256": "b3a96fee433951cd81415c1576146329f0f85138b3ab0677bcd19127eb8437aa",
+    "outputSha256": "07eac05fb7ab457cf4c889a909f25e44f9b54fa75f58ef715b5ab9320cd19cd6",
+    "method": "Higgsfield gpt_image_2_6",
+    "jobId": "c2d70462-9ad2-430f-9e04-54b92fde1012",
+    "outputUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3MKfEEPT6ltboLh2sYMbj00K3xw/hf_20261119_173048_c2d70462-9ad2-430f-9e04-54b92fde1012.png",
+    "prompt": "Seamless orthographic aerial canopy texture, Upper Guinean montane broadleaf rainforest on Mount Nimba. Frame filled edge to edge with hundreds of irregular distinct rounded emergent crowns, restrained olive and deep emerald, overcast diffuse daylight. Photoreal aerial survey, no horizon, labels or border.",
+    "reconstruction": "Generic illustrative environment; not surveyed imagery or a species identification."
+  },
+  {
+    "key": "ridge-surface",
+    "source": "scripts/blender/reference/landscape-art/ridge-surface.png",
+    "file": "public/landscape/ridge-surface.webp",
+    "width": 1254,
+    "height": 1254,
+    "sourceSha256": "401e0770e977ce20a60f4114c6663a9db56809fb155e84bb94a9a45f23b7ef10",
+    "outputSha256": "60b0a358ff634d99d7877f313cc17903585e7b037f8f981202e034d51a5185c9",
+    "method": "OpenAI image generation",
+    "prompt": "Photorealistic seamless square terrain macro texture for a realistic West African montane ridge reconstruction, viewed perfectly straight down orthographically. An intricate natural mosaic of dense fine olive green and dry straw-coloured montane grass tussocks, small patches of dark iron-rich quartzite outcrops and subtle reddish-brown exposed earth. Entire square edge to edge, all four edges tile seamlessly, evenly distributed detail, no dominant hero object. This depicts roughly 35 metres of ground with hundreds of fine grass tufts and scattered small rock patches. Diffuse neutral daylight, very subtle natural crevice shading, no strong directional shadows, no horizon, perspective, trees, flowers, snow, paths, buildings, animals, text or labels. Rich photographic botanical and mineral detail, restrained natural colours, avoid stylised patterns or perfectly circular grass clumps. Generic reconstructed surface, not a documentary photograph.",
+    "reconstruction": "Generic illustrative environment; not surveyed imagery or a species identification."
+  },
+  {
+    "key": "broadleaf-silhouette",
+    "source": "scripts/blender/reference/landscape-art/broadleaf-silhouette.png",
+    "file": "public/landscape/broadleaf-silhouette.webp",
+    "width": 1173,
+    "height": 1341,
+    "sourceSha256": "34798adc0cb045bc9b2477754e2efff615724fb7334af1b2162a8c39b00e3928",
+    "outputSha256": "c50fbfbaad3b41217b1ce67ba34d53ebc49ff5e86fc7055cbffc3b4a0503b269",
+    "method": "OpenAI image generation",
+    "prompt": "A single entire mature West African style moist-forest broadleaf canopy tree, generic environmental filler not a claimed identified species, seen straight-on at eye level, isolated on fully TRANSPARENT background. Fully visible from buttressed roots to highest twig with generous transparent margins all round. Tall irregular subtly tapered grey-brown trunk with fine pale lichen, branching into an asymmetric broad spreading natural crown with multiple overlapping smaller boughs. Many thousands of VERY SMALL realistic olive-green broad leaves, feathery detailed ragged silhouette, deep transparent gaps between major branches, realistic natural tree architecture. Tree about 25 metres tall, crown about 18 metres wide. Photorealistic botanical studio scan, neutral soft overcast illumination, balanced exposure with detailed shadows, no dramatic rim light, no ground plane, no cast shadow, no pot, no sky, no landscape, no text, no black or white matte. Not an umbrella shaped acacia, not a pine, not a perfect sphere. Entire tree on transparent background.",
+    "reconstruction": "Generic illustrative environment; not surveyed imagery or a species identification."
+  },
+  {
+    "key": "mountain-arrival",
+    "source": "scripts/blender/reference/landscape-art/mountain-arrival.png",
+    "file": "public/landscape/mountain-arrival.webp",
+    "width": 1344,
+    "height": 752,
+    "sourceSha256": "89d9bfb2543a4267c0b0c9242800bde70d1dc287b00d3f9224aba643319f0859",
+    "outputSha256": "48ad7161d74db65768a4b5c66bb281defe290a385a015d944f4858f50cd1786a",
+    "method": "Higgsfield gpt_image_2_6",
+    "prompt": "Photoreal aerial establishing photograph of Monts Nimba in Guinea, camera from northeast looking southwest down the spine of the massif. Wide elevated view looking down roughly 22 degrees. Main summit lies exactly at horizontal center and 32 percent down the frame; a bright grass-covered triangular crest leads from the lower center up toward it, while a secondary spur descends from the summit to the lower right. Long valleys with continuous Upper Guinean rainforest canopy on both sides. Tawny olive grassy slopes lit from left, subtle scattered dark ironstone, lighter grassy saddle just below summit. Silver humid sky at top and haze on the far plains. Natural, restrained documentary lighting. No labels, buildings or text.",
+    "reconstruction": "Generic illustrative environment; not surveyed imagery or a species identification.",
+    "transparent": false,
+    "jobId": "5f2a965d-8146-4a2b-bd12-37daf8021d91",
+    "outputUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3MKfEEPT6ltboLh2sYMbj00K3xw/hf_20261119_173921_5f2a965d-8146-4a2b-bd12-37daf8021d91.png"
+  },
+  {
+    "key": "tussock-grass",
+    "source": "scripts/blender/reference/landscape-art/tussock-grass.png",
+    "file": "public/landscape/tussock-grass.webp",
+    "width": 1312,
+    "height": 1199,
+    "sourceSha256": "157109fef21bb0d26b743cabce40dad2cc0f8dc90a8bf16a15e0fd4a4d267437",
+    "outputSha256": "b1941f329bb72c7e7da19f660cdde030970024956fe3284e43a1437f362b76a0",
+    "method": "OpenAI image generation",
+    "prompt": "A photorealistic game-ready alpha cutout texture of one naturally irregular clump of fine West African montane tussock grass, generic filler vegetation not an identified species. Straight-on eye-level side view of the entire clump, base at the very bottom center and blades growing upwards and outwards, centered with transparent margins left, right and above. About eighty very fine slender flexible grass blades, naturally curving and crossing, many subtle tapered pointed tips, realistic narrow blade widths. Mostly muted grey olive and fresh medium green blades with some dry pale tan straw at the base and a few delicate restrained seed stems; absolutely no vivid yellow or fluorescent green. Natural botanical scan detail, tiny veins, restrained realistic hues. Soft neutral diffuse lighting, no dramatic light, shadows, ground plane, soil mound, grass field, pot, sky, background, text, labels or watermark. Fully TRANSPARENT background with distinct transparent gaps between the fine blades and no black/white matte. About 60 cm tall relative to a 55 cm wide clump. No broad reeds or leaves.",
+    "reconstruction": "Generic illustrative environment; not surveyed imagery or a species identification."
+  }
+]

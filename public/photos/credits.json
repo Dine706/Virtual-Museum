@@ -705,5 +705,236 @@
     "modified": "resized and recompressed for web",
     "alt_en": "Open-pit iron-ore mine at Yekepa, Liberia, in 1976",
     "alt_fr": "Mine de fer à ciel ouvert à Yekepa, Liberia, en 1976"
+  },
+  {
+    "file": "photos/reconstruction-summit.jpg",
+    "thumb": "photos/thumb/reconstruction-summit.jpg",
+    "width": 1536,
+    "height": 1024,
+    "commons_title": "Digital reconstruction: summit",
+    "source_url": "./credits.html",
+    "author": "Tech Guinée",
+    "license": "Reconstitution numérique / Digital reconstruction",
+    "license_url": "./credits.html",
+    "attribution": "Tech Guinée — digital reconstruction; illustrative viewpoint, not a documentary photograph.",
+    "alt_fr": "Crête de prairie au-dessus des brumes — reconstitution numérique, point de vue indicatif.",
+    "alt_en": "Grass-covered ridge above the mist — digital reconstruction, illustrative viewpoint.",
+    "hotspots": [
+      "richard-molard",
+      "montane-grassland",
+      "viviparous-toad",
+      "unesco-inscription"
+    ],
+    "reconstruction": true
+  },
+  {
+    "file": "photos/reconstruction-cloudforest.jpg",
+    "thumb": "photos/thumb/reconstruction-cloudforest.jpg",
+    "width": 1536,
+    "height": 1024,
+    "commons_title": "Digital reconstruction: cloudforest",
+    "source_url": "./credits.html",
+    "author": "Tech Guinée",
+    "license": "Reconstitution numérique / Digital reconstruction",
+    "license_url": "./credits.html",
+    "attribution": "Tech Guinée — digital reconstruction; illustrative viewpoint, not a documentary photograph.",
+    "alt_fr": "Sous-bois humide avec mousse et brume — reconstitution numérique, point de vue indicatif.",
+    "alt_en": "Moist forest understorey with moss and mist — digital reconstruction, illustrative viewpoint.",
+    "hotspots": [
+      "cloud-forest",
+      "danger-list"
+    ],
+    "reconstruction": true
+  },
+  {
+    "file": "photos/reconstruction-lowland.jpg",
+    "thumb": "photos/thumb/reconstruction-lowland.jpg",
+    "width": 1536,
+    "height": 1024,
+    "commons_title": "Digital reconstruction: lowland",
+    "source_url": "./credits.html",
+    "author": "Tech Guinée",
+    "license": "Reconstitution numérique / Digital reconstruction",
+    "license_url": "./credits.html",
+    "attribution": "Tech Guinée — digital reconstruction; illustrative viewpoint, not a documentary photograph.",
+    "alt_fr": "Forêt de piémont, racines et jeunes arbres — reconstitution numérique, point de vue indicatif.",
+    "alt_en": "Foothill forest, roots and saplings — digital reconstruction, illustrative viewpoint.",
+    "hotspots": [
+      "lowland-forest",
+      "bossou-chimpanzees",
+      "green-corridor"
+    ],
+    "reconstruction": true
+  },
+  {
+    "file": "photos/reconstruction-stream.jpg",
+    "thumb": "photos/thumb/reconstruction-stream.jpg",
+    "width": 1536,
+    "height": 1024,
+    "commons_title": "Digital reconstruction: stream",
+    "source_url": "./credits.html",
+    "author": "Tech Guinée",
+    "license": "Reconstitution numérique / Digital reconstruction",
+    "license_url": "./credits.html",
+    "attribution": "Tech Guinée — digital reconstruction; illustrative viewpoint, not a documentary photograph.",
+    "alt_fr": "Ruisseau peu profond sous la forêt — reconstitution numérique, point de vue indicatif.",
+    "alt_en": "Shallow stream beneath the forest canopy — digital reconstruction, illustrative viewpoint.",
+    "hotspots": [
+      "cavally",
+      "otter-shrew"
+    ],
+    "reconstruction": true
+  },
+  {
+    "file": "photos/reconstruction-village.jpg",
+    "thumb": "photos/thumb/reconstruction-village.jpg",
+    "width": 1536,
+    "height": 1024,
+    "commons_title": "Digital reconstruction: village",
+    "source_url": "./credits.html",
+    "author": "Tech Guinée",
+    "license": "Reconstitution numérique / Digital reconstruction",
+    "license_url": "./credits.html",
+    "attribution": "Tech Guinée — digital reconstruction; illustrative viewpoint, not a documentary photograph.",
+    "alt_fr": "Maisons et cultures dans un village fictif — reconstitution numérique, point de vue indicatif.",
+    "alt_en": "Houses and crops in a fictional village — digital reconstruction, illustrative viewpoint.",
+    "hotspots": [
+      "ireb-bossou",
+      "cultural-landscape",
+      "cegens-gbakore",
+      "nzo",
+      "yeale"
+    ],
+    "reconstruction": true
+  },
+  {
+    "file": "photos/reconstruction-savanna.jpg",
+    "thumb": "photos/thumb/reconstruction-savanna.jpg",
+    "width": 1536,
+    "height": 1024,
+    "commons_title": "Digital reconstruction: savanna",
+    "source_url": "./credits.html",
+    "author": "Tech Guinée",
+    "license": "Reconstitution numérique / Digital reconstruction",
+    "license_url": "./credits.html",
+    "attribution": "Tech Guinée — digital reconstruction; illustrative viewpoint, not a documentary photograph.",
+    "alt_fr": "Prairies et arbres épars sous un ciel voilé — reconstitution numérique, point de vue indicatif.",
+    "alt_en": "Grassland and scattered trees under a hazy sky — digital reconstruction, illustrative viewpoint.",
+    "hotspots": [
+      "savanna-fire"
+    ],
+    "reconstruction": true
+  },
+  {
+    "file": "photos/reconstruction-lamco.jpg",
+    "thumb": "photos/thumb/reconstruction-lamco.jpg",
+    "width": 1536,
+    "height": 1024,
+    "commons_title": "Digital reconstruction: lamco",
+    "source_url": "./credits.html",
+    "author": "Tech Guinée",
+    "license": "Reconstitution numérique / Digital reconstruction",
+    "license_url": "./credits.html",
+    "attribution": "Tech Guinée — digital reconstruction; illustrative viewpoint, not a documentary photograph.",
+    "alt_fr": "Évocation d’un ancien lac de carrière et de ses pentes végétalisées — reconstitution numérique, point de vue indicatif.",
+    "alt_en": "Illustration of a former quarry lake and revegetated slopes — digital reconstruction, illustrative viewpoint.",
+    "hotspots": [
+      "yekepa-lamco"
+    ],
+    "reconstruction": true
+  },
+  {
+    "file": "photos/reconstruction-ridge.jpg",
+    "thumb": "photos/thumb/reconstruction-ridge.jpg",
+    "width": 1536,
+    "height": 1024,
+    "commons_title": "Digital reconstruction: ridge",
+    "source_url": "./credits.html",
+    "author": "Tech Guinée",
+    "license": "Reconstitution numérique / Digital reconstruction",
+    "license_url": "./credits.html",
+    "attribution": "Tech Guinée — digital reconstruction; illustrative viewpoint, not a documentary photograph.",
+    "alt_fr": "Crête, affleurements rocheux et ravins forestiers — reconstitution numérique, point de vue indicatif.",
+    "alt_en": "Ridge, rock outcrops and forested ravines — digital reconstruction, illustrative viewpoint.",
+    "hotspots": [
+      "grands-rochers",
+      "pierre-richaud",
+      "lamotte-bat",
+      "mining-enclave",
+      "tripoint"
+    ],
+    "reconstruction": true
+  },
+  {
+    "file": "photos/reconstruction-viviparous-toad.jpg",
+    "thumb": "photos/thumb/reconstruction-viviparous-toad.jpg",
+    "width": 508,
+    "height": 340,
+    "commons_title": "Toad in montane grass",
+    "source_url": "./credits.html",
+    "author": "Higgsfield",
+    "license": "Reconstitution numérique / Digital reconstruction",
+    "license_url": "./credits.html",
+    "attribution": "Higgsfield digital reconstruction. Job f83cb98e-3caa-44bc-b2a5-29510519d947.",
+    "alt_fr": "Crapaud dans la prairie montagnarde — reconstitution numérique.",
+    "alt_en": "Toad in montane grass — digital reconstruction.",
+    "hotspots": [
+      "viviparous-toad"
+    ],
+    "reconstruction": true
+  },
+  {
+    "file": "photos/reconstruction-otter-shrew.jpg",
+    "thumb": "photos/thumb/reconstruction-otter-shrew.jpg",
+    "width": 508,
+    "height": 340,
+    "commons_title": "Otter shrew beside a forest stream",
+    "source_url": "./credits.html",
+    "author": "Higgsfield",
+    "license": "Reconstitution numérique / Digital reconstruction",
+    "license_url": "./credits.html",
+    "attribution": "Higgsfield digital reconstruction. Job f83cb98e-3caa-44bc-b2a5-29510519d947.",
+    "alt_fr": "Potamogale au bord d’un ruisseau forestier — reconstitution numérique.",
+    "alt_en": "Otter shrew beside a forest stream — digital reconstruction.",
+    "hotspots": [
+      "otter-shrew"
+    ],
+    "reconstruction": true
+  },
+  {
+    "file": "photos/reconstruction-lamotte-bat.jpg",
+    "thumb": "photos/thumb/reconstruction-lamotte-bat.jpg",
+    "width": 508,
+    "height": 340,
+    "commons_title": "Bat resting in a rock crevice",
+    "source_url": "./credits.html",
+    "author": "Higgsfield",
+    "license": "Reconstitution numérique / Digital reconstruction",
+    "license_url": "./credits.html",
+    "attribution": "Higgsfield digital reconstruction. Job f83cb98e-3caa-44bc-b2a5-29510519d947.",
+    "alt_fr": "Chauve-souris dans une fissure rocheuse — reconstitution numérique.",
+    "alt_en": "Bat resting in a rock crevice — digital reconstruction.",
+    "hotspots": [
+      "lamotte-bat"
+    ],
+    "reconstruction": true
+  },
+  {
+    "file": "photos/reconstruction-bossou-chimpanzees.jpg",
+    "thumb": "photos/thumb/reconstruction-bossou-chimpanzees.jpg",
+    "width": 508,
+    "height": 340,
+    "commons_title": "Chimpanzee cracking a palm nut",
+    "source_url": "./credits.html",
+    "author": "Higgsfield",
+    "license": "Reconstitution numérique / Digital reconstruction",
+    "license_url": "./credits.html",
+    "attribution": "Higgsfield digital reconstruction. Job f83cb98e-3caa-44bc-b2a5-29510519d947.",
+    "alt_fr": "Chimpanzé cassant une noix de palme — reconstitution numérique.",
+    "alt_en": "Chimpanzee cracking a palm nut — digital reconstruction.",
+    "hotspots": [
+      "bossou-chimpanzees"
+    ],
+    "reconstruction": true
   }
 ]

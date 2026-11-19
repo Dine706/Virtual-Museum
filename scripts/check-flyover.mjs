@@ -9,7 +9,7 @@ import { createRequire } from 'node:module';
 let pw;
 try { pw = await import('playwright'); } catch { pw = createRequire(import.meta.url)('playwright'); }
 const BASE = process.env.BASE_URL || 'http://localhost:5173/';
-const browser = await pw.chromium.launch({ args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
+const browser = await pw.chromium.launch({ executablePath: process.env.BROWSER_PATH, args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
 const failures = [];
 const check = (ok, msg) => { console.log(ok ? 'ok  ' : 'FAIL', msg); if (!ok) failures.push(msg); };
 const HOME = { lon: -8.425, lat: 7.625 };
@@ -64,7 +64,8 @@ for (const how of ['Escape', 'tap']) {
 // 3. "Passer" on the title card.
 {
   const { ctx, page } = await open();
-  await page.click('.title-card .btn-ghost');
+  // The tour button is also btn-ghost; select the actual Skip action rather than starting a tour.
+  await page.click('.title-card [data-i18n="title.skip"]');
   await page.waitForTimeout(1800);
   const tgt = await page.evaluate(() => window.__nimba.target());
   check(distM(tgt, HOME) < 50 && !(await page.$('.flyover-ui')), `title "Passer": default orbit without flyover (${distM(tgt, HOME).toFixed(0)} m)`);

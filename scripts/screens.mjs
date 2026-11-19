@@ -25,7 +25,7 @@ const sizes = [
   ['desktop', { viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 }],
 ].filter(([n]) => !only || n === only);
 
-const browser = await chromium.launch({ args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
+const browser = await chromium.launch({ executablePath: process.env.BROWSER_PATH, args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
 let problems = 0;
 
 async function shoot(ctx, url, file, name) {
@@ -38,7 +38,7 @@ async function shoot(ctx, url, file, name) {
   page.on('pageerror', (e) => { problems++; console.log(`[${name}] pageerror: ${e.message}`); });
   await page.goto(url, { waitUntil: 'load' });
   // The app sets <body data-ready="1"> once the terrain has rendered (software GL is slow).
-  await page.waitForSelector('body[data-ready="1"]', { timeout: 90000 }).catch(() => console.log(`[${name}] timed out waiting for ready`));
+  await page.waitForSelector('body[data-ready="1"]', { timeout: 90000 }).catch(() => { problems++; console.log(`[${name}] timed out waiting for ready`); });
   await page.waitForTimeout(1800); // let tweens / fades settle
   await page.screenshot({ path: `docs/screens/${prefix}${file}` });
   await page.close();
@@ -53,3 +53,5 @@ for (const [name, opts] of sizes) {
 }
 await browser.close();
 console.log(`screens saved in docs/screens/ (${problems} console problems)`);
+
+process.exitCode = problems ? 1 : 0;

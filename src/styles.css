@@ -111,6 +111,9 @@ button { font: inherit; color: inherit; }
   background: radial-gradient(ellipse at 50% 55%, rgba(15, 26, 11, .15), rgba(15, 26, 11, .62) 70%), linear-gradient(to top, rgba(15, 26, 11, .7), transparent 45%);
   transition: opacity .6s var(--ease); }
 .title-card.hidden { opacity: 0; pointer-events: none; }
+.title-card { isolation: isolate; }
+.title-landscape { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 58%; z-index: -2; }
+.title-card::after { content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; background: linear-gradient(180deg, rgba(8, 20, 17, .40), rgba(8, 20, 17, .12) 55%, rgba(8, 20, 17, .55)); }
 .title-card .inner { max-width: 640px; display: grid; justify-items: center; gap: 14px; }
 .title-card h1 { margin: 0; font: 600 clamp(2.5rem, 9vw, 4.5rem)/1.02 var(--font-display); letter-spacing: -.01em; text-shadow: 0 2px 24px rgba(0, 0, 0, .45); }
 .title-card .subtitle { margin: 0; font: 500 clamp(.95rem, 2.4vw, 1.125rem)/1.45 var(--font-ui); color: var(--cloud-50); max-width: 34ch; text-shadow: 0 1px 10px rgba(0, 0, 0, .6); }
@@ -478,3 +481,41 @@ body.touring .walk-veil p { visibility: hidden; }
 .pano-hint.fade { opacity: 0; }
 .walk-pano .pano-dot { font: 700 .6875rem/1 var(--font-ui); padding: 3px 5px; border-radius: 6px; background: var(--straw-300); color: var(--forest-900); }
 @media (max-width: 600px) { .pano-title { padding: 8px 12px; } .pano-title strong { font-size: .9375rem; } .pano-title span { font-size: .6875rem; } .walk-pano span:last-child { display: none; } }
+
+/* Walk settings belong to the exploration, with the same quiet forest palette as the map. */
+.walk-compass { position: absolute; left: 50%; top: calc(16px + var(--sat)); transform: translateX(-50%); display: flex; align-items: center; gap: 10px; padding: 8px 16px; border: 1px solid var(--hairline); border-radius: 999px; background: var(--glass-soft); color: var(--cloud-50); font: 500 .75rem/1.3 var(--font-ui); font-variant-numeric: tabular-nums; pointer-events: none; }
+.walk-compass-needle { display: inline-block; color: var(--savanna-500); font-size: 1.25rem; }
+.walk-touch-actions { position: absolute; bottom: calc(90px + var(--sab)); right: calc(28px + var(--sar)); }
+.walk-touch-actions[hidden] { display: none; }
+.walk-ui:has(.walk-card:not([hidden])) .walk-touch-actions, .walk-ui:has(.walk-card:not([hidden])) .walk-stick { visibility: hidden; }
+.walk-jump { min-width: 72px; min-height: 72px; justify-content: center; background: var(--glass-soft); }
+.walk-menu { box-sizing: border-box; width: min(480px, calc(100vw - 24px)); max-height: calc(100dvh - 32px); padding: 0; border: 1px solid var(--hairline); border-radius: 22px; color: var(--cloud-50); background: #16210f; box-shadow: var(--shadow); overflow: auto; }
+.walk-menu::backdrop { background: rgba(6, 13, 5, .65); backdrop-filter: blur(8px); }
+.walk-menu header { position: relative; padding: 28px 28px 18px; border-bottom: 1px solid var(--divider); }
+.walk-menu h2 { margin: 8px 35px 0 0; font: 600 1.8rem/1.2 var(--font-display); }
+.walk-menu .walk-kicker { margin: 0; letter-spacing: .13em; color: var(--savanna-500); }
+.walk-menu-body { padding: 22px 28px; display: grid; gap: 20px; }
+.walk-menu-language { display: flex; gap: 12px; justify-content: space-between; align-items: center; }
+.walk-menu button, .walk-menu select { min-height: 44px; border: 1px solid var(--hairline); border-radius: 10px; padding: 8px 12px; font: 500 .875rem/1.3 var(--font-ui); background: var(--forest-800); color: var(--cloud-50); cursor: pointer; }
+.walk-menu-language button[aria-pressed="true"], .walk-menu .walk-resume { background: var(--savanna-500); color: var(--forest-950); }
+.walk-setting { display: grid; grid-template-columns: 1fr auto; gap: 8px; }
+.walk-setting output { color: var(--straw-300); font-variant-numeric: tabular-nums; }
+.walk-setting input, .walk-setting select, .walk-setting small { grid-column: 1 / -1; width: 100%; }
+.walk-setting input { accent-color: var(--savanna-500); min-height: 26px; }
+.walk-setting small { color: var(--mist-300); font: 400 .75rem/1.5 var(--font-ui); }
+.walk-setting-check { display: flex; justify-content: space-between; align-items: center; min-height: 32px; }
+.walk-setting-check input { width: 22px; height: 22px; accent-color: var(--savanna-500); }
+.walk-menu-help { border-top: 1px solid var(--divider); padding-top: 14px; }
+.walk-menu-help summary { cursor: pointer; min-height: 32px; }
+.walk-menu-help dl { display: grid; gap: 12px; font: 400 .8125rem/1.5 var(--font-ui); margin: 12px 0 0; }
+.walk-menu-help dl div { display: grid; grid-template-columns: 1fr 1.5fr; gap: 12px; }
+.walk-menu-help dt { color: var(--straw-300); }
+.walk-menu-help dd { margin: 0; color: var(--mist-300); }
+.walk-menu-disclosure { margin: 0; padding: 12px; background: var(--forest-950); border-radius: 10px; color: var(--mist-300); font: 400 .75rem/1.6 var(--font-ui); }
+.walk-menu footer { display: flex; justify-content: space-between; gap: 12px; }
+.walk-menu :focus-visible { outline: 3px solid var(--savanna-500); outline-offset: 3px; }
+@media (max-width: 1100px) { .walk-compass { top: auto; bottom: calc(16px + var(--sab)); } }
+@media (max-width: 600px) { .walk-place { max-width: 52vw; } .walk-actions { gap: 4px; } .walk-menu header { padding: 22px 20px 16px; } .walk-menu-body { padding: 18px 20px; } .walk-hint { max-width: calc(100vw - 32px); white-space: normal; text-align: center; } }
+.animal-destinations { padding: .6rem 0 1rem; }
+.animal-destinations h3 { margin: 0 0 .45rem; }
+.animal-destinations button { margin: .15rem .4rem .15rem 0; padding: .52rem .85rem; border-radius: 1rem; background: #303f31; color: #fff; border: 1px solid #70806e; cursor: pointer; }

@@ -1,0 +1,154 @@
+[
+  {
+    "key": "foliage",
+    "path": "/workspace/generated_images/exec-2ae0997c-a492-496f-9b12-63b571b855d0.png",
+    "kind": "material",
+    "sha256": "c1d3dfbdd3db27cfcb02920c0b91cc0132e7f91535802e60a36babf302c23aa1",
+    "method": "OpenAI image generation",
+    "prompt": "Create a production-quality photorealistic botanical cutout texture for a real-time 3D cloud-forest reconstruction. One small naturally irregular spray of 7 separate broad green leaves on fine branching twig stems, seen straight-on, centered and fully inside the square image with generous transparent margins. Generic tropical broadleaf filler foliage, not a claimed portrait of a particular identified species. Leaves have elongated oval shapes, pointed drip tips, subtle irregular margins, believable midribs and branching veins, varied natural forest greens, tiny restrained blemishes. Mix medium mature leaves and two lighter smaller leaves; individual leaf shapes must remain distinct, with lots of transparent negative space between them. Exceptionally realistic surface detail like a botanical studio scan. Soft even neutral diffuse illumination with no directional cast shadows, no white rim, no bokeh, no environment, no ground, no pot, no text or labels. Modest natural leaf curvature but overall flat enough to use as alpha-tested foliage cards in three.js and glTF. Do not create a full tree or scene. Transparent background."
+  },
+  {
+    "key": "bark",
+    "path": "/workspace/generated_images/exec-f8ea473c-fa71-48be-a37a-b3b53cbd1d89.png",
+    "kind": "material",
+    "sha256": "8be58c51e41c835636858c1639aa90c0c8f70d446b88e49bff1f2ced52daf7ee",
+    "method": "OpenAI image generation",
+    "prompt": "A seamless tileable square PBR base-color texture of natural pale grey-brown tropical broadleaf tree bark with small irregular patches of muted sage-green lichen and dark fine cracks. Photorealistic scanned detail. Flat orthographic close-up, covering the entire image edge to edge. Even soft neutral illumination, no directional shadows, no lighting gradients, no ambient occlusion baked in, no specular highlights, no branch silhouette, no surroundings, no text. Vertical subtle irregular fissures, fine flaky texture with believable scale. Avoid faces, regular stripes and repeating obvious motifs. All four edges must tile seamlessly. This is a generated generic material for a clearly labelled digital forest reconstruction, not a photograph of a real Nimba tree."
+  },
+  {
+    "key": "litter",
+    "path": "/workspace/generated_images/exec-a69d386c-3a49-4122-ae5d-1e9c886c26fd.png",
+    "kind": "material",
+    "sha256": "f4d3a80843b6da34bbd72bbe510098e49605608b03cc2b77edc5cf0e2d1357c3",
+    "method": "OpenAI image generation",
+    "prompt": "A seamless tileable square PBR base-color ground texture of a moist West African-style montane broadleaf forest floor: densely overlapping small dry and damp leaves, leaf fragments, dark decomposed humus, very sparse thin twigs, occasional tiny moss flecks. Photorealistic scanned surface detail, natural restrained warm brown and umber with grey-brown leaves, no strong orange cast. Flat orthographic overhead view, covering the whole square edge to edge. Even diffuse neutral light, no directional cast shadows or highlights, no perspective, no horizon, no objects or text. Leaves should be small relative to the image, many dozens visible, with no large conspicuous hero leaf. All four edges must tile seamlessly. Generated material for a labelled digital reconstruction, not a documentary Nimba photograph."
+  },
+  {
+    "key": "canopy",
+    "path": "/workspace/generated_images/exec-214e256d-95d6-4ab8-8296-535c064f5aa2.png",
+    "kind": "material",
+    "prompt": "Photorealistic botanical cutout texture for a 3D tree canopy billboard. A roughly circular irregular dense spray of many thin branching twigs carrying approximately 80 SMALL individual tropical broadleaf leaves. Entire cluster seen straight-on, fully inside a square image with transparent margins. Leaves are small elongated oval green leaves with pointed tips, fine realistic veins and subtle tonal variation. Many separate overlapping leaves with tiny transparent gaps, feathered irregular outline, realistic botanical studio-scan detail. Leaf sizes about 1/15 of total cluster width. This is a foliage TEXTURE, not an entire tree, not a single large leaf or seven-leaf sprig. Neutral soft diffuse lighting, minimal shadows, no black or white matte, no background, no scenery, no labels. Generic broadleaf filler, no claim of exact species identity. Transparent background.",
+    "sha256": "9d961b7b8f328b2117169ecc48256861c47f0ab07d1327ab45c30f05e6411425",
+    "method": "OpenAI image generation"
+  },
+  {
+    "key": "summit",
+    "path": "/workspace/generated_images/exec-f399b227-0455-4793-b914-b6af6dc69aa0.png",
+    "kind": "scene",
+    "prompt": "Create a photorealistic landscape illustration for the Monts Nimba digital reconstruction, West Africa (Guinea / Côte d'Ivoire / Liberia). Wide 3:2 composition, natural photographic-looking lighting, restrained realistic color, incredible botanical and geological surface detail. No text, captions, signs, maps, flags, logos, fantasy architecture, ceremonies or sacred sites. No identifiable people. This is reconstructed artwork, not documentary evidence of an exact viewpoint. An eye-level view along a long narrow green montane ridge, knee-high fine grass tussocks, dark angular quartzite and iron-rich weathered rocks, forest down in steep ravines, a mist-filled valley and several parallel ridges receding softly into a pale blue-grey morning sky. No alpine snow, no conifers, no enormous cliffs or Himalayan peaks.",
+    "sha256": "82d4423687c0c23a11b3538565d3acba7699dab05c8b5dab3bb53f8778b1c207",
+    "method": "OpenAI image generation"
+  },
+  {
+    "key": "cloudforest",
+    "path": "/workspace/generated_images/exec-6d3471f6-78a7-4006-9a4a-1ffe271040fb.png",
+    "kind": "scene",
+    "prompt": "Create a photorealistic landscape illustration for the Monts Nimba digital reconstruction, West Africa (Guinea / Côte d'Ivoire / Liberia). Wide 3:2 composition, natural photographic-looking lighting, restrained realistic color, incredible botanical and geological surface detail. No text, captions, signs, maps, flags, logos, fantasy architecture, ceremonies or sacred sites. No identifiable people. This is reconstructed artwork, not documentary evidence of an exact viewpoint. An immersive first-person view on a gentle forest-floor slope in a West African montane cloud forest. Slender irregular pale grey-brown trunks mottled with lichen and moss, broad leaves and small ferns, a quiet leaf-litter opening through an airy understorey, distant trunks dissolving into very fine cool mist, soft sun filtering through a tall canopy. Natural complex growth, believable scale, no giant fantasy leaves, no European pine trees, no boardwalk or man-made objects.",
+    "sha256": "1597cecaf39e46e593816dc7dbdd315f1d25886a61ef676e62f1af348db17a4b",
+    "method": "OpenAI image generation"
+  },
+  {
+    "key": "lowland",
+    "path": "/workspace/generated_images/exec-fc4dd0d5-d51b-4f41-83d3-15c46dcb01ff.png",
+    "kind": "scene",
+    "prompt": "Create a photorealistic landscape illustration for the Monts Nimba digital reconstruction, West Africa (Guinea / Côte d'Ivoire / Liberia). Wide 3:2 composition, natural photographic-looking lighting, restrained realistic color, incredible botanical and geological surface detail. No text, captions, signs, maps, flags, logos, fantasy architecture, ceremonies or sacred sites. No identifiable people. This is reconstructed artwork, not documentary evidence of an exact viewpoint. An immersive first-person view in tall West African semi-deciduous foothill forest. Several mature broadleaf canopy trees with modest buttress roots, thin pole trunks, layers of small glossy broadleaf saplings, vines, a restrained scattering of ferns, brown leaf litter and dappled daylight. Open walkable understorey with warm humid air, realistic leaf scale, no dense jungle wall, no gigantic fantasy leaves.",
+    "sha256": "725ec396f94ece879919f6ded666805cfb4fd9d536b3837d90ef8f55e8a8c7b1",
+    "method": "OpenAI image generation"
+  },
+  {
+    "key": "stream",
+    "path": "/workspace/generated_images/exec-613870fa-73c4-4f99-ad4b-97327c360535.png",
+    "kind": "scene",
+    "prompt": "Create a photorealistic landscape illustration for the Monts Nimba digital reconstruction, West Africa (Guinea / Côte d'Ivoire / Liberia). Wide 3:2 composition, natural photographic-looking lighting, restrained realistic color, incredible botanical and geological surface detail. No text, captions, signs, maps, flags, logos, fantasy architecture, ceremonies or sacred sites. No identifiable people. This is reconstructed artwork, not documentary evidence of an exact viewpoint. A narrow shallow clear stream winding through broadleaf West African foothill forest, seen from its muddy bank at eye level. Small worn dark stones, sandy patches, leaf litter, a few damp ferns and exposed roots. Filtered soft daylight under real-scale trees, water with gentle ripples and reflections. Quiet intimate composition, no waterfall, no gigantic river, no animals or human structures.",
+    "sha256": "582f7ac33a5d3fda04214e1eadba5e8ea5cf11905612b6ff1cc400d7ae2e6c23",
+    "method": "OpenAI image generation"
+  },
+  {
+    "key": "village",
+    "path": "/workspace/generated_images/exec-c3dec6da-a9ef-4187-81e1-99044d112747.png",
+    "kind": "scene",
+    "prompt": "Create a photorealistic 3:2 wide landscape illustration for a clearly disclosed digital reconstruction inspired by the Monts Nimba region of West Africa. Restrained natural colors, realistic material detail, cinematic but physically plausible daylight. No text, signs, captions, flags, logos, ceremonial objects or sacred sites. No identifiable individuals. This artwork is illustrative, not a survey or documentary photograph. A quiet small fictional rural settlement at the foot of green hills. A few modest rectangular earth-plastered houses with corrugated metal roofs, some naturally rusty, an occasional small round wattle-and-daub hut with a thatched cone. Red-brown compacted-earth paths, a few oil palms, practical vegetable plots, forested hills in the distance. Simple vernacular proportions, no exotic stereotypes, no tourists, no people, no ceremonial buildings, no major roads, no flags. Gentle late-morning light.",
+    "sha256": "8200cd69a31e84e315484360ba1bdc817bd5023d6e916afaed73223421d247ce",
+    "method": "OpenAI image generation"
+  },
+  {
+    "key": "savanna",
+    "path": "/workspace/generated_images/exec-179ca420-2939-449a-989e-7fd76512dbaf.png",
+    "kind": "scene",
+    "prompt": "Create a photorealistic 3:2 wide landscape illustration for a clearly disclosed digital reconstruction inspired by the Monts Nimba region of West Africa. Restrained natural colors, realistic material detail, cinematic but physically plausible daylight. No text, signs, captions, flags, logos, ceremonial objects or sacred sites. No identifiable individuals. This artwork is illustrative, not a survey or documentary photograph. A natural rolling mosaic of fine montane and foothill grasses, warm gold-green grass with sparse low shrubs and a few broadleaf trees, patches of subdued dark old fire-scarred ground, forest edging a distant long ridge, soft dry-season harmattan haze. No active fire, no dramatic smoke, no savanna wildlife, no acacias dominating the scene, no baobabs, no fantasy mountains.",
+    "sha256": "614b6f0111b419e135627deb1d328205ecf6914a00614be2dfe09cc5d17c4e25",
+    "method": "OpenAI image generation"
+  },
+  {
+    "key": "lamco",
+    "path": "/workspace/generated_images/exec-39f10225-6fbb-47fe-b54e-485890869bbb.png",
+    "kind": "scene",
+    "prompt": "Create a photorealistic 3:2 wide landscape illustration for a clearly disclosed digital reconstruction inspired by the Monts Nimba region of West Africa. Restrained natural colors, realistic material detail, cinematic but physically plausible daylight. No text, signs, captions, flags, logos, ceremonial objects or sacred sites. No identifiable individuals. This artwork is illustrative, not a survey or documentary photograph. A quiet former iron-ore pit lake in a West African green mountain landscape. Broad dark green-blue water with subtle reflections, exposed reddish-brown iron-rich stepped slopes partly recolonized by grass and small shrubs, a gentle low shoreline visible in the foreground, humid hazy midday sky. An old rehabilitating landscape, no operating machinery, no active excavation, no buildings, no workers, no accusations or dramatic pollution. Natural realistic proportions; no giant crater walls.",
+    "sha256": "e0969fb3ee52e17e5ec95204aa2ffba8f5ede778badb542cdfb7d1585072de2d",
+    "method": "OpenAI image generation"
+  },
+  {
+    "key": "ridge",
+    "path": "/workspace/generated_images/exec-de0adc52-e56b-4ada-ba9a-ccca5b93eecb.png",
+    "kind": "scene",
+    "prompt": "Create a photorealistic 3:2 wide landscape illustration for a clearly disclosed digital reconstruction inspired by the Monts Nimba region of West Africa. Restrained natural colors, realistic material detail, cinematic but physically plausible daylight. No text, signs, captions, flags, logos, ceremonial objects or sacred sites. No identifiable individuals. This artwork is illustrative, not a survey or documentary photograph. A long green West African montane ridge with a mosaic of fine grassland, weathered dark stone outcrops, forest-filled ravines and foothills. Eye-level panorama from a grassy shoulder with distant blue-grey hills under layered thin clouds. Some rocks in the foreground. Modest real-world relief, no snow, no huge Himalayan pinnacles, no mine pit or roads, no buildings or animals.",
+    "sha256": "828e1603d399bbd3a13af8162f3be3f37a30f7ce727a74371ee4354cf459a08f",
+    "method": "OpenAI image generation"
+  },
+  {
+    "key": "laterite",
+    "kind": "material",
+    "path": "/workspace/generated_images/exec-1727d6c4-0f76-4755-b7d0-75ec4ae65eb5.png",
+    "prompt": "Generate a photorealistic seamless square tileable PBR BASE COLOR texture for a real-time 3D landscape. Flat orthographic view, material fills the whole square edge to edge, evenly lit diffuse neutral lighting without directional shadows, highlights, perspective, gradients, large objects, text or frame. Fine-scale physically plausible surface detail and restrained natural color; no strong baked lighting. All four edges must tile. Compacted iron-rich lateritic earth, muted reddish-brown soil with tiny dark gravel and subtle worn patches. West African red-earth path and old spoil reference, no tire tracks, no large footprints, no leaf litter, no large rocks.",
+    "method": "OpenAI image generation",
+    "sha256": "8e7136c08c27d6d03414bdfc220eea2a7df325ca83a9fe34bb459e52f40171d3"
+  },
+  {
+    "key": "grass",
+    "kind": "material",
+    "path": "/workspace/generated_images/exec-d66f0034-238e-4e3f-a15b-f4e80b20dffd.png",
+    "prompt": "Generate a photorealistic seamless square tileable PBR BASE COLOR texture for a real-time 3D landscape. Flat orthographic view, material fills the whole square edge to edge, evenly lit diffuse neutral lighting without directional shadows, highlights, perspective, gradients, large objects, text or frame. Fine-scale physically plausible surface detail and restrained natural color; no strong baked lighting. All four edges must tile. Dense fine short montane grass turf seen straight down, natural varied moss-green and olive blades, hints of subdued golden dry stems and dark earth between tiny clumps. Very small blades, irregular growth, no big leaves, no flowers, no manicured lawn stripes.",
+    "method": "OpenAI image generation",
+    "sha256": "a301797ae7acb9e00698927ae6530cdd6a8803c4c7a2b531bd2940066a13198b"
+  },
+  {
+    "key": "rock",
+    "kind": "material",
+    "path": "/workspace/generated_images/exec-bbaa1529-609f-4c90-88b7-987345481ece.png",
+    "prompt": "Generate a photorealistic seamless square tileable PBR BASE COLOR texture for a real-time 3D landscape. Flat orthographic view, material fills the whole square edge to edge, evenly lit diffuse neutral lighting without directional shadows, highlights, perspective, gradients, large objects, text or frame. Fine-scale physically plausible surface detail and restrained natural color; no strong baked lighting. All four edges must tile. Weathered dark grey-brown quartzite and granitic mountain rock surface, fine mineral grains, subtle rusty iron staining, small irregular cracks, restrained tonal variation. Not a boulder silhouette, no dramatic wide fissures, no strong stripes.",
+    "method": "OpenAI image generation",
+    "sha256": "ac01c8aea422f5f0b0c79ca3233814d1a34194a0b451a19749aa885b4018af04"
+  },
+  {
+    "key": "moss",
+    "kind": "material",
+    "path": "/workspace/generated_images/exec-d4382e08-18ad-4fea-82c9-5f953330436a.png",
+    "prompt": "Generate a photorealistic seamless square tileable PBR BASE COLOR texture for a real-time 3D landscape. Flat orthographic view, material fills the whole square edge to edge, evenly lit diffuse neutral lighting without directional shadows, highlights, perspective, gradients, large objects, text or frame. Fine-scale physically plausible surface detail and restrained natural color; no strong baked lighting. All four edges must tile. Small delicate natural moss growing densely over damp fine-grained rock, varied muted forest and sage greens, sparse tiny exposed grey-brown rock patches. Seen very close and straight down, no big fern leaves, no mushrooms, no flowers.",
+    "method": "OpenAI image generation",
+    "sha256": "abd9b27d91561b9f5b6f386c7bc3a2917f2d745c04576ed41805f461285f9c6c"
+  },
+  {
+    "key": "mud",
+    "kind": "material",
+    "path": "/workspace/generated_images/exec-483bd495-6af2-4ed7-b9d7-2cfd173ccabb.png",
+    "prompt": "Photorealistic seamless square tileable PBR BASE COLOR material texture. Orthographic straight-on surface fills the square edge to edge, evenly lit with soft neutral diffuse light, no directional shadows, perspective, specular highlights, text or frames. Very fine natural detail and no obvious repeating large features. All four edges must tile seamlessly. Damp dark brown forest soil and fine silt, small scattered decomposing leaf fragments, subdued earthy brown color, slightly compacted irregular surface with tiny shallow impressions. No puddles reflecting sky, no large sticks, no large footprints, no baked light.",
+    "method": "OpenAI image generation",
+    "sha256": "7211ce66aa5c5e353a4bee75861e5a6151251be272467a2428d8091ac151b252"
+  },
+  {
+    "key": "sand",
+    "kind": "material",
+    "path": "/workspace/generated_images/exec-1492c4f5-87e7-4025-a807-af08b25875f9.png",
+    "prompt": "Photorealistic seamless square tileable PBR BASE COLOR material texture. Orthographic straight-on surface fills the square edge to edge, evenly lit with soft neutral diffuse light, no directional shadows, perspective, specular highlights, text or frames. Very fine natural detail and no obvious repeating large features. All four edges must tile seamlessly. Natural damp stream-bank sand and very fine rounded gravel, muted pale brown and grey grains, a few small dark mineral specks, realistic irregular distribution seen straight down. No beach shells, no water or horizon, no large stones.",
+    "method": "OpenAI image generation",
+    "sha256": "2203e292a6dfd3e63523e3072c2a3a026105200364f284238b0c0f8279bb468c"
+  },
+  {
+    "key": "palm",
+    "kind": "material",
+    "path": "/workspace/generated_images/exec-0e4f7f73-0ef0-4955-a79c-fab6caed0c5f.png",
+    "prompt": "Photorealistic seamless square tileable PBR BASE COLOR material texture. Orthographic straight-on surface fills the square edge to edge, evenly lit with soft neutral diffuse light, no directional shadows, perspective, specular highlights, text or frames. Very fine natural detail and no obvious repeating large features. All four edges must tile seamlessly. Generic tropical palm-trunk fibrous bark, dry grey-brown interlaced coarse plant fibres and small irregular old leaf-base scars. Flat macro material surface, no full trunk silhouette, no leaf fronds, no large geometric diamond pattern or face-like motifs. Restrained brown-grey color.",
+    "method": "OpenAI image generation",
+    "sha256": "30a26d4225120d10bc396e3b572144b41037a836a7459d184111ae4f5ce8ebb6"
+  }
+]

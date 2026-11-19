@@ -17,7 +17,13 @@
     "data:walk": ".venv/bin/python scripts/worldpack/build_walk_data.py",
     "assets:textures": "NODE_USE_ENV_PROXY=1 node scripts/fetch_textures.mjs",
     "assets:models": "NODE_USE_ENV_PROXY=1 node scripts/fetch_models.mjs",
-    "check:tour": "node scripts/check-tour.mjs"
+    "check:tour": "node scripts/check-tour.mjs",
+    "check:walk-controls": "node scripts/check-walk-controls.mjs",
+    "check:walk-physics": "node scripts/check-walk-physics.mjs",
+    "check:walk-quality": "node scripts/check-walk-quality.mjs",
+    "check:world-art": "node scripts/check-world-art.mjs",
+    "check:art-ui": "node scripts/check-art-ui.mjs",
+    "assets:world-art": "node scripts/build_world_art.mjs"
   },
   "dependencies": {
     "@fontsource-variable/fraunces": "^5.3.0",

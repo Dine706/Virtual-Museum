@@ -36,7 +36,7 @@ const server = http.createServer((req, res) => {
 }).listen(PORT);
 const BASE = `http://localhost:${PORT}/`;
 
-const browser = await pw.chromium.launch({ args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
+const browser = await pw.chromium.launch({ executablePath: process.env.BROWSER_PATH, args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
 const failures = [];
 const check = (ok, msg) => { console.log(ok ? 'ok  ' : 'FAIL', msg); if (!ok) failures.push(msg); };
 const kb = (b) => `${(b / 1024).toFixed(0)} KB`;

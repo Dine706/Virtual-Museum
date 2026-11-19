@@ -213,7 +213,7 @@ export function frond(kind: 'fern' | 'oilpalm' | 'raphia', seed: number): THREE.
   const g = ctx2d(c);
   const r = rng(seed);
   const cx = W / 2;
-  const hue = kind === 'fern' ? 100 : kind === 'oilpalm' ? 88 : 84;
+  const hue = kind === 'fern' ? 92 : kind === 'oilpalm' ? 86 : 84;
   const n = kind === 'fern' ? 44 : kind === 'oilpalm' ? 70 : 84;
   for (let k = 0; k < n; k++) {
     const t = k / n; // 0 = base (bottom), 1 = tip
@@ -221,12 +221,13 @@ export function frond(kind: 'fern' | 'oilpalm' | 'raphia', seed: number): THREE.
     const env = kind === 'fern' ? Math.sin(Math.PI * Math.min(1, t * 1.0 + 0.1)) : Math.sin(Math.PI * (0.12 + t * 0.88)) * (1 - t * 0.3);
     const len = (W / 2 - 4) * Math.max(0.15, env);
     for (const side of [-1, 1]) {
-      const l = (kind === 'fern' ? 42 : 36) + (r() - 0.5) * 10 + t * 6;
-      g.fillStyle = hsl(hue + (r() - 0.5) * 10, 46 + (r() - 0.5) * 12, l);
+      const l = (kind === 'fern' ? 30 : 34) + (r() - 0.5) * 10 + t * 6;
+      g.fillStyle = hsl(hue + (r() - 0.5) * 10, 31 + (r() - 0.5) * 10, l);
       g.save();
       g.translate(cx, y);
       const droop = kind === 'fern' ? 0.32 : 0.55 + r() * 0.25;
-      g.rotate(side * (Math.PI / 2 - droop));
+      g.scale(side, 1);
+      g.rotate(-droop);
       if (kind === 'fern') {
         // pinna: a tapering blade with lobed (pinnule) edges
         const w = 11;
