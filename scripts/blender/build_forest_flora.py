@@ -40,7 +40,18 @@ class Plant:
                 c=tuple(k*light*(.82+.20*t) for k in palette)
                 self.point(p,((u+1)*.5,t),c)
                 if j and i:
-                    ix=offset+j*cols+i; self.faces.append((ix-cols-1,ix-cols,ix,ix-1))
+                    ix=offset+j*cols+i; self.faces.append((ix-1,ix,ix-cols,ix-cols-1))
+    def berry(self, center, size, color):
+        start=len(self.v)
+        for j in range(6):
+            lat=pi*(j/5-.5)
+            for i in range(8):
+                a=2*pi*i/8
+                self.point(center+size*Vector((cos(a)*cos(lat),sin(a)*cos(lat),sin(lat))),(.16,.11),color)
+        for j in range(5):
+            for i in range(8):
+                k=start+j*8; nxt=(i+1)%8
+                self.faces.append((k+i,k+nxt,k+8+nxt,k+8+i))
     def save(self,name):
         mesh=bpy.data.meshes.new(name);mesh.from_pydata(self.v,[],self.faces);mesh.update()
         uv=mesh.uv_layers.new()
@@ -69,6 +80,23 @@ for variant in range(2):
                 L=[.49,.55,.64,.27][index]*r.uniform(.76,1.16)*(1-.25*t)
                 palette=[(.105,.245,.060),(.065,.22,.085),(.058,.183,.082),(.125,.218,.089)][index]
                 p.blade(base,a,L,L*[.14,.32,.18,.48][index],L*(.45+t*.56),L*(.89-.52*t),palette,index==3)
+        if variant==1 and kind=='palisota':
+            a,b=Vector((0,0,.02)),Vector((.07,.07,.47))
+            p.stalk(a,b,.009)
+            for j in range(32):
+                phase=j*2.39996
+                center=b+Vector((.025*cos(phase),.025*sin(phase),.0036*j))
+                p.berry(center,p.r.uniform(.008,.014),(.41,.020,.011))
+        if variant==1 and kind=='begonia':
+            tip=Vector((-.08,.08,.61))
+            p.stalk(Vector((0,0,.24)),tip,.005)
+            for j in range(5):
+                phase=j*2.39996
+                bud=tip+Vector((.09*cos(phase),.09*sin(phase),.05*sin(j)))
+                p.stalk(tip,bud,.002)
+                for i in range(4):
+                    p.blade(bud,i*pi/2+phase,.019,.012,.009,.013,(.85,.66,.61))
+                p.berry(bud,.005,(.85,.41,.035))
         p.save(kind+str(variant))
 # Narrow, divided fronds spread from a compact fern growing on a trunk.
 for variant in range(2):

@@ -673,6 +673,7 @@ export async function enterWalk(ctx: WalkContext): Promise<WalkHandle> {
       fx,
       get animation() { return animatedPlants?.stats ?? null; },
       get landscape() { return { distantTrees: distantForest?.count ?? 0, detailedTreeRange: O.range, geometryRange: O.near, groundRadius: O.R, farTerrainSegments: O.seg >= 500 ? 700 : 300, horizon: distantForest ? 22000 : 0 }; },
+      nearestLeaf: () => flora.nearestLeaf(eye),
       get localFlora() { return flora.counts; },
       get groundCover() { return cover.stats; },
       /** Test capture: render one real frame at the current viewport, then stop submitting GPU work. */

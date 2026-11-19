@@ -54,7 +54,7 @@ export class RegionalFlora {
   }
 
   private plant(kind:Form, x:number,y:number,z:number, scale:number,seed:number) {
-    const mesh=this.batches.get(kind+(seed>.5?'1':'0'))!;
+    const mesh=this.batches.get(kind+(seed>(kind==='begonia'||kind==='palisota'?.80:.50)?'1':'0'))!;
     if(mesh.count>=mesh.instanceMatrix.count) return;
     this.pose.position.set(x,y,z); this.pose.scale.setScalar(scale);
     this.pose.rotation.set(.08*Math.sin(seed*22),seed*71,.08*Math.cos(seed*37),'YXZ');
@@ -66,7 +66,7 @@ export class RegionalFlora {
     if(!this.ready || eye.distanceToSquared(this.last)<6.25) return;
     this.last.copy(eye);
     for(const mesh of this.batches.values()) mesh.count=0;
-    const step=2, radius=this.radius;
+    const step=1.65, radius=this.radius;
     for(let j=Math.floor((eye.z-radius)/step);j<=Math.ceil((eye.z+radius)/step);j++){
       for(let i=Math.floor((eye.x-radius)/step);i<=Math.ceil((eye.x+radius)/step);i++){
         const x=(i+hash2(i,j,104))*step,z=(j+hash2(i,j,105))*step;
@@ -83,6 +83,12 @@ export class RegionalFlora {
         const kind=patch>.42?'ginger':patch<-.13?(h<850?'marantochloa':'begonia'):'palisota';
         const size=(.68+.64*hash2(i,j,115))*(1-THREE.MathUtils.smoothstep(distance,radius-5,radius));
         this.plant(kind,x,h-.025,z,size,hash2(i,j,116));
+        // Young plants gather at the foot of mature clumps in pockets of shade.
+        if(distance<18 && clump>.12 && a.canopy>10) {
+          const offset=hash2(i,j,118)*6.28;
+          const px=x+.48*Math.cos(offset), pz=z+.48*Math.sin(offset);
+          this.plant(kind,px,this.data.heightAt(px,pz)-.015,pz,size*.48,hash2(i,j,119));
+        }
       }
     }
     for(const t of trees){
@@ -90,9 +96,27 @@ export class RegionalFlora {
       const seed=hash2(Math.floor(t.x*3),Math.floor(t.z*3),320);
       if(seed>.48) continue;
       const angle=t.rot+seed*6, r=t.h*.023;
-      this.plant('asplenium',t.x+r*Math.cos(angle),t.y+.35+seed*4,t.z+r*Math.sin(angle),.85+seed,seed);
+      this.plant('asplenium',t.x+r*Math.cos(angle),t.y+.35+seed*4,t.z+r*Math.sin(angle),.85+seed,hash2(Math.floor(t.x),Math.floor(t.z),321));
     }
     for(const m of this.batches.values()){m.instanceMatrix.needsUpdate=true;m.computeBoundingSphere();}
+  }
+
+  nearestLeaf(eye:THREE.Vector3) {
+    const m=new THREE.Matrix4(), v=new THREE.Vector3();
+    let best=Infinity, leaf:THREE.Vector3|null=null;
+    for(const mesh of this.batches.values()){
+      const position=mesh.geometry.attributes.position;
+      for(let i=0;i<mesh.count;i++){
+        mesh.getMatrixAt(i,m);
+        v.setFromMatrixPosition(m);
+        const d=v.distanceTo(eye);
+        if(d<1 || d>best) continue;
+        const index=Math.floor(position.count*.46);
+        leaf=new THREE.Vector3().fromBufferAttribute(position,index).applyMatrix4(m);
+        best=d;
+      }
+    }
+    return leaf;
   }
 
   pick(ray:THREE.Raycaster, limit:number):Card|null {
