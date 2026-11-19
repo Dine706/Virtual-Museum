@@ -161,7 +161,7 @@ export class Village {
     this.mats.rust = W(new THREE.MeshStandardMaterial({ map: metal(0.9, 8), roughness: 0.7, metalness: 0.3, side: THREE.DoubleSide }));
     this.mats.gable = W(new THREE.MeshStandardMaterial({ map: plaster('plain', 22, 9), roughness: 0.95, side: THREE.DoubleSide }));
     this.mats.wood = W(new THREE.MeshStandardMaterial({ color: '#5b3d25', roughness: 0.85 }));
-    this.mats.joinery = W(new THREE.MeshStandardMaterial({ color: this.artBase ? 0xffffff : 0x694b39, roughness: 0.87 }));
+    this.mats.joinery = W(new THREE.MeshStandardMaterial({ color: 0x694b39, roughness: 0.87 }));
     this.mats.woodLight = W(new THREE.MeshStandardMaterial({ color: '#7d5a38', roughness: 0.8 }));
     this.mats.hair = W(new THREE.MeshStandardMaterial({ color: '#141010', roughness: 0.95 }));
     this.mats.basin = W(new THREE.MeshStandardMaterial({ color: '#9aa3a8', roughness: 0.35, metalness: 0.6 }));
@@ -191,6 +191,7 @@ export class Village {
           material.map = map;
           material.bumpMap = map;
           material.bumpScale = file === 'zinc' ? 0.055 : 0.024;
+          if (name === 'joinery') material.color.set(0xffffff);
           if (name === 'rust') material.color.set('#ba947b');
           material.needsUpdate = true;
         }

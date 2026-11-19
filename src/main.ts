@@ -337,13 +337,13 @@ async function boot() {
   // ---- Walk mode (first-person, lazy-loaded) ----
   let walking: WalkHandle | null = null;
   let walkStarting = false;
-  async function startWalk(x: number, z: number) {
+  async function startWalk(x: number, z: number, heading?: number) {
     if (walking || walkStarting) return;
     walkStarting = true;
     readout.hide();
     if (selected) selectHotspot(null, true);
     const fwd = new THREE.Vector3().subVectors(controls.target, camera.position);
-    const yaw = Math.atan2(-fwd.x, -fwd.z);
+    const yaw = heading ?? Math.atan2(-fwd.x, -fwd.z);
     stage.suspend(true);
     document.body.classList.add('walking');
     try {
@@ -629,7 +629,8 @@ async function boot() {
     window.addEventListener('keydown', titleInput);
     setTimeout(pauseDrift, 30000);
     showTitleCard({
-      onWalk: () => { endIntro(); void startWalk(...lonLatToXZ(-8.3958, 7.6397)); },
+      // The mapped canopy opens onto a walkable grass saddle about 45 m southwest.
+      onWalk: () => { endIntro(); void startWalk(6300, -6495, 3 * Math.PI / 4); },
       onExplore: () => startFlyover(),
       onTour: () => void startTour(),
       tourFirst: location.hash === '#/tour',

@@ -1,4 +1,4 @@
-import{$t as e,Dt as t,E as n,Et as r,S as i,en as a,hn as o,l as s,ln as c,on as l,wt as u,zt as d}from"./index-C7H11Ugw.js";var f=null;function p(e){return f??=fetch(`${e}pano/panos.json`).then(e=>e.ok?e.json():[]).then(e=>e.panos??[]).catch(()=>[]),f}function m(f,p,m,h){return new Promise(g=>{let _=document.createElement(`div`);_.className=`pano-viewer`,_.setAttribute(`role`,`dialog`),_.setAttribute(`aria-modal`,`true`),_.setAttribute(`aria-label`,m===`fr`?f.title_fr:f.title_en),_.innerHTML=`
+import{$t as e,Dt as t,E as n,Et as r,S as i,en as a,hn as o,l as s,ln as c,on as l,wt as u,zt as d}from"./index-Cw6L09Qo.js";var f=null;function p(e){return f??=fetch(`${e}pano/panos.json`).then(e=>e.ok?e.json():[]).then(e=>e.panos??[]).catch(()=>[]),f}function m(f,p,m,h){return new Promise(g=>{let _=document.createElement(`div`);_.className=`pano-viewer`,_.setAttribute(`role`,`dialog`),_.setAttribute(`aria-modal`,`true`),_.setAttribute(`aria-label`,m===`fr`?f.title_fr:f.title_en),_.innerHTML=`
       <canvas class="pano-canvas" aria-hidden="true"></canvas>
       <div class="pano-top">
         <div class="pano-title"><strong></strong><span></span></div>
