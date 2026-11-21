@@ -1,0 +1,167 @@
+{
+ "id": "testarea-z1-edge",
+ "name_fr": "Zone test – lisière prairie d'altitude / forêt (zone sommet)",
+ "name_en": "Test area – montane grassland / forest edge (summit zone)",
+ "centre_lonlat": [
+  -8.400971,
+  7.624495
+ ],
+ "centre_utm29n_m": [
+  566072.65,
+  842831.39
+ ],
+ "size_m": 300,
+ "base_alt_m": 1311.0,
+ "ground_alt_m": [
+  1311.7,
+  1504.2
+ ],
+ "axes": "x east, y north, z up, metres; origin at the patch centre; z = altitude - base_alt_m",
+ "record": "placements.bin: little-endian float32, 5 per instance: x, y, z, yaw (radians, counter-clockwise from +x seen from above), uniform scale",
+ "terrain": {
+  "file": "terrain.glb",
+  "grid_m": 2,
+  "albedo": "terrain_albedo.jpg"
+ },
+ "check_points": [
+  {
+   "x": -150,
+   "y": -150,
+   "z": 189.09
+  },
+  {
+   "x": 150,
+   "y": -150,
+   "z": 29.29
+  },
+  {
+   "x": 150,
+   "y": 150,
+   "z": 0.72
+  },
+  {
+   "x": -150,
+   "y": 150,
+   "z": 178.33
+  },
+  {
+   "x": 0,
+   "y": 0,
+   "z": 96.63
+  },
+  {
+   "x": -70,
+   "y": 40,
+   "z": 92.77
+  },
+  {
+   "x": 55,
+   "y": -85,
+   "z": 59.64
+  },
+  {
+   "x": 110,
+   "y": 95,
+   "z": 22.57
+  }
+ ],
+ "sun": {
+  "azimuth_deg_from_north_clockwise": 125,
+  "elevation_deg": 42
+ },
+ "viewpoints": [
+  {
+   "id": "grassland",
+   "x": 117.0,
+   "y": 24.0,
+   "eye": 1.65,
+   "yaw": 0.508,
+   "pitch": -0.03,
+   "fov": 68,
+   "z": 41.024
+  },
+  {
+   "id": "forest_edge",
+   "x": 6.0,
+   "y": 78.0,
+   "eye": 1.65,
+   "yaw": -2.516,
+   "pitch": 0.05,
+   "fov": 72,
+   "z": 64.241
+  },
+  {
+   "id": "overview",
+   "x": 294.033,
+   "y": 59.538,
+   "eye": 226.632,
+   "yaw": 1.771,
+   "pitch": -0.409,
+   "fov": 58,
+   "z": 226.632
+  }
+ ],
+ "placements": [
+  {
+   "asset": "parinari_tree",
+   "count": 1079,
+   "offset_floats": 0
+  },
+  {
+   "asset": "montane_tree",
+   "count": 196,
+   "offset_floats": 5395
+  },
+  {
+   "asset": "tree_fern",
+   "count": 107,
+   "offset_floats": 6375
+  },
+  {
+   "asset": "ground_fern",
+   "count": 2810,
+   "offset_floats": 6910
+  },
+  {
+   "asset": "fallen_log",
+   "count": 32,
+   "offset_floats": 20960
+  },
+  {
+   "asset": "protea_shrub",
+   "count": 67,
+   "offset_floats": 21120
+  },
+  {
+   "asset": "rock_outcrop",
+   "count": 28,
+   "offset_floats": 21455
+  },
+  {
+   "asset": "rock_boulder_a",
+   "count": 61,
+   "offset_floats": 21595
+  },
+  {
+   "asset": "rock_boulder_b",
+   "count": 42,
+   "offset_floats": 21900
+  },
+  {
+   "asset": "rock_scree",
+   "count": 367,
+   "offset_floats": 22110
+  },
+  {
+   "asset": "grass_tussock_a",
+   "count": 118998,
+   "offset_floats": 23945
+  },
+  {
+   "asset": "grass_tussock_b",
+   "count": 64102,
+   "offset_floats": 618935
+  }
+ ],
+ "sources": "Relief: Copernicus DEM GLO-30 minus Meta/WRI canopy height, upsampled to 1 m (shape real, detail not). Where trees/grass/rock are: Meta/WRI canopy height, ESA WorldCover, slope. Plants: draft kit models."
+}

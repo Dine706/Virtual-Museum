@@ -469,3 +469,25 @@ vertical "curtains" along the shore), mines are red iron-ore spoil with patchy r
 are blurred so surfaces blend across outlines; ground textures use box projection (no smearing on pit walls);
 the camera steps to the nearest dry, gentle ground. Bug: the far massif mesh, only 6 m under the fine patch,
 bridged the pit with its coarse triangles and covered the camera (black render) – now sunk 300 m there.
+
+## Blender asset kit + Unreal test area (21 Nov 2026)
+Dean asked for assets made in Blender and a small test area to approve before the Unreal world goes further.
+* **Kit** (`scripts/blender/nimba_kit.py` → `worldpack/kit/*.glb`, `kit.json`): 13 models generated from code –
+  two grass tussocks, Protea-type shrub, mossy montane tree, tall Parinari-type tree, tree fern, forest-floor
+  fern, oil palm, two boulders, outcrop, scree, fallen log. Leaves and blades are real geometry (no alpha
+  cut-outs), bark and rock use the app's CC0 scans, leaf textures are generated. Review sheet:
+  `docs/screens/kit/kit_sheet.jpg` (the orange post is 1.70 m).
+* **The shapes are drafts, not validated species models.** They follow the growth forms listed in
+  `worldpack/ASSETS.md`; `kit.json` carries a "to validate" note per asset. No animals (CLAUDE.md §10).
+* **Test area** (`scripts/blender/nimba_test_area.py` → `worldpack/testarea/`): 300 m square of zone z1 at
+  7.6245° N, 8.4010° W, ground 1,312–1,504 m, chosen by score (grass/forest mix, some rock, lowest mean slope
+  above 1,300 m; it is still ≈ 30° on average). Trees stand where the 1 m canopy model has trees and take its
+  height; grass, Protea belt and rocks follow the masks. ≈ 257,000 instances in `placements.bin`.
+* **Unreal** (`worldpack/unreal/build_test_area.py`, README next to it): imports the GLBs, finds the axis
+  mapping by tracing the terrain at known points, spawns instanced meshes, sun/sky/fog, Player Start.
+  **Not run: this container has no Unreal Engine.** The Shadow PC folder "Nimba" is in the Remote Control list
+  but is not offered to cloud sessions, so the script has to be run (and corrected) there.
+* Findings: leaves need a translucent share in Cycles or the canopy is black from below; the forest view is
+  exposed +2.2 EV for the shade; the mossy montane tree branches too low to stand under above scale 1.5, so
+  canopy ≥ 10 m uses the tall tree; the camera spots are picked from the data and kept 3 m from trunks.
+* The web app is unchanged by this work.

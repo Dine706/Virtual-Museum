@@ -9,3 +9,4 @@ __pycache__
 # Blender renders: downloaded CC0 assets and outputs
 scripts/blender/assets/
 scripts/blender/out/
+worldpack/testarea/terrain_albedo.jpg
