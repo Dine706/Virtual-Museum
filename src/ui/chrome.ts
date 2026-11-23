@@ -61,18 +61,16 @@ export class Chrome {
     this.atmoBtn = this.iconButton('', () => h.onAtmo());
     const reset = this.iconButton(icons.locate, () => h.onReset());
     reset.dataset.i18nAttr = 'aria-label:view.reset;data-tip:view.reset';
-    const tour = this.iconButton(icons.play, () => this.onTour());
-    tour.dataset.i18nAttr = 'aria-label:tour.button;data-tip:tour.button';
     const langSlot = document.createElement('div');
     langSlot.className = 'lang-slot';
     langSlot.append(langToggle());
-    // Link to the virtual museum (musee.html).
+    // Link to the virtual museum (musee.html), in the place of the guided-tour button.
     const museum = document.createElement('a');
     museum.className = 'btn-icon has-tip';
     museum.href = './musee.html';
     museum.innerHTML = icons.museum;
     museum.dataset.i18nAttr = 'aria-label:museum.enter;data-tip:museum.enter';
-    tools.append(this.atmoBtn, reset, tour, museum, langSlot);
+    tools.append(this.atmoBtn, reset, museum, langSlot);
 
     document.getElementById('app')!.append(top, modes, tools);
     applyStatic();

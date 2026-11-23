@@ -20,8 +20,8 @@ export function showTitleCard(opts: { onExplore: () => void; onSkip: () => void;
   actions.className = 'actions';
   actions.innerHTML = `
     <button type="button" class="btn-primary" data-i18n="title.explore"></button>
-    <button type="button" class="btn-ghost tour-btn" data-i18n="tour.button"></button>
     <a class="btn-ghost museum-link" href="./musee.html" data-i18n="museum.enter"></a>
+    <button type="button" class="btn-ghost tour-btn" data-i18n="tour.button"></button>
     <button type="button" class="btn-ghost" data-i18n="title.skip"></button>`;
   // Above the (fading) progress block: nothing already on screen moves when the buttons arrive (CLS).
   inner.insertBefore(actions, document.getElementById('loading'));
@@ -39,7 +39,8 @@ export function showTitleCard(opts: { onExplore: () => void; onSkip: () => void;
   applyStatic(card);
   requestAnimationFrame(() => card.classList.add('ready'));
   const [explore, tourBtn, skip] = actions.querySelectorAll<HTMLButtonElement>('button');
-  if (!opts.onTour) tourBtn.remove();
+  // The virtual museum replaces the guided tour on the title card; the tour stays available from a #/tour link.
+  if (!opts.onTour || !opts.tourFirst) tourBtn.remove();
   (opts.tourFirst && opts.onTour ? tourBtn : explore).focus({ preventScroll: true });
 
   let closed = false;
