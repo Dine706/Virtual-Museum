@@ -1,0 +1,36 @@
+[
+ {
+  "role": "floor",
+  "id": "laminate_floor_02",
+  "name": "Laminate Floor 02",
+  "authors": [
+   "Dario Barresi",
+   "Charlotte Baglioni"
+  ],
+  "size_m": 1.6999999284744263,
+  "license": "CC0 1.0",
+  "url": "https://polyhaven.com/a/laminate_floor_02"
+ },
+ {
+  "role": "plaster",
+  "id": "white_plaster_02",
+  "name": "White Plaster 02",
+  "authors": [
+   "Rob Tuytel"
+  ],
+  "size_m": 1,
+  "license": "CC0 1.0",
+  "url": "https://polyhaven.com/a/white_plaster_02"
+ },
+ {
+  "role": "oak",
+  "id": "white_oak_veneer",
+  "name": "White Oak Veneer",
+  "authors": [
+   "Jenelle van Heerden"
+  ],
+  "size_m": 0.5,
+  "license": "CC0 1.0",
+  "url": "https://polyhaven.com/a/white_oak_veneer"
+ }
+]

@@ -33,5 +33,9 @@ export default defineConfig({
   base: './',
   plugins: [pruneDist()],
   server: { port: 5173, strictPort: true, host: true },
-  build: { target: 'es2022', assetsInlineLimit: 0, chunkSizeWarningLimit: 800 },
+  build: {
+    target: 'es2022', assetsInlineLimit: 0, chunkSizeWarningLimit: 800,
+    // Two pages: the 3D map (index.html) and the virtual museum (musee.html).
+    rollupOptions: { input: { main: path.resolve(import.meta.dirname, 'index.html'), musee: path.resolve(import.meta.dirname, 'musee.html') } },
+  },
 });

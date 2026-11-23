@@ -478,3 +478,7 @@ body.touring .walk-veil p { visibility: hidden; }
 .pano-hint.fade { opacity: 0; }
 .walk-pano .pano-dot { font: 700 .6875rem/1 var(--font-ui); padding: 3px 5px; border-radius: 6px; background: var(--straw-300); color: var(--forest-900); }
 @media (max-width: 600px) { .pano-title { padding: 8px 12px; } .pano-title strong { font-size: .9375rem; } .pano-title span { font-size: .6875rem; } .walk-pano span:last-child { display: none; } }
+
+/* Link to the virtual museum (title card, toolbar). */
+a.btn-ghost { display: inline-flex; align-items: center; text-decoration: none; color: var(--cloud-50); }
+a.btn-icon { text-decoration: none; }

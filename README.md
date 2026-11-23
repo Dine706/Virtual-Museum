@@ -2,9 +2,10 @@
 
 An unofficial **Phase 0 prototype** for the CSIG (Cité des Sciences et de l'Innovation de Guinée), fiche P19 "Musée virtuel et patrimoines UNESCO", built by Tech Guinée. Live at **https://nimba-3d.vercel.app**.
 
-It has two views:
+It has three views:
 * **The 3D map:** the whole Nimba massif from the real terrain, with 23 sourced hotspots (French / English), photos, sources and modes.
 * **Walk mode:** walk on the ground anywhere in the 31 km window. Tap the terrain → "Marcher ici", use the walk button in a hotspot panel, zoom in past the closest view, or open a `#/walk/<lon>,<lat>` link. The ground, forest, water, rocks, mines, fields and villages are built from measured and mapped data. Tap anything for a sourced card.
+* **The virtual museum** (`musee.html`, live at https://nimba-3d.vercel.app/musee): a modern gallery you walk through at eye level. Gallery 1 "La montagne / The Mountain" holds a painted relief model of the massif built from the DEM, eight framed photographs with labels (peaks, habitats, water), an introduction wall, and a window onto the computer-generated summit view. Every label opens a sourced card (French / English). Deep links: `musee.html#/e/<exhibit-id>`.
 
 ## Run it
 
@@ -37,6 +38,8 @@ URL flags:
 | `src/ui/` | DOM UI: title card, pins, panel, photo viewer, readout, labels, chrome |
 | `src/data/` | Content, geography, regions, loaders |
 | `src/i18n/` | French / English strings (every UI label) |
+| `src/museum/` | Virtual museum (`musee.html`): `layout.ts` (room, exhibits, lights), `bake.ts` (lightmaps baked on the GPU at load), `room.ts`, `relief.ts`, `exhibits.ts`, `nav.ts` (visitor), `ui.ts` |
+| `public/musee/tex/` | CC0 building-material textures (Poly Haven), rebuilt by `scripts/fetch_museum_textures.mjs` |
 | `src/walk/` | Walk mode (lazy chunk). Main modules below. |
 | `src/walk/index.ts` | Orchestration |
 | `src/walk/data.ts` | Tiles, streams, paths, OSM areas and buildings: one height function shared by CPU and GPU |

@@ -66,7 +66,13 @@ export class Chrome {
     const langSlot = document.createElement('div');
     langSlot.className = 'lang-slot';
     langSlot.append(langToggle());
-    tools.append(this.atmoBtn, reset, tour, langSlot);
+    // Link to the virtual museum (musee.html).
+    const museum = document.createElement('a');
+    museum.className = 'btn-icon has-tip';
+    museum.href = './musee.html';
+    museum.innerHTML = icons.museum;
+    museum.dataset.i18nAttr = 'aria-label:museum.enter;data-tip:museum.enter';
+    tools.append(this.atmoBtn, reset, tour, museum, langSlot);
 
     document.getElementById('app')!.append(top, modes, tools);
     applyStatic();

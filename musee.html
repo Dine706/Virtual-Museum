@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#16210F" />
+    <meta name="description" content="Musée virtuel des monts Nimba – Galerie 1 : la montagne. Maquette en relief, photographies et textes sourcés, en français et en anglais. Prototype non officiel – Phase 0." />
+    <title>Musée virtuel – Monts Nimba</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2316210F'/%3E%3Cpath d='M4 25 12 13l4 6 5-9 7 15z' fill='%23AE905B'/%3E%3C/svg%3E" />
+    <style>
+      html, body { margin: 0; height: 100%; background: #12150f; color: #EFF4F2; }
+      .m-loading { position: fixed; inset: 0; z-index: 30; display: grid; place-items: center; padding: 24px; text-align: center; background: #12150f;
+        font: 500 15px/1.4 system-ui, "Segoe UI", Roboto, sans-serif; transition: opacity .8s ease; }
+      .m-loading.done { opacity: 0; pointer-events: none; }
+      .m-loading .inner { display: grid; justify-items: center; gap: 14px; max-width: 520px; }
+      .m-loading .kicker { font-size: 12px; letter-spacing: .22em; text-transform: uppercase; color: #AE905B; }
+      .m-loading h1 { margin: 0; font: 600 clamp(2.2rem, 8vw, 3.6rem)/1.05 'Fraunces Variable', Fraunces, 'Iowan Old Style', Georgia, serif; }
+      .m-loading .bar { width: min(60vw, 240px); height: 2px; background: rgba(172,194,197,.18); border-radius: 2px; overflow: hidden; margin-top: 10px; }
+      .m-loading .bar i { display: block; height: 100%; width: 0; background: #AE905B; transition: width .25s; }
+      .m-loading .status { color: #ACC2C5; font-size: 14px; }
+    </style>
+  </head>
+  <body class="museum">
+    <div id="m-loading" class="m-loading" role="status" aria-live="polite">
+      <div class="inner">
+        <div class="kicker" id="m-load-kicker">Musée virtuel du Nimba</div>
+        <h1 id="m-load-title">La montagne</h1>
+        <div class="bar"><i id="m-load-bar"></i></div>
+        <div class="status" id="m-load-status">Ouverture de la galerie…</div>
+      </div>
+    </div>
+    <script>
+      try {
+        if (localStorage.getItem('nimba.lang') === 'en') {
+          document.documentElement.lang = 'en';
+          document.getElementById('m-load-kicker').textContent = 'Nimba Virtual Museum';
+          document.getElementById('m-load-title').textContent = 'The Mountain';
+          document.getElementById('m-load-status').textContent = 'Opening the gallery…';
+        }
+      } catch (e) {}
+    </script>
+    <canvas id="m-scene" aria-hidden="true" tabindex="-1"></canvas>
+    <noscript><p style="padding:2rem">JavaScript est nécessaire pour le musée virtuel. / JavaScript is required for the virtual museum.</p></noscript>
+    <script type="module" src="/src/museum/main.ts"></script>
+  </body>
+</html>

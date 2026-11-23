@@ -469,3 +469,34 @@ vertical "curtains" along the shore), mines are red iron-ore spoil with patchy r
 are blurred so surfaces blend across outlines; ground textures use box projection (no smearing on pit walls);
 the camera steps to the nearest dry, gentle ground. Bug: the far massif mesh, only 6 m under the fine patch,
 bridged the pit with its coarse triangles and covered the camera (black render) – now sunk 300 m there.
+
+## Virtual museum – Gallery 1 "La montagne / The Mountain"
+A second page, `musee.html` (Vite multi-page build; Vercel `cleanUrls` serves it at `/musee`), linked from the map's
+title card and toolbar. Built only from material already in the repo: the DEM, WorldCover, WDPA and border data,
+the 32 licensed photos (8 used on the walls), `content.json` texts, and the Blender summit panorama.
+* **Room:** 14 × 24 × 5 m modern gallery: oak floor, white plaster, a ceiling daylight slot, spotlights on tracks,
+  a floor-to-ceiling window in the north wall onto the summit panorama, a bench, and a doorway "Galerie 2 – bientôt".
+  Materials are CC0 Poly Haven scans (`scripts/fetch_museum_textures.mjs`; the wall plaster is remapped near-white).
+* **Light baked at load, no dynamic lights:** every flat surface is a lightmap plane packed in one atlas (1024² on
+  mid/low, ≤ 2048² on high, half-float). A GPU shader integrates the ceiling slot and the window as area lights (the
+  window's light is coloured by the panorama outside), 12 spotlights with soft shadows (small disc sources) and
+  ambient occlusion against the room box and the plinth/bench boxes. One plane per frame (no GPU watchdog trips).
+  Measured: ≈ 1.3 s on SwiftShader (CPU); a real GPU is far faster. Per-texel jitter was removed: it showed as
+  blotchy walls; a fixed stratified pattern is smooth. Prints, frames, labels and wall lettering sample the lightmap
+  of the wall they hang on, so spot scallops fall on them too. The room is then captured once into a PMREM
+  environment for reflections (floor sheen, frames); diffuse image-based light is switched off in those materials
+  (the bake already has it).
+* **Relief model:** 3.6 m block at ≈ 1 : 8 600, vertical exaggeration × 2 (stated on its card), coloured from
+  WorldCover in a muted palette, WDPA outline (amber) and national borders (dashed) painted on, 200 m contour lines,
+  self-shadows ray-marched in the shader under its two spotlights. Numbered brass markers 1–8 link to the prints.
+  Facts on its card (scale, extent, DEM min–max) are computed from the data at load, not typed in.
+* **Window:** labelled everywhere as a computer-generated image (not a photo); plants are generic CC0 models.
+* **Visitor:** eye height 1.6 m; drag to look, tap the floor to walk, tap an exhibit (or the navigator, N/P keys)
+  to glide to it and open its card; arrows/WASD (ZQSD on AZERTY: same physical keys) walk; render on demand.
+  Card = bottom sheet on phones / side panel ≥ 900 px; the camera's view offset keeps the exhibit in the visible
+  part. Plan dialog (`L`) = SVG floor plan + `<ol>` of all exhibits; it is also the no-WebGL fallback.
+* **Weight (mid tier, first visit):** JS ≈ 190 KB gz (three.js shared chunk + 22 KB museum), fonts, `terrarium_504`
+  0.53 MB, land cover 76 KB, `summit_2k` 0.25 MB, textures 0.17 MB, photo thumbs, then full prints lazily.
+  ≈ 1.6 MB before the full-size prints.
+* **Not done yet / next:** baked lighting in Blender (true bounce light) could replace the analytic ambient term;
+  more galleries (Le vivant, Les peuples et la montagne, Conservation); real object scans when available.

@@ -21,6 +21,7 @@ export function showTitleCard(opts: { onExplore: () => void; onSkip: () => void;
   actions.innerHTML = `
     <button type="button" class="btn-primary" data-i18n="title.explore"></button>
     <button type="button" class="btn-ghost tour-btn" data-i18n="tour.button"></button>
+    <a class="btn-ghost museum-link" href="./musee.html" data-i18n="museum.enter"></a>
     <button type="button" class="btn-ghost" data-i18n="title.skip"></button>`;
   // Above the (fading) progress block: nothing already on screen moves when the buttons arrive (CLS).
   inner.insertBefore(actions, document.getElementById('loading'));
